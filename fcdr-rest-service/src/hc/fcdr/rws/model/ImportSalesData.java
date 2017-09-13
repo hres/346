@@ -426,34 +426,35 @@ public class ImportSalesData
     {
         List<Object> a = new ArrayList<Object>();
 
-        a.add(salesUpc);// 0
-        a.add(salesDescription);// 1
-        a.add(salesBrand);// 2
-        a.add(salesManufacturer);// 3
-        a.add(dollarRank);// 4
-        a.add(dollarVolume);// 5
-        a.add(dollarShare);// 6
-        a.add(dollarVolumePercentageChange);// 7
-        a.add(kiloVolume);// 8
-        a.add(kiloShare);// 9
-        a.add(kiloVolumePercentageChange);// 10
-        a.add(averageAcDist);// 11
-        a.add(averageRetailPrice);// 12
-        a.add(salesSource);// 13
-        a.add(nielsenCategory);// 14
+        a.add(itemId);// 0
+        a.add(salesUpc);// 1
+        a.add(salesDescription);// 2
+        a.add(salesBrand);// 3
+        a.add(salesManufacturer);// 4
+        a.add(dollarRank);// 5
+        a.add(dollarVolume);// 6
+        a.add(dollarShare);// 7
+        a.add(dollarVolumePercentageChange);// 8
+        a.add(kiloVolume);// 9
+        a.add(kiloShare);// 10
+        a.add(kiloVolumePercentageChange);// 11
+        a.add(averageAcDist);// 12
+        a.add(averageRetailPrice);// 13
+        a.add(salesSource);// 14
+        a.add(nielsenCategory);// 15
         a.add(new java.sql.Date(
-                DateUtil.convertToDate(salesCollectionDate).getTime()));// 15
-        a.add(salesYear);// 16
-        a.add(controlLabelFlag);// 17
-        a.add(kiloVolumeTotal);// 18
-        a.add(kiloVolumeRank);// 19
-        a.add(dollarVolumeTotal);// 20
-        a.add(clusterNumber);// 21
-        a.add(productGrouping);// 22
-        a.add(salesProductDescription);// 23
-        a.add(classificationNumber);// 24
-        a.add(classificationType);// 25
-        a.add(salesComment);// 26
+                DateUtil.convertToDate(salesCollectionDate).getTime()));// 16
+        a.add(salesYear);// 17
+        a.add(controlLabelFlag);// 18
+        a.add(kiloVolumeTotal);// 19
+        a.add(kiloVolumeRank);// 20
+        a.add(dollarVolumeTotal);// 21
+        a.add(clusterNumber);// 22
+        a.add(productGrouping);// 23
+        a.add(salesProductDescription);// 24
+        a.add(classificationNumber);// 25
+        a.add(classificationType);// 26
+        a.add(salesComment);// 27
 
         return a;
     }

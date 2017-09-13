@@ -112,6 +112,8 @@ public class SalesDao extends PgDao
 
     public Integer insert(List<Object> csvFieldList) throws DaoException
     {
+        csvFieldList.remove(0);
+        
         String[] columns =
         { "sales_upc", "sales_description", "sales_brand", "sales_manufacturer",
                 "dollar_rank", "dollar_volume", "dollar_share",
