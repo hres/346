@@ -61,10 +61,10 @@ public class CSVLoader
 
             List<Object> csvFieldList = importSalesData.getCsvFieldList();
 
-            String salesUpc = (String) csvFieldList.get(0);
+            String salesUpc = (String) csvFieldList.get(1);
             Integer productId = salesDao.checkBySalesUpc(salesUpc);
-            Double classificationNumber = (Double) csvFieldList.get(24);
-            String classificationType = (String) csvFieldList.get(25);
+            Double classificationNumber = (Double) csvFieldList.get(25);
+            String classificationType = (String) csvFieldList.get(26);
 
             if (productId != null)
             {
@@ -150,11 +150,11 @@ public class CSVLoader
         // create new product
         List<Object> fieldsForProductInsertList = new ArrayList<Object>();
         fieldsForProductInsertList.add(productDescription);
-        fieldsForProductInsertList.add(csvFieldList.get(2)); // brand
+        fieldsForProductInsertList.add(csvFieldList.get(3)); // brand
         fieldsForProductInsertList.add("Canada"); // country
-        fieldsForProductInsertList.add(csvFieldList.get(21)); // cluster number
-        fieldsForProductInsertList.add(csvFieldList.get(26)); // comment
-        fieldsForProductInsertList.add(csvFieldList.get(3)); // manufacturer
+        fieldsForProductInsertList.add(csvFieldList.get(22)); // cluster number
+        fieldsForProductInsertList.add(csvFieldList.get(27)); // comment
+        fieldsForProductInsertList.add(csvFieldList.get(4)); // manufacturer
         fieldsForProductInsertList.add(777); // cnf code example
         fieldsForProductInsertList.add(DateUtil.getCurrentTimeStamp()); // creation date
         fieldsForProductInsertList.add(DateUtil.getCurrentTimeStamp()); // last edit date
@@ -164,8 +164,8 @@ public class CSVLoader
 
         try
         {
-            Double classificationNumber = (Double) csvFieldList.get(24);
-            String classificationType = (String) csvFieldList.get(25);
+            Double classificationNumber = (Double) csvFieldList.get(25);
+            String classificationType = (String) csvFieldList.get(26);
             productId = productDao.insert(fieldsForProductInsertList,
                     classificationNumber, classificationType);
         }

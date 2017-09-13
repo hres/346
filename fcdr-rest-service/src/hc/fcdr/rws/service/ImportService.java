@@ -63,7 +63,7 @@ public class ImportService extends Application
         try
         {
             ///loader.loadCSV(importInputDir + "SalesProductData20170814.csv", "sales",
-            loader.loadCSV(importInputDir + "SalesTestImport.csv", "sales",
+            loader.loadCSV(importInputDir + "Nielsen2015SalesData_FCDR_161209.csv", "sales",
                 false);
         }
         catch (java.lang.NumberFormatException e)
