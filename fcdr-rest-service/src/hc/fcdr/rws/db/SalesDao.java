@@ -113,7 +113,7 @@ public class SalesDao extends PgDao
     public Integer insert(List<Object> csvFieldList) throws DaoException
     {
         csvFieldList.remove(0);
-        
+
         String[] columns =
         { "sales_upc", "sales_description", "sales_brand", "sales_manufacturer",
                 "dollar_rank", "dollar_volume", "dollar_share",
@@ -137,7 +137,7 @@ public class SalesDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        System.out.println("Sales insert sql: " + query);
+        /// System.out.println("Sales insert sql: " + query);
 
         // ===
 

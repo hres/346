@@ -62,33 +62,37 @@ public class ImportService extends Application
 
         try
         {
-            ///loader.loadCSV(importInputDir + "SalesProductData20170814.csv", "sales",
-            loader.loadCSV(importInputDir + "Nielsen2015SalesData_FCDR_20170913.csv", "sales",
-                false);
+            /// loader.loadCSV(importInputDir + "SalesProductData20170814.csv", "sales",
+            loader.loadCSV(
+                    importInputDir + "Nielsen2015SalesData_FCDR_20170913.csv",
+                    "sales", false);
         }
         catch (java.lang.NumberFormatException e)
         {
             entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null, ResponseCodes.NOT_ACCEPTABLE.getMessage());
-            
+                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+                    MediaType.APPLICATION_JSON).entity(entity).build();
         }
         catch (com.opencsv.exceptions.CsvDataTypeMismatchException e1)
         {
             entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null, ResponseCodes.NOT_ACCEPTABLE.getMessage());
-            
+                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+                    MediaType.APPLICATION_JSON).entity(entity).build();
         }
         catch (Exception e2)
         {
             entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null, ResponseCodes.NOT_ACCEPTABLE.getMessage());
-            
+                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+                    MediaType.APPLICATION_JSON).entity(entity).build();
         }
 
         return Response.status(Response.Status.OK).type(

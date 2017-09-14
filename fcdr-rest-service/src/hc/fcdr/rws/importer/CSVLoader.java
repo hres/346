@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.StopWatch;
+
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import hc.fcdr.rws.db.ProductDao;
@@ -15,9 +17,12 @@ import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.ImportSalesData;
 import hc.fcdr.rws.util.DateUtil;
 
+import org.apache.log4j.Logger;
+
 public class CSVLoader
 {
-
+    private static final Logger logger       = Logger.getLogger(
+            CSVLoader.class.getName());
     private char       separator;
     private SalesDao   salesDao;
     private ProductDao productDao;
@@ -38,6 +43,10 @@ public class CSVLoader
     public void loadCSV(String csvFile, String tableName,
             boolean truncateBeforeLoad) throws Exception
     {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        System.out.println("Loading of sales data started...");
+        
         List<ImportSalesData> importSalesDataList = new ArrayList<ImportSalesData>();
 
         importSalesDataList = new CsvToBeanBuilder(
@@ -46,6 +55,9 @@ public class CSVLoader
 
         importSalesDataList.remove(importSalesDataList.size() - 1);
         loadCSV(importSalesDataList);
+        
+        stopWatch.stop();
+        System.out.println("Total time spent on loading the sales data: " + (stopWatch.getTime() / 1000) + " seconds.");
     }
 
     private void loadCSV(List<ImportSalesData> importSalesDataList)

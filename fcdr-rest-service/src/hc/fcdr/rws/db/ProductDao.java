@@ -339,8 +339,9 @@ public class ProductDao extends PgDao
         return null;
     }
 
-    public Integer insert(List<Object> csvFieldList, Double classificationNumber,
-            String classificationType) throws DaoException
+    public Integer insert(List<Object> csvFieldList,
+            Double classificationNumber, String classificationType)
+            throws DaoException
     {
         String[] columns =
         { "product_description", "product_brand", "product_country",
@@ -356,12 +357,13 @@ public class ProductDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        System.out.println("Product insert sql: " + query);
+        /// System.out.println("Product insert sql: " + query);
 
         // ===
 
         // returns the product_id upon successful insert
-        Integer productId = (Integer)executeUpdate(query, csvFieldList.toArray());
+        Integer productId = (Integer) executeUpdate(query,
+                csvFieldList.toArray());
 
         /// ===
 
@@ -379,7 +381,7 @@ public class ProductDao extends PgDao
                     Object o = insertProductClassification(sqlArgumentList);
                 }
             }
-        
+
         return productId;
     }
 
@@ -399,7 +401,7 @@ public class ProductDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        ///System.out.println("Product Classification insert sql: " + query);
+        /// System.out.println("Product Classification insert sql: " + query);
 
         // returns the classification_id upon successful insert
         try

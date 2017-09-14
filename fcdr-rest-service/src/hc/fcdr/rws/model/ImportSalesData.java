@@ -10,7 +10,7 @@ public class ImportSalesData
 {
     @CsvBindByPosition(position = 0)
     private Double  itemId;
-    
+
     @CsvBindByPosition(position = 1)
     private String  salesUpc;
 
