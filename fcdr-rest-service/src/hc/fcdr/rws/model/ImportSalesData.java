@@ -140,6 +140,11 @@ public class ImportSalesData
         this.classificationType = classificationType;
         this.salesComment = salesComment;
     }
+    
+    public Double getItemId()
+    {
+        return itemId;
+    }
 
     public String getSalesUpc()
     {

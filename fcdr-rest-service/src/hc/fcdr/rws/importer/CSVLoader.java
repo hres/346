@@ -53,11 +53,17 @@ public class CSVLoader
                 new FileReader(csvFile)).withType(
                         ImportSalesData.class).withSkipLines(1).build().parse();
 
-        importSalesDataList.remove(importSalesDataList.size() - 1);
+        stopWatch.split();
+        System.out.println("Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
+        
+        ///importSalesDataList.remove(importSalesDataList.size() - 1);
+        
+        System.out.println("Processing of sales data started...");
+        
         loadCSV(importSalesDataList);
         
         stopWatch.stop();
-        System.out.println("Total time spent on loading the sales data: " + (stopWatch.getTime() / 1000) + " seconds.");
+        System.out.println("Total time spent on processing the sales data: " + (stopWatch.getTime() / 1000) + " seconds.");
     }
 
     private void loadCSV(List<ImportSalesData> importSalesDataList)
@@ -69,8 +75,11 @@ public class CSVLoader
         for (ImportSalesData importSalesData : importSalesDataList)
         {
             if (!importSalesData.isValidRecord())
+            {
+                System.out.println("---Invalid record: " + importSalesData.getItemId());
                 continue;
-
+            }
+                
             List<Object> csvFieldList = importSalesData.getCsvFieldList();
 
             String salesUpc = (String) csvFieldList.get(1);
@@ -112,7 +121,12 @@ public class CSVLoader
 
         Map<Double, List<ImportSalesData>> m2 = new HashMap<Double, List<ImportSalesData>>();
 
-        m1.forEach((k, v) -> {
+        for (Map.Entry<String, List<ImportSalesData>> entry : m1.entrySet())
+        {
+        ///m1.forEach((k, v) -> {
+            
+            List<ImportSalesData> v = entry.getValue();
+            
             if (v.size() > 1)
                 insertProductSalesRecords(v);
             else
@@ -130,19 +144,29 @@ public class CSVLoader
                     m2.replace(productGrouping,
                             importSalesDataListProductGrouping);
                 }
-                else
+                else if ( (productGrouping != null)
+                        && !(m2.containsKey(productGrouping)) )
                 {
                     // One sales record for one product.
                     importSalesDataListProductGrouping = new ArrayList<ImportSalesData>();
                     importSalesDataListProductGrouping.add(v.get(0));
                     m2.put(productGrouping, importSalesDataListProductGrouping);
                 }
+                else
+                {
+                    insertProductSalesRecords(v);
+                }
             }
-        });
+        ///});
+        }
 
-        m2.forEach((k, v) -> {
+        for (Map.Entry<Double, List<ImportSalesData>> entry : m2.entrySet())
+        {
+            List<ImportSalesData> v = entry.getValue();
+        ///m2.forEach((k, v) -> {
             insertProductSalesRecords(v);
-        });
+        ///});
+        }
     }
 
     private void insertProductSalesRecords(
