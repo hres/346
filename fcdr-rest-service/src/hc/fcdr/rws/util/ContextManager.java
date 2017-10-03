@@ -21,6 +21,14 @@ public class ContextManager
 
     public final static String         APPLICATION_ENVIRONMENT = "APPLICATION_ENVIRONMENT";
     public final static String         SCHEMA                  = "SCHEMA";
+    public final static String         MAIL_SMTP               = "MAIL_SMTP";
+    public final static String         MAIL_SENDER_NAME        = "MAIL_SENDER_NAME";
+    public final static String         MAIL_SENDER_ADDRESS     = "MAIL_SENDER_ADDRESS";
+    public final static String         MAIL_RECEIVER_ADDRESS   = "MAIL_RECEIVER_ADDRESS";
+    public final static String         MAIL_ID                 = "MAIL_ID";
+    public final static String         MAIL_PASSWD             = "MAIL_PASSWD";
+    public final static String         MAIL_SUBJECT            = "MAIL_SUBJECT";
+    public final static String         MAIL_TEXT               = "MAIL_TEXT";
 
     public static String getJndiValue(String key)
     {
@@ -51,6 +59,15 @@ public class ContextManager
         m.put(APPLICATION_ENVIRONMENT,
                 getBindingVariable("application_environment"));
         m.put(SCHEMA, getBindingVariable("schema"));
+        
+        m.put(MAIL_SMTP, getBindingVariable("mailSmtp"));
+        m.put(MAIL_SENDER_NAME, getBindingVariable("mailSenderName"));
+        m.put(MAIL_SENDER_ADDRESS, getBindingVariable("mailSenderAddress"));
+        m.put(MAIL_RECEIVER_ADDRESS, getBindingVariable("mailReceiverAddress"));
+        m.put(MAIL_ID, getBindingVariable("mailId"));
+        m.put(MAIL_PASSWD, getBindingVariable("mailPasswd"));
+        m.put(MAIL_SUBJECT, getBindingVariable("mailSubject"));
+        m.put(MAIL_TEXT, getBindingVariable("mailText"));
 
         environmentVars = m;
     }

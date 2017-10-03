@@ -40,9 +40,12 @@ public class CSVLoader
         productDao = new ProductDao(connection, schema);
     }
 
-    public void loadCSV(String csvFile, String tableName,
+    public ImportStatistics loadCSV(String csvFile, String tableName,
             boolean truncateBeforeLoad) throws Exception
     {
+        ImportStatistics importStatistics = new ImportStatistics();
+        importStatistics.setImportDateTime(DateUtil.getReportDateTimeString());
+        
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         System.out.println("Loading of sales data started...");
@@ -55,20 +58,26 @@ public class CSVLoader
 
         stopWatch.split();
         System.out.println("Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
+        importStatistics.setTotalLoadingTime((stopWatch.getSplitTime() / 1000));
         
         ///importSalesDataList.remove(importSalesDataList.size() - 1);
         
         System.out.println("Processing of sales data started...");
         
-        loadCSV(importSalesDataList);
+        loadCSV(importSalesDataList, importStatistics);
         
         stopWatch.stop();
         System.out.println("Total time spent on processing the sales data: " + (stopWatch.getTime() / 1000) + " seconds.");
+        importStatistics.setTotalProcessingTime((stopWatch.getTime() / 1000));
+        
+        return importStatistics;
     }
 
-    private void loadCSV(List<ImportSalesData> importSalesDataList)
+    private void loadCSV(List<ImportSalesData> importSalesDataList, ImportStatistics importStatistics)
             throws Exception
     {
+        Integer numberOfRecordsProcessed = importSalesDataList.size();
+        Integer numberOfInvalidRecords = 0;
         List<ImportSalesData> importSalesDataListUpc = new ArrayList<ImportSalesData>();
         Map<String, List<ImportSalesData>> m1 = new HashMap<String, List<ImportSalesData>>();
 
@@ -76,6 +85,7 @@ public class CSVLoader
         {
             if (!importSalesData.isValidRecord())
             {
+                numberOfInvalidRecords++;
                 System.out.println("---Invalid record: " + importSalesData.getItemId());
                 continue;
             }
@@ -167,6 +177,9 @@ public class CSVLoader
             insertProductSalesRecords(v);
         ///});
         }
+        
+        importStatistics.setNumberOfRecordsProcessed(numberOfRecordsProcessed);
+        importStatistics.setNumberOfInvalidRecords(numberOfInvalidRecords);
     }
 
     private void insertProductSalesRecords(

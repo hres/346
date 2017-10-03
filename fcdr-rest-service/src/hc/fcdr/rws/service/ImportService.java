@@ -17,10 +17,12 @@ import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
+import hc.fcdr.rws.importer.ImportStatistics;
 import hc.fcdr.rws.mail.MailProcessor;
 import hc.fcdr.rws.model.ImportDataResponse;
 import hc.fcdr.rws.model.ImportRequest;
 import hc.fcdr.rws.model.ImportResponse;
+import hc.fcdr.rws.reportengine.ImportReport;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ImportService")
@@ -55,11 +57,6 @@ public class ImportService extends Application
     public Response getImport(final ImportRequest importRequest)
             throws SQLException, IOException, Exception
     {
-        
-        
-        String applicationEnvironment = ContextManager.getJndiValue(
-                "APPLICATION_ENVIRONMENT");
-
         String importInputDir = importRequest.inputDir;
 
         ImportResponse entity0 = new ImportResponse();
@@ -68,26 +65,27 @@ public class ImportService extends Application
         //===
         Properties properties = new Properties();
 
-        // Temporary; should come from context.xml
-//        properties.setProperty("mailSmtp", "10.224.40.190");
-//        properties.setProperty("mailSenderName", "FCDR Sodium Service");
-//        properties.setProperty("mailSenderAddress", "Zoltan.Hernadi@canada.ca");
-//        properties.setProperty("mailReceiverAddress", "Zoltan.Hernadi@canada.ca");
-//        properties.setProperty("mailId", "noreply");
-//        properties.setProperty("mailPasswd", "");
-//        properties.setProperty("mailSubject", "FCDR Sodium Service Import Results");
-//        properties.setProperty("mailText", "The sales data import has been successful");
+        properties.setProperty("mailSmtp", ContextManager.getJndiValue("MAIL_SMTP"));
+        properties.setProperty("mailSenderName", ContextManager.getJndiValue("MAIL_SENDER_NAME"));
+        properties.setProperty("mailSenderAddress", ContextManager.getJndiValue("MAIL_SENDER_ADDRESS"));
+        properties.setProperty("mailReceiverAddress", ContextManager.getJndiValue("MAIL_RECEIVER_ADDRESS"));
+        properties.setProperty("mailId", ContextManager.getJndiValue("MAIL_ID"));
+        properties.setProperty("mailPasswd", ContextManager.getJndiValue("MAIL_PASSWD"));
+        properties.setProperty("mailSubject", ContextManager.getJndiValue("MAIL_SUBJECT"));
+        properties.setProperty("mailText", ContextManager.getJndiValue("MAIL_TEXT"));
         
         //===
         
         try
         {
             /// loader.loadCSV(importInputDir + "SalesProductData20170814.csv", "sales",
-            loader.loadCSV(
+            ImportStatistics importStatistics = loader.loadCSV(
                     importInputDir + "SALESDATA_20170921.csv",
-                    ///importInputDir + "salesdata_20170920_10records.csv",
-                    ///importInputDir + "Nielsen2015SalesData_FCDR_20170913.csv",
+                    ///importInputDir + "salesdata_20171003_short.csv",
                     "sales", false);
+            
+            // Generate report.
+            ImportReport importReport = new ImportReport(importStatistics);
         }
         catch (java.lang.NumberFormatException e)
         {
@@ -119,29 +117,31 @@ public class ImportService extends Application
 
         //===
         
-//        if (!sendEmail(properties))
-//        {
-//            entity = new ImportDataResponse(
-//                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-//                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
-//
-//            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-//                    MediaType.APPLICATION_JSON).entity(entity).build();
-//        }
-//        
+        String[] filesToAttach = new String[] {"/home/zoltanh/report.pdf"};
+        
+        if (!sendEmail(properties, filesToAttach))
+        {
+            entity = new ImportDataResponse(
+                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+
+            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
+                    MediaType.APPLICATION_JSON).entity(entity).build();
+        }
+        
         //===
         
         return Response.status(Response.Status.OK).type(
                 MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-    private boolean sendEmail(Properties properties)
+    private boolean sendEmail(Properties properties, String[] filesToAttach)
     {
         MailProcessor mailProcessor = new MailProcessor(properties);
 
         try
         {
-            // Send message only if there are unprocessed files.
+            mailProcessor.setAttachments(filesToAttach);
             mailProcessor.sendMessage();
         }
         catch (MailProcessorException e)
@@ -151,4 +151,6 @@ public class ImportService extends Application
 
         return true;
     }
+    
+    
 }

@@ -275,6 +275,29 @@ public class DateUtil
         return s;
     }
 
+    /**
+     * Returns the current date in the 'YYYYMMDDHHMM' format.
+     * 
+     * @return a String value of current date in the 'YYYYMMDDHHMM' format.
+     */
+    public static String getReportDateTimeString()
+    {
+        String s = "";
+        Calendar now = Calendar.getInstance();
+        DecimalFormat df2 = new DecimalFormat("00");
+        DecimalFormat df4 = new DecimalFormat("0000");
+
+        String runMinutes = df2.format(now.get(Calendar.MINUTE));
+        String runHours = df2.format(now.get(Calendar.HOUR_OF_DAY));
+        String runDay = df2.format(now.get(Calendar.DAY_OF_MONTH));
+        String runMonth = df2.format(now.get(Calendar.MONTH) + 1);
+        String runYear = df4.format(now.get(Calendar.YEAR));
+
+        s += runYear + " " + runMonth + " " + runDay + " " + runHours + ":" + runMinutes;
+
+        return s;
+    }
+    
     public static java.sql.Timestamp getCurrentTimeStamp()
     {
         return new java.sql.Timestamp(
