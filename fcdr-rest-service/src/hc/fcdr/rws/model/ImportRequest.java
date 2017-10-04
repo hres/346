@@ -8,16 +8,17 @@ public class ImportRequest
 {
     @XmlElement
     public String  inputDir;
-    @XmlElement
-    public String  outputDir;
+   
     @XmlElement
     public boolean sendMail;
 
     @Override
     public String toString()
     {
-        return "ImportRequest [inputDir=" + inputDir + ", outputDir="
-                + outputDir + ", sendMail=" + sendMail + "]";
+        return "ImportRequest [inputDir=" + inputDir + ", sendMail=" + sendMail
+                + "]";
     }
+
+    
 
 }

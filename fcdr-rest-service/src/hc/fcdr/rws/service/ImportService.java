@@ -1,5 +1,6 @@
 package hc.fcdr.rws.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -28,7 +29,15 @@ import hc.fcdr.rws.util.ContextManager;
 @Path("/ImportService")
 public class ImportService extends Application
 {
-    static CSVLoader loader = null;
+    static CSVLoader     loader                = null;
+
+    private final String REPORT_DIRECTORY_ROOT = (!System.getProperty(
+            "java.io.tmpdir").endsWith(File.separator)
+                    ? (System.getProperty("java.io.tmpdir") + File.separator)
+                    : System.getProperty("java.io.tmpdir"));
+
+    private final String REPORT_FILE           = REPORT_DIRECTORY_ROOT
+            + "fcdrSalesImportReport.pdf";
 
     @PostConstruct
     public static void initialize()
@@ -58,32 +67,40 @@ public class ImportService extends Application
             throws SQLException, IOException, Exception
     {
         String importInputDir = importRequest.inputDir;
+        boolean sendMail = importRequest.sendMail;
 
         ImportResponse entity0 = new ImportResponse();
         ImportDataResponse entity = new ImportDataResponse();
 
-        //===
+        // ===
         Properties properties = new Properties();
 
-        properties.setProperty("mailSmtp", ContextManager.getJndiValue("MAIL_SMTP"));
-        properties.setProperty("mailSenderName", ContextManager.getJndiValue("MAIL_SENDER_NAME"));
-        properties.setProperty("mailSenderAddress", ContextManager.getJndiValue("MAIL_SENDER_ADDRESS"));
-        properties.setProperty("mailReceiverAddress", ContextManager.getJndiValue("MAIL_RECEIVER_ADDRESS"));
-        properties.setProperty("mailId", ContextManager.getJndiValue("MAIL_ID"));
-        properties.setProperty("mailPasswd", ContextManager.getJndiValue("MAIL_PASSWD"));
-        properties.setProperty("mailSubject", ContextManager.getJndiValue("MAIL_SUBJECT"));
-        properties.setProperty("mailText", ContextManager.getJndiValue("MAIL_TEXT"));
-        
-        //===
-        
+        properties.setProperty("mailSmtp",
+                ContextManager.getJndiValue("MAIL_SMTP"));
+        properties.setProperty("mailSenderName",
+                ContextManager.getJndiValue("MAIL_SENDER_NAME"));
+        properties.setProperty("mailSenderAddress",
+                ContextManager.getJndiValue("MAIL_SENDER_ADDRESS"));
+        properties.setProperty("mailReceiverAddress",
+                ContextManager.getJndiValue("MAIL_RECEIVER_ADDRESS"));
+        properties.setProperty("mailId",
+                ContextManager.getJndiValue("MAIL_ID"));
+        properties.setProperty("mailPasswd",
+                ContextManager.getJndiValue("MAIL_PASSWD"));
+        properties.setProperty("mailSubject",
+                ContextManager.getJndiValue("MAIL_SUBJECT"));
+        properties.setProperty("mailText",
+                ContextManager.getJndiValue("MAIL_TEXT"));
+
+        // ===
+
         try
         {
-            /// loader.loadCSV(importInputDir + "SalesProductData20170814.csv", "sales",
             ImportStatistics importStatistics = loader.loadCSV(
-                    importInputDir + "SALESDATA_20170921.csv",
-                    ///importInputDir + "salesdata_20171003_short.csv",
-                    "sales", false);
-            
+                    /// importInputDir + "SALESDATA_20170921.csv",
+                    importInputDir + "salesdata_20171003_short.csv", "sales",
+                    false);
+
             // Generate report.
             ImportReport importReport = new ImportReport(importStatistics);
         }
@@ -93,8 +110,10 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
         catch (com.opencsv.exceptions.CsvDataTypeMismatchException e1)
         {
@@ -102,8 +121,10 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
         catch (Exception e2)
         {
@@ -111,28 +132,37 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
 
-        //===
-        
-        String[] filesToAttach = new String[] {"/home/zoltanh/report.pdf"};
-        
-        if (!sendEmail(properties, filesToAttach))
+        // ===
+
+        if (sendMail)
         {
-            entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+            String[] filesToAttach = new String[]
+            { REPORT_FILE };
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            if (!sendEmail(properties, filesToAttach))
+            {
+                entity = new ImportDataResponse(
+                        ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                        ResponseCodes.NOT_ACCEPTABLE.getMessage());
+
+                return Response.status(Response.Status.NOT_ACCEPTABLE)
+                               .type(MediaType.APPLICATION_JSON)
+                               .entity(entity)
+                               .build();
+            }
         }
-        
-        //===
-        
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        // ===
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     private boolean sendEmail(Properties properties, String[] filesToAttach)
@@ -151,6 +181,5 @@ public class ImportService extends Application
 
         return true;
     }
-    
-    
+
 }

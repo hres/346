@@ -1,6 +1,8 @@
 package hc.fcdr.rws.importer;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ImportStatistics
 {
@@ -9,6 +11,7 @@ public class ImportStatistics
     private Long totalProcessingTime;
     private Integer numberOfRecordsProcessed;
     private Integer numberOfInvalidRecords;
+    private List<ImportReportDetailRow> importReportDetailRowList;
     
     public ImportStatistics()
     {
@@ -18,20 +21,9 @@ public class ImportStatistics
         this.totalProcessingTime = 0L;
         this.numberOfRecordsProcessed = 0;
         this.numberOfInvalidRecords = 0;
+        this.importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
     }
     
-    public ImportStatistics(String importDateTime, Long totalLoadingTime,
-            Long totalProcessingTime, Integer numberOfRecordsProcessed,
-            Integer numberOfInvalidRecords)
-    {
-        super();
-        this.importDateTime = importDateTime;
-        this.totalLoadingTime = totalLoadingTime;
-        this.totalProcessingTime = totalProcessingTime;
-        this.numberOfRecordsProcessed = numberOfRecordsProcessed;
-        this.numberOfInvalidRecords = numberOfInvalidRecords;
-    }
-
     public String getImportDateTime()
     {
         return importDateTime;
@@ -82,6 +74,17 @@ public class ImportStatistics
         this.numberOfInvalidRecords = numberOfInvalidRecords;
     }
 
+    public List<ImportReportDetailRow> getImportReportDetailRowList()
+    {
+        return importReportDetailRowList;
+    }
+
+    public void setImportReportDetailRowList(
+            List<ImportReportDetailRow> importReportDetailRowList)
+    {
+        this.importReportDetailRowList = importReportDetailRowList;
+    }
+
     @Override
     public String toString()
     {
@@ -89,7 +92,9 @@ public class ImportStatistics
                 + ", totalLoadingTime=" + totalLoadingTime
                 + ", totalProcessingTime=" + totalProcessingTime
                 + ", numberOfRecordsProcessed=" + numberOfRecordsProcessed
-                + ", numberOfInvalidRecords=" + numberOfInvalidRecords + "]";
+                + ", numberOfInvalidRecords=" + numberOfInvalidRecords
+                + ", importReportDetailRowList=" + importReportDetailRowList
+                + "]";
     }
     
     

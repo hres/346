@@ -21,11 +21,11 @@ import org.apache.log4j.Logger;
 
 public class CSVLoader
 {
-    private static final Logger logger       = Logger.getLogger(
+    private static final Logger logger = Logger.getLogger(
             CSVLoader.class.getName());
-    private char       separator;
-    private SalesDao   salesDao;
-    private ProductDao productDao;
+    private char                separator;
+    private SalesDao            salesDao;
+    private ProductDao          productDao;
 
     /**
      * Public constructor to build CSVLoader object with Connection details. The connection is closed on success or
@@ -45,39 +45,45 @@ public class CSVLoader
     {
         ImportStatistics importStatistics = new ImportStatistics();
         importStatistics.setImportDateTime(DateUtil.getReportDateTimeString());
-        
+
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         System.out.println("Loading of sales data started...");
-        
+
         List<ImportSalesData> importSalesDataList = new ArrayList<ImportSalesData>();
 
         importSalesDataList = new CsvToBeanBuilder(
-                new FileReader(csvFile)).withType(
-                        ImportSalesData.class).withSkipLines(1).build().parse();
+                new FileReader(csvFile)).withType(ImportSalesData.class)
+                                        .withSkipLines(1)
+                                        .build()
+                                        .parse();
 
         stopWatch.split();
-        System.out.println("Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
+        System.out.println("Total time spent on loading the sales data: "
+                + (stopWatch.getSplitTime() / 1000) + " seconds.");
         importStatistics.setTotalLoadingTime((stopWatch.getSplitTime() / 1000));
-        
-        ///importSalesDataList.remove(importSalesDataList.size() - 1);
-        
+
+        /// importSalesDataList.remove(importSalesDataList.size() - 1);
+
         System.out.println("Processing of sales data started...");
-        
+
         loadCSV(importSalesDataList, importStatistics);
-        
+
         stopWatch.stop();
-        System.out.println("Total time spent on processing the sales data: " + (stopWatch.getTime() / 1000) + " seconds.");
+        System.out.println("Total time spent on processing the sales data: "
+                + (stopWatch.getTime() / 1000) + " seconds.");
         importStatistics.setTotalProcessingTime((stopWatch.getTime() / 1000));
-        
+
         return importStatistics;
     }
 
-    private void loadCSV(List<ImportSalesData> importSalesDataList, ImportStatistics importStatistics)
-            throws Exception
+    private void loadCSV(List<ImportSalesData> importSalesDataList,
+            ImportStatistics importStatistics) throws Exception
     {
         Integer numberOfRecordsProcessed = importSalesDataList.size();
         Integer numberOfInvalidRecords = 0;
+        List<ImportReportDetailRow> importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
+
         List<ImportSalesData> importSalesDataListUpc = new ArrayList<ImportSalesData>();
         Map<String, List<ImportSalesData>> m1 = new HashMap<String, List<ImportSalesData>>();
 
@@ -86,10 +92,11 @@ public class CSVLoader
             if (!importSalesData.isValidRecord())
             {
                 numberOfInvalidRecords++;
-                System.out.println("---Invalid record: " + importSalesData.getItemId());
+                System.out.println(
+                        "---Invalid record: " + importSalesData.getItemId());
                 continue;
             }
-                
+
             List<Object> csvFieldList = importSalesData.getCsvFieldList();
 
             String salesUpc = (String) csvFieldList.get(1);
@@ -127,16 +134,21 @@ public class CSVLoader
                 m1.put(salesUpc, importSalesDataListUpc);
             }
 
+            ImportReportDetailRow importReportDetailRow = new ImportReportDetailRow(
+                    importSalesData.getItemId().toString(),
+                    importSalesData.getSalesDescription());
+            importReportDetailRowList.add(importReportDetailRow);
+
         } // end for
 
         Map<Double, List<ImportSalesData>> m2 = new HashMap<Double, List<ImportSalesData>>();
 
         for (Map.Entry<String, List<ImportSalesData>> entry : m1.entrySet())
         {
-        ///m1.forEach((k, v) -> {
-            
+            /// m1.forEach((k, v) -> {
+
             List<ImportSalesData> v = entry.getValue();
-            
+
             if (v.size() > 1)
                 insertProductSalesRecords(v);
             else
@@ -154,8 +166,8 @@ public class CSVLoader
                     m2.replace(productGrouping,
                             importSalesDataListProductGrouping);
                 }
-                else if ( (productGrouping != null)
-                        && !(m2.containsKey(productGrouping)) )
+                else if ((productGrouping != null)
+                        && !(m2.containsKey(productGrouping)))
                 {
                     // One sales record for one product.
                     importSalesDataListProductGrouping = new ArrayList<ImportSalesData>();
@@ -167,19 +179,21 @@ public class CSVLoader
                     insertProductSalesRecords(v);
                 }
             }
-        ///});
+            /// });
         }
 
         for (Map.Entry<Double, List<ImportSalesData>> entry : m2.entrySet())
         {
             List<ImportSalesData> v = entry.getValue();
-        ///m2.forEach((k, v) -> {
+            /// m2.forEach((k, v) -> {
             insertProductSalesRecords(v);
-        ///});
+            /// });
         }
-        
+
         importStatistics.setNumberOfRecordsProcessed(numberOfRecordsProcessed);
         importStatistics.setNumberOfInvalidRecords(numberOfInvalidRecords);
+        importStatistics.setImportReportDetailRowList(
+                importReportDetailRowList);
     }
 
     private void insertProductSalesRecords(
