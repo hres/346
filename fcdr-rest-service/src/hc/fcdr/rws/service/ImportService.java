@@ -110,29 +110,27 @@ public class ImportService extends Application
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
 
-            //String input = "{\"qty\":100,\"name\":\"iPad 4\"}";
-
             String input = "{\"inputDir\":\"/home/zoltanh/Documents/FoodModernizationProject/importInput/\",\"sendMail\":false   }";   
             
             OutputStream os = conn.getOutputStream();
             os.write(input.getBytes());
             os.flush();
 
-//            if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED)
-//            {
-//                throw new RuntimeException(
-//                        "Failed : HTTP error code : " + conn.getResponseCode());
-//            }
-//
-//            BufferedReader br = new BufferedReader(
-//                    new InputStreamReader((conn.getInputStream())));
-//
-//            String output;
-//            System.out.println("Output from Server .... \n");
-//            while ((output = br.readLine()) != null)
-//            {
-//                System.out.println(output);
-//            }
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            {
+                throw new RuntimeException(
+                        "Failed : HTTP error code : " + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader((conn.getInputStream())));
+
+            String output;
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null)
+            {
+                System.out.println(output);
+            }
 
             conn.disconnect();
 

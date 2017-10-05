@@ -13,6 +13,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.model.ReportDataResponse;
@@ -51,9 +52,12 @@ public class ReportService extends Application
     public Response getReport(final ReportRequest reportRequest)
             throws SQLException, IOException, Exception
     {
+        
+        
+        
         ReportDataResponse entity = new ReportDataResponse();
-
-        System.out.println("--- Report service called");
+        entity.setStatus(ResponseCodes.OK.getCode());
+        entity.setMessage(ResponseCodes.OK.getMessage());
         
         return Response.status(Response.Status.OK).type(
                 MediaType.APPLICATION_JSON).entity(entity).build();
