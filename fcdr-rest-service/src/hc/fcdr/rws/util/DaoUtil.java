@@ -294,10 +294,14 @@ public final class DaoUtil
         product.setDescription(result.getString("product_description"));
         product.setBrand(result.getString("product_brand"));
         product.setCountry(result.getString("product_country"));
-        product.setClusterNumber(result.getDouble("cluster_number"));
+        
+        product.setClusterNumber( ( (result.getString("cluster_number") == null) ? "" : result.getString("cluster_number") ) );
+
         product.setComment(result.getString("product_comment"));
         product.setManufacturer(result.getString("product_manufacturer"));
-        product.setCnfCode(result.getInt("cnf_code"));
+        
+        product.setCnfCode( ( (result.getString("cnf_code") == null) ? "" : result.getString("cnf_code") ) );
+        
         product.setCreationDate(result.getTimestamp("creation_date"));
         product.setLastEditDate(result.getTimestamp("last_edit_date"));
         product.setEditedBy(result.getString("edited_by"));
@@ -312,7 +316,7 @@ public final class DaoUtil
         ProductResponse productResponse = new ProductResponse(product);
 
         productResponse.setClassification_number(
-                resultSet.getDouble("classification_number"));
+                ( (resultSet.getString("classification_number") == null) ? "" : resultSet.getString("classification_number") ) );
         productResponse.setClassification_name(
                 resultSet.getString("classification_name"));
         productResponse.setClassification_type(

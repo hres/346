@@ -10,11 +10,14 @@ public class ProductResponse
     private Long    product_id;
     private String  product_manufacturer;
     private String  product_brand;
-    private Integer cnf_code;
-    private Double  cluster_number;
+    //private Integer cnf_code;
+    private String cnf_code;
+    //private Double  cluster_number;
+    private String  cluster_number;
     private String  product_description;
     private String  product_comment;
-    private Double  classification_number;
+    //private Double  classification_number;
+    private String  classification_number;
     private String  classification_name;
     private String  classification_type;
 
@@ -24,18 +27,23 @@ public class ProductResponse
         this.product_id = 0L;
         this.product_manufacturer = "";
         this.product_brand = "";
-        this.cnf_code = 0;
-        this.cluster_number = 0.0;
+        //this.cnf_code = 0;
+        this.cnf_code = "";
+        //this.cluster_number = 0.0;
+        this.cluster_number = "";
         this.product_description = "";
         this.product_comment = "";
-        this.classification_number = 0.0;
+        //this.classification_number = 0.0;
+        this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
     }
 
     public ProductResponse(Long id, String manufacturer, String brand,
-            Integer cnfCode, Double clusterNumber, String description,
-            String comment, Double classificationNumber,
+            //Integer cnfCode, Double clusterNumber, String description,
+            String cnfCode, String clusterNumber, String description,
+            //String comment, Double classificationNumber,
+            String comment, String classificationNumber,
             String classificationName, String classificationType)
     {
         super();
@@ -46,12 +54,14 @@ public class ProductResponse
         this.cluster_number = clusterNumber;
         this.product_description = description;
         this.product_comment = comment;
+
         this.classification_number = classificationNumber;
         this.classification_name = classificationName;
         this.classification_type = classificationType;
     }
 
-    public ProductResponse(Product product, Double classificationNumber,
+    //public ProductResponse(Product product, Double classificationNumber,
+    public ProductResponse(Product product, String classificationNumber,
             String classificationName, String classificationType)
     {
         super();
@@ -77,7 +87,8 @@ public class ProductResponse
         this.cluster_number = product.getClusterNumber();
         this.product_description = product.getDescription();
         this.product_comment = product.getComment();
-        this.classification_number = 0.0;
+        //this.classification_number = 0.0;
+        this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
     }
@@ -112,22 +123,26 @@ public class ProductResponse
         this.product_brand = product_brand;
     }
 
-    public Integer getCnf_code()
+    //public Integer getCnf_code()
+    public String getCnf_code()
     {
         return cnf_code;
     }
 
-    public void setCnf_code(Integer cnf_code)
+    //public void setCnf_code(Integer cnf_code)
+    public void setCnf_code(String cnf_code)
     {
         this.cnf_code = cnf_code;
     }
 
-    public Double getCluster_number()
+    //public Double getCluster_number()
+    public String getCluster_number()
     {
         return cluster_number;
     }
 
-    public void setCluster_number(Double cluster_number)
+    //public void setCluster_number(Double cluster_number)
+    public void setCluster_number(String cluster_number)
     {
         this.cluster_number = cluster_number;
     }
@@ -152,12 +167,14 @@ public class ProductResponse
         this.product_comment = product_comment;
     }
 
-    public Double getClassification_number()
+    //public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(Double classification_number)
+    //public void setClassification_number(Double classification_number)
+    public void setClassification_number(String classification_number)
     {
         this.classification_number = classification_number;
     }

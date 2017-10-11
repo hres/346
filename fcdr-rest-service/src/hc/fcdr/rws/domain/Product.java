@@ -17,10 +17,12 @@ public class Product implements Serializable
     private String            description;
     private String            brand;
     private String            country;
-    private Double            clusterNumber;
+    //private Double            clusterNumber;
+    private String            clusterNumber;
     private String            comment;
     private String            manufacturer;
-    private Integer           cnfCode;
+    //private Integer           cnfCode;
+    private String           cnfCode;
     private Timestamp         creationDate;
     private Timestamp         lastEditDate;
     private String            editedBy;
@@ -32,18 +34,22 @@ public class Product implements Serializable
         this.description = "";
         this.brand = "";
         this.country = "";
-        this.clusterNumber = 0.0;
+        //this.clusterNumber = 0.0;
+        this.clusterNumber = "";
         this.comment = "";
         this.manufacturer = "";
-        this.cnfCode = 0;
+        //this.cnfCode = 0;
+        this.cnfCode = "";
         this.creationDate = null;
         this.lastEditDate = null;
         this.editedBy = "";
     }
 
     public Product(Long id, String description, String brand, String country,
-            Double clusterNumber, String comment, String manufacturer,
-            Integer cnfCode, Timestamp creationDate, Timestamp lastEditDate,
+            //Double clusterNumber, String comment, String manufacturer,
+            String clusterNumber, String comment, String manufacturer,
+            //Integer cnfCode, Timestamp creationDate, Timestamp lastEditDate,
+            String cnfCode, Timestamp creationDate, Timestamp lastEditDate,
             String editedBy)
     {
         super();
@@ -120,13 +126,15 @@ public class Product implements Serializable
         this.country = country;
     }
 
-    public Double getClusterNumber()
+    //public Double getClusterNumber()
+    public String getClusterNumber()
     {
         return clusterNumber;
     }
 
     @XmlElement
-    public void setClusterNumber(Double clusterNumber)
+    //public void setClusterNumber(Double clusterNumber)
+    public void setClusterNumber(String clusterNumber)
     {
         this.clusterNumber = clusterNumber;
     }
@@ -153,13 +161,15 @@ public class Product implements Serializable
         this.manufacturer = manufacturer;
     }
 
-    public Integer getCnfCode()
+    //public Integer getCnfCode()
+    public String getCnfCode()
     {
         return cnfCode;
     }
 
     @XmlElement
-    public void setCnfCode(Integer cnfCode)
+    //public void setCnfCode(Integer cnfCode)
+    public void setCnfCode(String cnfCode)
     {
         this.cnfCode = cnfCode;
     }
