@@ -388,6 +388,11 @@ public final class DaoUtil
         else
             queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
 
+        if (!request.restaurant_type.isEmpty())
+            queryMap.put("restaurant_type", request.restaurant_type);
+        if (!request.type.isEmpty())
+            queryMap.put("type", request.type);
+        
         return queryMap;
     }
 
