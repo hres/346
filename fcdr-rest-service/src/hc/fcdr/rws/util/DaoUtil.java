@@ -16,7 +16,9 @@ import java.util.Map;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.domain.Sales;
+import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
+import hc.fcdr.rws.model.ClassificationResponse;
 import hc.fcdr.rws.model.PackageRequest;
 import hc.fcdr.rws.model.PackageResponse;
 import hc.fcdr.rws.model.ProductRequest;
@@ -284,6 +286,8 @@ public final class DaoUtil
         }
         return result;
     }
+    
+    //===
 
     public static Product getProduct(ResultSet result) throws SQLException
     {
@@ -400,7 +404,7 @@ public final class DaoUtil
         return queryMap;
     }
 
-    // ===
+    //===
 
     public static Sales getSales(ResultSet result) throws SQLException
     {
@@ -513,7 +517,7 @@ public final class DaoUtil
         return queryMap;
     }
 
-    // ===
+    //===
 
     public static Package getPackage(ResultSet result) throws SQLException
     {
@@ -614,6 +618,32 @@ public final class DaoUtil
         return queryMap;
     }
 
+    //===
+    
+    public static Classification getClassification(ResultSet result) throws SQLException
+    {
+        Classification classification = new Classification();
+
+        classification.setId(result.getLong("classification_id"));
+        classification.setClassificationNumber(
+                ( (result.getString("classification_number") == null) ? "" : result.getString("classification_number") ) );
+        classification.setClassificationName(result.getString("classification_name"));
+        classification.setClassificationType(result.getString("classification_type"));
+
+        return classification;
+    }
+
+    public static ClassificationResponse getClassificationResponse(ResultSet resultSet)
+            throws SQLException
+    {
+        Classification classification = getClassification(resultSet);
+        ClassificationResponse classificationResponse = new ClassificationResponse(classification);
+
+        return classificationResponse;
+    }
+    
+    //===
+    
     public static Boolean isType(String testStr, String type)
     {
         try

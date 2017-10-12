@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -18,30 +19,29 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import hc.fcdr.rws.db.ClassificationDao;
 import hc.fcdr.rws.db.PgConnectionPool;
-import hc.fcdr.rws.db.SalesDao;
-import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.SalesDataResponse;
-import hc.fcdr.rws.model.SalesRequest;
+import hc.fcdr.rws.model.ClassificationDataResponse;
 import hc.fcdr.rws.util.ContextManager;
+import hc.fcdr.rws.domain.Classification;
 
-@Path("/SalesService")
-public class SalesService extends Application
+@Path("/ClassificationService")
+public class ClassificationService extends Application
 {
-    static SalesDao salesDao = null;
+    static ClassificationDao classificationDao = null;
 
     @PostConstruct
     public static void initialize()
     {
-        if (salesDao == null)
+        if (classificationDao == null)
         {
             PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
             {
-                salesDao = new SalesDao(pgConnectionPool.getConnection(),
+                classificationDao = new ClassificationDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (SQLException e)
@@ -52,55 +52,55 @@ public class SalesService extends Application
     }
 
     @GET
-    @Path("/salesraw")
+    @Path("/classificationraw")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Sales> getSalesRawAll()
+    public List<Classification> getClassificationRawAll()
     {
         try
         {
-            if (salesDao != null)
-                return salesDao.getSales();
+            if (classificationDao != null)
+                return classificationDao.getClassification();
         }
         catch (DaoException e)
         {
             e.printStackTrace();
         }
 
-        return new ArrayList<Sales>();
+        return new ArrayList<Classification>();
     }
 
     @GET
-    @Path("/salesraw/{id}")
+    @Path("/classificationraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Sales getSalesRaw(@PathParam("id") long id,
+    public Classification getClassificationRaw(@PathParam("id") long id,
             @Context HttpServletResponse servletResponse)
     {
         try
         {
-            if (salesDao != null)
-                return salesDao.getSales(id);
+            if (classificationDao != null)
+                return classificationDao.getClassification(id);
         }
         catch (DaoException e)
         {
             e.printStackTrace();
         }
 
-        return new Sales();
+        return new Classification();
     }
 
     // ==============================
 
     @GET
-    @Path("/sales")
+    @Path("/classification")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSales()
+    public Response getClassification()
     {
-        SalesDataResponse entity = new SalesDataResponse();
+        ClassificationDataResponse entity = new ClassificationDataResponse();
 
         try
         {
-            if (salesDao != null)
-                entity = salesDao.getSalesResponse();
+            if (classificationDao != null)
+                entity = classificationDao.getClassificationResponse();
         }
         catch (Exception e)
         {
@@ -112,40 +112,17 @@ public class SalesService extends Application
     }
 
     @GET
-    @Path("/sales/{id}")
+    @Path("/classification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSales(@PathParam("id") long id,
+    public Response getClassification(@PathParam("id") long id,
             @Context HttpServletResponse servletResponse)
     {
-        SalesDataResponse entity = new SalesDataResponse();
+        ClassificationDataResponse entity = new ClassificationDataResponse();
 
         try
         {
-            if (salesDao != null)
-                entity = salesDao.getSalesResponse(id);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
-    }
-
-    @POST
-    @Path("/salesfiltered")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getSales(final SalesRequest salesRequest)
-            throws SQLException, IOException, Exception
-    {
-        SalesDataResponse entity = new SalesDataResponse();
-
-        try
-        {
-            if (salesDao != null)
-                entity = salesDao.getSalesResponse(salesRequest);
+            if (classificationDao != null)
+                entity = classificationDao.getClassificationResponse(id);
         }
         catch (Exception e)
         {
@@ -157,7 +134,7 @@ public class SalesService extends Application
     }
 
     @OPTIONS
-    @Path("/sales")
+    @Path("/classification")
     @Produces(MediaType.APPLICATION_XML)
     public String getSupportedOperations()
     {
