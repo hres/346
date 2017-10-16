@@ -20,6 +20,9 @@ import hc.fcdr.rws.model.SalesData;
 import hc.fcdr.rws.model.SalesDataResponse;
 import hc.fcdr.rws.model.SalesRequest;
 import hc.fcdr.rws.model.SalesResponse;
+import hc.fcdr.rws.model.SalesYearsData;
+import hc.fcdr.rws.model.SalesYearsDataResponse;
+import hc.fcdr.rws.model.SalesYearsResponse;
 
 public class SalesDao extends PgDao
 {
@@ -181,6 +184,40 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
+    // ===
+    
+    public SalesYearsDataResponse getSalesYearsResponse()
+            throws SQLException, IOException, Exception
+    {
+        ResultSet resultSet = null;
+        SalesYearsResponse salesYearsResponse = null;
+
+        SalesYearsData data = new SalesYearsData();
+
+        String query = "select distinct sales_year from " + schema + "." + "sales order by sales_year asc";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+                salesYearsResponse = DaoUtil.getSalesYearsResponse(resultSet);
+                data.add(salesYearsResponse);
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error(e);
+            return new SalesYearsDataResponse(
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
+        }
+
+        return new SalesYearsDataResponse(ResponseCodes.OK.getCode(), data,
+                ResponseCodes.OK.getMessage());
+    }
+    
     // ===
 
     public SalesDataResponse getSalesResponse(Long salesId)

@@ -24,6 +24,7 @@ import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.SalesDataResponse;
 import hc.fcdr.rws.model.SalesRequest;
+import hc.fcdr.rws.model.SalesYearsDataResponse;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/SalesService")
@@ -90,6 +91,27 @@ public class SalesService extends Application
 
     // ==============================
 
+    @GET
+    @Path("/salesyears")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSalesYears()
+    {
+        SalesYearsDataResponse entity = new SalesYearsDataResponse();
+
+        try
+        {
+            if (salesDao != null)
+                entity = salesDao.getSalesYearsResponse();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    
     @GET
     @Path("/sales")
     @Produces(MediaType.APPLICATION_JSON)

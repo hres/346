@@ -25,6 +25,7 @@ import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.model.ProductResponse;
 import hc.fcdr.rws.model.SalesRequest;
 import hc.fcdr.rws.model.SalesResponse;
+import hc.fcdr.rws.model.SalesYearsResponse;
 
 /**
  * Utility class for DAO's. This class contains commonly used DAO logic which is been refactored in single static
@@ -517,6 +518,14 @@ public final class DaoUtil
         return queryMap;
     }
 
+    //---
+    
+    public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
+            throws SQLException
+    {
+        return new SalesYearsResponse(resultSet.getInt("sales_year"));
+    }
+    
     //===
 
     public static Package getPackage(ResultSet result) throws SQLException
