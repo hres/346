@@ -175,9 +175,7 @@ public class CSVLoader
                     m2.put(productGrouping, importSalesDataListProductGrouping);
                 }
                 else
-                {
                     insertProductSalesRecords(v);
-                }
             }
             /// });
         }

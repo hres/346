@@ -185,7 +185,7 @@ public class SalesDao extends PgDao
     }
 
     // ===
-    
+
     public SalesYearsDataResponse getSalesYearsResponse()
             throws SQLException, IOException, Exception
     {
@@ -194,7 +194,8 @@ public class SalesDao extends PgDao
 
         SalesYearsData data = new SalesYearsData();
 
-        String query = "select distinct sales_year from " + schema + "." + "sales order by sales_year asc";
+        String query = "select distinct sales_year from " + schema + "."
+                + "sales order by sales_year asc";
 
         try
         {
@@ -217,7 +218,7 @@ public class SalesDao extends PgDao
         return new SalesYearsDataResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
     }
-    
+
     // ===
 
     public SalesDataResponse getSalesResponse(Long salesId)

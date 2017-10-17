@@ -48,8 +48,9 @@ public class WebServiceTester
         GenericType<List<User>> list = new GenericType<List<User>>()
         {
         };
-        List<User> users = client.target(REST_SERVICE_URL).request(
-                MediaType.APPLICATION_XML).get(list);
+        List<User> users = client.target(REST_SERVICE_URL)
+                                 .request(MediaType.APPLICATION_XML)
+                                 .get(list);
         String result = PASS;
         if (users.isEmpty())
             result = FAIL;
@@ -63,9 +64,11 @@ public class WebServiceTester
     {
         User sampleUser = new User();
         sampleUser.setId(1);
-        User user = client.target(REST_SERVICE_URL).path(
-                "/{userid}").resolveTemplate("userid", 1).request(
-                        MediaType.APPLICATION_XML).get(User.class);
+        User user = client.target(REST_SERVICE_URL)
+                          .path("/{userid}")
+                          .resolveTemplate("userid", 1)
+                          .request(MediaType.APPLICATION_XML)
+                          .get(User.class);
 
         String result = FAIL;
 
@@ -83,11 +86,11 @@ public class WebServiceTester
         form.param("id", "1");
         form.param("name", "suresh");
         form.param("profession", "clerk");
-        String callResult = client.target(REST_SERVICE_URL).request(
-                MediaType.APPLICATION_XML).post(
-                        Entity.entity(form,
-                                MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                        String.class);
+        String callResult = client.target(REST_SERVICE_URL)
+                                  .request(MediaType.APPLICATION_XML)
+                                  .post(Entity.entity(form,
+                                          MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                                          String.class);
         String result = PASS;
         if (!SUCCESS_RESULT.equals(callResult))
             result = FAIL;
@@ -102,11 +105,11 @@ public class WebServiceTester
         form.param("id", "2");
         form.param("name", "naresh");
         form.param("profession", "clerk");
-        String callResult = client.target(REST_SERVICE_URL).request(
-                MediaType.APPLICATION_XML).put(
-                        Entity.entity(form,
-                                MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                        String.class);
+        String callResult = client.target(REST_SERVICE_URL)
+                                  .request(MediaType.APPLICATION_XML)
+                                  .put(Entity.entity(form,
+                                          MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                                          String.class);
         String result = PASS;
         if (!SUCCESS_RESULT.equals(callResult))
             result = FAIL;
@@ -117,9 +120,11 @@ public class WebServiceTester
     // Test: Check if result is success XML.
     private void testDeleteUser()
     {
-        String callResult = client.target(REST_SERVICE_URL).path(
-                "/{userid}").resolveTemplate("userid", 2).request(
-                        MediaType.APPLICATION_XML).delete(String.class);
+        String callResult = client.target(REST_SERVICE_URL)
+                                  .path("/{userid}")
+                                  .resolveTemplate("userid", 2)
+                                  .request(MediaType.APPLICATION_XML)
+                                  .delete(String.class);
         String result = PASS;
         if (!SUCCESS_RESULT.equals(callResult))
             result = FAIL;

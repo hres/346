@@ -1,14 +1,10 @@
 package hc.fcdr.rws.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 public class ReportDataResponse
 {
-    private int             status;
-    private String          message;
-    
+    private int    status;
+    private String message;
+
     public ReportDataResponse()
     {
         super();
@@ -36,5 +32,4 @@ public class ReportDataResponse
         this.message = message;
     }
 
-    
 }

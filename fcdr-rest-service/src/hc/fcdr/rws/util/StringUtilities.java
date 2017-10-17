@@ -312,8 +312,11 @@ public class StringUtilities
 
         return new StringBuffer(
                 ((len + start) - end) + overlay.length() + 1).append(
-                        str.substring(0, start)).append(overlay).append(
-                                str.substring(end)).toString();
+                        str.substring(0, start))
+                                                             .append(overlay)
+                                                             .append(str.substring(
+                                                                     end))
+                                                             .toString();
     }
 
     /**

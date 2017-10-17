@@ -59,7 +59,7 @@ public class ContextManager
         m.put(APPLICATION_ENVIRONMENT,
                 getBindingVariable("application_environment"));
         m.put(SCHEMA, getBindingVariable("schema"));
-        
+
         m.put(MAIL_SMTP, getBindingVariable("mailSmtp"));
         m.put(MAIL_SENDER_NAME, getBindingVariable("mailSenderName"));
         m.put(MAIL_SENDER_ADDRESS, getBindingVariable("mailSenderAddress"));

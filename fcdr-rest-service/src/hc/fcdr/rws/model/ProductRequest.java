@@ -34,7 +34,7 @@ public class ProductRequest
     public String  restaurant_type;
     @XmlElement
     public String  type;
-    
+
     @Override
     public String toString()
     {
@@ -50,6 +50,5 @@ public class ProductRequest
                 + ", restaurant_type=" + restaurant_type + ", type=" + type
                 + "]";
     }
-    
-    
+
 }

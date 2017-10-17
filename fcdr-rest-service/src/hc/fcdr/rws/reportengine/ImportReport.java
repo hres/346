@@ -5,18 +5,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
-import java.util.Date;
-
 import hc.fcdr.rws.importer.ImportReportDetailRow;
 import hc.fcdr.rws.importer.ImportStatistics;
-import net.sf.dynamicreports.report.builder.FieldBuilder;
-import net.sf.dynamicreports.report.builder.column.ComponentColumnBuilder;
-import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
-import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
-import net.sf.dynamicreports.report.constant.Evaluation;
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.exception.DRException;

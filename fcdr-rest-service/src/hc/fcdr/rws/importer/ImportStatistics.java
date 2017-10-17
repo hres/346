@@ -1,18 +1,17 @@
 package hc.fcdr.rws.importer;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ImportStatistics
 {
-    private String importDateTime;
-    private Long totalLoadingTime;
-    private Long totalProcessingTime;
-    private Integer numberOfRecordsProcessed;
-    private Integer numberOfInvalidRecords;
+    private String                      importDateTime;
+    private Long                        totalLoadingTime;
+    private Long                        totalProcessingTime;
+    private Integer                     numberOfRecordsProcessed;
+    private Integer                     numberOfInvalidRecords;
     private List<ImportReportDetailRow> importReportDetailRowList;
-    
+
     public ImportStatistics()
     {
         super();
@@ -23,7 +22,7 @@ public class ImportStatistics
         this.numberOfInvalidRecords = 0;
         this.importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
     }
-    
+
     public String getImportDateTime()
     {
         return importDateTime;
@@ -96,6 +95,5 @@ public class ImportStatistics
                 + ", importReportDetailRowList=" + importReportDetailRowList
                 + "]";
     }
-    
-    
+
 }

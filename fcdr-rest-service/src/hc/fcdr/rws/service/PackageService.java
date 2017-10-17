@@ -108,8 +108,10 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @GET
@@ -130,8 +132,10 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @POST
@@ -153,8 +157,10 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @OPTIONS

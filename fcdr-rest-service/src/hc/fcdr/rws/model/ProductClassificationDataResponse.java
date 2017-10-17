@@ -1,20 +1,20 @@
 package hc.fcdr.rws.model;
 
-public class ClassificationDataResponse
+public class ProductClassificationDataResponse
 {
-    private int                status;
-    private ClassificationData data;
-    private String             message;
+    private int                       status;
+    private ProductClassificationData data;
+    private String                    message;
 
-    public ClassificationDataResponse()
+    public ProductClassificationDataResponse()
     {
         status = 0;
-        data = new ClassificationData();
+        data = new ProductClassificationData();
         message = "";
     }
 
-    public ClassificationDataResponse(int status, ClassificationData data,
-            String message)
+    public ProductClassificationDataResponse(int status,
+            ProductClassificationData data, String message)
     {
         super();
         this.status = status;
@@ -32,12 +32,12 @@ public class ClassificationDataResponse
         this.status = status;
     }
 
-    public ClassificationData getData()
+    public ProductClassificationData getData()
     {
         return data;
     }
 
-    public void setData(ClassificationData data)
+    public void setData(ProductClassificationData data)
     {
         this.data = data;
     }

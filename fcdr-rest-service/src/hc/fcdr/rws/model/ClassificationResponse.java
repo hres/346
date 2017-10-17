@@ -3,14 +3,13 @@ package hc.fcdr.rws.model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import hc.fcdr.rws.domain.Classification;
-import hc.fcdr.rws.domain.Product;
 
 @XmlRootElement
 public class ClassificationResponse
 {
-    private String  classification_number;
-    private String  classification_name;
-    private String  classification_type;
+    private String classification_number;
+    private String classification_name;
+    private String classification_type;
 
     public ClassificationResponse()
     {
@@ -28,7 +27,7 @@ public class ClassificationResponse
         this.classification_name = classificationName;
         this.classification_type = classificationType;
     }
-    
+
     public ClassificationResponse(Classification classification)
     {
         super();

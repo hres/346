@@ -5,64 +5,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 import hc.fcdr.rws.domain.Product;
 
 @XmlRootElement
-public class ProductResponse
+public class ProductClassificationResponse
 {
     private Long   product_id;
     private String product_manufacturer;
     private String product_brand;
-    // private Integer cnf_code;
+    private String product_country;
     private String cnf_code;
-    // private Double cluster_number;
     private String cluster_number;
     private String product_description;
     private String product_comment;
-    // private Double classification_number;
+    private String creation_date;
+    private String last_edit_date;
+    private String edited_by;
+    private String restaurant_type;
+    private String type;
     private String classification_number;
     private String classification_name;
     private String classification_type;
 
-    public ProductResponse()
+    public ProductClassificationResponse()
     {
         super();
         this.product_id = 0L;
         this.product_manufacturer = "";
         this.product_brand = "";
-        // this.cnf_code = 0;
         this.cnf_code = "";
-        // this.cluster_number = 0.0;
         this.cluster_number = "";
         this.product_description = "";
         this.product_comment = "";
-        // this.classification_number = 0.0;
+        this.creation_date = "";
+        this.last_edit_date = "";
+        this.edited_by = "";
+        this.restaurant_type = "";
+        this.type = "";
         this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
     }
 
-    public ProductResponse(Long id, String manufacturer, String brand,
-            // Integer cnfCode, Double clusterNumber, String description,
-            String cnfCode, String clusterNumber, String description,
-            // String comment, Double classificationNumber,
-            String comment, String classificationNumber,
-            String classificationName, String classificationType)
-    {
-        super();
-        this.product_id = id;
-        this.product_manufacturer = manufacturer;
-        this.product_brand = brand;
-        this.cnf_code = cnfCode;
-        this.cluster_number = clusterNumber;
-        this.product_description = description;
-        this.product_comment = comment;
-
-        this.classification_number = classificationNumber;
-        this.classification_name = classificationName;
-        this.classification_type = classificationType;
-    }
-
-    // public ProductResponse(Product product, Double classificationNumber,
-    public ProductResponse(Product product, String classificationNumber,
-            String classificationName, String classificationType)
+    public ProductClassificationResponse(Product product)
     {
         super();
         this.product_id = product.getId();
@@ -72,22 +54,11 @@ public class ProductResponse
         this.cluster_number = product.getClusterNumber();
         this.product_description = product.getDescription();
         this.product_comment = product.getComment();
-        this.classification_number = classificationNumber;
-        this.classification_name = classificationName;
-        this.classification_type = classificationType;
-    }
-
-    public ProductResponse(Product product)
-    {
-        super();
-        this.product_id = product.getId();
-        this.product_manufacturer = product.getManufacturer();
-        this.product_brand = product.getBrand();
-        this.cnf_code = product.getCnfCode();
-        this.cluster_number = product.getClusterNumber();
-        this.product_description = product.getDescription();
-        this.product_comment = product.getComment();
-        // this.classification_number = 0.0;
+        this.creation_date = product.getCreationDate().toString();
+        this.last_edit_date = product.getLastEditDate().toString();
+        this.edited_by = product.getEditedBy();
+        this.restaurant_type = product.getRestaurantType();
+        this.type = product.getType();
         this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
@@ -123,25 +94,31 @@ public class ProductResponse
         this.product_brand = product_brand;
     }
 
-    // public Integer getCnf_code()
+    public String getProduct_country()
+    {
+        return product_country;
+    }
+
+    public void setProduct_country(String product_country)
+    {
+        this.product_country = product_country;
+    }
+
     public String getCnf_code()
     {
         return cnf_code;
     }
 
-    // public void setCnf_code(Integer cnf_code)
     public void setCnf_code(String cnf_code)
     {
         this.cnf_code = cnf_code;
     }
 
-    // public Double getCluster_number()
     public String getCluster_number()
     {
         return cluster_number;
     }
 
-    // public void setCluster_number(Double cluster_number)
     public void setCluster_number(String cluster_number)
     {
         this.cluster_number = cluster_number;
@@ -167,13 +144,61 @@ public class ProductResponse
         this.product_comment = product_comment;
     }
 
-    // public Double getClassification_number()
+    public String getCreation_date()
+    {
+        return creation_date;
+    }
+
+    public void setCreation_date(String creation_date)
+    {
+        this.creation_date = creation_date;
+    }
+
+    public String getLast_edit_date()
+    {
+        return last_edit_date;
+    }
+
+    public void setLast_edit_date(String last_edit_date)
+    {
+        this.last_edit_date = last_edit_date;
+    }
+
+    public String getEdited_by()
+    {
+        return edited_by;
+    }
+
+    public void setEdited_by(String edited_by)
+    {
+        this.edited_by = edited_by;
+    }
+
+    public String getRestaurant_type()
+    {
+        return restaurant_type;
+    }
+
+    public void setRestaurant_type(String restaurant_type)
+    {
+        this.restaurant_type = restaurant_type;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
     public String getClassification_number()
     {
         return classification_number;
     }
 
-    // public void setClassification_number(Double classification_number)
     public void setClassification_number(String classification_number)
     {
         this.classification_number = classification_number;
@@ -198,23 +223,5 @@ public class ProductResponse
     {
         this.classification_type = classification_type;
     }
-
-    public void setClassificationType(String classificationType)
-    {
-        this.classification_type = classificationType;
-    }
-
-    // @Override
-    // public String toString()
-    // {
-    // return "ProductResponse [product_id=" + id + ", product_manufacturer="
-    // + manufacturer + ", product_brand=" + brand + ", cnf_code="
-    // + cnfCode + ", cluster_number=" + clusterNumber
-    // + ", product_description=" + description + ", product_comment="
-    // + comment + ", classification_number=" + classificationNumber
-    // + ", classification_name=" + classificationName
-    // + ", classification_type=" + classificationType + "]";
-    // }
-    //
 
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SalesYearsData
 {
     private List<SalesYearsResponse> dataList;
-    private Integer             count;
+    private Integer                  count;
 
     public SalesYearsData()
     {

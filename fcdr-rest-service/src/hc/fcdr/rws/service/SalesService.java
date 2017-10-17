@@ -108,10 +108,12 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
-    
+
     @GET
     @Path("/sales")
     @Produces(MediaType.APPLICATION_JSON)
@@ -129,8 +131,10 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @GET
@@ -151,8 +155,10 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @POST
@@ -174,8 +180,10 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @OPTIONS

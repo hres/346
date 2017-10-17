@@ -21,6 +21,7 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.model.ClassificationResponse;
 import hc.fcdr.rws.model.PackageRequest;
 import hc.fcdr.rws.model.PackageResponse;
+import hc.fcdr.rws.model.ProductClassificationResponse;
 import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.model.ProductResponse;
 import hc.fcdr.rws.model.SalesRequest;
@@ -287,8 +288,8 @@ public final class DaoUtil
         }
         return result;
     }
-    
-    //===
+
+    // ===
 
     public static Product getProduct(ResultSet result) throws SQLException
     {
@@ -299,14 +300,16 @@ public final class DaoUtil
         product.setDescription(result.getString("product_description"));
         product.setBrand(result.getString("product_brand"));
         product.setCountry(result.getString("product_country"));
-        
-        product.setClusterNumber( ( (result.getString("cluster_number") == null) ? "" : result.getString("cluster_number") ) );
+
+        product.setClusterNumber(((result.getString("cluster_number") == null)
+                ? "" : result.getString("cluster_number")));
 
         product.setComment(result.getString("product_comment"));
         product.setManufacturer(result.getString("product_manufacturer"));
-        
-        product.setCnfCode( ( (result.getString("cnf_code") == null) ? "" : result.getString("cnf_code") ) );
-        
+
+        product.setCnfCode(((result.getString("cnf_code") == null) ? ""
+                : result.getString("cnf_code")));
+
         product.setCreationDate(result.getTimestamp("creation_date"));
         product.setLastEditDate(result.getTimestamp("last_edit_date"));
         product.setEditedBy(result.getString("edited_by"));
@@ -321,7 +324,8 @@ public final class DaoUtil
         ProductResponse productResponse = new ProductResponse(product);
 
         productResponse.setClassification_number(
-                ( (resultSet.getString("classification_number") == null) ? "" : resultSet.getString("classification_number") ) );
+                ((resultSet.getString("classification_number") == null) ? ""
+                        : resultSet.getString("classification_number")));
         productResponse.setClassification_name(
                 resultSet.getString("classification_name"));
         productResponse.setClassification_type(
@@ -401,11 +405,31 @@ public final class DaoUtil
             queryMap.put("restaurant_type", request.restaurant_type);
         if (!request.type.isEmpty())
             queryMap.put("type", request.type);
-        
+
         return queryMap;
     }
 
-    //===
+    // ===
+
+    public static ProductClassificationResponse getProductClassificationResponse(
+            ResultSet resultSet) throws SQLException
+    {
+        Product product = getProduct(resultSet);
+        ProductClassificationResponse productClassificationResponse = new ProductClassificationResponse(
+                product);
+
+        productClassificationResponse.setClassification_number(
+                ((resultSet.getString("classification_number") == null) ? ""
+                        : resultSet.getString("classification_number")));
+        productClassificationResponse.setClassification_name(
+                resultSet.getString("classification_name"));
+        productClassificationResponse.setClassification_type(
+                resultSet.getString("classification_type"));
+
+        return productClassificationResponse;
+    }
+
+    // ===
 
     public static Sales getSales(ResultSet result) throws SQLException
     {
@@ -518,15 +542,15 @@ public final class DaoUtil
         return queryMap;
     }
 
-    //---
-    
+    // ---
+
     public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
             throws SQLException
     {
         return new SalesYearsResponse(resultSet.getInt("sales_year"));
     }
-    
-    //===
+
+    // ===
 
     public static Package getPackage(ResultSet result) throws SQLException
     {
@@ -627,32 +651,37 @@ public final class DaoUtil
         return queryMap;
     }
 
-    //===
-    
-    public static Classification getClassification(ResultSet result) throws SQLException
+    // ===
+
+    public static Classification getClassification(ResultSet result)
+            throws SQLException
     {
         Classification classification = new Classification();
 
         classification.setId(result.getLong("classification_id"));
         classification.setClassificationNumber(
-                ( (result.getString("classification_number") == null) ? "" : result.getString("classification_number") ) );
-        classification.setClassificationName(result.getString("classification_name"));
-        classification.setClassificationType(result.getString("classification_type"));
+                ((result.getString("classification_number") == null) ? ""
+                        : result.getString("classification_number")));
+        classification.setClassificationName(
+                result.getString("classification_name"));
+        classification.setClassificationType(
+                result.getString("classification_type"));
 
         return classification;
     }
 
-    public static ClassificationResponse getClassificationResponse(ResultSet resultSet)
-            throws SQLException
+    public static ClassificationResponse getClassificationResponse(
+            ResultSet resultSet) throws SQLException
     {
         Classification classification = getClassification(resultSet);
-        ClassificationResponse classificationResponse = new ClassificationResponse(classification);
+        ClassificationResponse classificationResponse = new ClassificationResponse(
+                classification);
 
         return classificationResponse;
     }
-    
-    //===
-    
+
+    // ===
+
     public static Boolean isType(String testStr, String type)
     {
         try

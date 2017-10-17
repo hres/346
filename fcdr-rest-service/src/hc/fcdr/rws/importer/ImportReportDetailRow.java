@@ -2,16 +2,16 @@ package hc.fcdr.rws.importer;
 
 public class ImportReportDetailRow
 {
-    private String  itemId;
-    private String  salesDescription;
-    
+    private String itemId;
+    private String salesDescription;
+
     public ImportReportDetailRow()
     {
         super();
         this.itemId = "";
         this.salesDescription = "";
     }
-    
+
     public ImportReportDetailRow(String itemId, String salesDescription)
     {
         super();
@@ -45,7 +45,5 @@ public class ImportReportDetailRow
         return "ImportReportDetailLine [itemId=" + itemId
                 + ", salesDescription=" + salesDescription + "]";
     }
-    
-    
-    
+
 }

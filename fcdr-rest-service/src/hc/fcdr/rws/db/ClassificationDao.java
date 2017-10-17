@@ -5,10 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.util.DaoUtil;
@@ -54,7 +51,8 @@ public class ClassificationDao extends PgDao
         return classificationList;
     }
 
-    public Classification getClassification(Long classificationId) throws DaoException
+    public Classification getClassification(Long classificationId)
+            throws DaoException
     {
         ResultSet resultSet = null;
         Classification classification = null;
@@ -97,7 +95,8 @@ public class ClassificationDao extends PgDao
 
             while (resultSet.next())
             {
-                classificationResponse = DaoUtil.getClassificationResponse(resultSet);
+                classificationResponse = DaoUtil.getClassificationResponse(
+                        resultSet);
                 data.add(classificationResponse);
             }
         }
@@ -115,8 +114,8 @@ public class ClassificationDao extends PgDao
 
     // ===
 
-    public ClassificationDataResponse getClassificationResponse(Long classificationId)
-            throws SQLException, IOException, Exception
+    public ClassificationDataResponse getClassificationResponse(
+            Long classificationId) throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ClassificationResponse classificationResponse = null;
@@ -133,7 +132,8 @@ public class ClassificationDao extends PgDao
 
             if (resultSet.next())
             {
-                classificationResponse = DaoUtil.getClassificationResponse(resultSet);
+                classificationResponse = DaoUtil.getClassificationResponse(
+                        resultSet);
                 data.add(classificationResponse);
             }
         }
@@ -149,5 +149,4 @@ public class ClassificationDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    
 }

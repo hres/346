@@ -1,15 +1,16 @@
 package hc.fcdr.rws.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "classification")
 public class Classification implements Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2364195962877145135L;
     private Long   id;
     private String classificationNumber;
     private String classificationName;
@@ -22,7 +23,8 @@ public class Classification implements Serializable
 
     }
 
-    public Classification(Long id, String classificationNumber, String classificationName, String classificationType)
+    public Classification(Long id, String classificationNumber,
+            String classificationName, String classificationType)
     {
         super();
         this.id = id;
@@ -89,13 +91,13 @@ public class Classification implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((classificationName == null) ? 0
+        result = (prime * result) + ((classificationName == null) ? 0
                 : classificationName.hashCode());
-        result = prime * result + ((classificationNumber == null) ? 0
+        result = (prime * result) + ((classificationNumber == null) ? 0
                 : classificationNumber.hashCode());
-        result = prime * result + ((classificationType == null) ? 0
+        result = (prime * result) + ((classificationType == null) ? 0
                 : classificationType.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = (prime * result) + ((id == null) ? 0 : id.hashCode());
         return result;
     }
 
@@ -149,6 +151,4 @@ public class Classification implements Serializable
                 + classificationType + "]";
     }
 
-    
-    
 }

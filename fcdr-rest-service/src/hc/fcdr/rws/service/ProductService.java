@@ -23,6 +23,7 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.ProductDataResponse;
 import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.util.ContextManager;
@@ -110,8 +111,10 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @GET
@@ -133,8 +136,62 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+
+    @GET
+    @Path("/productclassifications/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductClassifications(@PathParam("id") long id,
+            @Context HttpServletResponse servletResponse)
+    {
+        final Boolean RETURN_FIRST_RECORD_FOUND = false;
+        ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductClassificationResponse(id,
+                        RETURN_FIRST_RECORD_FOUND);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+
+    @GET
+    @Path("/productclassification/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductClassification(@PathParam("id") long id,
+            @Context HttpServletResponse servletResponse)
+    {
+        final Boolean RETURN_FIRST_RECORD_FOUND = true;
+        ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductClassificationResponse(id,
+                        RETURN_FIRST_RECORD_FOUND);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @POST
@@ -161,8 +218,10 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     // ===========

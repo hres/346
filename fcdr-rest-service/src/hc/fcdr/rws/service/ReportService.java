@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -52,16 +51,15 @@ public class ReportService extends Application
     public Response getReport(final ReportRequest reportRequest)
             throws SQLException, IOException, Exception
     {
-        
-        
-        
+
         ReportDataResponse entity = new ReportDataResponse();
         entity.setStatus(ResponseCodes.OK.getCode());
         entity.setMessage(ResponseCodes.OK.getMessage());
-        
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
-    }
 
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
 
 }

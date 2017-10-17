@@ -6,14 +6,15 @@ import java.util.ArrayList;
 public class ClassificationData
 {
     private List<ClassificationResponse> dataList;
-    private Integer               count;
+    private Integer                      count;
 
     public ClassificationData()
     {
         this(new ArrayList<ClassificationResponse>(), 0);
     }
 
-    public ClassificationData(List<ClassificationResponse> dataList, Integer count)
+    public ClassificationData(List<ClassificationResponse> dataList,
+            Integer count)
     {
         this.dataList = dataList;
         this.count = count;

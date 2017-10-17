@@ -8,7 +8,7 @@ public class ImportRequest
 {
     @XmlElement
     public String  inputDir;
-   
+
     @XmlElement
     public boolean sendMail;
 
@@ -18,7 +18,5 @@ public class ImportRequest
         return "ImportRequest [inputDir=" + inputDir + ", sendMail=" + sendMail
                 + "]";
     }
-
-    
 
 }

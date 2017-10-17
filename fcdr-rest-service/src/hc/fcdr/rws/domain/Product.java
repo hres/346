@@ -17,15 +17,15 @@ public class Product implements Serializable
     private String            description;
     private String            brand;
     private String            country;
-    //private Double            clusterNumber;
     private String            clusterNumber;
     private String            comment;
     private String            manufacturer;
-    //private Integer           cnfCode;
-    private String           cnfCode;
+    private String            cnfCode;
     private Timestamp         creationDate;
     private Timestamp         lastEditDate;
     private String            editedBy;
+    private String            restaurantType;
+    private String            type;
 
     public Product()
     {
@@ -34,23 +34,21 @@ public class Product implements Serializable
         this.description = "";
         this.brand = "";
         this.country = "";
-        //this.clusterNumber = 0.0;
         this.clusterNumber = "";
         this.comment = "";
         this.manufacturer = "";
-        //this.cnfCode = 0;
         this.cnfCode = "";
         this.creationDate = null;
         this.lastEditDate = null;
         this.editedBy = "";
+        this.restaurantType = "";
+        this.type = "";
     }
 
     public Product(Long id, String description, String brand, String country,
-            //Double clusterNumber, String comment, String manufacturer,
             String clusterNumber, String comment, String manufacturer,
-            //Integer cnfCode, Timestamp creationDate, Timestamp lastEditDate,
             String cnfCode, Timestamp creationDate, Timestamp lastEditDate,
-            String editedBy)
+            String editedBy, String restaurantType, String type)
     {
         super();
         this.id = id;
@@ -64,6 +62,8 @@ public class Product implements Serializable
         this.creationDate = creationDate;
         this.lastEditDate = lastEditDate;
         this.editedBy = editedBy;
+        this.restaurantType = restaurantType;
+        this.type = type;
     }
 
     public Product(Product product)
@@ -80,6 +80,8 @@ public class Product implements Serializable
         this.creationDate = product.getCreationDate();
         this.lastEditDate = product.getLastEditDate();
         this.editedBy = product.getEditedBy();
+        this.restaurantType = product.getRestaurantType();
+        this.type = product.getType();
     }
 
     public Long getId()
@@ -126,14 +128,12 @@ public class Product implements Serializable
         this.country = country;
     }
 
-    //public Double getClusterNumber()
     public String getClusterNumber()
     {
         return clusterNumber;
     }
 
     @XmlElement
-    //public void setClusterNumber(Double clusterNumber)
     public void setClusterNumber(String clusterNumber)
     {
         this.clusterNumber = clusterNumber;
@@ -161,14 +161,12 @@ public class Product implements Serializable
         this.manufacturer = manufacturer;
     }
 
-    //public Integer getCnfCode()
     public String getCnfCode()
     {
         return cnfCode;
     }
 
     @XmlElement
-    //public void setCnfCode(Integer cnfCode)
     public void setCnfCode(String cnfCode)
     {
         this.cnfCode = cnfCode;
@@ -207,6 +205,28 @@ public class Product implements Serializable
         this.editedBy = editedBy;
     }
 
+    public String getRestaurantType()
+    {
+        return restaurantType;
+    }
+
+    @XmlElement
+    public void setRestaurantType(String restaurantType)
+    {
+        this.restaurantType = restaurantType;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    @XmlElement
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
     @Override
     public String toString()
     {
@@ -215,7 +235,8 @@ public class Product implements Serializable
                 + clusterNumber + ", comment=" + comment + ", manufacturer="
                 + manufacturer + ", cnfCode=" + cnfCode + ", creationDate="
                 + creationDate + ", lastEditDate=" + lastEditDate
-                + ", editedBy=" + editedBy + "]";
+                + ", editedBy=" + editedBy + ", restaurantType="
+                + restaurantType + ", type=" + type + "]";
     }
 
     @Override
@@ -226,12 +247,9 @@ public class Product implements Serializable
         result = (prime * result) + ((brand == null) ? 0 : brand.hashCode());
         result = (prime * result)
                 + ((clusterNumber == null) ? 0 : clusterNumber.hashCode());
-        result = (prime * result)
-                + ((cnfCode == null) ? 0 : cnfCode.hashCode());
-        result = (prime * result)
-                + ((comment == null) ? 0 : comment.hashCode());
-        result = (prime * result)
-                + ((country == null) ? 0 : country.hashCode());
+        result = (prime * result) + ((cnfCode == null) ? 0 : cnfCode.hashCode());
+        result = (prime * result) + ((comment == null) ? 0 : comment.hashCode());
+        result = (prime * result) + ((country == null) ? 0 : country.hashCode());
         result = (prime * result)
                 + ((creationDate == null) ? 0 : creationDate.hashCode());
         result = (prime * result)
@@ -243,6 +261,9 @@ public class Product implements Serializable
                 + ((lastEditDate == null) ? 0 : lastEditDate.hashCode());
         result = (prime * result)
                 + ((manufacturer == null) ? 0 : manufacturer.hashCode());
+        result = (prime * result)
+                + ((restaurantType == null) ? 0 : restaurantType.hashCode());
+        result = (prime * result) + ((type == null) ? 0 : type.hashCode());
         return result;
     }
 
@@ -332,6 +353,20 @@ public class Product implements Serializable
                 return false;
         }
         else if (!manufacturer.equals(other.manufacturer))
+            return false;
+        if (restaurantType == null)
+        {
+            if (other.restaurantType != null)
+                return false;
+        }
+        else if (!restaurantType.equals(other.restaurantType))
+            return false;
+        if (type == null)
+        {
+            if (other.type != null)
+                return false;
+        }
+        else if (!type.equals(other.type))
             return false;
         return true;
     }

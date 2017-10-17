@@ -16,6 +16,9 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.ProductClassificationData;
+import hc.fcdr.rws.model.ProductClassificationDataResponse;
+import hc.fcdr.rws.model.ProductClassificationResponse;
 import hc.fcdr.rws.model.ProductData;
 import hc.fcdr.rws.model.ProductDataResponse;
 import hc.fcdr.rws.model.ProductRequest;
@@ -153,7 +156,7 @@ public class ProductDao extends PgDao
             resultSet = executeQuery(query, new Object[]
             { productId });
 
-            if (resultSet.next())
+            while (resultSet.next())
             {
                 productResponse = DaoUtil.getProductResponse(resultSet);
                 data.add(productResponse);
@@ -170,6 +173,63 @@ public class ProductDao extends PgDao
         return new ProductDataResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
     }
+
+    // ===
+
+    public ProductClassificationDataResponse getProductClassificationResponse(
+            Long productId, Boolean returnFirstRecordFound)
+            throws SQLException, IOException, Exception
+    {
+        ResultSet resultSet = null;
+        ProductClassificationResponse productClassificationResponse = null;
+
+        ProductClassificationData data = new ProductClassificationData();
+
+        String query = "select p.product_id, p.product_description, p.product_brand, "
+                + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
+                + " p.creation_date, p.last_edit_date, p.edited_by, "
+                + "c.classification_number, c.classification_type, c.classification_name from "
+                + schema + "." + "product p " + "left outer join " + schema
+                + "."
+                + "product_classification pc on p.product_id = pc.product_classification_product_id_fkey left outer join "
+                + schema + "."
+                + "classification c on pc.product_classification_classification_id_fkey = c.classification_id where p.product_id = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { productId });
+
+            if (returnFirstRecordFound)
+            {
+                if (resultSet.next())
+                {
+                    productClassificationResponse = DaoUtil.getProductClassificationResponse(
+                            resultSet);
+                    data.add(productClassificationResponse);
+                }
+            }
+            else
+                while (resultSet.next())
+                {
+                    productClassificationResponse = DaoUtil.getProductClassificationResponse(
+                            resultSet);
+                    data.add(productClassificationResponse);
+                }
+        }
+        catch (SQLException e)
+        {
+            logger.error(e);
+            return new ProductClassificationDataResponse(
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
+        }
+
+        return new ProductClassificationDataResponse(ResponseCodes.OK.getCode(),
+                data, ResponseCodes.OK.getMessage());
+    }
+
+    // ===
 
     public ProductDataResponse getProductResponse(ProductRequest productRequest)
             throws SQLException, IOException, Exception

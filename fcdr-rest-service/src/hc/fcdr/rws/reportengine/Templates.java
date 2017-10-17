@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.util.Locale;
 
 import net.sf.dynamicreports.report.base.expression.AbstractValueFormatter;
-import net.sf.dynamicreports.report.builder.HyperLinkBuilder;
 import net.sf.dynamicreports.report.builder.ReportTemplateBuilder;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.datatype.BigDecimalType;

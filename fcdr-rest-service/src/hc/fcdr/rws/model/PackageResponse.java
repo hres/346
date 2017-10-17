@@ -52,7 +52,8 @@ public class PackageResponse
         this.labelUpc = _package.getUpc();
         this.labelDescription = _package.getDescription();
         this.labelSource = _package.getPackageSource();
-        this.labelCollectionDate = _package.getPackageCollectionDate().toString();
+        this.labelCollectionDate = _package.getPackageCollectionDate()
+                                           .toString();
         this.labelCreationDate = _package.getCreationDate();
         this.labelLastEditDate = _package.getLastEditDate();
         this.labelLastEditedBy = _package.getEditedBy();
