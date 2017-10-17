@@ -319,6 +319,8 @@ public class SalesDao extends PgDao
         {
             str = keys.next();
 
+            if (str.equals("sales_year"))
+                str = "CAST (" + str + " AS TEXT)";
             if (count == 0)
                 where_clause += " " + str + " LIKE ?";
             else
