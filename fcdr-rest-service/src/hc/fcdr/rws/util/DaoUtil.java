@@ -24,6 +24,9 @@ import hc.fcdr.rws.model.PackageResponse;
 import hc.fcdr.rws.model.ProductClassificationResponse;
 import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.model.ProductResponse;
+import hc.fcdr.rws.model.ProductSalesLabelRequest;
+import hc.fcdr.rws.model.ProductSalesLabelResponse;
+import hc.fcdr.rws.model.ProductSalesResponse;
 import hc.fcdr.rws.model.SalesRequest;
 import hc.fcdr.rws.model.SalesResponse;
 import hc.fcdr.rws.model.SalesYearsResponse;
@@ -313,6 +316,10 @@ public final class DaoUtil
         product.setCreationDate(result.getTimestamp("creation_date"));
         product.setLastEditDate(result.getTimestamp("last_edit_date"));
         product.setEditedBy(result.getString("edited_by"));
+        
+        /// Maybe needed only if returning these values.
+        ///product.setRestaurantType(result.getString("restaurant_type"));
+        ///product.setType(result.getString("type"));
 
         return product;
     }
@@ -681,6 +688,166 @@ public final class DaoUtil
     }
 
     // ===
+    
+    public static ProductSalesResponse getProductSalesResponse(ResultSet resultSet)
+            throws SQLException
+    {
+        Sales sales = getSales(resultSet);
+        ProductSalesResponse productSalesResponse = new ProductSalesResponse(sales);
+
+        return productSalesResponse;
+    }
+    
+    // ===
+    
+    public static ProductSalesLabelResponse getProductSalesLabelResponse(
+            ResultSet resultSet)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    // ---
+    
+    public static Map<String, Object> getQueryMap(ProductSalesLabelRequest request)
+    {
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+
+        if (!request.product_description.isEmpty())
+            queryMap.put("product_description", request.product_description);
+        if (!request.product_brand.isEmpty())
+            queryMap.put("product_brand", request.product_brand);
+        if (!request.product_manufacturer.isEmpty())
+            queryMap.put("product_manufacturer", request.product_manufacturer);
+
+        if (request.cnf_code != null)
+        {
+            if (isType(request.cnf_code.toString(), "int"))
+            {
+                if (request.cnf_code > 0)
+                    queryMap.put("cnf_code", request.cnf_code);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+
+        if (request.cluster_number != null)
+        {
+            if (isType(request.cluster_number.toString(), "double"))
+            {
+                if (request.cluster_number > 0.0)
+                    queryMap.put("cluster_number", request.cluster_number);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+
+        
+        if (!request.product_comment.isEmpty())
+            queryMap.put("product_comment", request.product_comment);
+
+        if (request.classification_number != null)
+        {
+            if (isType(request.classification_number.toString(), "double"))
+            {
+                if (request.classification_number > 0.0)
+                    queryMap.put("classification_number",
+                            request.classification_number);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+
+        if (!request.classification_name.isEmpty())
+            queryMap.put("classification_name", request.classification_name);
+        if (!request.classification_type.isEmpty())
+            queryMap.put("classification_type", request.classification_type);
+
+        // ===
+        
+        if (request.sales_year != null)
+        {
+            if (isType(request.sales_year.toString(), "int"))
+            {
+                if (request.sales_year > 0)
+                    queryMap.put("sales_year", request.sales_year);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        
+        if (!request.sales_description.isEmpty())
+            queryMap.put("sales_description", request.sales_description);
+        
+        if (!request.sales_upc.isEmpty())
+            if (StringUtilities.isNumeric(request.sales_upc))
+                queryMap.put("sales_upc", request.sales_upc);
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_UPC);
+        
+        if (!request.nielsen_category.isEmpty())
+            queryMap.put("nielsen_category", request.nielsen_category);
+        
+        if (!request.sales_source.isEmpty())
+            queryMap.put("sales_source", request.sales_source);
+
+        if (DateUtil.validateDates(request.sales_collection_date_from,
+                request.sales_collection_date_to))
+        {
+            if (!request.sales_collection_date_from.isEmpty()
+                    && !request.sales_collection_date_to.isEmpty())
+            {
+                queryMap.put("collection_date_from",
+                        request.sales_collection_date_from);
+                queryMap.put("collection_date_to", request.sales_collection_date_to);
+            }
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+        
+        // Add dollar rank
+        
+        if (!request.sales_comment.isEmpty())
+            queryMap.put("sales_comment", request.sales_comment);
+
+        // ===
+        
+        
+        // ===
+
+        if (request.offset != null)
+        {
+            if (!isType(request.offset.toString(), "int"))
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        
+        // ===
+        
+        if (request.offset != null)
+        {
+            if (!isType(request.offset.toString(), "int"))
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+
+        return queryMap;
+    }
+    
+    
+
+    
+    // ===
 
     public static Boolean isType(String testStr, String type)
     {
@@ -701,4 +868,5 @@ public final class DaoUtil
 
     }
 
+    
 }

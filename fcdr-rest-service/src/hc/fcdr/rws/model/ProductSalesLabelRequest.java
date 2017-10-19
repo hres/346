@@ -24,9 +24,9 @@ public class ProductSalesLabelRequest
     public Double  cluster_number;
     @XmlElement
     public String  product_comment;
-    
+
     @XmlElement
-    public Integer  sales_year;
+    public Integer sales_year;
     @XmlElement
     public String  sales_description;
     @XmlElement
@@ -45,7 +45,7 @@ public class ProductSalesLabelRequest
     public String  dollar_rank_to;
     @XmlElement
     public String  sales_comment;
-    
+
     @XmlElement
     public String  label_upc;
     @XmlElement
@@ -60,13 +60,14 @@ public class ProductSalesLabelRequest
     public String  label_collection_date_to;
     @XmlElement
     public String  label_comment;
+
     @XmlElement
     public String  orderby;
     @XmlElement
     public boolean flag;
     @XmlElement
     public Integer offset;
-    
+
     @Override
     public String toString()
     {
@@ -94,5 +95,4 @@ public class ProductSalesLabelRequest
                 + ", flag=" + flag + ", offset=" + offset + "]";
     }
 
-    
 }

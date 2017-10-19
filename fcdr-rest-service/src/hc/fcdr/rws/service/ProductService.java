@@ -26,6 +26,7 @@ import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.ProductDataResponse;
 import hc.fcdr.rws.model.ProductRequest;
+import hc.fcdr.rws.model.ProductSalesDataResponse;
 import hc.fcdr.rws.model.ProductSalesLabelDataResponse;
 import hc.fcdr.rws.model.ProductSalesLabelRequest;
 import hc.fcdr.rws.util.ContextManager;
@@ -252,6 +253,33 @@ public class ProductService extends Application
                        .entity(entity)
                        .build();
     }
+    
+    // ===========
+    
+    @GET
+    @Path("/productsales/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductSales(@PathParam("id") long id,
+            @Context HttpServletResponse servletResponse)
+    {
+        ProductSalesDataResponse entity = new ProductSalesDataResponse();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductSalesResponse(id);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+
     
     // ===========
 
