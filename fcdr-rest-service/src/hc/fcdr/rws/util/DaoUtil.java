@@ -22,6 +22,7 @@ import hc.fcdr.rws.model.ClassificationResponse;
 import hc.fcdr.rws.model.PackageRequest;
 import hc.fcdr.rws.model.PackageResponse;
 import hc.fcdr.rws.model.ProductClassificationResponse;
+import hc.fcdr.rws.model.ProductLabelsResponse;
 import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.model.ProductResponse;
 import hc.fcdr.rws.model.ProductSalesLabelRequest;
@@ -696,6 +697,17 @@ public final class DaoUtil
         ProductSalesResponse productSalesResponse = new ProductSalesResponse(sales);
 
         return productSalesResponse;
+    }
+    
+    // ===
+    
+    public static ProductLabelsResponse getProductLabelsResponse(ResultSet resultSet)
+            throws SQLException
+    {
+        Package _package = getPackage(resultSet);
+        ProductLabelsResponse productLabelsResponse = new ProductLabelsResponse(_package);
+
+        return productLabelsResponse;
     }
     
     // ===

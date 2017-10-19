@@ -21,6 +21,9 @@ import hc.fcdr.rws.model.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.ProductClassificationResponse;
 import hc.fcdr.rws.model.ProductData;
 import hc.fcdr.rws.model.ProductDataResponse;
+import hc.fcdr.rws.model.ProductLabelsData;
+import hc.fcdr.rws.model.ProductLabelsDataResponse;
+import hc.fcdr.rws.model.ProductLabelsResponse;
 import hc.fcdr.rws.model.ProductRequest;
 import hc.fcdr.rws.model.ProductResponse;
 import hc.fcdr.rws.model.ProductSalesData;
@@ -391,6 +394,42 @@ public class ProductDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
+    // ===
+
+    public ProductLabelsDataResponse getProductLabelsResponse(Long productId)
+            throws SQLException, IOException, Exception
+    {
+        ResultSet resultSet = null;
+        ProductLabelsResponse productLabelsResponse = null;
+
+        ProductLabelsData data = new ProductLabelsData();
+        
+        String query = "select * from " + schema + "."
+                + "package where package_product_id_fkey = ?";
+        
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { productId });
+
+            while (resultSet.next())
+            {
+                productLabelsResponse = DaoUtil.getProductLabelsResponse(resultSet);
+                data.add(productLabelsResponse);
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error(e);
+            return new ProductLabelsDataResponse(
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
+                    ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
+        }
+
+        return new ProductLabelsDataResponse(ResponseCodes.OK.getCode(), data,
+                ResponseCodes.OK.getMessage());
+    }
+    
     // ===
 
     public ProductSalesLabelDataResponse getProductSalesLabelResponse(ProductSalesLabelRequest productSalesLabelRequest)
