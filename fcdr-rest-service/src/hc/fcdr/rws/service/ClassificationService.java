@@ -70,8 +70,7 @@ public class ClassificationService extends Application
     @GET
     @Path("/classificationraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Classification getClassificationRaw(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Classification getClassificationRaw(@PathParam("id") long id)
     {
         try
         {
@@ -114,8 +113,7 @@ public class ClassificationService extends Application
     @GET
     @Path("/classification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClassification(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getClassification(@PathParam("id") long id)
     {
         ClassificationDataResponse entity = new ClassificationDataResponse();
 

@@ -73,8 +73,7 @@ public class SalesService extends Application
     @GET
     @Path("/salesraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Sales getSalesRaw(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Sales getSalesRaw(@PathParam("id") long id)
     {
         try
         {
@@ -140,8 +139,7 @@ public class SalesService extends Application
     @GET
     @Path("/sales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSales(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getSales(@PathParam("id") long id)
     {
         SalesDataResponse entity = new SalesDataResponse();
 

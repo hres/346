@@ -334,10 +334,13 @@ public final class DaoUtil
         productResponse.setClassification_number(
                 ((resultSet.getString("classification_number") == null) ? ""
                         : resultSet.getString("classification_number")));
+        
         productResponse.setClassification_name(
-                resultSet.getString("classification_name"));
+                ((resultSet.getString("classification_name") == null) ? ""
+                        : resultSet.getString("classification_name")));
         productResponse.setClassification_type(
-                resultSet.getString("classification_type"));
+                ((resultSet.getString("classification_type") == null) ? ""
+                        : resultSet.getString("classification_type")));
 
         return productResponse;
     }

@@ -78,8 +78,7 @@ public class ProductService extends Application
     @GET
     @Path("/productsraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductsRaw(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Product getProductsRaw(@PathParam("id") long id)
     {
         try
         {
@@ -124,8 +123,7 @@ public class ProductService extends Application
     @GET
     @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getProducts(@PathParam("id") long id)
     {
         ProductDataResponse entity = new ProductDataResponse();
 
@@ -149,8 +147,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassifications/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassifications(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getProductClassifications(@PathParam("id") long id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = false;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -175,8 +172,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassification(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getProductClassification(@PathParam("id") long id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = true;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -260,8 +256,7 @@ public class ProductService extends Application
     @GET
     @Path("/productsales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductSales(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getProductSales(@PathParam("id") long id)
     {
         ProductSalesDataResponse entity = new ProductSalesDataResponse();
 
@@ -287,8 +282,7 @@ public class ProductService extends Application
     @GET
     @Path("/productlabels/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductLabels(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getProductLabels(@PathParam("id") long id)
     {
         ProductLabelsDataResponse entity = new ProductLabelsDataResponse();
 

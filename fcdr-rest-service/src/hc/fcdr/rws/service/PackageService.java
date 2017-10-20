@@ -73,8 +73,7 @@ public class PackageService extends Application
     @GET
     @Path("/packageraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Package getPackageRaw(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Package getPackageRaw(@PathParam("id") long id)
     {
         try
         {
@@ -117,8 +116,7 @@ public class PackageService extends Application
     @GET
     @Path("/package/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPackage(@PathParam("id") long id,
-            @Context HttpServletResponse servletResponse)
+    public Response getPackage(@PathParam("id") long id)
     {
         PackageDataResponse entity = new PackageDataResponse();
 
