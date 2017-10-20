@@ -308,7 +308,7 @@ public final class DaoUtil
         product.setClusterNumber(((result.getString("cluster_number") == null)
                 ? "" : result.getString("cluster_number")));
 
-        product.setComment(result.getString("product_comment"));
+        product.setComment(((result.getString("product_comment") == null) ? "" : result.getString("product_comment")));
         product.setManufacturer(result.getString("product_manufacturer"));
 
         product.setCnfCode(((result.getString("cnf_code") == null) ? ""
