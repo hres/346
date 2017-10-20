@@ -282,7 +282,9 @@ public class ProductDao extends PgDao
 
         String where_clause = "";
         int count = 0;
+        String str0;
         String str;
+        String str1;
         String sortDirection = null;
 
         Iterator<String> keys = queryMap.keySet().iterator();
@@ -290,14 +292,24 @@ public class ProductDao extends PgDao
 
         while (keys.hasNext())
         {
-            str = keys.next();
-
-            if (str.equals("cluster_number") || str.equals("cnf_code"))
-                str = "CAST (" + str + " AS TEXT)";
+            str0 = keys.next();
+            
+            String prx = (("classification_number".equalsIgnoreCase(str0))
+                    || ("classification_name".equalsIgnoreCase(str0))
+                    || ("classification_type".equalsIgnoreCase(str0))) ? "c."
+                            : "p.";
+            
+            str1 = prx + str0;
+            
+            if (str0.equals("cluster_number") || str0.equals("cnf_code") || str0.equals("classification_number"))
+                str1 = "CAST (" + str1 + " AS TEXT)";
+            
+            
+            
             if (count == 0)
-                where_clause += " " + str + " LIKE ?";
+                where_clause += " " + str1 + " LIKE ?";
             else
-                where_clause += " AND " + str + " LIKE ?";
+                where_clause += " AND " + str1 + " LIKE ?";
 
             ++count;
         }
@@ -307,7 +319,7 @@ public class ProductDao extends PgDao
         try
         {
             if ((where_clause != null) && (where_clause.length() > 0))
-                query += " where " + "p." + where_clause.trim();
+                query += " where " + where_clause.trim();
 
             if (sortOrder)
                 sortDirection = "ASC";
@@ -315,6 +327,7 @@ public class ProductDao extends PgDao
                 sortDirection = "DESC";
 
             offSet = offSet * 10;
+            
             String prefix = (("classification_number".equalsIgnoreCase(orderBy))
                     || ("classification_name".equalsIgnoreCase(orderBy))
                     || ("classification_type".equalsIgnoreCase(orderBy))) ? "c."
