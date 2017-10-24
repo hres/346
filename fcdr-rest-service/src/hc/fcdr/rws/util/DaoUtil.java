@@ -294,7 +294,8 @@ public final class DaoUtil
     }
 
     // ===
-
+    // ===
+    
     public static Product getProduct(ResultSet result) throws SQLException
     {
 
@@ -716,10 +717,54 @@ public final class DaoUtil
     // ===
     
     public static ProductSalesLabelResponse getProductSalesLabelResponse(
-            ResultSet resultSet)
+            ResultSet resultSet) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        Product product = getProduct(resultSet);
+        ProductSalesLabelResponse productSalesLabelResponse = new ProductSalesLabelResponse(product);
+
+        productSalesLabelResponse.setClassification_number(
+                ((resultSet.getString("classification_number") == null) ? ""
+                        : resultSet.getString("classification_number")));
+        
+        productSalesLabelResponse.setClassification_name(
+                ((resultSet.getString("classification_name") == null) ? ""
+                        : resultSet.getString("classification_name")));
+        productSalesLabelResponse.setClassification_type(
+                ((resultSet.getString("classification_type") == null) ? ""
+                        : resultSet.getString("classification_type")));
+        
+        productSalesLabelResponse.setSales_year(((resultSet.getString("sales_year") == null) ? ""
+                        : resultSet.getString("sales_year")));
+        productSalesLabelResponse.setSales_description(((resultSet.getString("sales_description") == null) ? ""
+                        : resultSet.getString("sales_description")));
+        productSalesLabelResponse.setSales_upc(((resultSet.getString("sales_upc") == null) ? ""
+                        : resultSet.getString("sales_upc")));
+        productSalesLabelResponse.setNielsen_category(((resultSet.getString("nielsen_category") == null) ? ""
+                        : resultSet.getString("nielsen_category")));
+        productSalesLabelResponse.setSales_source(((resultSet.getString("sales_source") == null) ? ""
+                        : resultSet.getString("sales_source")));
+        productSalesLabelResponse.setSales_collection_date(((resultSet.getString("sales_collection_date") == null) ? ""
+                        : resultSet.getString("sales_collection_date")));
+        
+        //TODO dollar rank
+        
+        productSalesLabelResponse.setSales_comment(((resultSet.getString("sales_comment") == null) ? ""
+                        : resultSet.getString("sales_comment")));
+        
+        productSalesLabelResponse.setLabel_upc(((resultSet.getString("package_upc") == null) ? ""
+                        : resultSet.getString("package_upc")));
+        productSalesLabelResponse.setLabel_description(((resultSet.getString("package_description") == null) ? ""
+                        : resultSet.getString("package_description")));
+        productSalesLabelResponse.setLabel_source(((resultSet.getString("package_source") == null) ? ""
+                        : resultSet.getString("package_source")));
+        productSalesLabelResponse.setLabel_ingredients(((resultSet.getString("ingredients") == null) ? ""
+                        : resultSet.getString("ingredients")));
+        productSalesLabelResponse.setLabel_collection_date(((resultSet.getString("package_collection_date") == null) ? ""
+                        : resultSet.getString("package_collection_date")));
+        productSalesLabelResponse.setLabel_comment(((resultSet.getString("package_comment") == null) ? ""
+                        : resultSet.getString("package_comment")));
+
+        return productSalesLabelResponse;
     }
     
     // ---
@@ -828,23 +873,39 @@ public final class DaoUtil
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
         
-        // Add dollar rank
+        // Add dollar rank from/to
         
         if (!request.sales_comment.isEmpty())
             queryMap.put("sales_comment", request.sales_comment);
 
         // ===
         
-        
-        // ===
+        if (!request.label_upc.isEmpty())
+            if (StringUtilities.isNumeric(request.label_upc))
+                queryMap.put("label_upc", request.label_upc);
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_UPC);
 
-        if (request.offset != null)
+        if (!request.label_description.isEmpty())
+            queryMap.put("label_description", request.label_description);
+        if (!request.label_source.isEmpty())
+            queryMap.put("label_source", request.label_source);
+        if (!request.label_ingredients.isEmpty())
+            queryMap.put("label_ingredients", request.label_ingredients);
+
+        if (DateUtil.validateDates(request.label_collection_date_from,
+                request.label_collection_date_to))
         {
-            if (!isType(request.offset.toString(), "int"))
-                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+            if (!request.label_collection_date_from.isEmpty()
+                    && !request.label_collection_date_to.isEmpty())
+            {
+                queryMap.put("label_collection_date_from",
+                        request.label_collection_date_from);
+                queryMap.put("label_collection_date_to", request.label_collection_date_to);
+            }
         }
         else
-            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+            queryMap.put("inputError", ResponseCodes.INVALID_DATE);
         
         // ===
         
@@ -858,10 +919,7 @@ public final class DaoUtil
 
         return queryMap;
     }
-    
-    
 
-    
     // ===
 
     public static Boolean isType(String testStr, String type)
