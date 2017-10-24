@@ -11,10 +11,10 @@ public class Classification implements Serializable
      * 
      */
     private static final long serialVersionUID = -2364195962877145135L;
-    private Long   id;
-    private String classificationNumber;
-    private String classificationName;
-    private String classificationType;
+    private Long              id;
+    private String            classificationNumber;
+    private String            classificationName;
+    private String            classificationType;
 
     public Classification()
     {

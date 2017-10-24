@@ -2,9 +2,9 @@ package hc.fcdr.rws.model;
 
 public class ProductLabelsDataResponse
 {
-    private int                       status;
+    private int               status;
     private ProductLabelsData data;
-    private String                    message;
+    private String            message;
 
     public ProductLabelsDataResponse()
     {
@@ -13,8 +13,8 @@ public class ProductLabelsDataResponse
         message = "";
     }
 
-    public ProductLabelsDataResponse(int status,
-            ProductLabelsData data, String message)
+    public ProductLabelsDataResponse(int status, ProductLabelsData data,
+            String message)
     {
         super();
         this.status = status;

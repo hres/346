@@ -247,9 +247,12 @@ public class Product implements Serializable
         result = (prime * result) + ((brand == null) ? 0 : brand.hashCode());
         result = (prime * result)
                 + ((clusterNumber == null) ? 0 : clusterNumber.hashCode());
-        result = (prime * result) + ((cnfCode == null) ? 0 : cnfCode.hashCode());
-        result = (prime * result) + ((comment == null) ? 0 : comment.hashCode());
-        result = (prime * result) + ((country == null) ? 0 : country.hashCode());
+        result = (prime * result)
+                + ((cnfCode == null) ? 0 : cnfCode.hashCode());
+        result = (prime * result)
+                + ((comment == null) ? 0 : comment.hashCode());
+        result = (prime * result)
+                + ((country == null) ? 0 : country.hashCode());
         result = (prime * result)
                 + ((creationDate == null) ? 0 : creationDate.hashCode());
         result = (prime * result)

@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,7 +14,6 @@ import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -225,12 +223,13 @@ public class ProductService extends Application
     }
 
     // ===========
-    
+
     @POST
     @Path("/productsaleslabel")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getProductSalesLabel(final ProductSalesLabelRequest productSalesLabelRequest)
+    public Response getProductSalesLabel(
+            final ProductSalesLabelRequest productSalesLabelRequest)
             throws SQLException, IOException, Exception
     {
         ProductSalesLabelDataResponse entity = new ProductSalesLabelDataResponse();
@@ -238,7 +237,8 @@ public class ProductService extends Application
         try
         {
             if (productDao != null)
-                entity = productDao.getProductSalesLabelResponse(productSalesLabelRequest);
+                entity = productDao.getProductSalesLabelResponse(
+                        productSalesLabelRequest);
         }
         catch (Exception e)
         {
@@ -250,9 +250,9 @@ public class ProductService extends Application
                        .entity(entity)
                        .build();
     }
-    
+
     // ===========
-    
+
     @GET
     @Path("/productsales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -276,9 +276,8 @@ public class ProductService extends Application
                        .build();
     }
 
-    
     // ===========
-    
+
     @GET
     @Path("/productlabels/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -301,7 +300,7 @@ public class ProductService extends Application
                        .entity(entity)
                        .build();
     }
-    
+
     // ===========
 
     // @PUT

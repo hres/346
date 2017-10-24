@@ -7,13 +7,13 @@ import hc.fcdr.rws.domain.Sales;
 @XmlRootElement
 public class ProductSalesResponse
 {
-    private Long sales_id;
+    private Long    sales_id;
     private String  sales_upc;
     private Double  dollar_volume;
     private Integer sales_year;
     private String  nielsen_category;
     private String  sales_source;
-    
+
     public ProductSalesResponse()
     {
         super();
@@ -25,7 +25,6 @@ public class ProductSalesResponse
         this.sales_source = "";
     }
 
-    
     public ProductSalesResponse(Long sales_id, String sales_upc,
             Double dollar_volume, Integer sales_year, String nielsen_category,
             String sales_source)
@@ -50,77 +49,64 @@ public class ProductSalesResponse
         this.sales_source = sales.getSalesSource();
     }
 
-
     public Long getSales_id()
     {
         return sales_id;
     }
-
 
     public void setSales_id(Long sales_id)
     {
         this.sales_id = sales_id;
     }
 
-
     public String getSales_upc()
     {
         return sales_upc;
     }
-
 
     public void setSales_upc(String sales_upc)
     {
         this.sales_upc = sales_upc;
     }
 
-
     public Double getDollar_volume()
     {
         return dollar_volume;
     }
-
 
     public void setDollar_volume(Double dollar_volume)
     {
         this.dollar_volume = dollar_volume;
     }
 
-
     public Integer getSales_year()
     {
         return sales_year;
     }
-
 
     public void setSales_year(Integer sales_year)
     {
         this.sales_year = sales_year;
     }
 
-
     public String getNielsen_category()
     {
         return nielsen_category;
     }
-
 
     public void setNielsen_category(String nielsen_category)
     {
         this.nielsen_category = nielsen_category;
     }
 
-
     public String getSales_source()
     {
         return sales_source;
     }
-
 
     public void setSales_source(String sales_source)
     {
         this.sales_source = sales_source;
     }
 
-    
 }

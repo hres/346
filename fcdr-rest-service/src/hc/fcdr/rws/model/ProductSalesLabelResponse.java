@@ -14,11 +14,11 @@ public class ProductSalesLabelResponse
     private String cnf_code;
     private String cluster_number;
     private String product_comment;
-    
+
     private String classification_number;
     private String classification_name;
     private String classification_type;
-    
+
     private String sales_year;
     private String sales_description;
     private String sales_upc;
@@ -27,14 +27,14 @@ public class ProductSalesLabelResponse
     private String sales_collection_date;
     private String dollar_rank;
     private String sales_comment;
-    
+
     private String label_upc;
     private String label_description;
     private String label_source;
     private String label_ingredients;
     private String label_collection_date;
     private String label_comment;
-    
+
     public ProductSalesLabelResponse()
     {
         super();
@@ -45,11 +45,11 @@ public class ProductSalesLabelResponse
         this.cnf_code = "";
         this.cluster_number = "";
         this.product_comment = "";
-        
+
         this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
-        
+
         this.sales_year = "";
         this.sales_description = "";
         this.sales_upc = "";
@@ -58,7 +58,7 @@ public class ProductSalesLabelResponse
         this.sales_collection_date = "";
         this.dollar_rank = "";
         this.sales_comment = "";
-        
+
         this.label_upc = "";
         this.label_description = "";
         this.label_source = "";
@@ -77,11 +77,11 @@ public class ProductSalesLabelResponse
         this.cnf_code = product.getCnfCode();
         this.cluster_number = product.getClusterNumber();
         this.product_comment = product.getComment();
-        
+
         this.classification_number = "";
         this.classification_name = "";
         this.classification_type = "";
-        
+
         this.sales_year = "";
         this.sales_description = "";
         this.sales_upc = "";
@@ -90,7 +90,7 @@ public class ProductSalesLabelResponse
         this.sales_collection_date = "";
         this.dollar_rank = "";
         this.sales_comment = "";
-        
+
         this.label_upc = "";
         this.label_description = "";
         this.label_source = "";
@@ -338,5 +338,5 @@ public class ProductSalesLabelResponse
     {
         this.label_comment = label_comment;
     }
-    
+
 }
