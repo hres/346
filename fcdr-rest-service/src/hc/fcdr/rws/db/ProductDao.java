@@ -468,6 +468,51 @@ public class ProductDao extends PgDao
                     ((ResponseCodes) o).getMessage());
         }
 
+        /// ===
+
+        String salesCollectionDateFrom = "";
+        String salesCollectionDateTo = "";
+        boolean as = false;
+        boolean bs = false;
+
+        if (queryMap.containsKey("sales_collection_date_from"))
+        {
+            salesCollectionDateFrom = (String) queryMap.get("sales_collection_date_from");
+            queryMap.remove("sales_collection_date_from");
+            as = true;
+        }
+
+        if (queryMap.containsKey("sales_collection_date_to"))
+        {
+            salesCollectionDateTo = (String) queryMap.get("sales_collection_date_to");
+            queryMap.remove("sales_collection_date_to");
+            bs = true;
+        }
+
+        /// ===
+        /// ===
+
+        String labelCollectionDateFrom = "";
+        String labelCollectionDateTo = "";
+        boolean al = false;
+        boolean bl = false;
+
+        if (queryMap.containsKey("label_collection_date_from"))
+        {
+            labelCollectionDateFrom = (String) queryMap.get("label_collection_date_from");
+            queryMap.remove("label_collection_date_from");
+            al = true;
+        }
+
+        if (queryMap.containsKey("label_collection_date_to"))
+        {
+            labelCollectionDateTo = (String) queryMap.get("label_collection_date_to");
+            queryMap.remove("label_collection_date_to");
+            bl = true;
+        }
+
+        /// ===
+        
         ResultSet resultSet = null;
         ProductSalesLabelResponse productSalesLabelResponse = null;
         ProductSalesLabelData data = new ProductSalesLabelData();
@@ -494,7 +539,9 @@ public class ProductDao extends PgDao
 
         String where_clause = "";
         int count = 0;
+        String str0;
         String str;
+        String str1;
         String sortDirection = null;
 
         Iterator<String> keys = queryMap.keySet().iterator();
@@ -502,19 +549,45 @@ public class ProductDao extends PgDao
 
         while (keys.hasNext())
         {
-            str = keys.next();
+            str0 = keys.next();
 
-            if (str.equals("cluster_number") || str.equals("cnf_code"))
-                str = "CAST (" + str + " AS TEXT)";
+            String prx = (("classification_number".equalsIgnoreCase(str0))
+                    || ("classification_name".equalsIgnoreCase(str0))
+                    || ("classification_type".equalsIgnoreCase(str0))) ? "c."
+                            : "p.";
+
+            str1 = prx + str0;
+
+            if (str0.equals("cluster_number") || str0.equals("cnf_code")
+                    || str0.equals("classification_number"))
+                str1 = "CAST (" + str1 + " AS TEXT)";
+
             if (count == 0)
-                where_clause += " " + str + " LIKE ?";
+                where_clause += " " + str1 + " LIKE ?";
             else
-                where_clause += " AND " + str + " LIKE ?";
+                where_clause += " AND " + str1 + " LIKE ?";
 
             ++count;
         }
 
-        // ===
+        /// ===
+        
+        if (as && bs)
+            if (count == 0)
+                where_clause += " sales_collection_date BETWEEN ? AND ? ";
+            else
+                where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
+        
+        /// ===
+        /// ===
+        
+        if (al && bl)
+            if (count == 0)
+                where_clause += " package_collection_date BETWEEN ? AND ? ";
+            else
+                where_clause += " AND package_collection_date BETWEEN ? AND ? ";
+
+        /// ===
 
         try
         {
@@ -544,6 +617,25 @@ public class ProductDao extends PgDao
                     objectList.add("%" + queryMap.get(str) + "%");
                 }
 
+            /// ===
+            
+            if (as && bs)
+            {
+                objectList.add(java.sql.Date.valueOf(salesCollectionDateFrom));
+                objectList.add(java.sql.Date.valueOf(salesCollectionDateTo));
+            }
+
+            /// ===
+            /// ===
+            
+            if (al && bl)
+            {
+                objectList.add(java.sql.Date.valueOf(labelCollectionDateFrom));
+                objectList.add(java.sql.Date.valueOf(labelCollectionDateTo));
+            }
+            
+            /// ===
+            
             resultSet = executeQuery(query, objectList.toArray());
 
             while (resultSet.next())

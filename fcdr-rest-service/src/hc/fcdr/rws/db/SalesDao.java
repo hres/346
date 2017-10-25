@@ -273,7 +273,7 @@ public class SalesDao extends PgDao
                     ((ResponseCodes) o).getMessage());
         }
 
-        // ===
+        /// ===
 
         String collectionDateFrom = "";
         String collectionDateTo = "";
@@ -294,7 +294,7 @@ public class SalesDao extends PgDao
             b = true;
         }
 
-        // ===
+        /// ===
 
         ResultSet resultSet = null;
         SalesResponse salesResponse = null;
@@ -330,13 +330,15 @@ public class SalesDao extends PgDao
             ++count;
         }
 
+        /// ===
+        
         if (a && b)
             if (count == 0)
                 where_clause += " sales_collection_date BETWEEN ? AND ? ";
             else
                 where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
-
-        // ===
+        
+        /// ===
 
         try
         {
@@ -361,12 +363,16 @@ public class SalesDao extends PgDao
                     objectList.add("%" + queryMap.get(str) + "%");
                 }
 
+            /// ===
+            
             if (a && b)
             {
                 objectList.add(java.sql.Date.valueOf(collectionDateFrom));
                 objectList.add(java.sql.Date.valueOf(collectionDateTo));
             }
 
+            /// ===
+            
             resultSet = executeQuery(query, objectList.toArray());
 
             while (resultSet.next())
