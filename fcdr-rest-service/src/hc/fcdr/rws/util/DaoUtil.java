@@ -756,7 +756,8 @@ public final class DaoUtil
                 ((resultSet.getString("sales_collection_date") == null) ? ""
                         : resultSet.getString("sales_collection_date")));
 
-        // TODO dollar rank
+        productSalesLabelResponse.setDollar_rank(((resultSet.getString("dollar_rank") == null)
+                ? "" : resultSet.getString("dollar_rank")));
 
         productSalesLabelResponse.setSales_comment(
                 ((resultSet.getString("sales_comment") == null) ? ""
@@ -882,17 +883,40 @@ public final class DaoUtil
             if (!request.sales_collection_date_from.isEmpty()
                     && !request.sales_collection_date_to.isEmpty())
             {
-                queryMap.put("collection_date_from",
+                queryMap.put("sales_collection_date_from",
                         request.sales_collection_date_from);
-                queryMap.put("collection_date_to",
+                queryMap.put("sales_collection_date_to",
                         request.sales_collection_date_to);
             }
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
 
-        // Add dollar rank from/to
+        /// ===
+        
+        if ( (request.dollar_rank_from != null) && (request.dollar_rank_to != null) )
+        {
+            if (isType(request.dollar_rank_from.toString(), "double"))
+            {
+                if (request.dollar_rank_from > 0.0)
+                    queryMap.put("dollar_rank_from", request.dollar_rank_from);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+            
+            if (isType(request.dollar_rank_to.toString(), "double"))
+            {
+                if (request.dollar_rank_to > 0.0)
+                    queryMap.put("dollar_rank_to", request.dollar_rank_to);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
+        /// ===
+        
         if (!request.sales_comment.isEmpty())
             queryMap.put("sales_comment", request.sales_comment);
 
@@ -900,16 +924,16 @@ public final class DaoUtil
 
         if (!request.label_upc.isEmpty())
             if (StringUtilities.isNumeric(request.label_upc))
-                queryMap.put("label_upc", request.label_upc);
+                queryMap.put("package_upc", request.label_upc);
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_UPC);
 
         if (!request.label_description.isEmpty())
-            queryMap.put("label_description", request.label_description);
+            queryMap.put("package_description", request.label_description);
         if (!request.label_source.isEmpty())
-            queryMap.put("label_source", request.label_source);
+            queryMap.put("package_source", request.label_source);
         if (!request.label_ingredients.isEmpty())
-            queryMap.put("label_ingredients", request.label_ingredients);
+            queryMap.put("package_ingredients", request.label_ingredients);
 
         if (DateUtil.validateDates(request.label_collection_date_from,
                 request.label_collection_date_to))
@@ -917,9 +941,9 @@ public final class DaoUtil
             if (!request.label_collection_date_from.isEmpty()
                     && !request.label_collection_date_to.isEmpty())
             {
-                queryMap.put("label_collection_date_from",
+                queryMap.put("package_collection_date_from",
                         request.label_collection_date_from);
-                queryMap.put("label_collection_date_to",
+                queryMap.put("package_collection_date_to",
                         request.label_collection_date_to);
             }
         }

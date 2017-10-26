@@ -40,9 +40,9 @@ public class ProductSalesLabelRequest
     @XmlElement
     public String  sales_collection_date_to;
     @XmlElement
-    public String  dollar_rank_from;
+    public Double  dollar_rank_from;
     @XmlElement
-    public String  dollar_rank_to;
+    public Double  dollar_rank_to;
     @XmlElement
     public String  sales_comment;
 

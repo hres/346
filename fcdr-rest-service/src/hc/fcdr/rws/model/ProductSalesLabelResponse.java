@@ -70,7 +70,7 @@ public class ProductSalesLabelResponse
     public ProductSalesLabelResponse(Product product)
     {
         super();
-        this.product_id = 0L;
+        this.product_id = product.getId();
         this.product_description = product.getDescription();
         this.product_brand = product.getBrand();
         this.product_manufacturer = product.getManufacturer();

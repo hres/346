@@ -477,14 +477,16 @@ public class ProductDao extends PgDao
 
         if (queryMap.containsKey("sales_collection_date_from"))
         {
-            salesCollectionDateFrom = (String) queryMap.get("sales_collection_date_from");
+            salesCollectionDateFrom = (String) queryMap.get(
+                    "sales_collection_date_from");
             queryMap.remove("sales_collection_date_from");
             as = true;
         }
 
         if (queryMap.containsKey("sales_collection_date_to"))
         {
-            salesCollectionDateTo = (String) queryMap.get("sales_collection_date_to");
+            salesCollectionDateTo = (String) queryMap.get(
+                    "sales_collection_date_to");
             queryMap.remove("sales_collection_date_to");
             bs = true;
         }
@@ -497,22 +499,46 @@ public class ProductDao extends PgDao
         boolean al = false;
         boolean bl = false;
 
-        if (queryMap.containsKey("label_collection_date_from"))
+        if (queryMap.containsKey("package_collection_date_from"))
         {
-            labelCollectionDateFrom = (String) queryMap.get("label_collection_date_from");
-            queryMap.remove("label_collection_date_from");
+            labelCollectionDateFrom = (String) queryMap.get(
+                    "package_collection_date_from");
+            queryMap.remove("package_collection_date_from");
             al = true;
         }
 
-        if (queryMap.containsKey("label_collection_date_to"))
+        if (queryMap.containsKey("package_collection_date_to"))
         {
-            labelCollectionDateTo = (String) queryMap.get("label_collection_date_to");
-            queryMap.remove("label_collection_date_to");
+            labelCollectionDateTo = (String) queryMap.get(
+                    "package_collection_date_to");
+            queryMap.remove("package_collection_date_to");
             bl = true;
         }
 
         /// ===
-        
+        /// ===
+
+        Double dollarRankFrom = 0.0;
+        Double dollarRankTo = 0.0;
+        boolean ad = false;
+        boolean bd = false;
+
+        if (queryMap.containsKey("dollar_rank_from"))
+        {
+            dollarRankFrom = (Double) queryMap.get("dollar_rank_from");
+            queryMap.remove("dollar_rank_from");
+            ad = true;
+        }
+
+        if (queryMap.containsKey("dollar_rank_to"))
+        {
+            dollarRankTo = (Double) queryMap.get("dollar_rank_to");
+            queryMap.remove("dollar_rank_to");
+            bd = true;
+        }
+
+        /// ===
+
         ResultSet resultSet = null;
         ProductSalesLabelResponse productSalesLabelResponse = null;
         ProductSalesLabelData data = new ProductSalesLabelData();
@@ -520,7 +546,7 @@ public class ProductDao extends PgDao
         String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
                 + " p.creation_date, p.last_edit_date, p.edited_by, "
-                + "c.classification_number, c.classification_type, c.classification_name, s.sales_year, s.sales_description, s.sales_upc, s.nielsen_category, s.sales_source, s.sales_collection_date, s.sales_comment, l.package_upc, l.package_description, l.package_source, l.ingredients, l.package_collection_date, l.package_comment from "
+                + "c.classification_number, c.classification_type, c.classification_name, s.sales_year, s.sales_description, s.sales_upc, s.nielsen_category, s.sales_source, s.sales_collection_date, s.dollar_rank, s.sales_comment, l.package_upc, l.package_description, l.package_source, l.ingredients, l.package_collection_date, l.package_comment from "
                 + schema + "." + "product p " + "left outer join " + schema
                 + "."
                 + "product_classification pc on p.product_id = pc.product_classification_product_id_fkey left outer join "
@@ -551,14 +577,9 @@ public class ProductDao extends PgDao
         {
             str0 = keys.next();
 
-            String prx = (("classification_number".equalsIgnoreCase(str0))
-                    || ("classification_name".equalsIgnoreCase(str0))
-                    || ("classification_type".equalsIgnoreCase(str0))) ? "c."
-                            : "p.";
+            str1 = prefix(str0) + str0;
 
-            str1 = prx + str0;
-
-            if (str0.equals("cluster_number") || str0.equals("cnf_code")
+            if (str0.equals("cluster_number") || str0.equals("cnf_code") || str0.equals("sales_year")
                     || str0.equals("classification_number"))
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
@@ -571,28 +592,37 @@ public class ProductDao extends PgDao
         }
 
         /// ===
-        
+
         if (as && bs)
             if (count == 0)
-                where_clause += " sales_collection_date BETWEEN ? AND ? ";
+                where_clause += " s.sales_collection_date BETWEEN ? AND ? ";
             else
-                where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
-        
+                where_clause += " AND s.sales_collection_date BETWEEN ? AND ? ";
+
         /// ===
         /// ===
-        
+
         if (al && bl)
             if (count == 0)
-                where_clause += " package_collection_date BETWEEN ? AND ? ";
+                where_clause += " l.package_collection_date BETWEEN ? AND ? ";
             else
-                where_clause += " AND package_collection_date BETWEEN ? AND ? ";
+                where_clause += " AND l.package_collection_date BETWEEN ? AND ? ";
+
+        /// ===
+        /// ===
+
+        if (ad && bd)
+            if (count == 0)
+                where_clause += " s.dollar_rank BETWEEN ? AND ? ";
+            else
+                where_clause += " AND s.dollar_rank BETWEEN ? AND ? ";
 
         /// ===
 
         try
         {
             if ((where_clause != null) && (where_clause.length() > 0))
-                query += " where " + "p." + where_clause.trim();
+                query += " where " + where_clause.trim();
 
             if (sortOrder)
                 sortDirection = "ASC";
@@ -600,12 +630,8 @@ public class ProductDao extends PgDao
                 sortDirection = "DESC";
 
             offSet = offSet * 10;
-            String prefix = (("classification_number".equalsIgnoreCase(orderBy))
-                    || ("classification_name".equalsIgnoreCase(orderBy))
-                    || ("classification_type".equalsIgnoreCase(orderBy))) ? "c."
-                            : "p.";
-
-            query += " ORDER BY " + prefix + orderBy + " " + sortDirection
+            
+            query += " ORDER BY " + prefix(orderBy) + orderBy + " " + sortDirection
                     + " offset " + offSet + " limit 10";
 
             List<Object> objectList = new ArrayList<Object>();
@@ -618,7 +644,7 @@ public class ProductDao extends PgDao
                 }
 
             /// ===
-            
+
             if (as && bs)
             {
                 objectList.add(java.sql.Date.valueOf(salesCollectionDateFrom));
@@ -627,15 +653,24 @@ public class ProductDao extends PgDao
 
             /// ===
             /// ===
-            
+
             if (al && bl)
             {
                 objectList.add(java.sql.Date.valueOf(labelCollectionDateFrom));
                 objectList.add(java.sql.Date.valueOf(labelCollectionDateTo));
             }
-            
+
             /// ===
-            
+            /// ===
+
+            if (ad && bd)
+            {
+                objectList.add(dollarRankFrom);
+                objectList.add(dollarRankTo);
+            }
+
+            /// ===
+
             resultSet = executeQuery(query, objectList.toArray());
 
             while (resultSet.next())
@@ -816,6 +851,40 @@ public class ProductDao extends PgDao
         }
 
         return null;
+    }
+
+    private String prefix(String str0)
+    {
+        String prx = "p.";
+
+        if (("classification_number".equalsIgnoreCase(str0))
+                || ("classification_name".equalsIgnoreCase(str0))
+                || ("classification_type".equalsIgnoreCase(str0)))
+        {
+            prx = "c.";
+        }
+        else if (("sales_year".equalsIgnoreCase(str0))
+                || ("sales_description".equalsIgnoreCase(str0))
+                || ("sales_upc".equalsIgnoreCase(str0))
+                || ("nielsen_category".equalsIgnoreCase(str0))
+                || ("sales_source".equalsIgnoreCase(str0))
+                || ("sales_collection_date".equalsIgnoreCase(str0))
+                || ("dollar_rank".equalsIgnoreCase(str0))
+                || ("sales_comment".equalsIgnoreCase(str0)))
+        {
+            prx = "s.";
+        }
+        else if (("package_upc".equalsIgnoreCase(str0))
+                || ("package_description".equalsIgnoreCase(str0))
+                || ("package_source".equalsIgnoreCase(str0))
+                || ("ingredients".equalsIgnoreCase(str0))
+                || ("package_collection_date".equalsIgnoreCase(str0))
+                || ("package_comment".equalsIgnoreCase(str0)))
+        {
+            prx = "l.";
+        }
+
+        return prx;
     }
 
 }
