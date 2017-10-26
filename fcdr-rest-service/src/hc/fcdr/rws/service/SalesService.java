@@ -20,9 +20,9 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.SalesDataResponse;
-import hc.fcdr.rws.model.SalesRequest;
-import hc.fcdr.rws.model.SalesYearsDataResponse;
+import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesRequest;
+import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/SalesService")

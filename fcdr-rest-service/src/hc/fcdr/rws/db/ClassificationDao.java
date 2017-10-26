@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.ClassificationData;
-import hc.fcdr.rws.model.ClassificationDataResponse;
-import hc.fcdr.rws.model.ClassificationResponse;
+import hc.fcdr.rws.model.classification.ClassificationData;
+import hc.fcdr.rws.model.classification.ClassificationDataResponse;
+import hc.fcdr.rws.model.classification.ClassificationResponse;
 import hc.fcdr.rws.domain.Classification;
 
 public class ClassificationDao extends PgDao

@@ -14,7 +14,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.ImportSalesData;
+import hc.fcdr.rws.model.importer.ImportSalesData;
 import hc.fcdr.rws.util.DateUtil;
 
 import org.apache.log4j.Logger;

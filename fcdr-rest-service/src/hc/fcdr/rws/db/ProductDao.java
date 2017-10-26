@@ -16,23 +16,23 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.ProductClassificationData;
-import hc.fcdr.rws.model.ProductClassificationDataResponse;
-import hc.fcdr.rws.model.ProductClassificationResponse;
-import hc.fcdr.rws.model.ProductData;
-import hc.fcdr.rws.model.ProductDataResponse;
-import hc.fcdr.rws.model.ProductLabelsData;
-import hc.fcdr.rws.model.ProductLabelsDataResponse;
-import hc.fcdr.rws.model.ProductLabelsResponse;
-import hc.fcdr.rws.model.ProductRequest;
-import hc.fcdr.rws.model.ProductResponse;
-import hc.fcdr.rws.model.ProductSalesData;
-import hc.fcdr.rws.model.ProductSalesDataResponse;
-import hc.fcdr.rws.model.ProductSalesLabelData;
-import hc.fcdr.rws.model.ProductSalesLabelDataResponse;
-import hc.fcdr.rws.model.ProductSalesLabelRequest;
-import hc.fcdr.rws.model.ProductSalesLabelResponse;
-import hc.fcdr.rws.model.ProductSalesResponse;
+import hc.fcdr.rws.model.product.ProductClassificationData;
+import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
+import hc.fcdr.rws.model.product.ProductClassificationResponse;
+import hc.fcdr.rws.model.product.ProductData;
+import hc.fcdr.rws.model.product.ProductDataResponse;
+import hc.fcdr.rws.model.product.ProductLabelsData;
+import hc.fcdr.rws.model.product.ProductLabelsDataResponse;
+import hc.fcdr.rws.model.product.ProductLabelsResponse;
+import hc.fcdr.rws.model.product.ProductRequest;
+import hc.fcdr.rws.model.product.ProductResponse;
+import hc.fcdr.rws.model.product.ProductSalesData;
+import hc.fcdr.rws.model.product.ProductSalesDataResponse;
+import hc.fcdr.rws.model.product.ProductSalesLabelData;
+import hc.fcdr.rws.model.product.ProductSalesLabelDataResponse;
+import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
+import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
+import hc.fcdr.rws.model.product.ProductSalesResponse;
 
 public class ProductDao extends PgDao
 {
@@ -579,7 +579,8 @@ public class ProductDao extends PgDao
 
             str1 = prefix(str0) + str0;
 
-            if (str0.equals("cluster_number") || str0.equals("cnf_code") || str0.equals("sales_year")
+            if (str0.equals("cluster_number") || str0.equals("cnf_code")
+                    || str0.equals("sales_year")
                     || str0.equals("classification_number"))
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
@@ -630,9 +631,9 @@ public class ProductDao extends PgDao
                 sortDirection = "DESC";
 
             offSet = offSet * 10;
-            
-            query += " ORDER BY " + prefix(orderBy) + orderBy + " " + sortDirection
-                    + " offset " + offSet + " limit 10";
+
+            query += " ORDER BY " + prefix(orderBy) + orderBy + " "
+                    + sortDirection + " offset " + offSet + " limit 10";
 
             List<Object> objectList = new ArrayList<Object>();
 
@@ -860,9 +861,7 @@ public class ProductDao extends PgDao
         if (("classification_number".equalsIgnoreCase(str0))
                 || ("classification_name".equalsIgnoreCase(str0))
                 || ("classification_type".equalsIgnoreCase(str0)))
-        {
             prx = "c.";
-        }
         else if (("sales_year".equalsIgnoreCase(str0))
                 || ("sales_description".equalsIgnoreCase(str0))
                 || ("sales_upc".equalsIgnoreCase(str0))
@@ -871,18 +870,14 @@ public class ProductDao extends PgDao
                 || ("sales_collection_date".equalsIgnoreCase(str0))
                 || ("dollar_rank".equalsIgnoreCase(str0))
                 || ("sales_comment".equalsIgnoreCase(str0)))
-        {
             prx = "s.";
-        }
         else if (("package_upc".equalsIgnoreCase(str0))
                 || ("package_description".equalsIgnoreCase(str0))
                 || ("package_source".equalsIgnoreCase(str0))
                 || ("ingredients".equalsIgnoreCase(str0))
                 || ("package_collection_date".equalsIgnoreCase(str0))
                 || ("package_comment".equalsIgnoreCase(str0)))
-        {
             prx = "l.";
-        }
 
         return prx;
     }

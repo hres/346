@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import hc.fcdr.rws.db.ClassificationDao;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.ClassificationDataResponse;
+import hc.fcdr.rws.model.classification.ClassificationDataResponse;
 import hc.fcdr.rws.util.ContextManager;
 import hc.fcdr.rws.domain.Classification;
 

@@ -20,8 +20,8 @@ import javax.ws.rs.core.Response;
 import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.PackageDataResponse;
-import hc.fcdr.rws.model.PackageRequest;
+import hc.fcdr.rws.model.pkg.PackageDataResponse;
+import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.util.ContextManager;
 import hc.fcdr.rws.domain.Package;
 

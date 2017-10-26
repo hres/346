@@ -20,9 +20,9 @@ import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
 import hc.fcdr.rws.importer.ImportStatistics;
 import hc.fcdr.rws.mail.MailProcessor;
-import hc.fcdr.rws.model.ImportDataResponse;
-import hc.fcdr.rws.model.ImportRequest;
-import hc.fcdr.rws.model.ImportResponse;
+import hc.fcdr.rws.model.importer.ImportDataResponse;
+import hc.fcdr.rws.model.importer.ImportRequest;
+import hc.fcdr.rws.model.importer.ImportResponse;
 import hc.fcdr.rws.reportengine.ImportReport;
 import hc.fcdr.rws.util.ContextManager;
 

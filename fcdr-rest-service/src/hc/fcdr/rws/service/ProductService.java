@@ -21,13 +21,13 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.ProductClassificationDataResponse;
-import hc.fcdr.rws.model.ProductDataResponse;
-import hc.fcdr.rws.model.ProductLabelsDataResponse;
-import hc.fcdr.rws.model.ProductRequest;
-import hc.fcdr.rws.model.ProductSalesDataResponse;
-import hc.fcdr.rws.model.ProductSalesLabelDataResponse;
-import hc.fcdr.rws.model.ProductSalesLabelRequest;
+import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
+import hc.fcdr.rws.model.product.ProductDataResponse;
+import hc.fcdr.rws.model.product.ProductLabelsDataResponse;
+import hc.fcdr.rws.model.product.ProductRequest;
+import hc.fcdr.rws.model.product.ProductSalesDataResponse;
+import hc.fcdr.rws.model.product.ProductSalesLabelDataResponse;
+import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ProductService")

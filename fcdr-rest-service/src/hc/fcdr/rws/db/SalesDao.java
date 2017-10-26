@@ -16,13 +16,13 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.SalesData;
-import hc.fcdr.rws.model.SalesDataResponse;
-import hc.fcdr.rws.model.SalesRequest;
-import hc.fcdr.rws.model.SalesResponse;
-import hc.fcdr.rws.model.SalesYearsData;
-import hc.fcdr.rws.model.SalesYearsDataResponse;
-import hc.fcdr.rws.model.SalesYearsResponse;
+import hc.fcdr.rws.model.sales.SalesData;
+import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesRequest;
+import hc.fcdr.rws.model.sales.SalesResponse;
+import hc.fcdr.rws.model.sales.SalesYearsData;
+import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
+import hc.fcdr.rws.model.sales.SalesYearsResponse;
 
 public class SalesDao extends PgDao
 {
@@ -331,13 +331,13 @@ public class SalesDao extends PgDao
         }
 
         /// ===
-        
+
         if (a && b)
             if (count == 0)
                 where_clause += " sales_collection_date BETWEEN ? AND ? ";
             else
                 where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
-        
+
         /// ===
 
         try
@@ -364,7 +364,7 @@ public class SalesDao extends PgDao
                 }
 
             /// ===
-            
+
             if (a && b)
             {
                 objectList.add(java.sql.Date.valueOf(collectionDateFrom));
@@ -372,7 +372,7 @@ public class SalesDao extends PgDao
             }
 
             /// ===
-            
+
             resultSet = executeQuery(query, objectList.toArray());
 
             while (resultSet.next())

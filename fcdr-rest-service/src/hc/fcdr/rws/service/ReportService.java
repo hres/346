@@ -15,8 +15,8 @@ import javax.ws.rs.core.Response;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
-import hc.fcdr.rws.model.ReportDataResponse;
-import hc.fcdr.rws.model.ReportRequest;
+import hc.fcdr.rws.model.report.ReportDataResponse;
+import hc.fcdr.rws.model.report.ReportRequest;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ReportService")

@@ -14,10 +14,10 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.PackageData;
-import hc.fcdr.rws.model.PackageDataResponse;
-import hc.fcdr.rws.model.PackageRequest;
-import hc.fcdr.rws.model.PackageResponse;
+import hc.fcdr.rws.model.pkg.PackageData;
+import hc.fcdr.rws.model.pkg.PackageDataResponse;
+import hc.fcdr.rws.model.pkg.PackageRequest;
+import hc.fcdr.rws.model.pkg.PackageResponse;
 import hc.fcdr.rws.domain.Package;
 
 public class PackageDao extends PgDao
@@ -225,7 +225,7 @@ public class PackageDao extends PgDao
         }
 
         /// ===
-        
+
         if (a && b)
             if (count == 0)
                 where_clause += " package_collection_date BETWEEN ? AND ? ";
@@ -258,13 +258,13 @@ public class PackageDao extends PgDao
                 }
 
             /// ===
-            
+
             if (a && b)
             {
                 objectList.add(java.sql.Date.valueOf(collectionDateFrom));
                 objectList.add(java.sql.Date.valueOf(collectionDateTo));
             }
-            
+
             /// ===
 
             resultSet = executeQuery(query, objectList.toArray());

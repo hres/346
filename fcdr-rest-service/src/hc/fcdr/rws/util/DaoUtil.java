@@ -18,19 +18,19 @@ import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
-import hc.fcdr.rws.model.ClassificationResponse;
-import hc.fcdr.rws.model.PackageRequest;
-import hc.fcdr.rws.model.PackageResponse;
-import hc.fcdr.rws.model.ProductClassificationResponse;
-import hc.fcdr.rws.model.ProductLabelsResponse;
-import hc.fcdr.rws.model.ProductRequest;
-import hc.fcdr.rws.model.ProductResponse;
-import hc.fcdr.rws.model.ProductSalesLabelRequest;
-import hc.fcdr.rws.model.ProductSalesLabelResponse;
-import hc.fcdr.rws.model.ProductSalesResponse;
-import hc.fcdr.rws.model.SalesRequest;
-import hc.fcdr.rws.model.SalesResponse;
-import hc.fcdr.rws.model.SalesYearsResponse;
+import hc.fcdr.rws.model.classification.ClassificationResponse;
+import hc.fcdr.rws.model.pkg.PackageRequest;
+import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.product.ProductClassificationResponse;
+import hc.fcdr.rws.model.product.ProductLabelsResponse;
+import hc.fcdr.rws.model.product.ProductRequest;
+import hc.fcdr.rws.model.product.ProductResponse;
+import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
+import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
+import hc.fcdr.rws.model.product.ProductSalesResponse;
+import hc.fcdr.rws.model.sales.SalesRequest;
+import hc.fcdr.rws.model.sales.SalesResponse;
+import hc.fcdr.rws.model.sales.SalesYearsResponse;
 
 /**
  * Utility class for DAO's. This class contains commonly used DAO logic which is been refactored in single static
@@ -756,8 +756,9 @@ public final class DaoUtil
                 ((resultSet.getString("sales_collection_date") == null) ? ""
                         : resultSet.getString("sales_collection_date")));
 
-        productSalesLabelResponse.setDollar_rank(((resultSet.getString("dollar_rank") == null)
-                ? "" : resultSet.getString("dollar_rank")));
+        productSalesLabelResponse.setDollar_rank(
+                ((resultSet.getString("dollar_rank") == null) ? ""
+                        : resultSet.getString("dollar_rank")));
 
         productSalesLabelResponse.setSales_comment(
                 ((resultSet.getString("sales_comment") == null) ? ""
@@ -893,8 +894,9 @@ public final class DaoUtil
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
 
         /// ===
-        
-        if ( (request.dollar_rank_from != null) && (request.dollar_rank_to != null) )
+
+        if ((request.dollar_rank_from != null)
+                && (request.dollar_rank_to != null))
         {
             if (isType(request.dollar_rank_from.toString(), "double"))
             {
@@ -903,7 +905,7 @@ public final class DaoUtil
             }
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-            
+
             if (isType(request.dollar_rank_to.toString(), "double"))
             {
                 if (request.dollar_rank_to > 0.0)
@@ -916,7 +918,7 @@ public final class DaoUtil
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
         /// ===
-        
+
         if (!request.sales_comment.isEmpty())
             queryMap.put("sales_comment", request.sales_comment);
 
