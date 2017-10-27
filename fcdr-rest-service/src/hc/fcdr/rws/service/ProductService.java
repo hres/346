@@ -303,52 +303,37 @@ public class ProductService extends Application
 
     // ===========
 
-    // @PUT
-    // @Path("/users")
-    // @Produces(MediaType.APPLICATION_XML)
-    // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    // public String createUser(@FormParam("id") int id, @FormParam("name") String name, @FormParam("profession") String
-    // profession,
-    // @Context HttpServletResponse servletResponse) throws IOException
-    // {
-    // User user = new User(id, name, profession);
-    // int result = userDao.addUser(user);
-    //
-    // if (result == 1)
-    // return SUCCESS_RESULT;
-    //
-    // return FAILURE_RESULT;
-    // }
-    //
-    // @POST
-    // @Path("/users")
-    // @Produces(MediaType.APPLICATION_XML)
-    // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    // public String updateUser(@FormParam("id") int id, @FormParam("name") String name, @FormParam("profession") String
-    // profession,
-    // @Context HttpServletResponse servletResponse) throws IOException
-    // {
-    // User user = new User(id, name, profession);
-    // int result = userDao.updateUser(user);
-    //
-    // if (result == 1)
-    // return SUCCESS_RESULT;
-    //
-    // return FAILURE_RESULT;
-    // }
-    //
-    // @DELETE
-    // @Path("users/{userid}")
-    // @Produces(MediaType.APPLICATION_XML)
-    // public String deleteUser(@PathParam("userid") int userid)
-    // {
-    // int result = userDao.deleteUser(userid);
-    //
-    // if (result == 1)
-    // return SUCCESS_RESULT;
-    //
-    // return FAILURE_RESULT;
-    // }
+//    @POST
+//    @Path("/update")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response update(final ProductUpdateRequest productUpdateRequest)
+//            throws SQLException, IOException, Exception
+//    {
+//
+//        String applicationEnvironment = ContextManager.getJndiValue(
+//                "APPLICATION_ENVIRONMENT");
+//
+//        ProductUpdateDataResponse entity = new ProductUpdateDataResponse();
+//
+//        try
+//        {
+//            if (productDao != null)
+//                entity = productDao.getProductUpdateResponse(productUpdateRequest);
+//        }
+//        catch (Exception e)
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
+//        return Response.status(Response.Status.OK)
+//                       .type(MediaType.APPLICATION_JSON)
+//                       .entity(entity)
+//                       .build();
+//    }
+    
+    // ===========
 
     @OPTIONS
     @Path("/products")

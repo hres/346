@@ -559,7 +559,7 @@ public class ProductDao extends PgDao
 
         // ===
 
-        String orderBy = productSalesLabelRequest.orderby;
+        String orderBy = label2Package(productSalesLabelRequest.orderby);
         Integer offSet = productSalesLabelRequest.offset;
         boolean sortOrder = productSalesLabelRequest.flag;
 
@@ -882,4 +882,10 @@ public class ProductDao extends PgDao
         return prx;
     }
 
+    private String label2Package(String s)
+    {
+        if (s.startsWith("label"))
+            return s.replace("label", "package");
+        return s;
+    }
 }
