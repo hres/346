@@ -17,13 +17,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import hc.fcdr.rws.db.UserDao;
+import hc.fcdr.rws.db.TempDao;
 import hc.fcdr.rws.domain.User;
 
 @Path("/UserService")
 public class UserService
 {
-    UserDao                     userDao        = new UserDao();
+    TempDao                     userDao        = new TempDao();
 
     private static final String SUCCESS_RESULT = "<result>success</result>";
     private static final String FAILURE_RESULT = "<result>failure</result>";

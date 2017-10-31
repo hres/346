@@ -28,6 +28,7 @@ import hc.fcdr.rws.model.product.ProductResponse;
 import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
+import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
@@ -321,8 +322,8 @@ public final class DaoUtil
         product.setEditedBy(result.getString("edited_by"));
 
         /// Maybe needed only if returning these values.
-        /// product.setRestaurantType(result.getString("restaurant_type"));
-        /// product.setType(result.getString("type"));
+        product.setRestaurantType(result.getString("restaurant_type"));
+        product.setType(result.getString("type"));
 
         return product;
     }
@@ -336,7 +337,6 @@ public final class DaoUtil
         productResponse.setClassification_number(
                 ((resultSet.getString("classification_number") == null) ? ""
                         : resultSet.getString("classification_number")));
-
         productResponse.setClassification_name(
                 ((resultSet.getString("classification_name") == null) ? ""
                         : resultSet.getString("classification_name")));
@@ -431,14 +431,16 @@ public final class DaoUtil
         ProductClassificationResponse productClassificationResponse = new ProductClassificationResponse(
                 product);
 
-        productClassificationResponse.setClassification_number(
+         productClassificationResponse.setClassification_number(
                 ((resultSet.getString("classification_number") == null) ? ""
                         : resultSet.getString("classification_number")));
         productClassificationResponse.setClassification_name(
-                resultSet.getString("classification_name"));
+                ((resultSet.getString("classification_name") == null) ? ""
+                        : resultSet.getString("classification_name")));
         productClassificationResponse.setClassification_type(
-                resultSet.getString("classification_type"));
-
+                ((resultSet.getString("classification_type") == null) ? ""
+                        : resultSet.getString("classification_type")));
+        
         return productClassificationResponse;
     }
 
@@ -965,6 +967,81 @@ public final class DaoUtil
         return queryMap;
     }
 
+    // ===
+    
+    public static Map<String, Object> getQueryMap(ProductUpdateRequest request)
+    {
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+
+        if (!request.product_manufacturer.isEmpty())
+            queryMap.put("product_manufacturer", request.product_manufacturer);
+        if (!request.product_brand.isEmpty())
+            queryMap.put("product_brand", request.product_brand);
+
+        if (request.cnf_code != null)
+        {
+            if (isType(request.cnf_code.toString(), "int"))
+            {
+                if (request.cnf_code > 0)
+                    queryMap.put("cnf_code", request.cnf_code);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+
+        if (request.cluster_number != null)
+        {
+            if (isType(request.cluster_number.toString(), "double"))
+            {
+                if (request.cluster_number > 0.0)
+                    queryMap.put("cluster_number", request.cluster_number);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+
+        if (!request.product_description.isEmpty())
+            queryMap.put("product_description", request.product_description);
+        else
+            queryMap.put("inputError", ResponseCodes.MISSING_PRODUCT_DESCRIPTION);
+        
+        if (!request.product_comment.isEmpty())
+            queryMap.put("product_comment", request.product_comment);
+
+        if (request.classification_number != null)
+        {
+            if (isType(request.classification_number.toString(), "double"))
+            {
+                if (request.classification_number > 0.0)
+                    queryMap.put("classification_number",
+                            request.classification_number);
+            }
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        }
+        else
+            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+
+        if (!request.classification_name.isEmpty())
+            queryMap.put("classification_name", request.classification_name);
+        if (!request.classification_type.isEmpty())
+            queryMap.put("classification_type", request.classification_type);
+
+        if (!request.restaurant_type.isEmpty())
+            queryMap.put("restaurant_type", request.restaurant_type);
+        if (!request.type.isEmpty())
+            queryMap.put("type", request.type);
+        
+        if (!request.edited_by.isEmpty())
+            queryMap.put("edited_by", request.edited_by);
+
+        return queryMap;
+    }
+    
     // ===
 
     public static Boolean isType(String testStr, String type)

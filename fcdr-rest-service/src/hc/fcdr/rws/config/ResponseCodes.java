@@ -31,7 +31,9 @@ public enum ResponseCodes
  INVALID_INTEGER(600, "Invalid integer value entered"),
  INVALID_DOUBLE(601, "Invalid double value entered"),
  INVALID_DATE(602, "Invalid date(s) entered"),
- INVALID_UPC(603, "Invalid upc code entered");
+ INVALID_UPC(603, "Invalid upc code entered"),
+ NO_PRODUCT_FOUND(700, "No product found"),
+ MISSING_PRODUCT_DESCRIPTION(701, "Missing Product Description");
 
     private final int    code;
     private final String message;

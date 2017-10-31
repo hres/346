@@ -12,7 +12,7 @@ import java.util.List;
 
 import hc.fcdr.rws.domain.User;
 
-public class UserDao
+public class TempDao
 {
     public List<User> getAllUsers()
     {
@@ -135,5 +135,33 @@ public class UserDao
             e.printStackTrace();
         }
     }
+    
+//    private void a()
+//    {
+//        if (classificationId != null)
+//                {
+//                    // Update classification.
+//                    String[] columns1 =
+//                    { "classification_number", "classification_name",
+//                            "classification_type" };
+//
+//                    String questionmarks1 = StringUtils.repeat("?,",
+//                            columns1.length);
+//                    questionmarks1 = (String) questionmarks1.subSequence(0,
+//                            questionmarks1.length() - 1);
+//
+//                    String query1 = "update " + schema + "."
+//                            + "classification set "
+//                            + "classification_number = COALESCE(?, classification_number), "
+//                            + "classification_name = COALESCE(?, classification_name), "
+//                            + "classification_type = COALESCE(?, classification_type) "
+//                            + "where classification_id = ?";
+//
+//                    List<Object> classificationFieldList = productUpdateRequest.getClassificationFieldList();
+//                    classificationFieldList.add(classificationId);
+//
+//                    executeUpdate(query1, classificationFieldList.toArray());
+//                }
+//    }
 
 }

@@ -28,6 +28,8 @@ import hc.fcdr.rws.model.product.ProductRequest;
 import hc.fcdr.rws.model.product.ProductSalesDataResponse;
 import hc.fcdr.rws.model.product.ProductSalesLabelDataResponse;
 import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
+import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
+import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ProductService")
@@ -76,7 +78,7 @@ public class ProductService extends Application
     @GET
     @Path("/productsraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductsRaw(@PathParam("id") long id)
+    public Product getProductsRaw(@PathParam("id") int id)
     {
         try
         {
@@ -121,7 +123,7 @@ public class ProductService extends Application
     @GET
     @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts(@PathParam("id") long id)
+    public Response getProducts(@PathParam("id") int id)
     {
         ProductDataResponse entity = new ProductDataResponse();
 
@@ -145,7 +147,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassifications/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassifications(@PathParam("id") long id)
+    public Response getProductClassifications(@PathParam("id") int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = false;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -170,7 +172,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassification(@PathParam("id") long id)
+    public Response getProductClassification(@PathParam("id") int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = true;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -303,35 +305,31 @@ public class ProductService extends Application
 
     // ===========
 
-//    @POST
-//    @Path("/update")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response update(final ProductUpdateRequest productUpdateRequest)
-//            throws SQLException, IOException, Exception
-//    {
-//
-//        String applicationEnvironment = ContextManager.getJndiValue(
-//                "APPLICATION_ENVIRONMENT");
-//
-//        ProductUpdateDataResponse entity = new ProductUpdateDataResponse();
-//
-//        try
-//        {
-//            if (productDao != null)
-//                entity = productDao.getProductUpdateResponse(productUpdateRequest);
-//        }
-//        catch (Exception e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//        return Response.status(Response.Status.OK)
-//                       .type(MediaType.APPLICATION_JSON)
-//                       .entity(entity)
-//                       .build();
-//    }
+    @POST
+    @Path("/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(final ProductUpdateRequest productUpdateRequest)
+            throws SQLException, IOException, Exception
+    {
+        ProductUpdateDataResponse entity = new ProductUpdateDataResponse();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductUpdateResponse(productUpdateRequest);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
     
     // ===========
 
