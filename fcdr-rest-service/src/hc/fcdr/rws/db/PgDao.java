@@ -76,9 +76,7 @@ public class PgDao
                             "Creating object failed, no generated key obtained.");
             }
             else if (query.startsWith("delete"))
-            {
                 return affectedRows;
-            }
 
         }
         catch (SQLException e)

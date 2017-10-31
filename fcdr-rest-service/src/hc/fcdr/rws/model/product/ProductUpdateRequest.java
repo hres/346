@@ -28,7 +28,7 @@ public class ProductUpdateRequest
     @XmlElement
     public String  edited_by;
     @XmlElement
-    public Integer    product_id;
+    public Integer product_id;
     @XmlElement
     public Double  classification_number;
     @XmlElement
@@ -49,7 +49,7 @@ public class ProductUpdateRequest
         productFieldList.add(type);
         productFieldList.add(edited_by);
         productFieldList.add(product_id);
-        
+
         return productFieldList;
     }
 
@@ -59,7 +59,7 @@ public class ProductUpdateRequest
         classificationFieldList.add(classification_number);
         classificationFieldList.add(classification_name);
         classificationFieldList.add(classification_type);
-        
+
         return classificationFieldList;
     }
 

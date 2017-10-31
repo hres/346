@@ -431,7 +431,7 @@ public final class DaoUtil
         ProductClassificationResponse productClassificationResponse = new ProductClassificationResponse(
                 product);
 
-         productClassificationResponse.setClassification_number(
+        productClassificationResponse.setClassification_number(
                 ((resultSet.getString("classification_number") == null) ? ""
                         : resultSet.getString("classification_number")));
         productClassificationResponse.setClassification_name(
@@ -440,7 +440,7 @@ public final class DaoUtil
         productClassificationResponse.setClassification_type(
                 ((resultSet.getString("classification_type") == null) ? ""
                         : resultSet.getString("classification_type")));
-        
+
         return productClassificationResponse;
     }
 
@@ -968,7 +968,7 @@ public final class DaoUtil
     }
 
     // ===
-    
+
     public static Map<String, Object> getQueryMap(ProductUpdateRequest request)
     {
         Map<String, Object> queryMap = new HashMap<String, Object>();
@@ -1007,8 +1007,9 @@ public final class DaoUtil
         if (!request.product_description.isEmpty())
             queryMap.put("product_description", request.product_description);
         else
-            queryMap.put("inputError", ResponseCodes.MISSING_PRODUCT_DESCRIPTION);
-        
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_PRODUCT_DESCRIPTION);
+
         if (!request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
@@ -1035,13 +1036,13 @@ public final class DaoUtil
             queryMap.put("restaurant_type", request.restaurant_type);
         if (!request.type.isEmpty())
             queryMap.put("type", request.type);
-        
+
         if (!request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
 
         return queryMap;
     }
-    
+
     // ===
 
     public static Boolean isType(String testStr, String type)

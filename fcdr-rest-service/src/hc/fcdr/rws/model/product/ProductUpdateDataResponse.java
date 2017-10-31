@@ -2,8 +2,8 @@ package hc.fcdr.rws.model.product;
 
 public class ProductUpdateDataResponse
 {
-    private int         status;
-    private String      message;
+    private int    status;
+    private String message;
 
     public ProductUpdateDataResponse()
     {

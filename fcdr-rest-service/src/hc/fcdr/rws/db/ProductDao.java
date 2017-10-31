@@ -1,24 +1,20 @@
 package hc.fcdr.rws.db;
 
-import java.beans.Introspector;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.metadata.PropertyDescriptor;
-
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.util.DaoUtil;
+import hc.fcdr.rws.util.DateUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
@@ -931,21 +927,22 @@ public class ProductDao extends PgDao
         // Check for product.
         Product product = getProduct(productUpdateRequest.product_id);
 
-        if (product == null || product.getId() == 0L)
+        if ((product == null) || (product.getId() == 0L))
             return new ProductUpdateDataResponse(
                     ResponseCodes.NO_PRODUCT_FOUND.getCode(),
                     ResponseCodes.NO_PRODUCT_FOUND.getMessage());
 
         String[] columns =
-        { "product_manufacturer", "product_brand", "product_description",
-                "product_comment", "cnf_code", "cluster_number",
-                "restaurant_type", "type", "edited_by" };
+        { "last_edit_date", "product_manufacturer", "product_brand",
+                "product_description", "product_comment", "cnf_code",
+                "cluster_number", "restaurant_type", "type", "edited_by" };
 
         String questionmarks = StringUtils.repeat("?,", columns.length);
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
         String query = "update " + schema + "." + "product set "
+                + "last_edit_date = COALESCE(?, last_edit_date), "
                 + "product_manufacturer = COALESCE(?, product_manufacturer), "
                 + "product_brand = COALESCE(?, product_brand), "
                 + "product_description = COALESCE(?, product_description), "
@@ -957,13 +954,17 @@ public class ProductDao extends PgDao
                 + "edited_by = COALESCE(?, edited_by) "
                 + "where product_id = ?";
 
-        executeUpdate(query,
-                productUpdateRequest.getProductFieldList().toArray());
+        Timestamp lastEditDate = DateUtil.getCurrentTimeStamp();
+        List<Object> productFieldList = productUpdateRequest.getProductFieldList();
+        productFieldList.add(0, lastEditDate);
+
+        executeUpdate(query, productFieldList.toArray());
 
         /// ===
 
         if (productUpdateRequest.product_id != null)
-            if ( (productUpdateRequest.classification_number != null) && (productUpdateRequest.classification_number != 0.0))
+            if ((productUpdateRequest.classification_number != null)
+                    && (productUpdateRequest.classification_number != 0.0))
             {
                 Integer classificationId = checkClassification(
                         productUpdateRequest.classification_number);
@@ -984,7 +985,7 @@ public class ProductDao extends PgDao
                     }
                     else if (productUpdateRequest.product_id != productId)
                     {
-                        // If the product id is not null, 
+                        // If the product id is not null,
                         // then the product id may be different from the given product id.
                         // If the same, then no update needed.
 
@@ -1007,9 +1008,7 @@ public class ProductDao extends PgDao
                 }
             }
             else
-            {
                 deleteProductClassification(productUpdateRequest.product_id);
-            }
 
         return new ProductUpdateDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());

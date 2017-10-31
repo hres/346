@@ -317,7 +317,8 @@ public class ProductService extends Application
         try
         {
             if (productDao != null)
-                entity = productDao.getProductUpdateResponse(productUpdateRequest);
+                entity = productDao.getProductUpdateResponse(
+                        productUpdateRequest);
         }
         catch (Exception e)
         {
@@ -330,7 +331,7 @@ public class ProductService extends Application
                        .entity(entity)
                        .build();
     }
-    
+
     // ===========
 
     @OPTIONS
