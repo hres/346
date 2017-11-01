@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
@@ -21,6 +22,7 @@ import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.util.ContextManager;
@@ -182,6 +184,33 @@ public class SalesService extends Application
                        .build();
     }
 
+    // ===
+    
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") Integer id)
+    {
+        SalesDeleteDataResponse entity = new SalesDeleteDataResponse();
+
+        try
+        {
+            if (salesDao != null)
+                entity = salesDao.getSalesDeleteResponse(id);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+    
+    // ===
+    
     @OPTIONS
     @Path("/sales")
     @Produces(MediaType.APPLICATION_XML)

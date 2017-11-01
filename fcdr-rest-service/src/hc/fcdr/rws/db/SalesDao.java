@@ -16,8 +16,10 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
 import hc.fcdr.rws.model.sales.SalesYearsData;
@@ -396,6 +398,31 @@ public class SalesDao extends PgDao
         return new SalesDataResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
 
+    }
+
+    public SalesDeleteDataResponse getSalesDeleteResponse(Integer id) throws SQLException, IOException, Exception
+    {
+        String sql = "delete from " + schema + "."
+                + "sales where sales_id = ?";
+
+        try
+        {
+            Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
+            { id });
+            
+            if (deletedRow == 0)
+                return new SalesDeleteDataResponse(
+                        ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
+                        ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        
+        return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
     }
 
 }
