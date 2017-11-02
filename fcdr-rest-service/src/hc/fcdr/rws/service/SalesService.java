@@ -236,7 +236,6 @@ public class SalesService extends Application
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

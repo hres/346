@@ -1357,7 +1357,7 @@ public final class DaoUtil
         }
         salesUpdateList.add(request.sales_id);
 
-        queryMap.put("sales_sales_list", salesUpdateList);
+        queryMap.put("sales_update_list", salesUpdateList);
         
         return queryMap;
     }
