@@ -34,7 +34,19 @@ public enum ResponseCodes
  INVALID_UPC(603, "Invalid upc code entered"),
  NO_PRODUCT_FOUND(700, "No product found"),
  MISSING_PRODUCT_DESCRIPTION(701, "Missing Product Description"),
- CANNOT_DELETE_SALES_RECORD(702, "Cannot delete sales record");
+ CANNOT_DELETE_SALES_RECORD(702, "Cannot delete sales record"),
+ MISSING_SALES_DESCRIPTION(702, "Missing sales description"),
+ MISSING_SALES_UPC(703, "Missing sales upc"),
+ MISSING_DOLLAR_VOLUME(704, "Missing dollar volume"),
+ MISSING_DOLLAR_SHARE(705, "Missing dollar share"),
+ MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE(706, "Missing dollar volume percentage change"),
+ MISSING_KILO_VOLUME(707, "Missing kilo volume"),
+ MISSING_KILO_SHARE(708, "Missing kilo share"),
+ MISSING_KILO_VOLUME_PERCENTAGE_CHANGE(709, "Missing kilo volume percentage change"),
+ MISSING_NIELSEN_CATEGORY(710, "Missing nielsen category"),
+ MISSING_KILO_VOLUME_TOTAL(711, "Missing kilo volume total"),
+ MISSING_DOLLAR_VOLUME_TOTAL(712, "Missing dollar volume total"),
+ MISSING_PRODUCT_ID(713, "Missing product id");
 
     private final int    code;
     private final String message;

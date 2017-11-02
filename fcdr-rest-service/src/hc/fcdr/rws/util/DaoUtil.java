@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
@@ -557,6 +559,407 @@ public final class DaoUtil
         return queryMap;
     }
 
+    public static Map<String, Object> getQueryMap(SalesInsertRequest request)
+    {
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        List<Object> salesInsertList = new ArrayList<Object>();
+
+        if (!request.sales_description.isEmpty())
+            queryMap.put("sales_description", request.sales_description);
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_SALES_DESCRIPTION);
+            return queryMap;
+        }
+        salesInsertList.add(request.sales_description);
+        
+        if (!request.sales_upc.isEmpty())
+            if (StringUtilities.isNumeric(request.sales_upc))
+                queryMap.put("sales_upc", request.sales_upc);
+            else
+                queryMap.put("inputError", ResponseCodes.INVALID_UPC);
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_SALES_UPC);
+            return queryMap;
+        }
+        salesInsertList.add(request.sales_upc);
+        
+        if (!request.sales_brand.isEmpty())
+            queryMap.put("sales_brand", request.sales_brand);
+        salesInsertList.add(request.sales_brand);
+        
+        if (!request.sales_manufacturer.isEmpty())
+            queryMap.put("sales_manufacturer", request.sales_manufacturer);
+        salesInsertList.add(request.sales_manufacturer);
+        
+        if (request.dollar_rank != null)
+        {
+            if (isType(request.dollar_rank.toString(), "double"))
+            {
+                if (request.dollar_rank > 0.0)
+                    queryMap.put("dollar_rank", request.dollar_rank);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.dollar_rank);
+        
+        if (request.dollar_volume != null)
+        {
+            if (isType(request.dollar_volume.toString(), "double"))
+            {
+                if (request.dollar_volume > 0.0)
+                    queryMap.put("dollar_volume", request.dollar_volume);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME);
+            return queryMap;
+        }
+        salesInsertList.add(request.dollar_volume);
+        
+        if (request.dollar_share != null)
+        {
+            if (isType(request.dollar_share.toString(), "double"))
+            {
+                if (request.dollar_share > 0.0)
+                    queryMap.put("dollar_share", request.dollar_share);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_SHARE);
+            return queryMap;
+        }
+        salesInsertList.add(request.dollar_share);
+        
+        if (request.dollar_volume_percentage_change != null)
+        {
+            if (isType(request.dollar_volume_percentage_change.toString(), "double"))
+            {
+                if (request.dollar_volume_percentage_change > 0.0)
+                    queryMap.put("dollar_volume_percentage_change", request.dollar_volume_percentage_change);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE);
+            return queryMap;
+        }
+        salesInsertList.add(request.dollar_volume_percentage_change);
+        
+        if (request.kilo_volume != null)
+        {
+            if (isType(request.kilo_volume.toString(), "double"))
+            {
+                if (request.kilo_volume > 0.0)
+                    queryMap.put("kilo_volume", request.kilo_volume);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_KILO_VOLUME);
+            return queryMap;
+        }
+        salesInsertList.add(request.kilo_volume);
+        
+        if (request.kilo_share != null)
+        {
+            if (isType(request.kilo_share.toString(), "double"))
+            {
+                if (request.kilo_share > 0.0)
+                    queryMap.put("kilo_share", request.kilo_share);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_KILO_SHARE);
+            return queryMap;
+        }
+        salesInsertList.add(request.kilo_share);
+        
+        if (request.kilo_volume_percentage_change != null)
+        {
+            if (isType(request.kilo_volume_percentage_change.toString(), "double"))
+            {
+                if (request.kilo_volume_percentage_change > 0.0)
+                    queryMap.put("kilo_volume_percentage_change", request.kilo_volume_percentage_change);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_KILO_VOLUME_PERCENTAGE_CHANGE);
+            return queryMap;
+        }
+        salesInsertList.add(request.kilo_volume_percentage_change);
+        
+        if (request.average_ac_dist != null)
+        {
+            if (isType(request.average_ac_dist.toString(), "double"))
+            {
+                if (request.average_ac_dist > 0.0)
+                    queryMap.put("average_ac_dist", request.average_ac_dist);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.average_ac_dist);
+        
+        if (request.average_retail_price != null)
+        {
+            if (isType(request.average_retail_price.toString(), "double"))
+            {
+                if (request.average_retail_price > 0.0)
+                    queryMap.put("average_retail_price", request.average_retail_price);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.average_retail_price);
+        
+        if (!request.sales_source.isEmpty())
+            queryMap.put("sales_source", request.sales_source);
+        salesInsertList.add(request.sales_source);
+
+        if (!request.nielsen_category.isEmpty())
+            queryMap.put("nielsen_category", request.nielsen_category);
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_NIELSEN_CATEGORY);
+            return queryMap;
+        }
+        salesInsertList.add(request.nielsen_category);
+        
+        if (request.sales_year != null)
+        {
+            if (isType(request.sales_year.toString(), "int"))
+            {
+                if (request.sales_year > 0)
+                    queryMap.put("sales_year", request.sales_year);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.sales_year);
+        
+        if (!request.control_label_flag.toString().isEmpty())
+            queryMap.put("control_label_flag", request.control_label_flag);
+        salesInsertList.add(request.control_label_flag);
+        
+        if (request.kilo_volume_total != null)
+        {
+            if (isType(request.kilo_volume_total.toString(), "double"))
+            {
+                if (request.kilo_volume_total > 0.0)
+                    queryMap.put("kilo_volume_total", request.kilo_volume_total);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_KILO_VOLUME_TOTAL);
+            return queryMap;
+        }
+        salesInsertList.add(request.kilo_volume_total);
+        
+        if (request.kilo_volume_rank != null)
+        {
+            if (isType(request.kilo_volume_rank.toString(), "double"))
+            {
+                if (request.kilo_volume_rank > 0.0)
+                    queryMap.put("kilo_volume_rank", request.kilo_volume_rank);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.kilo_volume_rank);
+        
+        if (request.dollar_volume_total != null)
+        {
+            if (isType(request.dollar_volume_total.toString(), "double"))
+            {
+                if (request.dollar_volume_total > 0.0)
+                    queryMap.put("dollar_volume_total", request.dollar_volume_total);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_TOTAL);
+            return queryMap;
+        }
+        salesInsertList.add(request.dollar_volume_total);
+        
+        if (request.cluster_number != null)
+        {
+            if (isType(request.cluster_number.toString(), "double"))
+            {
+                if (request.cluster_number > 0.0)
+                    queryMap.put("cluster_number", request.cluster_number);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.cluster_number);
+        
+        if (request.product_grouping != null)
+        {
+            if (isType(request.product_grouping.toString(), "double"))
+            {
+                if (request.product_grouping > 0.0)
+                    queryMap.put("product_grouping", request.product_grouping);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.product_grouping);
+        
+        if (!request.sales_product_description.isEmpty())
+            queryMap.put("sales_product_description", request.sales_product_description);
+        salesInsertList.add(request.sales_product_description);
+        
+        if (request.classification_number != null)
+        {
+            if (isType(request.classification_number.toString(), "double"))
+            {
+                if (request.classification_number > 0.0)
+                    queryMap.put("classification_number", request.classification_number);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.classification_number);
+        
+        if (!request.classification_type.isEmpty())
+            queryMap.put("classification_type", request.classification_type);
+        salesInsertList.add(request.classification_type);
+        
+        if (!request.sales_comment.isEmpty())
+            queryMap.put("sales_comment", request.sales_comment);
+        salesInsertList.add(request.sales_comment);
+
+        if (!request.sales_collection_date.isEmpty())
+        {
+            queryMap.put("sales_collection_date", request.sales_collection_date);
+            salesInsertList.add(Date.valueOf(request.sales_collection_date));
+        }
+        else
+            salesInsertList.add(null);
+        
+        if (request.number_of_units != null)
+        {
+            if (isType(request.number_of_units.toString(), "int"))
+            {
+                if (request.number_of_units > 0)
+                    queryMap.put("number_of_units", request.number_of_units);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+        }
+        salesInsertList.add(request.number_of_units);
+        
+        if (!request.edited_by.isEmpty())
+            queryMap.put("edited_by", request.edited_by);
+        salesInsertList.add(request.edited_by);
+        
+        Timestamp now = DateUtil.getCurrentTimeStamp();
+        queryMap.put("creation_date", now);
+        salesInsertList.add(now);
+        queryMap.put("last_edit_date", now);
+        salesInsertList.add(now);
+        
+        if (request.product_id != null)
+        {
+            if (isType(request.product_id.toString(), "long"))
+            {
+                if (request.product_id > 0)
+                    queryMap.put("sales_product_id_fkey", request.product_id);
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_PRODUCT_ID);
+            return queryMap;
+        }
+        salesInsertList.add(request.product_id);
+
+        queryMap.put("sales_insert_list", salesInsertList);
+        
+        return queryMap;
+    }
+    
     // ---
 
     public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
@@ -1055,6 +1458,8 @@ public final class DaoUtil
                 Integer.parseInt(testStr);
             else if (type.equalsIgnoreCase("double"))
                 Double.parseDouble(testStr);
+            else if (type.equalsIgnoreCase("long"))
+                Long.parseLong(testStr);
             return true;
         }
         catch (Exception e)

@@ -20,6 +20,8 @@ import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
 import hc.fcdr.rws.model.sales.SalesYearsData;
@@ -142,16 +144,83 @@ public class SalesDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        /// System.out.println("Sales insert sql: " + query);
-
-        // ===
-
         // returns the sales_id upon successful insert
         Object o = executeUpdate(query, csvFieldList.toArray());
 
         return (Integer) o;
     }
 
+    public SalesInsertDataResponse getSalesInsertResponse(SalesInsertRequest salesInsertRequest) throws DaoException
+    {
+        Map<String, Object> queryMap = DaoUtil.getQueryMap(salesInsertRequest);
+
+        if (queryMap.isEmpty())
+            return new SalesInsertDataResponse(ResponseCodes.EMPTY_REQUEST.getCode(),
+                    ResponseCodes.EMPTY_REQUEST.getMessage());
+
+        if (queryMap.containsKey("inputError"))
+        {
+            Object o = queryMap.get("inputError");
+            queryMap.remove("inputError");
+
+            return new SalesInsertDataResponse(((ResponseCodes) o).getCode(),
+                    ((ResponseCodes) o).getMessage());
+        }
+        
+        String[] columns =
+        { 
+                "sales_description",
+                "sales_upc",
+                "sales_brand",
+                "sales_manufacturer",
+                "dollar_rank",
+                "dollar_volume",
+                "dollar_share",
+                "dollar_volume_percentage_change",
+                "kilo_volume",
+                "kilo_share",
+                "kilo_volume_percentage_change",
+                "average_ac_dist",
+                "average_retail_price",
+                "sales_source",
+                "nielsen_category",
+                "sales_year",
+                "control_label_flag",
+                "kilo_volume_total",
+                "kilo_volume_rank",
+                "dollar_volume_total",
+                "cluster_number",
+                "product_grouping",
+                "sales_product_description",
+                "classification_number",
+                "classification_type",
+                "sales_comment",
+                "sales_collection_date",
+                "number_of_units",
+                "edited_by",
+                "creation_date",
+                "last_edit_date",
+                "sales_product_id_fkey"
+                };
+
+        String questionmarks = StringUtils.repeat("?,", columns.length);
+        questionmarks = (String) questionmarks.subSequence(0,
+                questionmarks.length() - 1);
+
+        String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
+                schema + "." + "sales");
+        query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
+        query = query.replaceFirst(VALUES_REGEX, questionmarks);
+
+        List<Object> salesInsertList = (List<Object>) queryMap.get("sales_insert_list");
+        
+        // returns the sales_id upon successful insert
+        Object o = executeUpdate(query, salesInsertList.toArray());
+
+        return new SalesInsertDataResponse(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
+    }
+    
     // ===
 
     public SalesDataResponse getSalesResponse()

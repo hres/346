@@ -12,6 +12,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +24,8 @@ import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.util.ContextManager;
@@ -184,6 +187,33 @@ public class SalesService extends Application
                        .build();
     }
 
+    // ===
+    
+    @POST
+    @Path("/insert")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response insert(final SalesInsertRequest salesInsertRequest)
+            throws SQLException, IOException, Exception
+    {
+        SalesInsertDataResponse entity = new SalesInsertDataResponse();
+
+        try
+        {
+            if (salesDao != null)
+                entity = salesDao.getSalesInsertResponse(salesInsertRequest);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+    
     // ===
     
     @DELETE
