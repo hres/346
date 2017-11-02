@@ -24,6 +24,8 @@ import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
+import hc.fcdr.rws.model.sales.SalesUpdateDataResponse;
+import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsData;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
@@ -218,6 +220,88 @@ public class SalesDao extends PgDao
         Object o = executeUpdate(query, salesInsertList.toArray());
 
         return new SalesInsertDataResponse(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
+    }
+    
+    // ===
+    
+    public SalesUpdateDataResponse getSalesUpdateResponse(SalesUpdateRequest salesUpdateRequest) throws DaoException
+    {
+        Map<String, Object> queryMap = DaoUtil.getQueryMap(salesUpdateRequest);
+
+        if (queryMap.isEmpty())
+            return new SalesUpdateDataResponse(ResponseCodes.EMPTY_REQUEST.getCode(),
+                    ResponseCodes.EMPTY_REQUEST.getMessage());
+
+        if (queryMap.containsKey("inputError"))
+        {
+            Object o = queryMap.get("inputError");
+            queryMap.remove("inputError");
+
+            return new SalesUpdateDataResponse(((ResponseCodes) o).getCode(),
+                    ((ResponseCodes) o).getMessage());
+        }
+        
+        // Check for sales.
+        Sales sales = getSales(salesUpdateRequest.sales_id);
+
+        if ((sales == null) || (sales.getId() == 0L))
+            return new SalesUpdateDataResponse(
+                    ResponseCodes.NO_PRODUCT_FOUND.getCode(),
+                    ResponseCodes.NO_PRODUCT_FOUND.getMessage());
+        
+        String[] columns =
+        { 
+                "sales_description",
+                "sales_upc",
+                "sales_brand",
+                "sales_manufacturer",
+                "dollar_rank",
+                "dollar_volume",
+                "dollar_share",
+                "dollar_volume_percentage_change",
+                "kilo_volume",
+                "kilo_share",
+                "kilo_volume_percentage_change",
+                "average_ac_dist",
+                "average_retail_price",
+                "sales_source",
+                "nielsen_category",
+                "sales_year",
+                "control_label_flag",
+                "kilo_volume_total",
+                "kilo_volume_rank",
+                "dollar_volume_total",
+                "cluster_number",
+                "product_grouping",
+                "sales_product_description",
+                "classification_number",
+                "classification_type",
+                "sales_comment",
+                "sales_collection_date",
+                "number_of_units",
+                "edited_by",
+                "last_edit_date",
+                "sales_id"
+                };
+
+        String questionmarks = StringUtils.repeat("?,", columns.length);
+        questionmarks = (String) questionmarks.subSequence(0,
+                questionmarks.length() - 1);
+       
+        //TODO finish sales
+        String query = "update " + schema + "." + "sales set "
+                + "sales_description = COALESCE(?, sales_description), "
+                + "edited_by = COALESCE(?, edited_by), "
+                + "last_edit_date = COALESCE(?, last_edit_date) "
+                + "where sales_id = ?";
+        
+
+        List<Object> salesUpdateList = (List<Object>) queryMap.get("sales_update_list");
+        
+        Object o = executeUpdate(query, salesUpdateList.toArray());
+
+        return new SalesUpdateDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }
     

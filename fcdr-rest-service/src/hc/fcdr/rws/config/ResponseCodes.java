@@ -46,7 +46,8 @@ public enum ResponseCodes
  MISSING_NIELSEN_CATEGORY(710, "Missing nielsen category"),
  MISSING_KILO_VOLUME_TOTAL(711, "Missing kilo volume total"),
  MISSING_DOLLAR_VOLUME_TOTAL(712, "Missing dollar volume total"),
- MISSING_PRODUCT_ID(713, "Missing product id");
+ MISSING_PRODUCT_ID(713, "Missing product id"),
+ MISSING_SALES_ID(714, "Missing sales id");
 
     private final int    code;
     private final String message;

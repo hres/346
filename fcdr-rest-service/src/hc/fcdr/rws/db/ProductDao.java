@@ -922,8 +922,6 @@ public class ProductDao extends PgDao
                     ((ResponseCodes) o).getMessage());
         }
 
-        ResultSet resultSet = null;
-
         // Check for product.
         Product product = getProduct(productUpdateRequest.product_id);
 

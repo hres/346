@@ -22,11 +22,15 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
+import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
+import hc.fcdr.rws.model.sales.SalesUpdateDataResponse;
+import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.util.ContextManager;
 
@@ -188,7 +192,7 @@ public class SalesService extends Application
     }
 
     // ===
-    
+
     @POST
     @Path("/insert")
     @Produces(MediaType.APPLICATION_JSON)
@@ -213,9 +217,37 @@ public class SalesService extends Application
                        .entity(entity)
                        .build();
     }
-    
+
     // ===
-    
+
+    @POST
+    @Path("/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(final SalesUpdateRequest salesUpdateRequest)
+            throws SQLException, IOException, Exception
+    {
+        SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
+
+        try
+        {
+            if (salesDao != null)
+                entity = salesDao.getSalesUpdateResponse(salesUpdateRequest);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+
+    // ===
+
     @DELETE
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -238,9 +270,9 @@ public class SalesService extends Application
                        .entity(entity)
                        .build();
     }
-    
+
     // ===
-    
+
     @OPTIONS
     @Path("/sales")
     @Produces(MediaType.APPLICATION_XML)
