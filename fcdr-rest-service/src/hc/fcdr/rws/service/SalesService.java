@@ -25,6 +25,7 @@ import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesDataResponseShort;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
@@ -173,7 +174,7 @@ public class SalesService extends Application
     public Response getSales(final SalesRequest salesRequest)
             throws SQLException, IOException, Exception
     {
-        SalesDataResponse entity = new SalesDataResponse();
+        SalesDataResponseShort entity = new SalesDataResponseShort();
 
         try
         {

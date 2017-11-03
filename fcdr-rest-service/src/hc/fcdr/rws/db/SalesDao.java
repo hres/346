@@ -19,11 +19,14 @@ import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
+import hc.fcdr.rws.model.sales.SalesDataResponseShort;
+import hc.fcdr.rws.model.sales.SalesDataShort;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
+import hc.fcdr.rws.model.sales.SalesResponseShort;
 import hc.fcdr.rws.model.sales.SalesUpdateDataResponse;
 import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsData;
@@ -435,13 +438,13 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    public SalesDataResponse getSalesResponse(SalesRequest salesRequest)
+    public SalesDataResponseShort getSalesResponse(SalesRequest salesRequest)
             throws SQLException, IOException, Exception
     {
         Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
 
         if (queryMap.isEmpty())
-            return new SalesDataResponse(ResponseCodes.EMPTY_REQUEST.getCode(),
+            return new SalesDataResponseShort(ResponseCodes.EMPTY_REQUEST.getCode(),
                     null, ResponseCodes.EMPTY_REQUEST.getMessage());
 
         if (queryMap.containsKey("inputError"))
@@ -449,7 +452,7 @@ public class SalesDao extends PgDao
             Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
-            return new SalesDataResponse(((ResponseCodes) o).getCode(), null,
+            return new SalesDataResponseShort(((ResponseCodes) o).getCode(), null,
                     ((ResponseCodes) o).getMessage());
         }
 
@@ -477,8 +480,8 @@ public class SalesDao extends PgDao
         /// ===
 
         ResultSet resultSet = null;
-        SalesResponse salesResponse = null;
-        SalesData data = new SalesData();
+        SalesResponseShort salesResponseShort = null;
+        SalesDataShort data = new SalesDataShort();
 
         String query = "select * from " + schema + "." + "sales";
 
@@ -557,23 +560,23 @@ public class SalesDao extends PgDao
 
             while (resultSet.next())
             {
-                salesResponse = DaoUtil.getSalesResponse(resultSet);
-                data.add(salesResponse);
+                salesResponseShort = DaoUtil.getSalesResponseShort(resultSet);
+                data.add(salesResponseShort);
             }
         }
         catch (SQLException e)
         {
             logger.error(e);
-            return new SalesDataResponse(
+            return new SalesDataResponseShort(
                     ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
 
         if (data.getCount() == 0)
-            return new SalesDataResponse(ResponseCodes.NO_DATA_FOUND.getCode(),
+            return new SalesDataResponseShort(ResponseCodes.NO_DATA_FOUND.getCode(),
                     null, ResponseCodes.NO_DATA_FOUND.getMessage());
 
-        return new SalesDataResponse(ResponseCodes.OK.getCode(), data,
+        return new SalesDataResponseShort(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
 
     }

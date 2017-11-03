@@ -33,6 +33,7 @@ import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.SalesRequest;
 import hc.fcdr.rws.model.sales.SalesResponse;
+import hc.fcdr.rws.model.sales.SalesResponseShort;
 import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
 
@@ -494,6 +495,15 @@ public final class DaoUtil
         return sales;
     }
 
+    public static SalesResponseShort getSalesResponseShort(ResultSet resultSet)
+            throws SQLException
+    {
+        Sales sales = getSales(resultSet);
+        SalesResponseShort salesResponseShort = new SalesResponseShort(sales);
+
+        return salesResponseShort;
+    }
+    
     public static SalesResponse getSalesResponse(ResultSet resultSet)
             throws SQLException
     {
