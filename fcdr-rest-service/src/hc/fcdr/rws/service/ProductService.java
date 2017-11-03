@@ -202,8 +202,8 @@ public class ProductService extends Application
             throws SQLException, IOException, Exception
     {
 
-        String applicationEnvironment = ContextManager.getJndiValue(
-                "APPLICATION_ENVIRONMENT");
+        ///String applicationEnvironment = ContextManager.getJndiValue(
+                ///"APPLICATION_ENVIRONMENT");
 
         ProductDataResponse entity = new ProductDataResponse();
 
@@ -214,7 +214,6 @@ public class ProductService extends Application
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

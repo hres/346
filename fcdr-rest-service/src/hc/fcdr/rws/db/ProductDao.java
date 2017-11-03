@@ -270,7 +270,7 @@ public class ProductDao extends PgDao
 
         String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
-                + " p.creation_date, p.last_edit_date, p.edited_by, "
+                + " p.creation_date, p.last_edit_date, p.edited_by, p.restaurant_type, p.type,"
                 + "c.classification_number, c.classification_type, c.classification_name from "
                 + schema + "." + "product p " + "left outer join " + schema
                 + "."
