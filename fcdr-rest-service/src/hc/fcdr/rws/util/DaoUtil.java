@@ -1788,9 +1788,9 @@ public final class DaoUtil
     {
         Map<String, Object> queryMap = new HashMap<String, Object>();
 
-        if (!request.product_manufacturer.isEmpty())
+        if (request.product_manufacturer != null && !request.product_manufacturer.isEmpty())
             queryMap.put("product_manufacturer", request.product_manufacturer);
-        if (!request.product_brand.isEmpty())
+        if (request.product_brand != null && !request.product_brand.isEmpty())
             queryMap.put("product_brand", request.product_brand);
 
         if (request.cnf_code != null)
@@ -1819,13 +1819,13 @@ public final class DaoUtil
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
-        if (!request.product_description.isEmpty())
+        if (request.product_description != null && !request.product_description.isEmpty())
             queryMap.put("product_description", request.product_description);
         else
             queryMap.put("inputError",
                     ResponseCodes.MISSING_PRODUCT_DESCRIPTION);
 
-        if (!request.product_comment.isEmpty())
+        if (request.product_comment != null && !request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
         if (request.classification_number != null)
@@ -1842,17 +1842,17 @@ public final class DaoUtil
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
-        if (!request.classification_name.isEmpty())
+        if (request.classification_name != null && !request.classification_name.isEmpty())
             queryMap.put("classification_name", request.classification_name);
-        if (!request.classification_type.isEmpty())
+        if (request.classification_type != null && !request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
 
-        if (!request.restaurant_type.isEmpty())
+        if (request.restaurant_type != null && !request.restaurant_type.isEmpty())
             queryMap.put("restaurant_type", request.restaurant_type);
-        if (!request.type.isEmpty())
+        if (request.type != null && !request.type.isEmpty())
             queryMap.put("type", request.type);
 
-        if (!request.edited_by.isEmpty())
+        if (request.edited_by != null && !request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
 
         return queryMap;
