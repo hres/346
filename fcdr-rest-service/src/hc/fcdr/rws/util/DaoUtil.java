@@ -311,8 +311,9 @@ public final class DaoUtil
         product.setBrand(result.getString("product_brand"));
         product.setCountry(result.getString("product_country"));
 
-        product.setClusterNumber(((result.getString("cluster_number") == null)
-                ? "" : result.getString("cluster_number")));
+        product.setClusterNumber(
+                ((result.getString("cluster_number") == null) ? ""
+                        : result.getString("cluster_number")));
 
         product.setComment(((result.getString("product_comment") == null) ? ""
                 : result.getString("product_comment")));
@@ -503,7 +504,7 @@ public final class DaoUtil
 
         return salesResponseShort;
     }
-    
+
     public static SalesResponse getSalesResponse(ResultSet resultSet)
             throws SQLException
     {
@@ -583,7 +584,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.sales_description);
-        
+
         if (!request.sales_upc.isEmpty())
             if (StringUtilities.isNumeric(request.sales_upc))
                 queryMap.put("sales_upc", request.sales_upc);
@@ -595,17 +596,16 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.sales_upc);
-        
+
         if (!request.sales_brand.isEmpty())
             queryMap.put("sales_brand", request.sales_brand);
         salesInsertList.add(request.sales_brand);
-        
+
         if (!request.sales_manufacturer.isEmpty())
             queryMap.put("sales_manufacturer", request.sales_manufacturer);
         salesInsertList.add(request.sales_manufacturer);
-        
+
         if (request.dollar_rank != null)
-        {
             if (isType(request.dollar_rank.toString(), "double"))
             {
                 if (request.dollar_rank > 0.0)
@@ -616,9 +616,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.dollar_rank);
-        
+
         if (request.dollar_volume != null)
         {
             if (isType(request.dollar_volume.toString(), "double"))
@@ -638,7 +637,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.dollar_volume);
-        
+
         if (request.dollar_share != null)
         {
             if (isType(request.dollar_share.toString(), "double"))
@@ -658,13 +657,15 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.dollar_share);
-        
+
         if (request.dollar_volume_percentage_change != null)
         {
-            if (isType(request.dollar_volume_percentage_change.toString(), "double"))
+            if (isType(request.dollar_volume_percentage_change.toString(),
+                    "double"))
             {
                 if (request.dollar_volume_percentage_change > 0.0)
-                    queryMap.put("dollar_volume_percentage_change", request.dollar_volume_percentage_change);
+                    queryMap.put("dollar_volume_percentage_change",
+                            request.dollar_volume_percentage_change);
             }
             else
             {
@@ -674,11 +675,12 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE);
             return queryMap;
         }
         salesInsertList.add(request.dollar_volume_percentage_change);
-        
+
         if (request.kilo_volume != null)
         {
             if (isType(request.kilo_volume.toString(), "double"))
@@ -698,7 +700,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.kilo_volume);
-        
+
         if (request.kilo_share != null)
         {
             if (isType(request.kilo_share.toString(), "double"))
@@ -718,13 +720,15 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.kilo_share);
-        
+
         if (request.kilo_volume_percentage_change != null)
         {
-            if (isType(request.kilo_volume_percentage_change.toString(), "double"))
+            if (isType(request.kilo_volume_percentage_change.toString(),
+                    "double"))
             {
                 if (request.kilo_volume_percentage_change > 0.0)
-                    queryMap.put("kilo_volume_percentage_change", request.kilo_volume_percentage_change);
+                    queryMap.put("kilo_volume_percentage_change",
+                            request.kilo_volume_percentage_change);
             }
             else
             {
@@ -734,13 +738,13 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_KILO_VOLUME_PERCENTAGE_CHANGE);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_KILO_VOLUME_PERCENTAGE_CHANGE);
             return queryMap;
         }
         salesInsertList.add(request.kilo_volume_percentage_change);
-        
+
         if (request.average_ac_dist != null)
-        {
             if (isType(request.average_ac_dist.toString(), "double"))
             {
                 if (request.average_ac_dist > 0.0)
@@ -751,24 +755,22 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.average_ac_dist);
-        
+
         if (request.average_retail_price != null)
-        {
             if (isType(request.average_retail_price.toString(), "double"))
             {
                 if (request.average_retail_price > 0.0)
-                    queryMap.put("average_retail_price", request.average_retail_price);
+                    queryMap.put("average_retail_price",
+                            request.average_retail_price);
             }
             else
             {
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.average_retail_price);
-        
+
         if (!request.sales_source.isEmpty())
             queryMap.put("sales_source", request.sales_source);
         salesInsertList.add(request.sales_source);
@@ -781,9 +783,8 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.nielsen_category);
-        
+
         if (request.sales_year != null)
-        {
             if (isType(request.sales_year.toString(), "int"))
             {
                 if (request.sales_year > 0)
@@ -794,19 +795,19 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.sales_year);
-        
+
         if (!request.control_label_flag.toString().isEmpty())
             queryMap.put("control_label_flag", request.control_label_flag);
         salesInsertList.add(request.control_label_flag);
-        
+
         if (request.kilo_volume_total != null)
         {
             if (isType(request.kilo_volume_total.toString(), "double"))
             {
                 if (request.kilo_volume_total > 0.0)
-                    queryMap.put("kilo_volume_total", request.kilo_volume_total);
+                    queryMap.put("kilo_volume_total",
+                            request.kilo_volume_total);
             }
             else
             {
@@ -820,9 +821,8 @@ public final class DaoUtil
             return queryMap;
         }
         salesInsertList.add(request.kilo_volume_total);
-        
+
         if (request.kilo_volume_rank != null)
-        {
             if (isType(request.kilo_volume_rank.toString(), "double"))
             {
                 if (request.kilo_volume_rank > 0.0)
@@ -833,15 +833,15 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.kilo_volume_rank);
-        
+
         if (request.dollar_volume_total != null)
         {
             if (isType(request.dollar_volume_total.toString(), "double"))
             {
                 if (request.dollar_volume_total > 0.0)
-                    queryMap.put("dollar_volume_total", request.dollar_volume_total);
+                    queryMap.put("dollar_volume_total",
+                            request.dollar_volume_total);
             }
             else
             {
@@ -851,13 +851,13 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_TOTAL);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_DOLLAR_VOLUME_TOTAL);
             return queryMap;
         }
         salesInsertList.add(request.dollar_volume_total);
-        
+
         if (request.cluster_number != null)
-        {
             if (isType(request.cluster_number.toString(), "double"))
             {
                 if (request.cluster_number > 0.0)
@@ -868,11 +868,9 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.cluster_number);
-        
+
         if (request.product_grouping != null)
-        {
             if (isType(request.product_grouping.toString(), "double"))
             {
                 if (request.product_grouping > 0.0)
@@ -883,46 +881,45 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.product_grouping);
-        
+
         if (!request.sales_product_description.isEmpty())
-            queryMap.put("sales_product_description", request.sales_product_description);
+            queryMap.put("sales_product_description",
+                    request.sales_product_description);
         salesInsertList.add(request.sales_product_description);
-        
+
         if (request.classification_number != null)
-        {
             if (isType(request.classification_number.toString(), "double"))
             {
                 if (request.classification_number > 0.0)
-                    queryMap.put("classification_number", request.classification_number);
+                    queryMap.put("classification_number",
+                            request.classification_number);
             }
             else
             {
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.classification_number);
-        
+
         if (!request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
         salesInsertList.add(request.classification_type);
-        
+
         if (!request.sales_comment.isEmpty())
             queryMap.put("sales_comment", request.sales_comment);
         salesInsertList.add(request.sales_comment);
 
         if (!request.sales_collection_date.isEmpty())
         {
-            queryMap.put("sales_collection_date", request.sales_collection_date);
+            queryMap.put("sales_collection_date",
+                    request.sales_collection_date);
             salesInsertList.add(Date.valueOf(request.sales_collection_date));
         }
         else
             salesInsertList.add(null);
-        
+
         if (request.number_of_units != null)
-        {
             if (isType(request.number_of_units.toString(), "int"))
             {
                 if (request.number_of_units > 0)
@@ -933,19 +930,18 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        }
         salesInsertList.add(request.number_of_units);
-        
+
         if (!request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
         salesInsertList.add(request.edited_by);
-        
+
         Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("creation_date", now);
         salesInsertList.add(now);
         queryMap.put("last_edit_date", now);
         salesInsertList.add(now);
-        
+
         if (request.product_id != null)
         {
             if (isType(request.product_id.toString(), "long"))
@@ -967,12 +963,12 @@ public final class DaoUtil
         salesInsertList.add(request.product_id);
 
         queryMap.put("sales_insert_list", salesInsertList);
-        
+
         return queryMap;
     }
-    
+
     // ---
-    
+
     public static Map<String, Object> getQueryMap(SalesUpdateRequest request)
     {
         Map<String, Object> queryMap = new HashMap<String, Object>();
@@ -986,7 +982,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.sales_description);
-        
+
         if (!request.sales_upc.isEmpty())
             if (StringUtilities.isNumeric(request.sales_upc))
                 queryMap.put("sales_upc", request.sales_upc);
@@ -998,17 +994,16 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.sales_upc);
-        
+
         if (!request.sales_brand.isEmpty())
             queryMap.put("sales_brand", request.sales_brand);
         salesUpdateList.add(request.sales_brand);
-        
+
         if (!request.sales_manufacturer.isEmpty())
             queryMap.put("sales_manufacturer", request.sales_manufacturer);
         salesUpdateList.add(request.sales_manufacturer);
-        
+
         if (request.dollar_rank != null)
-        {
             if (isType(request.dollar_rank.toString(), "double"))
             {
                 if (request.dollar_rank > 0.0)
@@ -1019,9 +1014,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.dollar_rank);
-        
+
         if (request.dollar_volume != null)
         {
             if (isType(request.dollar_volume.toString(), "double"))
@@ -1041,7 +1035,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.dollar_volume);
-        
+
         if (request.dollar_share != null)
         {
             if (isType(request.dollar_share.toString(), "double"))
@@ -1061,13 +1055,15 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.dollar_share);
-        
+
         if (request.dollar_volume_percentage_change != null)
         {
-            if (isType(request.dollar_volume_percentage_change.toString(), "double"))
+            if (isType(request.dollar_volume_percentage_change.toString(),
+                    "double"))
             {
                 if (request.dollar_volume_percentage_change > 0.0)
-                    queryMap.put("dollar_volume_percentage_change", request.dollar_volume_percentage_change);
+                    queryMap.put("dollar_volume_percentage_change",
+                            request.dollar_volume_percentage_change);
             }
             else
             {
@@ -1077,11 +1073,12 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_DOLLAR_VOLUME_PERCENTAGE_CHANGE);
             return queryMap;
         }
         salesUpdateList.add(request.dollar_volume_percentage_change);
-        
+
         if (request.kilo_volume != null)
         {
             if (isType(request.kilo_volume.toString(), "double"))
@@ -1101,7 +1098,7 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.kilo_volume);
-        
+
         if (request.kilo_share != null)
         {
             if (isType(request.kilo_share.toString(), "double"))
@@ -1121,13 +1118,15 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.kilo_share);
-        
+
         if (request.kilo_volume_percentage_change != null)
         {
-            if (isType(request.kilo_volume_percentage_change.toString(), "double"))
+            if (isType(request.kilo_volume_percentage_change.toString(),
+                    "double"))
             {
                 if (request.kilo_volume_percentage_change > 0.0)
-                    queryMap.put("kilo_volume_percentage_change", request.kilo_volume_percentage_change);
+                    queryMap.put("kilo_volume_percentage_change",
+                            request.kilo_volume_percentage_change);
             }
             else
             {
@@ -1137,13 +1136,13 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_KILO_VOLUME_PERCENTAGE_CHANGE);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_KILO_VOLUME_PERCENTAGE_CHANGE);
             return queryMap;
         }
         salesUpdateList.add(request.kilo_volume_percentage_change);
-        
+
         if (request.average_ac_dist != null)
-        {
             if (isType(request.average_ac_dist.toString(), "double"))
             {
                 if (request.average_ac_dist > 0.0)
@@ -1154,24 +1153,22 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.average_ac_dist);
-        
+
         if (request.average_retail_price != null)
-        {
             if (isType(request.average_retail_price.toString(), "double"))
             {
                 if (request.average_retail_price > 0.0)
-                    queryMap.put("average_retail_price", request.average_retail_price);
+                    queryMap.put("average_retail_price",
+                            request.average_retail_price);
             }
             else
             {
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.average_retail_price);
-        
+
         if (!request.sales_source.isEmpty())
             queryMap.put("sales_source", request.sales_source);
         salesUpdateList.add(request.sales_source);
@@ -1184,9 +1181,8 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.nielsen_category);
-        
+
         if (request.sales_year != null)
-        {
             if (isType(request.sales_year.toString(), "int"))
             {
                 if (request.sales_year > 0)
@@ -1197,19 +1193,19 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.sales_year);
-        
+
         if (!request.control_label_flag.toString().isEmpty())
             queryMap.put("control_label_flag", request.control_label_flag);
         salesUpdateList.add(request.control_label_flag);
-        
+
         if (request.kilo_volume_total != null)
         {
             if (isType(request.kilo_volume_total.toString(), "double"))
             {
                 if (request.kilo_volume_total > 0.0)
-                    queryMap.put("kilo_volume_total", request.kilo_volume_total);
+                    queryMap.put("kilo_volume_total",
+                            request.kilo_volume_total);
             }
             else
             {
@@ -1223,9 +1219,8 @@ public final class DaoUtil
             return queryMap;
         }
         salesUpdateList.add(request.kilo_volume_total);
-        
+
         if (request.kilo_volume_rank != null)
-        {
             if (isType(request.kilo_volume_rank.toString(), "double"))
             {
                 if (request.kilo_volume_rank > 0.0)
@@ -1236,15 +1231,15 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.kilo_volume_rank);
-        
+
         if (request.dollar_volume_total != null)
         {
             if (isType(request.dollar_volume_total.toString(), "double"))
             {
                 if (request.dollar_volume_total > 0.0)
-                    queryMap.put("dollar_volume_total", request.dollar_volume_total);
+                    queryMap.put("dollar_volume_total",
+                            request.dollar_volume_total);
             }
             else
             {
@@ -1254,13 +1249,13 @@ public final class DaoUtil
         }
         else
         {
-            queryMap.put("inputError", ResponseCodes.MISSING_DOLLAR_VOLUME_TOTAL);
+            queryMap.put("inputError",
+                    ResponseCodes.MISSING_DOLLAR_VOLUME_TOTAL);
             return queryMap;
         }
         salesUpdateList.add(request.dollar_volume_total);
-        
+
         if (request.cluster_number != null)
-        {
             if (isType(request.cluster_number.toString(), "double"))
             {
                 if (request.cluster_number > 0.0)
@@ -1271,11 +1266,9 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.cluster_number);
-        
+
         if (request.product_grouping != null)
-        {
             if (isType(request.product_grouping.toString(), "double"))
             {
                 if (request.product_grouping > 0.0)
@@ -1286,46 +1279,45 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.product_grouping);
-        
+
         if (!request.sales_product_description.isEmpty())
-            queryMap.put("sales_product_description", request.sales_product_description);
+            queryMap.put("sales_product_description",
+                    request.sales_product_description);
         salesUpdateList.add(request.sales_product_description);
-        
+
         if (request.classification_number != null)
-        {
             if (isType(request.classification_number.toString(), "double"))
             {
                 if (request.classification_number > 0.0)
-                    queryMap.put("classification_number", request.classification_number);
+                    queryMap.put("classification_number",
+                            request.classification_number);
             }
             else
             {
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.classification_number);
-        
+
         if (!request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
         salesUpdateList.add(request.classification_type);
-        
+
         if (!request.sales_comment.isEmpty())
             queryMap.put("sales_comment", request.sales_comment);
         salesUpdateList.add(request.sales_comment);
 
         if (!request.sales_collection_date.isEmpty())
         {
-            queryMap.put("sales_collection_date", request.sales_collection_date);
+            queryMap.put("sales_collection_date",
+                    request.sales_collection_date);
             salesUpdateList.add(Date.valueOf(request.sales_collection_date));
         }
         else
             salesUpdateList.add(null);
-        
+
         if (request.number_of_units != null)
-        {
             if (isType(request.number_of_units.toString(), "int"))
             {
                 if (request.number_of_units > 0)
@@ -1336,17 +1328,16 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        }
         salesUpdateList.add(request.number_of_units);
-        
+
         if (!request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
         salesUpdateList.add(request.edited_by);
-        
+
         Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("last_edit_date", now);
         salesUpdateList.add(now);
-        
+
         if (request.sales_id != null)
         {
             if (isType(request.sales_id.toString(), "long"))
@@ -1368,10 +1359,10 @@ public final class DaoUtil
         salesUpdateList.add(request.sales_id);
 
         queryMap.put("sales_update_list", salesUpdateList);
-        
+
         return queryMap;
     }
-    
+
     // ---
 
     public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
@@ -1788,44 +1779,37 @@ public final class DaoUtil
     {
         Map<String, Object> queryMap = new HashMap<String, Object>();
 
-        if (request.product_manufacturer != null && !request.product_manufacturer.isEmpty())
+        if ((request.product_manufacturer != null)
+                && !request.product_manufacturer.isEmpty())
             queryMap.put("product_manufacturer", request.product_manufacturer);
-        if (request.product_brand != null && !request.product_brand.isEmpty())
+        if ((request.product_brand != null) && !request.product_brand.isEmpty())
             queryMap.put("product_brand", request.product_brand);
 
-        if (request.cnf_code != null)
+        if (request.cnf_code != null && !request.cnf_code.isEmpty())
         {
-            if (isType(request.cnf_code.toString(), "int"))
-            {
-                if (request.cnf_code > 0)
-                    queryMap.put("cnf_code", request.cnf_code);
-            }
+            if (isType(request.cnf_code, "int"))
+                queryMap.put("cnf_code", request.cnf_code);
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
         }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
 
-        if (request.cluster_number != null)
+        if (request.cluster_number != null && !request.cluster_number.isEmpty())
         {
-            if (isType(request.cluster_number.toString(), "double"))
-            {
-                if (request.cluster_number > 0.0)
-                    queryMap.put("cluster_number", request.cluster_number);
-            }
+            if (isType(request.cluster_number, "double"))
+                queryMap.put("cluster_number", request.cluster_number);
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
         }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
-        if (request.product_description != null && !request.product_description.isEmpty())
+        if ((request.product_description != null)
+                && !request.product_description.isEmpty())
             queryMap.put("product_description", request.product_description);
         else
             queryMap.put("inputError",
                     ResponseCodes.MISSING_PRODUCT_DESCRIPTION);
 
-        if (request.product_comment != null && !request.product_comment.isEmpty())
+        if ((request.product_comment != null)
+                && !request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
         if (request.classification_number != null)
@@ -1842,17 +1826,20 @@ public final class DaoUtil
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
-        if (request.classification_name != null && !request.classification_name.isEmpty())
+        if ((request.classification_name != null)
+                && !request.classification_name.isEmpty())
             queryMap.put("classification_name", request.classification_name);
-        if (request.classification_type != null && !request.classification_type.isEmpty())
+        if ((request.classification_type != null)
+                && !request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
 
-        if (request.restaurant_type != null && !request.restaurant_type.isEmpty())
+        if ((request.restaurant_type != null)
+                && !request.restaurant_type.isEmpty())
             queryMap.put("restaurant_type", request.restaurant_type);
-        if (request.type != null && !request.type.isEmpty())
+        if ((request.type != null) && !request.type.isEmpty())
             queryMap.put("type", request.type);
 
-        if (request.edited_by != null && !request.edited_by.isEmpty())
+        if ((request.edited_by != null) && !request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
 
         return queryMap;

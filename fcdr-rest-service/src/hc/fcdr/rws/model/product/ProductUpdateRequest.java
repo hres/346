@@ -18,9 +18,9 @@ public class ProductUpdateRequest
     @XmlElement
     public String  product_comment;
     @XmlElement
-    public Integer cnf_code;
+    public String cnf_code;
     @XmlElement
-    public Double  cluster_number;
+    public String  cluster_number;
     @XmlElement
     public String  restaurant_type;
     @XmlElement
@@ -43,8 +43,8 @@ public class ProductUpdateRequest
         productFieldList.add(product_brand);
         productFieldList.add(product_description);
         productFieldList.add(product_comment);
-        productFieldList.add(cnf_code);
-        productFieldList.add(cluster_number);
+        productFieldList.add(cnf_code.isEmpty() ? null : cnf_code);
+        productFieldList.add(cluster_number.isEmpty() ? null : cluster_number);
         productFieldList.add(restaurant_type);
         productFieldList.add(type);
         productFieldList.add(edited_by);

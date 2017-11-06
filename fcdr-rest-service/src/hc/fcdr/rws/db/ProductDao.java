@@ -939,14 +939,29 @@ public class ProductDao extends PgDao
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
+        String cnfCode = (productUpdateRequest.cnf_code != null
+                && !productUpdateRequest.cnf_code.isEmpty())
+                        ? "cnf_code = COALESCE(?, cnf_code), "
+                        : "cnf_code = null, ";
+        String clusterNumber = (productUpdateRequest.cluster_number != null
+                && !productUpdateRequest.cluster_number.isEmpty())
+                        ? "cluster_number = COALESCE(?, cluster_number), "
+                        : "cluster_number = null, ";
+
         String query = "update " + schema + "." + "product set "
                 + "last_edit_date = COALESCE(?, last_edit_date), "
                 + "product_manufacturer = COALESCE(?, product_manufacturer), "
                 + "product_brand = COALESCE(?, product_brand), "
                 + "product_description = COALESCE(?, product_description), "
                 + "product_comment = COALESCE(?, product_comment), "
-                + "cnf_code = COALESCE(?, cnf_code), "
-                + "cluster_number = COALESCE(?, cluster_number), "
+                ///+ "cnf_code = COALESCE(?, cnf_code), "
+                ///+ "cluster_number = COALESCE(?, cluster_number), "
+                
+                + "cnf_code = ?, "
+                + "cluster_number = ?, "
+                
+                ///+ "" + cnfCode + ""
+                ///+ "" + clusterNumber + ""               
                 + "restaurant_type = COALESCE(?, restaurant_type), "
                 + "type = COALESCE(?, type), "
                 + "edited_by = COALESCE(?, edited_by) "
@@ -975,7 +990,7 @@ public class ProductDao extends PgDao
 
                     if (productId == null)
                     {
-                        // If the product id is null, then there is no record for this classification id.
+                        // If the product id is null, then update the product id.
                         List<Object> sqlArgumentList = new ArrayList<Object>();
                         sqlArgumentList.add(productUpdateRequest.product_id);
                         sqlArgumentList.add(classificationId);
