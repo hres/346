@@ -43,8 +43,8 @@ public class ProductUpdateRequest
         productFieldList.add(product_brand);
         productFieldList.add(product_description);
         productFieldList.add(product_comment);
-        productFieldList.add(cnf_code.isEmpty() ? null : cnf_code);
-        productFieldList.add(cluster_number.isEmpty() ? null : cluster_number);
+        productFieldList.add(cnf_code.isEmpty() ? null : Integer.parseInt(cnf_code));
+        productFieldList.add(cluster_number.isEmpty() ? null : Double.parseDouble(cluster_number));
         productFieldList.add(restaurant_type);
         productFieldList.add(type);
         productFieldList.add(edited_by);
