@@ -10,7 +10,7 @@ public class SalesResponseShort
     private String  salesUpc;
     private String  salesDescription;
     private String  salesSource;
-    private Integer salesYear;
+    private String salesYear;
     private String  nielsenCategory;
     private Double  dollarVolume;
     private Double  kiloVolume;
@@ -22,7 +22,7 @@ public class SalesResponseShort
         this.salesUpc = "";
         this.salesDescription = "";
         this.salesSource = "";
-        this.salesYear = 0;
+        this.salesYear = "";
         this.nielsenCategory = "";
         this.dollarVolume = 0.0;
         this.kiloVolume = 0.0;
@@ -30,7 +30,7 @@ public class SalesResponseShort
     }
 
     public SalesResponseShort(String salesUpc, String salesDescription,
-            String salesSource, Integer salesYear, String nielsenCategory,
+            String salesSource, String salesYear, String nielsenCategory,
             Double dollarVolume, Double kiloVolume, Long productId)
     {
         super();
@@ -87,12 +87,12 @@ public class SalesResponseShort
         this.salesSource = salesSource;
     }
 
-    public Integer getSalesYear()
+    public String getSalesYear()
     {
         return salesYear;
     }
 
-    public void setSalesYear(Integer salesYear)
+    public void setSalesYear(String salesYear)
     {
         this.salesYear = salesYear;
     }

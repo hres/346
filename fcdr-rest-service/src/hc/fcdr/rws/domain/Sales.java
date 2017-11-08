@@ -30,7 +30,7 @@ public class Sales implements Serializable
     private Double            averageRetailPrice;
     private String            salesSource;
     private String            nielsenCategory;
-    private Integer           salesYear;
+    private String           salesYear;
     private Boolean           controlLabelFlag;
     private Double            kiloVolumeTotal;
     private Double            kiloVolumeRank;
@@ -67,7 +67,7 @@ public class Sales implements Serializable
         this.averageRetailPrice = 0.0;
         this.salesSource = "";
         this.nielsenCategory = "";
-        this.salesYear = 0;
+        this.salesYear = "";
         this.controlLabelFlag = false;
         this.kiloVolumeTotal = 0.0;
         this.kiloVolumeRank = 0.0;
@@ -92,7 +92,7 @@ public class Sales implements Serializable
             Double kiloVolume, Double kiloShare,
             Double kiloVolumePercentageChange, Double averageAcDist,
             Double averageRetailPrice, String salesSource,
-            String nielsenCategory, Integer salesYear, Boolean controlLabelFlag,
+            String nielsenCategory, String salesYear, Boolean controlLabelFlag,
             Double kiloVolumeTotal, Double kiloVolumeRank,
             Double dollarVolumeTotal, Double clusterNumber,
             Double productGrouping, String salesProductDescription,
@@ -352,13 +352,13 @@ public class Sales implements Serializable
         this.nielsenCategory = nielsenCategory;
     }
 
-    public Integer getSalesYear()
+    public String getSalesYear()
     {
         return salesYear;
     }
 
     @XmlElement
-    public void setSalesYear(Integer salesYear)
+    public void setSalesYear(String salesYear)
     {
         this.salesYear = salesYear;
     }

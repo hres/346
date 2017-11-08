@@ -7,15 +7,15 @@ import hc.fcdr.rws.domain.Sales;
 @XmlRootElement
 public class SalesYearsResponse
 {
-    private Integer salesYear;
+    private String salesYear;
 
     public SalesYearsResponse()
     {
         super();
-        this.salesYear = 0;
+        this.salesYear = "";
     }
 
-    public SalesYearsResponse(Integer salesYear)
+    public SalesYearsResponse(String salesYear)
     {
         super();
         this.salesYear = salesYear;
@@ -27,12 +27,12 @@ public class SalesYearsResponse
         this.salesYear = sales.getSalesYear();
     }
 
-    public Integer getSalesYear()
+    public String getSalesYear()
     {
         return salesYear;
     }
 
-    public void setSalesYear(Integer salesYear)
+    public void setSalesYear(String salesYear)
     {
         this.salesYear = salesYear;
     }

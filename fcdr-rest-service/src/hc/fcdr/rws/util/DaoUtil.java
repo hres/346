@@ -473,7 +473,9 @@ public final class DaoUtil
         sales.setAverageRetailPrice(result.getDouble("average_retail_price"));
         sales.setSalesSource(result.getString("sales_source"));
         sales.setNielsenCategory(result.getString("nielsen_category"));
-        sales.setSalesYear(result.getInt("sales_year"));
+        sales.setSalesYear(
+                ((result.getString("sales_year") == null) ? ""
+                        : result.getString("sales_year")));
         sales.setControlLabelFlag(result.getBoolean("control_label_flag"));
         sales.setKiloVolumeTotal(result.getDouble("kilo_volume_total"));
         sales.setKiloVolumeRank(result.getDouble("kilo_volume_rank"));
@@ -795,7 +797,7 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        salesInsertList.add(request.sales_year);
+        salesInsertList.add((request.sales_year == 0) ? null : request.sales_year);
 
         if (!request.control_label_flag.toString().isEmpty())
             queryMap.put("control_label_flag", request.control_label_flag);
@@ -932,7 +934,7 @@ public final class DaoUtil
             }
         salesInsertList.add(request.number_of_units);
 
-        if (!request.edited_by.isEmpty())
+        if (request.edited_by != null && !request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
         salesInsertList.add(request.edited_by);
 
@@ -1368,7 +1370,10 @@ public final class DaoUtil
     public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
             throws SQLException
     {
-        return new SalesYearsResponse(resultSet.getInt("sales_year"));
+        String salesYear = ((resultSet.getString("sales_year") == null) ? "" : resultSet.getString("sales_year"));
+        
+        return new SalesYearsResponse(salesYear);
+        
     }
 
     // ===

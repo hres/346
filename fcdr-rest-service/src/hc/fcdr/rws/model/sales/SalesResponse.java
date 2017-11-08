@@ -25,7 +25,7 @@ public class SalesResponse
     private Double    average_retail_price;
     private String    sales_source;
     private String    nielsen_category;
-    private Integer   sales_year;
+    private String   sales_year;
     private Boolean   control_label_flag;
     private Double    kilo_volume_total;
     private Double    kilo_volume_rank;
@@ -61,7 +61,7 @@ public class SalesResponse
         this.average_retail_price = 0.0;
         this.sales_source = "";
         this.nielsen_category = "";
-        this.sales_year = 0;
+        this.sales_year = "";
         this.control_label_flag = false;
         this.kilo_volume_total = 0.0;
         this.kilo_volume_rank = 0.0;
@@ -271,12 +271,12 @@ public class SalesResponse
         this.nielsen_category = nielsen_category;
     }
 
-    public Integer getSales_year()
+    public String getSales_year()
     {
         return sales_year;
     }
 
-    public void setSales_year(Integer sales_year)
+    public void setSales_year(String sales_year)
     {
         this.sales_year = sales_year;
     }

@@ -240,9 +240,17 @@ public class SalesDao extends PgDao
     public Boolean checkForSameSalesUpcProductId(String upc, Integer productId)
             throws DaoException
     {
-        String salesUpc = getSalesUpcByProductId(productId);
-
-        if (!salesUpc.equals(upc))
+//        String salesUpc = getSalesUpcByProductId(productId);
+//
+//        if (!salesUpc.equals(upc))
+//            return false;
+        
+        Integer salesProductId = checkBySalesUpc(upc);
+        
+        if (salesProductId == null)
+            return true;
+        
+        if (salesProductId != productId)
             return false;
 
         return true;

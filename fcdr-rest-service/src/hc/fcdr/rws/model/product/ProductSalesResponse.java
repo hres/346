@@ -10,7 +10,7 @@ public class ProductSalesResponse
     private Long    sales_id;
     private String  sales_upc;
     private Double  dollar_volume;
-    private Integer sales_year;
+    private String sales_year;
     private String  nielsen_category;
     private String  sales_source;
 
@@ -20,13 +20,13 @@ public class ProductSalesResponse
         this.sales_id = 0L;
         this.sales_upc = "";
         this.dollar_volume = 0.0;
-        this.sales_year = 0;
+        this.sales_year = "";
         this.nielsen_category = "";
         this.sales_source = "";
     }
 
     public ProductSalesResponse(Long sales_id, String sales_upc,
-            Double dollar_volume, Integer sales_year, String nielsen_category,
+            Double dollar_volume, String sales_year, String nielsen_category,
             String sales_source)
     {
         super();
@@ -44,7 +44,7 @@ public class ProductSalesResponse
         this.sales_id = sales.getId();
         this.sales_upc = sales.getUpc();
         this.dollar_volume = sales.getDollarVolume();
-        this.sales_year = sales.getSalesYear();
+        this.sales_year = (sales.getSalesYear() == null) ? "" : sales.getSalesYear().toString();
         this.nielsen_category = sales.getNielsenCategory();
         this.sales_source = sales.getSalesSource();
     }
@@ -79,12 +79,12 @@ public class ProductSalesResponse
         this.dollar_volume = dollar_volume;
     }
 
-    public Integer getSales_year()
+    public String getSales_year()
     {
         return sales_year;
     }
 
-    public void setSales_year(Integer sales_year)
+    public void setSales_year(String sales_year)
     {
         this.sales_year = sales_year;
     }
