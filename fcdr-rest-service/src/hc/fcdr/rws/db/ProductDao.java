@@ -1026,11 +1026,11 @@ public class ProductDao extends PgDao
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
-        String cnfCode = (productUpdateRequest.cnf_code != null
+        String cnfCode = ((productUpdateRequest.cnf_code != null)
                 && !productUpdateRequest.cnf_code.isEmpty())
                         ? "cnf_code = COALESCE(?, cnf_code), "
                         : "cnf_code = null, ";
-        String clusterNumber = (productUpdateRequest.cluster_number != null
+        String clusterNumber = ((productUpdateRequest.cluster_number != null)
                 && !productUpdateRequest.cluster_number.isEmpty())
                         ? "cluster_number = COALESCE(?, cluster_number), "
                         : "cluster_number = null, ";

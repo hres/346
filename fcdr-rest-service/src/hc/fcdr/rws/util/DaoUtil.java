@@ -944,7 +944,7 @@ public final class DaoUtil
 
         if (request.product_id != null)
         {
-            if (isType(request.product_id.toString(), "long"))
+            if (isType(request.product_id.toString(), "int"))
             {
                 if (request.product_id > 0)
                     queryMap.put("sales_product_id_fkey", request.product_id);
@@ -1785,21 +1785,17 @@ public final class DaoUtil
         if ((request.product_brand != null) && !request.product_brand.isEmpty())
             queryMap.put("product_brand", request.product_brand);
 
-        if (request.cnf_code != null && !request.cnf_code.isEmpty())
-        {
+        if ((request.cnf_code != null) && !request.cnf_code.isEmpty())
             if (isType(request.cnf_code, "int"))
                 queryMap.put("cnf_code", request.cnf_code);
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
-        }
 
-        if (request.cluster_number != null && !request.cluster_number.isEmpty())
-        {
+        if ((request.cluster_number != null) && !request.cluster_number.isEmpty())
             if (isType(request.cluster_number, "double"))
                 queryMap.put("cluster_number", request.cluster_number);
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-        }
 
         if ((request.product_description != null)
                 && !request.product_description.isEmpty())

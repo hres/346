@@ -16,7 +16,6 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDataResponseShort;
@@ -122,6 +121,30 @@ public class SalesDao extends PgDao
         return null;
     }
 
+    public String getSalesUpcByProductId(Integer productId) throws DaoException
+    {
+        ResultSet resultSet = null;
+
+        String query = "select sales_upc from " + schema + "."
+                + "sales where sales_product_id_fkey = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { productId });
+
+            if (resultSet.next())
+                return resultSet.getString("sales_upc");
+        }
+        catch (SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return null;
+    }
+    
     public Integer insert(List<Object> csvFieldList) throws DaoException
     {
         csvFieldList.remove(0);
@@ -155,12 +178,14 @@ public class SalesDao extends PgDao
         return (Integer) o;
     }
 
-    public SalesInsertDataResponse getSalesInsertResponse(SalesInsertRequest salesInsertRequest) throws DaoException
+    public SalesInsertDataResponse getSalesInsertResponse(
+            SalesInsertRequest salesInsertRequest) throws DaoException
     {
         Map<String, Object> queryMap = DaoUtil.getQueryMap(salesInsertRequest);
 
         if (queryMap.isEmpty())
-            return new SalesInsertDataResponse(ResponseCodes.EMPTY_REQUEST.getCode(),
+            return new SalesInsertDataResponse(
+                    ResponseCodes.EMPTY_REQUEST.getCode(),
                     ResponseCodes.EMPTY_REQUEST.getMessage());
 
         if (queryMap.containsKey("inputError"))
@@ -171,42 +196,25 @@ public class SalesDao extends PgDao
             return new SalesInsertDataResponse(((ResponseCodes) o).getCode(),
                     ((ResponseCodes) o).getMessage());
         }
-        
+
+        if (!checkForSameSalesUpcProductId(salesInsertRequest.sales_upc,
+                salesInsertRequest.product_id))
+            return new SalesInsertDataResponse(
+                    ResponseCodes.INVALID_UPC_PRODUCTID.getCode(),
+                    ResponseCodes.INVALID_UPC_PRODUCTID.getMessage());
+
         String[] columns =
-        { 
-                "sales_description",
-                "sales_upc",
-                "sales_brand",
-                "sales_manufacturer",
-                "dollar_rank",
-                "dollar_volume",
-                "dollar_share",
-                "dollar_volume_percentage_change",
-                "kilo_volume",
-                "kilo_share",
-                "kilo_volume_percentage_change",
-                "average_ac_dist",
-                "average_retail_price",
-                "sales_source",
-                "nielsen_category",
-                "sales_year",
-                "control_label_flag",
-                "kilo_volume_total",
-                "kilo_volume_rank",
-                "dollar_volume_total",
-                "cluster_number",
-                "product_grouping",
-                "sales_product_description",
-                "classification_number",
-                "classification_type",
-                "sales_comment",
-                "sales_collection_date",
-                "number_of_units",
-                "edited_by",
-                "creation_date",
-                "last_edit_date",
-                "sales_product_id_fkey"
-                };
+        { "sales_description", "sales_upc", "sales_brand", "sales_manufacturer",
+                "dollar_rank", "dollar_volume", "dollar_share",
+                "dollar_volume_percentage_change", "kilo_volume", "kilo_share",
+                "kilo_volume_percentage_change", "average_ac_dist",
+                "average_retail_price", "sales_source", "nielsen_category",
+                "sales_year", "control_label_flag", "kilo_volume_total",
+                "kilo_volume_rank", "dollar_volume_total", "cluster_number",
+                "product_grouping", "sales_product_description",
+                "classification_number", "classification_type", "sales_comment",
+                "sales_collection_date", "number_of_units", "edited_by",
+                "creation_date", "last_edit_date", "sales_product_id_fkey" };
 
         String questionmarks = StringUtils.repeat("?,", columns.length);
         questionmarks = (String) questionmarks.subSequence(0,
@@ -217,23 +225,39 @@ public class SalesDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        List<Object> salesInsertList = (List<Object>) queryMap.get("sales_insert_list");
-        
-        // returns the sales_id upon successful insert
+        List<Object> salesInsertList = (List<Object>) queryMap.get(
+                "sales_insert_list");
+
+        // Returns the sales_id upon successful insert.
         Object o = executeUpdate(query, salesInsertList.toArray());
 
         return new SalesInsertDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }
-    
+
     // ===
-    
-    public SalesUpdateDataResponse getSalesUpdateResponse(SalesUpdateRequest salesUpdateRequest) throws DaoException
+
+    public Boolean checkForSameSalesUpcProductId(String upc, Integer productId)
+            throws DaoException
+    {
+        String salesUpc = getSalesUpcByProductId(productId);
+
+        if (!salesUpc.equals(upc))
+            return false;
+
+        return true;
+    }
+
+    // ===
+
+    public SalesUpdateDataResponse getSalesUpdateResponse(
+            SalesUpdateRequest salesUpdateRequest) throws DaoException
     {
         Map<String, Object> queryMap = DaoUtil.getQueryMap(salesUpdateRequest);
 
         if (queryMap.isEmpty())
-            return new SalesUpdateDataResponse(ResponseCodes.EMPTY_REQUEST.getCode(),
+            return new SalesUpdateDataResponse(
+                    ResponseCodes.EMPTY_REQUEST.getCode(),
                     ResponseCodes.EMPTY_REQUEST.getMessage());
 
         if (queryMap.containsKey("inputError"))
@@ -244,7 +268,7 @@ public class SalesDao extends PgDao
             return new SalesUpdateDataResponse(((ResponseCodes) o).getCode(),
                     ((ResponseCodes) o).getMessage());
         }
-        
+
         // Check for sales.
         Sales sales = getSales(salesUpdateRequest.sales_id);
 
@@ -252,46 +276,24 @@ public class SalesDao extends PgDao
             return new SalesUpdateDataResponse(
                     ResponseCodes.NO_PRODUCT_FOUND.getCode(),
                     ResponseCodes.NO_PRODUCT_FOUND.getMessage());
-        
+
         String[] columns =
-        { 
-                "sales_description",
-                "sales_upc",
-                "sales_brand",
-                "sales_manufacturer",
-                "dollar_rank",
-                "dollar_volume",
-                "dollar_share",
-                "dollar_volume_percentage_change",
-                "kilo_volume",
-                "kilo_share",
-                "kilo_volume_percentage_change",
-                "average_ac_dist",
-                "average_retail_price",
-                "sales_source",
-                "nielsen_category",
-                "sales_year",
-                "control_label_flag",
-                "kilo_volume_total",
-                "kilo_volume_rank",
-                "dollar_volume_total",
-                "cluster_number",
-                "product_grouping",
-                "sales_product_description",
-                "classification_number",
-                "classification_type",
-                "sales_comment",
-                "sales_collection_date",
-                "number_of_units",
-                "edited_by",
-                "last_edit_date",
-                "sales_id"
-                };
+        { "sales_description", "sales_upc", "sales_brand", "sales_manufacturer",
+                "dollar_rank", "dollar_volume", "dollar_share",
+                "dollar_volume_percentage_change", "kilo_volume", "kilo_share",
+                "kilo_volume_percentage_change", "average_ac_dist",
+                "average_retail_price", "sales_source", "nielsen_category",
+                "sales_year", "control_label_flag", "kilo_volume_total",
+                "kilo_volume_rank", "dollar_volume_total", "cluster_number",
+                "product_grouping", "sales_product_description",
+                "classification_number", "classification_type", "sales_comment",
+                "sales_collection_date", "number_of_units", "edited_by",
+                "last_edit_date", "sales_id" };
 
         String questionmarks = StringUtils.repeat("?,", columns.length);
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
-       
+
         String query = "update " + schema + "." + "sales set "
                 + "sales_description = COALESCE(?, sales_description), "
                 + "sales_upc = COALESCE(?, sales_upc), "
@@ -325,14 +327,15 @@ public class SalesDao extends PgDao
                 + "last_edit_date = COALESCE(?, last_edit_date) "
                 + "where sales_id = ?";
 
-        List<Object> salesUpdateList = (List<Object>) queryMap.get("sales_update_list");
-        
+        List<Object> salesUpdateList = (List<Object>) queryMap.get(
+                "sales_update_list");
+
         Object o = executeUpdate(query, salesUpdateList.toArray());
 
         return new SalesUpdateDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }
-    
+
     // ===
 
     public SalesDataResponse getSalesResponse()
@@ -444,16 +447,17 @@ public class SalesDao extends PgDao
         Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
 
         if (queryMap.isEmpty())
-            return new SalesDataResponseShort(ResponseCodes.EMPTY_REQUEST.getCode(),
-                    null, ResponseCodes.EMPTY_REQUEST.getMessage());
+            return new SalesDataResponseShort(
+                    ResponseCodes.EMPTY_REQUEST.getCode(), null,
+                    ResponseCodes.EMPTY_REQUEST.getMessage());
 
         if (queryMap.containsKey("inputError"))
         {
             Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
-            return new SalesDataResponseShort(((ResponseCodes) o).getCode(), null,
-                    ((ResponseCodes) o).getMessage());
+            return new SalesDataResponseShort(((ResponseCodes) o).getCode(),
+                    null, ((ResponseCodes) o).getMessage());
         }
 
         /// ===
@@ -573,24 +577,25 @@ public class SalesDao extends PgDao
         }
 
         if (data.getCount() == 0)
-            return new SalesDataResponseShort(ResponseCodes.NO_DATA_FOUND.getCode(),
-                    null, ResponseCodes.NO_DATA_FOUND.getMessage());
+            return new SalesDataResponseShort(
+                    ResponseCodes.NO_DATA_FOUND.getCode(), null,
+                    ResponseCodes.NO_DATA_FOUND.getMessage());
 
         return new SalesDataResponseShort(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
 
     }
 
-    public SalesDeleteDataResponse getSalesDeleteResponse(Integer id) throws SQLException, IOException, Exception
+    public SalesDeleteDataResponse getSalesDeleteResponse(Integer id)
+            throws SQLException, IOException, Exception
     {
-        String sql = "delete from " + schema + "."
-                + "sales where sales_id = ?";
+        String sql = "delete from " + schema + "." + "sales where sales_id = ?";
 
         try
         {
             Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
             { id });
-            
+
             if (deletedRow == 0)
                 return new SalesDeleteDataResponse(
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
@@ -601,7 +606,7 @@ public class SalesDao extends PgDao
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-        
+
         return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }

@@ -1,8 +1,5 @@
 package hc.fcdr.rws.model.sales;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -68,7 +65,7 @@ public class SalesInsertRequest
     @XmlElement
     public String  edited_by;
     @XmlElement
-    public Long    product_id;
+    public Integer product_id;
 
     @Override
     public String toString()

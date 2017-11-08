@@ -518,8 +518,9 @@ public class Package implements Serializable
         int result = 1;
         result = (prime * result) + ((asPreparedPerServingAmount == null) ? 0
                 : asPreparedPerServingAmount.hashCode());
-        result = (prime * result) + ((asPreparedPerServingAmountInGrams == null)
-                ? 0 : asPreparedPerServingAmountInGrams.hashCode());
+        result = (prime * result)
+                + ((asPreparedPerServingAmountInGrams == null) ? 0
+                        : asPreparedPerServingAmountInGrams.hashCode());
         result = (prime * result) + ((asPreparedUnitOfMeasure == null) ? 0
                 : asPreparedUnitOfMeasure.hashCode());
         result = (prime * result) + ((asSoldPerServingAmount == null) ? 0

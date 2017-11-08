@@ -1,8 +1,5 @@
 package hc.fcdr.rws.model.sales;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -86,11 +86,11 @@ public class WebServiceTester
         form.param("id", "1");
         form.param("name", "suresh");
         form.param("profession", "clerk");
-        String callResult = client.target(REST_SERVICE_URL)
-                                  .request(MediaType.APPLICATION_XML)
-                                  .post(Entity.entity(form,
-                                          MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                                          String.class);
+        String callResult = client.target(
+                REST_SERVICE_URL).request(MediaType.APPLICATION_XML).post(
+                        Entity.entity(form,
+                                MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                        String.class);
         String result = PASS;
         if (!SUCCESS_RESULT.equals(callResult))
             result = FAIL;
@@ -105,11 +105,11 @@ public class WebServiceTester
         form.param("id", "2");
         form.param("name", "naresh");
         form.param("profession", "clerk");
-        String callResult = client.target(REST_SERVICE_URL)
-                                  .request(MediaType.APPLICATION_XML)
-                                  .put(Entity.entity(form,
-                                          MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                                          String.class);
+        String callResult = client.target(
+                REST_SERVICE_URL).request(MediaType.APPLICATION_XML).put(
+                        Entity.entity(form,
+                                MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                        String.class);
         String result = PASS;
         if (!SUCCESS_RESULT.equals(callResult))
             result = FAIL;

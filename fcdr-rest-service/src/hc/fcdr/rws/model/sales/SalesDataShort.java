@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SalesDataShort
 {
     private List<SalesResponseShort> dataList;
-    private Integer             count;
+    private Integer                  count;
 
     public SalesDataShort()
     {

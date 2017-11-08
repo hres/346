@@ -310,13 +310,11 @@ public class StringUtilities
             end = temp;
         }
 
-        return new StringBuffer(
-                ((len + start) - end) + overlay.length() + 1).append(
-                        str.substring(0, start))
-                                                             .append(overlay)
-                                                             .append(str.substring(
-                                                                     end))
-                                                             .toString();
+        return new StringBuffer(((len + start) - end) + overlay.length()
+                + 1).append(str.substring(0, start))
+                    .append(overlay)
+                    .append(str.substring(end))
+                    .toString();
     }
 
     /**
