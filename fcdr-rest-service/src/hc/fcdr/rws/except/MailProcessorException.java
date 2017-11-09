@@ -12,7 +12,7 @@ public class MailProcessorException extends RuntimeException
      * 
      * @@param errorMessage the message to display.
      */
-    public MailProcessorException(String errorMessage)
+    public MailProcessorException(final String errorMessage)
     {
         super(errorMessage);
     }

@@ -28,7 +28,7 @@ public class ImportStatistics
         return importDateTime;
     }
 
-    public void setImportDateTime(String importDateTime)
+    public void setImportDateTime(final String importDateTime)
     {
         this.importDateTime = importDateTime;
     }
@@ -38,7 +38,7 @@ public class ImportStatistics
         return totalLoadingTime;
     }
 
-    public void setTotalLoadingTime(Long totalLoadingTime)
+    public void setTotalLoadingTime(final Long totalLoadingTime)
     {
         this.totalLoadingTime = totalLoadingTime;
     }
@@ -48,7 +48,7 @@ public class ImportStatistics
         return totalProcessingTime;
     }
 
-    public void setTotalProcessingTime(Long totalProcessingTime)
+    public void setTotalProcessingTime(final Long totalProcessingTime)
     {
         this.totalProcessingTime = totalProcessingTime;
     }
@@ -58,7 +58,8 @@ public class ImportStatistics
         return numberOfRecordsProcessed;
     }
 
-    public void setNumberOfRecordsProcessed(Integer numberOfRecordsProcessed)
+    public void setNumberOfRecordsProcessed(
+            final Integer numberOfRecordsProcessed)
     {
         this.numberOfRecordsProcessed = numberOfRecordsProcessed;
     }
@@ -68,7 +69,7 @@ public class ImportStatistics
         return numberOfInvalidRecords;
     }
 
-    public void setNumberOfInvalidRecords(Integer numberOfInvalidRecords)
+    public void setNumberOfInvalidRecords(final Integer numberOfInvalidRecords)
     {
         this.numberOfInvalidRecords = numberOfInvalidRecords;
     }
@@ -79,7 +80,7 @@ public class ImportStatistics
     }
 
     public void setImportReportDetailRowList(
-            List<ImportReportDetailRow> importReportDetailRowList)
+            final List<ImportReportDetailRow> importReportDetailRowList)
     {
         this.importReportDetailRowList = importReportDetailRowList;
     }

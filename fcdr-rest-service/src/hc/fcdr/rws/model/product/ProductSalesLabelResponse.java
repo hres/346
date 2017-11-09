@@ -67,7 +67,7 @@ public class ProductSalesLabelResponse
         this.label_comment = "";
     }
 
-    public ProductSalesLabelResponse(Product product)
+    public ProductSalesLabelResponse(final Product product)
     {
         super();
         this.product_id = product.getId();
@@ -104,7 +104,7 @@ public class ProductSalesLabelResponse
         return product_id;
     }
 
-    public void setProduct_id(Long product_id)
+    public void setProduct_id(final Long product_id)
     {
         this.product_id = product_id;
     }
@@ -114,7 +114,7 @@ public class ProductSalesLabelResponse
         return product_description;
     }
 
-    public void setProduct_description(String product_description)
+    public void setProduct_description(final String product_description)
     {
         this.product_description = product_description;
     }
@@ -124,7 +124,7 @@ public class ProductSalesLabelResponse
         return product_brand;
     }
 
-    public void setProduct_brand(String product_brand)
+    public void setProduct_brand(final String product_brand)
     {
         this.product_brand = product_brand;
     }
@@ -134,7 +134,7 @@ public class ProductSalesLabelResponse
         return product_manufacturer;
     }
 
-    public void setProduct_manufacturer(String product_manufacturer)
+    public void setProduct_manufacturer(final String product_manufacturer)
     {
         this.product_manufacturer = product_manufacturer;
     }
@@ -144,7 +144,7 @@ public class ProductSalesLabelResponse
         return cnf_code;
     }
 
-    public void setCnf_code(String cnf_code)
+    public void setCnf_code(final String cnf_code)
     {
         this.cnf_code = cnf_code;
     }
@@ -154,7 +154,7 @@ public class ProductSalesLabelResponse
         return cluster_number;
     }
 
-    public void setCluster_number(String cluster_number)
+    public void setCluster_number(final String cluster_number)
     {
         this.cluster_number = cluster_number;
     }
@@ -164,7 +164,7 @@ public class ProductSalesLabelResponse
         return product_comment;
     }
 
-    public void setProduct_comment(String product_comment)
+    public void setProduct_comment(final String product_comment)
     {
         this.product_comment = product_comment;
     }
@@ -174,7 +174,7 @@ public class ProductSalesLabelResponse
         return classification_number;
     }
 
-    public void setClassification_number(String classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }
@@ -184,7 +184,7 @@ public class ProductSalesLabelResponse
         return classification_name;
     }
 
-    public void setClassification_name(String classification_name)
+    public void setClassification_name(final String classification_name)
     {
         this.classification_name = classification_name;
     }
@@ -194,7 +194,7 @@ public class ProductSalesLabelResponse
         return classification_type;
     }
 
-    public void setClassification_type(String classification_type)
+    public void setClassification_type(final String classification_type)
     {
         this.classification_type = classification_type;
     }
@@ -204,7 +204,7 @@ public class ProductSalesLabelResponse
         return sales_year;
     }
 
-    public void setSales_year(String sales_year)
+    public void setSales_year(final String sales_year)
     {
         this.sales_year = sales_year;
     }
@@ -214,7 +214,7 @@ public class ProductSalesLabelResponse
         return sales_description;
     }
 
-    public void setSales_description(String sales_description)
+    public void setSales_description(final String sales_description)
     {
         this.sales_description = sales_description;
     }
@@ -224,7 +224,7 @@ public class ProductSalesLabelResponse
         return sales_upc;
     }
 
-    public void setSales_upc(String sales_upc)
+    public void setSales_upc(final String sales_upc)
     {
         this.sales_upc = sales_upc;
     }
@@ -234,7 +234,7 @@ public class ProductSalesLabelResponse
         return nielsen_category;
     }
 
-    public void setNielsen_category(String nielsen_category)
+    public void setNielsen_category(final String nielsen_category)
     {
         this.nielsen_category = nielsen_category;
     }
@@ -244,7 +244,7 @@ public class ProductSalesLabelResponse
         return sales_source;
     }
 
-    public void setSales_source(String sales_source)
+    public void setSales_source(final String sales_source)
     {
         this.sales_source = sales_source;
     }
@@ -254,7 +254,7 @@ public class ProductSalesLabelResponse
         return sales_collection_date;
     }
 
-    public void setSales_collection_date(String sales_collection_date)
+    public void setSales_collection_date(final String sales_collection_date)
     {
         this.sales_collection_date = sales_collection_date;
     }
@@ -264,7 +264,7 @@ public class ProductSalesLabelResponse
         return dollar_rank;
     }
 
-    public void setDollar_rank(String dollar_rank)
+    public void setDollar_rank(final String dollar_rank)
     {
         this.dollar_rank = dollar_rank;
     }
@@ -274,7 +274,7 @@ public class ProductSalesLabelResponse
         return sales_comment;
     }
 
-    public void setSales_comment(String sales_comment)
+    public void setSales_comment(final String sales_comment)
     {
         this.sales_comment = sales_comment;
     }
@@ -284,7 +284,7 @@ public class ProductSalesLabelResponse
         return label_upc;
     }
 
-    public void setLabel_upc(String label_upc)
+    public void setLabel_upc(final String label_upc)
     {
         this.label_upc = label_upc;
     }
@@ -294,7 +294,7 @@ public class ProductSalesLabelResponse
         return label_description;
     }
 
-    public void setLabel_description(String label_description)
+    public void setLabel_description(final String label_description)
     {
         this.label_description = label_description;
     }
@@ -304,7 +304,7 @@ public class ProductSalesLabelResponse
         return label_source;
     }
 
-    public void setLabel_source(String label_source)
+    public void setLabel_source(final String label_source)
     {
         this.label_source = label_source;
     }
@@ -314,7 +314,7 @@ public class ProductSalesLabelResponse
         return label_ingredients;
     }
 
-    public void setLabel_ingredients(String label_ingredients)
+    public void setLabel_ingredients(final String label_ingredients)
     {
         this.label_ingredients = label_ingredients;
     }
@@ -324,7 +324,7 @@ public class ProductSalesLabelResponse
         return label_collection_date;
     }
 
-    public void setLabel_collection_date(String label_collection_date)
+    public void setLabel_collection_date(final String label_collection_date)
     {
         this.label_collection_date = label_collection_date;
     }
@@ -334,7 +334,7 @@ public class ProductSalesLabelResponse
         return label_comment;
     }
 
-    public void setLabel_comment(String label_comment)
+    public void setLabel_comment(final String label_comment)
     {
         this.label_comment = label_comment;
     }

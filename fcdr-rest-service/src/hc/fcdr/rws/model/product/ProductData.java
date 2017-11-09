@@ -1,7 +1,7 @@
 package hc.fcdr.rws.model.product;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductData
 {
@@ -13,7 +13,8 @@ public class ProductData
         this(new ArrayList<ProductResponse>(), 0);
     }
 
-    public ProductData(List<ProductResponse> dataList, Integer count)
+    public ProductData(final List<ProductResponse> dataList,
+            final Integer count)
     {
         this.dataList = dataList;
         this.count = count;
@@ -24,7 +25,7 @@ public class ProductData
         return dataList;
     }
 
-    public void setDataList(List<ProductResponse> dataList)
+    public void setDataList(final List<ProductResponse> dataList)
     {
         this.dataList = dataList;
     }
@@ -34,12 +35,12 @@ public class ProductData
         return count;
     }
 
-    public void setCount(Integer count)
+    public void setCount(final Integer count)
     {
         this.count = count;
     }
 
-    public void add(ProductResponse o)
+    public void add(final ProductResponse o)
     {
         dataList.add(o);
         count++;

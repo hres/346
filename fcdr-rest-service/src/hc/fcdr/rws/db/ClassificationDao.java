@@ -6,23 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 
-import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
+import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationData;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
 import hc.fcdr.rws.model.classification.ClassificationResponse;
-import hc.fcdr.rws.domain.Classification;
+import hc.fcdr.rws.util.DaoUtil;
 
 public class ClassificationDao extends PgDao
 {
     private static final Logger logger = Logger.getLogger(
             ClassificationDao.class.getName());
-    private String              schema;
+    private final String        schema;
 
-    public ClassificationDao(Connection connection, String schema)
+    public ClassificationDao(final Connection connection, final String schema)
     {
         super(connection);
         this.schema = schema;
@@ -31,9 +32,9 @@ public class ClassificationDao extends PgDao
     public List<Classification> getClassification() throws DaoException
     {
         ResultSet resultSet = null;
-        List<Classification> classificationList = new ArrayList<Classification>();
+        final List<Classification> classificationList = new ArrayList<Classification>();
 
-        String query = "select * from " + schema + "." + "classification";
+        final String query = "select * from " + schema + "." + "classification";
 
         try
         {
@@ -42,7 +43,7 @@ public class ClassificationDao extends PgDao
             while (resultSet.next())
                 classificationList.add(DaoUtil.getClassification(resultSet));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -51,13 +52,13 @@ public class ClassificationDao extends PgDao
         return classificationList;
     }
 
-    public Classification getClassification(Long classificationId)
+    public Classification getClassification(final Long classificationId)
             throws DaoException
     {
         ResultSet resultSet = null;
         Classification classification = null;
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "classification where classification_id = ?";
 
         try
@@ -68,7 +69,7 @@ public class ClassificationDao extends PgDao
             if (resultSet.next())
                 classification = DaoUtil.getClassification(resultSet);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -85,9 +86,9 @@ public class ClassificationDao extends PgDao
         ResultSet resultSet = null;
         ClassificationResponse classificationResponse = null;
 
-        ClassificationData data = new ClassificationData();
+        final ClassificationData data = new ClassificationData();
 
-        String query = "select * from " + schema + "." + "classification";
+        final String query = "select * from " + schema + "." + "classification";
 
         try
         {
@@ -100,7 +101,7 @@ public class ClassificationDao extends PgDao
                 data.add(classificationResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ClassificationDataResponse(
@@ -115,14 +116,15 @@ public class ClassificationDao extends PgDao
     // ===
 
     public ClassificationDataResponse getClassificationResponse(
-            Long classificationId) throws SQLException, IOException, Exception
+            final Long classificationId)
+            throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ClassificationResponse classificationResponse = null;
 
-        ClassificationData data = new ClassificationData();
+        final ClassificationData data = new ClassificationData();
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "classification where classification_id = ?";
 
         try
@@ -137,7 +139,7 @@ public class ClassificationDao extends PgDao
                 data.add(classificationResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ClassificationDataResponse(

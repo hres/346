@@ -4,22 +4,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.ClassificationDao;
 import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
 import hc.fcdr.rws.util.ContextManager;
-import hc.fcdr.rws.domain.Classification;
 
 @Path("/ClassificationService")
 public class ClassificationService extends Application
@@ -31,7 +31,7 @@ public class ClassificationService extends Application
     {
         if (classificationDao == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -40,7 +40,7 @@ public class ClassificationService extends Application
                         pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -57,7 +57,7 @@ public class ClassificationService extends Application
             if (classificationDao != null)
                 return classificationDao.getClassification();
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -68,14 +68,14 @@ public class ClassificationService extends Application
     @GET
     @Path("/classificationraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Classification getClassificationRaw(@PathParam("id") long id)
+    public Classification getClassificationRaw(@PathParam("id") final long id)
     {
         try
         {
             if (classificationDao != null)
                 return classificationDao.getClassification(id);
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class ClassificationService extends Application
             if (classificationDao != null)
                 entity = classificationDao.getClassificationResponse();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -111,7 +111,7 @@ public class ClassificationService extends Application
     @GET
     @Path("/classification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClassification(@PathParam("id") long id)
+    public Response getClassification(@PathParam("id") final long id)
     {
         ClassificationDataResponse entity = new ClassificationDataResponse();
 
@@ -120,7 +120,7 @@ public class ClassificationService extends Application
             if (classificationDao != null)
                 entity = classificationDao.getClassificationResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }

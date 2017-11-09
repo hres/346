@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.opencsv.bean.CsvBindByPosition;
+
 import hc.fcdr.rws.util.DateUtil;
 
 public class ImportSalesData
@@ -98,18 +99,20 @@ public class ImportSalesData
         super();
     }
 
-    public ImportSalesData(String salesUpc, String salesDescription,
-            String salesBrand, String salesManufacturer, Double dollarRank,
-            Double dollarVolume, Double dollarShare,
-            Double dollarVolumePercentageChange, Double kiloVolume,
-            Double kiloShare, Double kiloVolumePercentageChange,
-            Double averageAcDist, Double averageRetailPrice, String salesSource,
-            String nielsenCategory, String salesCollectionDate,
-            Integer salesYear, Boolean controlLabelFlag, Double kiloVolumeTotal,
-            Double kiloVolumeRank, Double dollarVolumeTotal,
-            Double clusterNumber, Double productGrouping,
-            String salesProductDescription, Double classificationNumber,
-            String classificationType, String salesComment)
+    public ImportSalesData(final String salesUpc, final String salesDescription,
+            final String salesBrand, final String salesManufacturer,
+            final Double dollarRank, final Double dollarVolume,
+            final Double dollarShare, final Double dollarVolumePercentageChange,
+            final Double kiloVolume, final Double kiloShare,
+            final Double kiloVolumePercentageChange, final Double averageAcDist,
+            final Double averageRetailPrice, final String salesSource,
+            final String nielsenCategory, final String salesCollectionDate,
+            final Integer salesYear, final Boolean controlLabelFlag,
+            final Double kiloVolumeTotal, final Double kiloVolumeRank,
+            final Double dollarVolumeTotal, final Double clusterNumber,
+            final Double productGrouping, final String salesProductDescription,
+            final Double classificationNumber, final String classificationType,
+            final String salesComment)
     {
         super();
         this.salesUpc = salesUpc;
@@ -151,7 +154,7 @@ public class ImportSalesData
         return salesUpc;
     }
 
-    public void setSalesUpc(String salesUpc)
+    public void setSalesUpc(final String salesUpc)
     {
         this.salesUpc = salesUpc;
     }
@@ -161,7 +164,7 @@ public class ImportSalesData
         return salesDescription;
     }
 
-    public void setSalesDescription(String salesDescription)
+    public void setSalesDescription(final String salesDescription)
     {
         this.salesDescription = salesDescription;
     }
@@ -171,7 +174,7 @@ public class ImportSalesData
         return salesBrand;
     }
 
-    public void setSalesBrand(String salesBrand)
+    public void setSalesBrand(final String salesBrand)
     {
         this.salesBrand = salesBrand;
     }
@@ -181,7 +184,7 @@ public class ImportSalesData
         return salesManufacturer;
     }
 
-    public void setSalesManufacturer(String salesManufacturer)
+    public void setSalesManufacturer(final String salesManufacturer)
     {
         this.salesManufacturer = salesManufacturer;
     }
@@ -191,7 +194,7 @@ public class ImportSalesData
         return dollarRank;
     }
 
-    public void setDollarRank(Double dollarRank)
+    public void setDollarRank(final Double dollarRank)
     {
         this.dollarRank = dollarRank;
     }
@@ -201,7 +204,7 @@ public class ImportSalesData
         return dollarVolume;
     }
 
-    public void setDollarVolume(Double dollarVolume)
+    public void setDollarVolume(final Double dollarVolume)
     {
         this.dollarVolume = dollarVolume;
     }
@@ -211,7 +214,7 @@ public class ImportSalesData
         return dollarShare;
     }
 
-    public void setDollarShare(Double dollarShare)
+    public void setDollarShare(final Double dollarShare)
     {
         this.dollarShare = dollarShare;
     }
@@ -222,7 +225,7 @@ public class ImportSalesData
     }
 
     public void setDollarVolumePercentageChange(
-            Double dollarVolumePercentageChange)
+            final Double dollarVolumePercentageChange)
     {
         this.dollarVolumePercentageChange = dollarVolumePercentageChange;
     }
@@ -232,7 +235,7 @@ public class ImportSalesData
         return kiloVolume;
     }
 
-    public void setKiloVolume(Double kiloVolume)
+    public void setKiloVolume(final Double kiloVolume)
     {
         this.kiloVolume = kiloVolume;
     }
@@ -242,7 +245,7 @@ public class ImportSalesData
         return kiloShare;
     }
 
-    public void setKiloShare(Double kiloShare)
+    public void setKiloShare(final Double kiloShare)
     {
         this.kiloShare = kiloShare;
     }
@@ -252,7 +255,8 @@ public class ImportSalesData
         return kiloVolumePercentageChange;
     }
 
-    public void setKiloVolumePercentageChange(Double kiloVolumePercentageChange)
+    public void setKiloVolumePercentageChange(
+            final Double kiloVolumePercentageChange)
     {
         this.kiloVolumePercentageChange = kiloVolumePercentageChange;
     }
@@ -262,7 +266,7 @@ public class ImportSalesData
         return averageAcDist;
     }
 
-    public void setAverageAcDist(Double averageAcDist)
+    public void setAverageAcDist(final Double averageAcDist)
     {
         this.averageAcDist = averageAcDist;
     }
@@ -272,7 +276,7 @@ public class ImportSalesData
         return averageRetailPrice;
     }
 
-    public void setAverageRetailPrice(Double averageRetailPrice)
+    public void setAverageRetailPrice(final Double averageRetailPrice)
     {
         this.averageRetailPrice = averageRetailPrice;
     }
@@ -282,7 +286,7 @@ public class ImportSalesData
         return salesSource;
     }
 
-    public void setSalesSource(String salesSource)
+    public void setSalesSource(final String salesSource)
     {
         this.salesSource = salesSource;
     }
@@ -292,7 +296,7 @@ public class ImportSalesData
         return nielsenCategory;
     }
 
-    public void setNielsenCategory(String nielsenCategory)
+    public void setNielsenCategory(final String nielsenCategory)
     {
         this.nielsenCategory = nielsenCategory;
     }
@@ -302,7 +306,7 @@ public class ImportSalesData
         return salesCollectionDate;
     }
 
-    public void setSalesCollectionDate(String salesCollectionDate)
+    public void setSalesCollectionDate(final String salesCollectionDate)
     {
         this.salesCollectionDate = salesCollectionDate;
     }
@@ -312,7 +316,7 @@ public class ImportSalesData
         return salesYear;
     }
 
-    public void setSalesYear(Integer salesYear)
+    public void setSalesYear(final Integer salesYear)
     {
         this.salesYear = salesYear;
     }
@@ -322,7 +326,7 @@ public class ImportSalesData
         return controlLabelFlag;
     }
 
-    public void setControlLabelFlag(Boolean controlLabelFlag)
+    public void setControlLabelFlag(final Boolean controlLabelFlag)
     {
         this.controlLabelFlag = controlLabelFlag;
     }
@@ -332,7 +336,7 @@ public class ImportSalesData
         return kiloVolumeTotal;
     }
 
-    public void setKiloVolumeTotal(Double kiloVolumeTotal)
+    public void setKiloVolumeTotal(final Double kiloVolumeTotal)
     {
         this.kiloVolumeTotal = kiloVolumeTotal;
     }
@@ -342,7 +346,7 @@ public class ImportSalesData
         return kiloVolumeRank;
     }
 
-    public void setKiloVolumeRank(Double kiloVolumeRank)
+    public void setKiloVolumeRank(final Double kiloVolumeRank)
     {
         this.kiloVolumeRank = kiloVolumeRank;
     }
@@ -352,7 +356,7 @@ public class ImportSalesData
         return dollarVolumeTotal;
     }
 
-    public void setDollarVolumeTotal(Double dollarVolumeTotal)
+    public void setDollarVolumeTotal(final Double dollarVolumeTotal)
     {
         this.dollarVolumeTotal = dollarVolumeTotal;
     }
@@ -362,7 +366,7 @@ public class ImportSalesData
         return clusterNumber;
     }
 
-    public void setClusterNumber(Double clusterNumber)
+    public void setClusterNumber(final Double clusterNumber)
     {
         this.clusterNumber = clusterNumber;
     }
@@ -372,7 +376,7 @@ public class ImportSalesData
         return productGrouping;
     }
 
-    public void setProductGrouping(Double productGrouping)
+    public void setProductGrouping(final Double productGrouping)
     {
         this.productGrouping = productGrouping;
     }
@@ -382,7 +386,7 @@ public class ImportSalesData
         return salesProductDescription;
     }
 
-    public void setSalesProductDescription(String salesProductDescription)
+    public void setSalesProductDescription(final String salesProductDescription)
     {
         this.salesProductDescription = salesProductDescription;
     }
@@ -392,7 +396,7 @@ public class ImportSalesData
         return classificationNumber;
     }
 
-    public void setClassificationNumber(Double classificationNumber)
+    public void setClassificationNumber(final Double classificationNumber)
     {
         this.classificationNumber = classificationNumber;
     }
@@ -402,7 +406,7 @@ public class ImportSalesData
         return classificationType;
     }
 
-    public void setClassificationType(String classificationType)
+    public void setClassificationType(final String classificationType)
     {
         this.classificationType = classificationType;
     }
@@ -412,7 +416,7 @@ public class ImportSalesData
         return salesComment;
     }
 
-    public void setSalesComment(String salesComment)
+    public void setSalesComment(final String salesComment)
     {
         this.salesComment = salesComment;
     }
@@ -429,7 +433,7 @@ public class ImportSalesData
 
     public List<Object> getCsvFieldList()
     {
-        List<Object> a = new ArrayList<Object>();
+        final List<Object> a = new ArrayList<Object>();
 
         a.add(itemId);// 0
         a.add(salesUpc);// 1
@@ -466,7 +470,7 @@ public class ImportSalesData
 
     public List<Object> getFieldsForProductUpdateList()
     {
-        List<Object> a = new ArrayList<Object>();
+        final List<Object> a = new ArrayList<Object>();
 
         a.add(salesBrand);
         a.add(salesManufacturer);

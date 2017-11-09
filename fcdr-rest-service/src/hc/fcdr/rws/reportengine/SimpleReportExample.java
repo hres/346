@@ -17,7 +17,7 @@ import net.sf.dynamicreports.report.exception.DRException;
 public class SimpleReportExample
 {
 
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
         Connection connection = null;
         try
@@ -27,18 +27,18 @@ public class SimpleReportExample
                     "jdbc:postgresql://localhost:5432/fcdrdb", "fcdruser",
                     "fcdruser");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             e.printStackTrace();
             return;
         }
-        catch (ClassNotFoundException e)
+        catch (final ClassNotFoundException e)
         {
             e.printStackTrace();
             return;
         }
 
-        JasperReportBuilder report = DynamicReports.report();// a new report
+        final JasperReportBuilder report = DynamicReports.report();// a new report
         report.columns(
                 Columns.column("Id", "classification_id",
                         DataTypes.integerType())
@@ -63,11 +63,11 @@ public class SimpleReportExample
             report.show();// show the report
             report.toPdf(new FileOutputStream("/home/zoltanh/report.pdf"));// export the report to a pdf file
         }
-        catch (DRException e)
+        catch (final DRException e)
         {
             e.printStackTrace();
         }
-        catch (FileNotFoundException e)
+        catch (final FileNotFoundException e)
         {
             e.printStackTrace();
         }

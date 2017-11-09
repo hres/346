@@ -3,6 +3,7 @@ package hc.fcdr.rws;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -13,24 +14,24 @@ import org.json.JSONObject;
 
 public class RestTester
 {
-    public static void main(String[] args)
+    public static void main(final String[] args)
             throws ClientProtocolException, IOException
     {
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost(
+        final HttpClient client = new DefaultHttpClient();
+        final HttpPost post = new HttpPost(
                 "http://localhost:8087/fcdr-rest-service/rest/ProductService/productsfiltered");
 
-        JSONObject json = new JSONObject();
+        final JSONObject json = new JSONObject();
         /// json.put("product_id", 10);
-        StringEntity input = new StringEntity(json.toString());
+        final StringEntity input = new StringEntity(json.toString());
 
         /// StringEntity input = new StringEntity("{\'id\': 10}");
         input.setContentType("application/json");
 
         post.setEntity(input);
-        HttpResponse response = client.execute(post);
+        final HttpResponse response = client.execute(post);
 
-        BufferedReader rd = new BufferedReader(
+        final BufferedReader rd = new BufferedReader(
                 new InputStreamReader(response.getEntity().getContent()));
         String line = "";
 

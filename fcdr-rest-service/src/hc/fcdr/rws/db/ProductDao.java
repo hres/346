@@ -13,8 +13,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import hc.fcdr.rws.util.DaoUtil;
-import hc.fcdr.rws.util.DateUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
@@ -37,19 +35,21 @@ import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.util.DaoUtil;
+import hc.fcdr.rws.util.DateUtil;
 
 public class ProductDao extends PgDao
 {
     private static final Logger logger       = Logger.getLogger(
             ProductDao.class.getName());
-    private String              schema;
+    private final String        schema;
 
     private static final String SQL_INSERT   = "insert into ${table}(${keys}) values(${values})";
     private static final String TABLE_REGEX  = "\\$\\{table\\}";
     private static final String KEYS_REGEX   = "\\$\\{keys\\}";
     private static final String VALUES_REGEX = "\\$\\{values\\}";
 
-    public ProductDao(Connection connection, String schema)
+    public ProductDao(final Connection connection, final String schema)
     {
         super(connection);
         this.schema = schema;
@@ -58,9 +58,9 @@ public class ProductDao extends PgDao
     public List<Product> getProducts() throws DaoException
     {
         ResultSet resultSet = null;
-        List<Product> productList = new ArrayList<Product>();
+        final List<Product> productList = new ArrayList<Product>();
 
-        String query = "select * from " + schema + "." + "product";
+        final String query = "select * from " + schema + "." + "product";
 
         try
         {
@@ -69,7 +69,7 @@ public class ProductDao extends PgDao
             while (resultSet.next())
                 productList.add(DaoUtil.getProduct(resultSet));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -78,12 +78,12 @@ public class ProductDao extends PgDao
         return productList;
     }
 
-    public Product getProduct(Integer productId) throws DaoException
+    public Product getProduct(final Integer productId) throws DaoException
     {
         ResultSet resultSet = null;
         Product product = null;
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "product where product_id = ?";
 
         try
@@ -94,7 +94,7 @@ public class ProductDao extends PgDao
             if (resultSet.next())
                 product = DaoUtil.getProduct(resultSet);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -111,9 +111,9 @@ public class ProductDao extends PgDao
         ResultSet resultSet = null;
         ProductResponse productResponse = null;
 
-        ProductData data = new ProductData();
+        final ProductData data = new ProductData();
 
-        String query = "select p.product_id, p.product_description, p.product_brand, "
+        final String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
                 + " p.creation_date, p.last_edit_date, p.edited_by, "
                 + "c.classification_number, c.classification_type, c.classification_name from "
@@ -133,7 +133,7 @@ public class ProductDao extends PgDao
                 data.add(productResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductDataResponse(
@@ -147,15 +147,15 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public ProductDataResponse getProductResponse(Integer productId)
+    public ProductDataResponse getProductResponse(final Integer productId)
             throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductResponse productResponse = null;
 
-        ProductData data = new ProductData();
+        final ProductData data = new ProductData();
 
-        String query = "select p.product_id, p.product_description, p.product_brand, "
+        final String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
                 + " p.creation_date, p.last_edit_date, p.edited_by, "
                 + "c.classification_number, c.classification_type, c.classification_name from "
@@ -176,7 +176,7 @@ public class ProductDao extends PgDao
                 data.add(productResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductDataResponse(
@@ -191,15 +191,15 @@ public class ProductDao extends PgDao
     // ===
 
     public ProductClassificationDataResponse getProductClassificationResponse(
-            Integer productId, Boolean returnFirstRecordFound)
+            final Integer productId, final Boolean returnFirstRecordFound)
             throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductClassificationResponse productClassificationResponse = null;
 
-        ProductClassificationData data = new ProductClassificationData();
+        final ProductClassificationData data = new ProductClassificationData();
 
-        String query = "select p.product_id, p.product_description, p.product_brand, "
+        final String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
                 + " p.creation_date, p.last_edit_date, p.edited_by, p.restaurant_type, p.type,"
                 + "c.classification_number, c.classification_type, c.classification_name from "
@@ -231,7 +231,7 @@ public class ProductDao extends PgDao
                     data.add(productClassificationResponse);
                 }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductClassificationDataResponse(
@@ -245,10 +245,12 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public ProductDataResponse getProductResponse(ProductRequest productRequest)
+    public ProductDataResponse getProductResponse(
+            final ProductRequest productRequest)
             throws SQLException, IOException, Exception
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(productRequest);
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+                productRequest);
 
         if (queryMap.isEmpty())
             return new ProductDataResponse(
@@ -257,7 +259,7 @@ public class ProductDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new ProductDataResponse(((ResponseCodes) o).getCode(), null,
@@ -266,7 +268,7 @@ public class ProductDao extends PgDao
 
         ResultSet resultSet = null;
         ProductResponse productResponse = null;
-        ProductData data = new ProductData();
+        final ProductData data = new ProductData();
 
         String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
@@ -280,9 +282,9 @@ public class ProductDao extends PgDao
 
         // ===
 
-        String orderBy = productRequest.orderby;
+        final String orderBy = productRequest.orderby;
         Integer offSet = productRequest.offset;
-        boolean sortOrder = productRequest.flag;
+        final boolean sortOrder = productRequest.flag;
 
         String where_clause = "";
         int count = 0;
@@ -291,14 +293,14 @@ public class ProductDao extends PgDao
         String str1;
         String sortDirection = null;
 
-        Iterator<String> keys = queryMap.keySet().iterator();
-        Iterator<String> keys_repeat = queryMap.keySet().iterator();
+        final Iterator<String> keys = queryMap.keySet().iterator();
+        final Iterator<String> keys_repeat = queryMap.keySet().iterator();
 
         while (keys.hasNext())
         {
             str0 = keys.next();
 
-            String prx = (("classification_number".equalsIgnoreCase(str0))
+            final String prx = (("classification_number".equalsIgnoreCase(str0))
                     || ("classification_name".equalsIgnoreCase(str0))
                     || ("classification_type".equalsIgnoreCase(str0))) ? "c."
                             : "p.";
@@ -331,7 +333,8 @@ public class ProductDao extends PgDao
 
             offSet = offSet * 10;
 
-            String prefix = (("classification_number".equalsIgnoreCase(orderBy))
+            final String prefix = (("classification_number".equalsIgnoreCase(
+                    orderBy))
                     || ("classification_name".equalsIgnoreCase(orderBy))
                     || ("classification_type".equalsIgnoreCase(orderBy))) ? "c."
                             : "p.";
@@ -339,7 +342,7 @@ public class ProductDao extends PgDao
             query += " ORDER BY " + prefix + orderBy + " " + sortDirection
                     + " offset " + offSet + " limit 10";
 
-            List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectList = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
@@ -356,7 +359,7 @@ public class ProductDao extends PgDao
                 data.add(productResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductDataResponse(
@@ -376,15 +379,15 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public ProductSalesDataResponse getProductSalesResponse(Long productId)
-            throws SQLException, IOException, Exception
+    public ProductSalesDataResponse getProductSalesResponse(
+            final Long productId) throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductSalesResponse productSalesResponse = null;
 
-        ProductSalesData data = new ProductSalesData();
+        final ProductSalesData data = new ProductSalesData();
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "sales where sales_product_id_fkey = ?";
 
         try
@@ -399,7 +402,7 @@ public class ProductDao extends PgDao
                 data.add(productSalesResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductSalesDataResponse(
@@ -413,15 +416,15 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public ProductLabelsDataResponse getProductLabelsResponse(Long productId)
-            throws SQLException, IOException, Exception
+    public ProductLabelsDataResponse getProductLabelsResponse(
+            final Long productId) throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductLabelsResponse productLabelsResponse = null;
 
-        ProductLabelsData data = new ProductLabelsData();
+        final ProductLabelsData data = new ProductLabelsData();
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "package where package_product_id_fkey = ?";
 
         try
@@ -436,7 +439,7 @@ public class ProductDao extends PgDao
                 data.add(productLabelsResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductLabelsDataResponse(
@@ -451,10 +454,10 @@ public class ProductDao extends PgDao
     // ===
 
     public ProductSalesLabelDataResponse getProductSalesLabelResponse(
-            ProductSalesLabelRequest productSalesLabelRequest)
+            final ProductSalesLabelRequest productSalesLabelRequest)
             throws SQLException, IOException, Exception
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 productSalesLabelRequest);
 
         if (queryMap.isEmpty())
@@ -464,7 +467,7 @@ public class ProductDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new ProductSalesLabelDataResponse(
@@ -545,7 +548,7 @@ public class ProductDao extends PgDao
 
         ResultSet resultSet = null;
         ProductSalesLabelResponse productSalesLabelResponse = null;
-        ProductSalesLabelData data = new ProductSalesLabelData();
+        final ProductSalesLabelData data = new ProductSalesLabelData();
 
         String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
@@ -563,9 +566,9 @@ public class ProductDao extends PgDao
 
         // ===
 
-        String orderBy = label2Package(productSalesLabelRequest.orderby);
+        final String orderBy = label2Package(productSalesLabelRequest.orderby);
         Integer offSet = productSalesLabelRequest.offset;
-        boolean sortOrder = productSalesLabelRequest.flag;
+        final boolean sortOrder = productSalesLabelRequest.flag;
 
         String where_clause = "";
         int count = 0;
@@ -574,8 +577,8 @@ public class ProductDao extends PgDao
         String str1;
         String sortDirection = null;
 
-        Iterator<String> keys = queryMap.keySet().iterator();
-        Iterator<String> keys_repeat = queryMap.keySet().iterator();
+        final Iterator<String> keys = queryMap.keySet().iterator();
+        final Iterator<String> keys_repeat = queryMap.keySet().iterator();
 
         while (keys.hasNext())
         {
@@ -638,7 +641,7 @@ public class ProductDao extends PgDao
             query += " ORDER BY " + prefix(orderBy) + orderBy + " "
                     + sortDirection + " offset " + offSet + " limit 10";
 
-            List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectList = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
@@ -684,7 +687,7 @@ public class ProductDao extends PgDao
                 data.add(productSalesLabelResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new ProductSalesLabelDataResponse(
@@ -704,10 +707,11 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public Object update(List<Object> list, Double classificationNumber,
-            String classificationType) throws DaoException
+    public Object update(final List<Object> list,
+            final Double classificationNumber, final String classificationType)
+            throws DaoException
     {
-        String[] columns =
+        final String[] columns =
         { "cluster_number", "product_description", "product_brand",
                 "product_manufacturer" };
 
@@ -715,7 +719,7 @@ public class ProductDao extends PgDao
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
-        String query = "update " + schema + "." + "product set "
+        final String query = "update " + schema + "." + "product set "
                 + "product_brand = COALESCE(?, product_brand), "
                 + "product_manufacturer = COALESCE(?, product_manufacturer), "
                 + "cluster_number = COALESCE(?, cluster_number), "
@@ -731,22 +735,23 @@ public class ProductDao extends PgDao
 
         executeUpdate(query, list.toArray());
 
-        Integer productId = (Integer) list.get(list.size() - 1);
+        final Integer productId = (Integer) list.get(list.size() - 1);
 
         /// ===
 
         if (productId != null)
             if (classificationNumber != null)
             {
-                Integer classificationId = checkClassification(
+                final Integer classificationId = checkClassification(
                         classificationNumber);
 
                 if (classificationId != null)
                 {
-                    List<Object> sqlArgumentList = new ArrayList<Object>();
+                    final List<Object> sqlArgumentList = new ArrayList<Object>();
                     sqlArgumentList.add(productId);
                     sqlArgumentList.add(classificationId);
-                    Object o = insertProductClassification(sqlArgumentList);
+                    final Object o = insertProductClassification(
+                            sqlArgumentList);
 
                     return o;
                 }
@@ -755,11 +760,11 @@ public class ProductDao extends PgDao
         return null;
     }
 
-    public Integer insert(List<Object> csvFieldList,
-            Double classificationNumber, String classificationType)
+    public Integer insert(final List<Object> csvFieldList,
+            final Double classificationNumber, final String classificationType)
             throws DaoException
     {
-        String[] columns =
+        final String[] columns =
         { "product_description", "product_brand", "product_country",
                 "cluster_number", "product_comment", "product_manufacturer",
                 "cnf_code", "creation_date", "last_edit_date", "edited_by" };
@@ -777,7 +782,7 @@ public class ProductDao extends PgDao
         // ===
 
         // returns the product_id upon successful insert
-        Integer productId = (Integer) executeUpdate(query,
+        final Integer productId = (Integer) executeUpdate(query,
                 csvFieldList.toArray());
 
         /// ===
@@ -785,15 +790,16 @@ public class ProductDao extends PgDao
         if (productId != null)
             if (classificationNumber != null)
             {
-                Integer classificationId = checkClassification(
+                final Integer classificationId = checkClassification(
                         classificationNumber);
 
                 if (classificationId != null)
                 {
-                    List<Object> sqlArgumentList = new ArrayList<Object>();
+                    final List<Object> sqlArgumentList = new ArrayList<Object>();
                     sqlArgumentList.add(productId);
                     sqlArgumentList.add(classificationId);
-                    Object o = insertProductClassification(sqlArgumentList);
+                    final Object o = insertProductClassification(
+                            sqlArgumentList);
                 }
             }
 
@@ -802,12 +808,12 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public Boolean checkProductClassificationProductId(Integer productId)
+    public Boolean checkProductClassificationProductId(final Integer productId)
             throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select product_classification_product_id_fkey from "
+        final String query = "select product_classification_product_id_fkey from "
                 + schema + "."
                 + "product_classification where product_classification_product_id_fkey = ?";
 
@@ -819,7 +825,7 @@ public class ProductDao extends PgDao
             if (resultSet.next())
                 return true;
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -829,11 +835,11 @@ public class ProductDao extends PgDao
     }
 
     public Boolean checkProductClassificationClassificationId(
-            Integer classificationId) throws DaoException
+            final Integer classificationId) throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select product_classification_classification_id_fkey from "
+        final String query = "select product_classification_classification_id_fkey from "
                 + schema + "."
                 + "product_classification where product_classification_classification_id_fkey = ?";
 
@@ -845,7 +851,7 @@ public class ProductDao extends PgDao
             if (resultSet.next())
                 return true;
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -858,12 +864,12 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public Integer getProductClassificationProductId(Integer classificationId)
-            throws DaoException
+    public Integer getProductClassificationProductId(
+            final Integer classificationId) throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select product_classification_product_id_fkey from "
+        final String query = "select product_classification_product_id_fkey from "
                 + schema + "."
                 + "product_classification where product_classification_classification_id_fkey = ?";
 
@@ -876,7 +882,7 @@ public class ProductDao extends PgDao
                 return resultSet.getInt(
                         "product_classification_product_id_fkey");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -885,12 +891,12 @@ public class ProductDao extends PgDao
         return null;
     }
 
-    public Integer getProductClassificationClassificationId(Integer productId)
-            throws DaoException
+    public Integer getProductClassificationClassificationId(
+            final Integer productId) throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select product_classification_classification_id_fkey from "
+        final String query = "select product_classification_classification_id_fkey from "
                 + schema + "."
                 + "product_classification where product_classification_product_id_fkey = ?";
 
@@ -903,7 +909,7 @@ public class ProductDao extends PgDao
                 return resultSet.getInt(
                         "product_classification_classification_id_fkey");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -914,10 +920,10 @@ public class ProductDao extends PgDao
 
     // ===
 
-    public Integer insertProductClassification(List<Object> sqlArgumentList)
-            throws DaoException
+    public Integer insertProductClassification(
+            final List<Object> sqlArgumentList) throws DaoException
     {
-        String[] columns =
+        final String[] columns =
         { "product_classification_product_id_fkey",
                 "product_classification_classification_id_fkey" };
 
@@ -935,7 +941,7 @@ public class ProductDao extends PgDao
         {
             return (Integer) executeUpdate(query, sqlArgumentList.toArray());
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.getMessage();
         }
@@ -943,10 +949,10 @@ public class ProductDao extends PgDao
         return null;
     }
 
-    public Integer deleteProductClassification(Integer productId)
+    public Integer deleteProductClassification(final Integer productId)
             throws DaoException
     {
-        String sql = "delete from " + schema + "."
+        final String sql = "delete from " + schema + "."
                 + "product_classification where product_classification_product_id_fkey = ?";
 
         try
@@ -954,19 +960,19 @@ public class ProductDao extends PgDao
             return (Integer) executeUpdate(sql, new Object[]
             { productId });
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public Integer checkClassification(Double classificationNumber)
+    public Integer checkClassification(final Double classificationNumber)
             throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select classification_id from " + schema + "."
+        final String query = "select classification_id from " + schema + "."
                 + "classification where classification_number = ?";
 
         try
@@ -977,7 +983,7 @@ public class ProductDao extends PgDao
             if (resultSet.next())
                 return resultSet.getInt("classification_id");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -989,10 +995,10 @@ public class ProductDao extends PgDao
     // ===
 
     public ProductUpdateDataResponse getProductUpdateResponse(
-            ProductUpdateRequest productUpdateRequest)
+            final ProductUpdateRequest productUpdateRequest)
             throws SQLException, IOException, Exception
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 productUpdateRequest);
 
         if (queryMap.isEmpty())
@@ -1002,7 +1008,7 @@ public class ProductDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new ProductUpdateDataResponse(((ResponseCodes) o).getCode(),
@@ -1010,14 +1016,14 @@ public class ProductDao extends PgDao
         }
 
         // Check for product.
-        Product product = getProduct(productUpdateRequest.product_id);
+        final Product product = getProduct(productUpdateRequest.product_id);
 
         if ((product == null) || (product.getId() == 0L))
             return new ProductUpdateDataResponse(
                     ResponseCodes.NO_PRODUCT_FOUND.getCode(),
                     ResponseCodes.NO_PRODUCT_FOUND.getMessage());
 
-        String[] columns =
+        final String[] columns =
         { "last_edit_date", "product_manufacturer", "product_brand",
                 "product_description", "product_comment", "cnf_code",
                 "cluster_number", "restaurant_type", "type", "edited_by" };
@@ -1026,16 +1032,16 @@ public class ProductDao extends PgDao
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
-        String cnfCode = ((productUpdateRequest.cnf_code != null)
+        final String cnfCode = ((productUpdateRequest.cnf_code != null)
                 && !productUpdateRequest.cnf_code.isEmpty())
                         ? "cnf_code = COALESCE(?, cnf_code), "
                         : "cnf_code = null, ";
-        String clusterNumber = ((productUpdateRequest.cluster_number != null)
+        final String clusterNumber = ((productUpdateRequest.cluster_number != null)
                 && !productUpdateRequest.cluster_number.isEmpty())
                         ? "cluster_number = COALESCE(?, cluster_number), "
                         : "cluster_number = null, ";
 
-        String query = "update " + schema + "." + "product set "
+        final String query = "update " + schema + "." + "product set "
                 + "last_edit_date = COALESCE(?, last_edit_date), "
                 + "product_manufacturer = COALESCE(?, product_manufacturer), "
                 + "product_brand = COALESCE(?, product_brand), "
@@ -1047,8 +1053,8 @@ public class ProductDao extends PgDao
                 + "edited_by = COALESCE(?, edited_by) "
                 + "where product_id = ?";
 
-        Timestamp lastEditDate = DateUtil.getCurrentTimeStamp();
-        List<Object> productFieldList = productUpdateRequest.getProductFieldList();
+        final Timestamp lastEditDate = DateUtil.getCurrentTimeStamp();
+        final List<Object> productFieldList = productUpdateRequest.getProductFieldList();
         productFieldList.add(0, lastEditDate);
 
         executeUpdate(query, productFieldList.toArray());
@@ -1059,40 +1065,42 @@ public class ProductDao extends PgDao
             if ((productUpdateRequest.classification_number != null)
                     && (productUpdateRequest.classification_number != 0.0))
             {
-                Integer classificationId = checkClassification(
+                final Integer classificationId = checkClassification(
                         productUpdateRequest.classification_number);
 
                 if (classificationId != null)
                 {
-                    Boolean productIdPCExists = checkProductClassificationProductId(
+                    final Boolean productIdPCExists = checkProductClassificationProductId(
                             productUpdateRequest.product_id);
-                    Boolean classificationIdPCExists = checkProductClassificationClassificationId(
+                    final Boolean classificationIdPCExists = checkProductClassificationClassificationId(
                             classificationId);
 
-                    Integer productIdPC = getProductClassificationProductId(
+                    final Integer productIdPC = getProductClassificationProductId(
                             classificationId);
-                    Integer classificationIdPC = getProductClassificationClassificationId(
+                    final Integer classificationIdPC = getProductClassificationClassificationId(
                             productUpdateRequest.product_id);
 
                     if (!productIdPCExists && !classificationIdPCExists)
                     {
                         // Create a new record in the product_classification table.
-                        List<Object> sqlArgumentList = new ArrayList<Object>();
+                        final List<Object> sqlArgumentList = new ArrayList<Object>();
                         sqlArgumentList.add(productUpdateRequest.product_id);
                         sqlArgumentList.add(classificationId);
-                        Object o = insertProductClassification(sqlArgumentList);
+                        final Object o = insertProductClassification(
+                                sqlArgumentList);
                     }
                     else if (!productIdPCExists && classificationIdPCExists)
                     {
                         // Create a new record in the product_classification table.
-                        List<Object> sqlArgumentList = new ArrayList<Object>();
+                        final List<Object> sqlArgumentList = new ArrayList<Object>();
                         sqlArgumentList.add(productUpdateRequest.product_id);
                         sqlArgumentList.add(classificationId);
-                        Object o = insertProductClassification(sqlArgumentList);
+                        final Object o = insertProductClassification(
+                                sqlArgumentList);
                     }
                     else if (productIdPCExists && !classificationIdPCExists)
                     {
-                        String[] columns1 =
+                        final String[] columns1 =
                         { "classificationId" };
 
                         String questionmarks1 = StringUtils.repeat("?,",
@@ -1100,7 +1108,7 @@ public class ProductDao extends PgDao
                         questionmarks1 = (String) questionmarks1.subSequence(0,
                                 questionmarks1.length() - 1);
 
-                        String query1 = "update " + schema + "."
+                        final String query1 = "update " + schema + "."
                                 + "product_classification set "
                                 + "product_classification_classification_id_fkey = COALESCE(?, product_classification_classification_id_fkey) "
                                 + "where product_classification_product_id_fkey = ?";
@@ -1111,7 +1119,7 @@ public class ProductDao extends PgDao
                     else if (productIdPCExists
                             && (classificationId != classificationIdPC))
                     {
-                        String[] columns1 =
+                        final String[] columns1 =
                         { "classificationId" };
 
                         String questionmarks1 = StringUtils.repeat("?,",
@@ -1119,7 +1127,7 @@ public class ProductDao extends PgDao
                         questionmarks1 = (String) questionmarks1.subSequence(0,
                                 questionmarks1.length() - 1);
 
-                        String query1 = "update " + schema + "."
+                        final String query1 = "update " + schema + "."
                                 + "product_classification set "
                                 + "product_classification_classification_id_fkey = COALESCE(?, product_classification_classification_id_fkey) "
                                 + "where product_classification_product_id_fkey = ?";
@@ -1138,7 +1146,7 @@ public class ProductDao extends PgDao
 
     // ===
 
-    private String prefix(String str0)
+    private String prefix(final String str0)
     {
         String prx = "p.";
 
@@ -1166,7 +1174,7 @@ public class ProductDao extends PgDao
         return prx;
     }
 
-    private String label2Package(String s)
+    private String label2Package(final String s)
     {
         if (s.startsWith("label"))
             return s.replace("label", "package");

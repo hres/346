@@ -38,7 +38,7 @@ public class ProductUpdateRequest
 
     public List<Object> getProductFieldList()
     {
-        List<Object> productFieldList = new ArrayList<Object>();
+        final List<Object> productFieldList = new ArrayList<Object>();
         productFieldList.add(product_manufacturer);
         productFieldList.add(product_brand);
         productFieldList.add(product_description);
@@ -57,7 +57,7 @@ public class ProductUpdateRequest
 
     public List<Object> getClassificationFieldList()
     {
-        List<Object> classificationFieldList = new ArrayList<Object>();
+        final List<Object> classificationFieldList = new ArrayList<Object>();
         classificationFieldList.add(classification_number);
         classificationFieldList.add(classification_name);
         classificationFieldList.add(classification_type);

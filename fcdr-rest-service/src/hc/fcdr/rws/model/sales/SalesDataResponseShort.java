@@ -13,8 +13,8 @@ public class SalesDataResponseShort
         message = "";
     }
 
-    public SalesDataResponseShort(int status, SalesDataShort data,
-            String message)
+    public SalesDataResponseShort(final int status, final SalesDataShort data,
+            final String message)
     {
         super();
         this.status = status;
@@ -27,7 +27,7 @@ public class SalesDataResponseShort
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -37,7 +37,7 @@ public class SalesDataResponseShort
         return data;
     }
 
-    public void setData(SalesDataShort data)
+    public void setData(final SalesDataShort data)
     {
         this.data = data;
     }
@@ -47,7 +47,7 @@ public class SalesDataResponseShort
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

@@ -11,7 +11,7 @@ public class SalesUpdateDataResponse
         message = "";
     }
 
-    public SalesUpdateDataResponse(int status, String message)
+    public SalesUpdateDataResponse(final int status, final String message)
     {
         super();
         this.status = status;
@@ -23,7 +23,7 @@ public class SalesUpdateDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -33,7 +33,7 @@ public class SalesUpdateDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

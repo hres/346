@@ -29,7 +29,7 @@ public class ReportService extends Application
     {
         if (productDao == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -37,7 +37,7 @@ public class ReportService extends Application
                 productDao = new ProductDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -52,7 +52,7 @@ public class ReportService extends Application
             throws SQLException, IOException, Exception
     {
 
-        ReportDataResponse entity = new ReportDataResponse();
+        final ReportDataResponse entity = new ReportDataResponse();
         entity.setStatus(ResponseCodes.OK.getCode());
         entity.setMessage(ResponseCodes.OK.getMessage());
 

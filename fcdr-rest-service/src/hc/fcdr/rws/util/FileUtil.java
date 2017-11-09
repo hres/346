@@ -14,25 +14,25 @@ import org.xml.sax.ContentHandler;
 
 public class FileUtil
 {
-    public static String getContentType(String fileName)
+    public static String getContentType(final String fileName)
     {
         FileInputStream is = null;
 
         try
         {
-            File f = new File(fileName);
+            final File f = new File(fileName);
             is = new FileInputStream(f);
 
-            ContentHandler contenthandler = new BodyContentHandler();
-            Metadata metadata = new Metadata();
+            final ContentHandler contenthandler = new BodyContentHandler();
+            final Metadata metadata = new Metadata();
             metadata.set(TikaMetadataKeys.RESOURCE_NAME_KEY, f.getName());
-            Parser parser = new AutoDetectParser();
+            final Parser parser = new AutoDetectParser();
             parser.parse(is, contenthandler, metadata, null);
             // /System.out.println("content: " + contenthandler.toString());
 
             return metadata.get(HttpHeaders.CONTENT_TYPE);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class FileUtil
                 {
                     is.close();
                 }
-                catch (IOException e)
+                catch (final IOException e)
                 {
                     e.printStackTrace();
                 }

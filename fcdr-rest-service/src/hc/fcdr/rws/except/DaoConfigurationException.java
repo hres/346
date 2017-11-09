@@ -14,7 +14,7 @@ public class DaoConfigurationException extends Exception
      * @param message
      *            The detail message of the DAOConfigurationException.
      */
-    public DaoConfigurationException(String message)
+    public DaoConfigurationException(final String message)
     {
         super(message);
     }
@@ -25,7 +25,7 @@ public class DaoConfigurationException extends Exception
      * @param cause
      *            The root cause of the DAOConfigurationException.
      */
-    public DaoConfigurationException(Throwable cause)
+    public DaoConfigurationException(final Throwable cause)
     {
         super(cause);
     }
@@ -38,7 +38,8 @@ public class DaoConfigurationException extends Exception
      * @param cause
      *            The root cause of the DAOConfigurationException.
      */
-    public DaoConfigurationException(String message, Throwable cause)
+    public DaoConfigurationException(final String message,
+            final Throwable cause)
     {
         super(message, cause);
     }

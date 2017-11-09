@@ -21,17 +21,17 @@ import hc.fcdr.rws.except.MailProcessorException;
 
 public class MailProcessor
 {
-    private Mail          mail;
-    private String[]      filesToAttach;
-    private Properties    props;
-    private static Logger log = Logger.getLogger(MailProcessor.class);
+    private final Mail       mail;
+    private String[]         filesToAttach;
+    private final Properties props;
+    private static Logger    log = Logger.getLogger(MailProcessor.class);
 
     /**
      * Constructor #1.
      * 
      * @@param mail The Mail object used to initialize the email message.
      */
-    public MailProcessor(Mail mail)
+    public MailProcessor(final Mail mail)
     {
         this.mail = mail;
         filesToAttach = null;
@@ -49,7 +49,7 @@ public class MailProcessor
      * 
      * @@param properties The Hashmap object used to initialize the email message.
      */
-    public MailProcessor(Properties properties)
+    public MailProcessor(final Properties properties)
     {
         mail = load(properties);
 
@@ -62,9 +62,9 @@ public class MailProcessor
     }
 
     /** Loads the properties from the initialization file. */
-    private Mail load(Properties properties)
+    private Mail load(final Properties properties)
     {
-        Mail newMail = new Mail();
+        final Mail newMail = new Mail();
 
         newMail.setSmtp(properties.getProperty("mailSmtp"));
         newMail.setSenderName(properties.getProperty("mailSenderName"));
@@ -105,7 +105,7 @@ public class MailProcessor
             if (aMessage == null)
                 throw new MessagingException();
 
-            ArrayList<InternetAddress> recipients = new ArrayList<InternetAddress>();
+            final ArrayList<InternetAddress> recipients = new ArrayList<InternetAddress>();
             InternetAddress internetAddress;
 
             for (int i = 0; i < (mail.getReceiverAddresses()).length; ++i)
@@ -117,7 +117,7 @@ public class MailProcessor
                     recipients.add(internetAddress);
             }
 
-            Address toAddresses[] = recipients.toArray(new Address[0]);
+            final Address toAddresses[] = recipients.toArray(new Address[0]);
 
             if (mail.getSenderName() != null)
                 fromAddress = new InternetAddress(mail.getSenderAddress(),
@@ -132,17 +132,17 @@ public class MailProcessor
             aMessage.setSentDate(new Date());
 
             // Set the text part of message.
-            MimeBodyPart textPart = new MimeBodyPart();
+            final MimeBodyPart textPart = new MimeBodyPart();
             textPart.setContent(mail.getText(), "text/plain");
 
             // Assemble mail.
-            Multipart multipart = new MimeMultipart();
+            final Multipart multipart = new MimeMultipart();
 
             if (filesToAttach != null)
-                for (String element : filesToAttach)
+                for (final String element : filesToAttach)
                     if (element != null)
                     {
-                        MimeBodyPart attachedFile = new MimeBodyPart();
+                        final MimeBodyPart attachedFile = new MimeBodyPart();
                         attachedFile.attachFile(element);
                         multipart.addBodyPart(attachedFile);
                     }
@@ -166,36 +166,36 @@ public class MailProcessor
 
             transport.close();
         }
-        catch (java.io.UnsupportedEncodingException e)
+        catch (final java.io.UnsupportedEncodingException e)
         {
             log.error("UnsupportedEncodingException ::  "
                     + mail.getReceiverAddresses());
             throw new MailProcessorException(e.getMessage());
         }
-        catch (javax.mail.internet.AddressException e)
+        catch (final javax.mail.internet.AddressException e)
         {
             log.error("AddressException ::  " + mail.getReceiverAddresses());
             throw new MailProcessorException(e.getMessage());
         }
-        catch (SendFailedException e)
+        catch (final SendFailedException e)
         {
             log.error("SendFailedException ::  " + mail.getReceiverAddresses());
             throw new MailProcessorException(e.getMessage());
         }
-        catch (MessagingException e)
+        catch (final MessagingException e)
         {
             log.error("MessagingException ::  " + mail.getReceiverAddresses()
                     + "\n" + e.getMessage());
             throw new MailProcessorException(e.getMessage());
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             log.error("Exception ::  " + mail.getReceiverAddresses());
             try
             {
                 throw new MailProcessorException(e.getMessage());
             }
-            catch (Exception e1)
+            catch (final Exception e1)
             {
 
                 log.error(e.getMessage(), e);
@@ -208,7 +208,7 @@ public class MailProcessor
      * 
      * @@param filesToAttach One or more file attachments included with this email message.
      */
-    public void setAttachments(String[] filesToAttach)
+    public void setAttachments(final String[] filesToAttach)
     {
         if (filesToAttach != null)
         {

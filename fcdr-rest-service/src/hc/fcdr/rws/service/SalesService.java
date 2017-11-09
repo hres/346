@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.Produces;
+
 import javax.annotation.PostConstruct;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,7 +43,7 @@ public class SalesService extends Application
     {
         if (salesDao == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -50,7 +51,7 @@ public class SalesService extends Application
                 salesDao = new SalesDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -67,7 +68,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 return salesDao.getSales();
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -78,14 +79,14 @@ public class SalesService extends Application
     @GET
     @Path("/salesraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Sales getSalesRaw(@PathParam("id") long id)
+    public Sales getSalesRaw(@PathParam("id") final long id)
     {
         try
         {
             if (salesDao != null)
                 return salesDao.getSales(id);
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -107,7 +108,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesYearsResponse();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -130,7 +131,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesResponse();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -144,7 +145,7 @@ public class SalesService extends Application
     @GET
     @Path("/sales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSales(@PathParam("id") long id)
+    public Response getSales(@PathParam("id") final long id)
     {
         SalesDataResponse entity = new SalesDataResponse();
 
@@ -153,7 +154,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -178,7 +179,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesResponse(salesRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -205,7 +206,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesInsertResponse(salesInsertRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -232,7 +233,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesUpdateResponse(salesUpdateRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -248,7 +249,7 @@ public class SalesService extends Application
     @DELETE
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response delete(@PathParam("id") Integer id)
+    public Response delete(@PathParam("id") final Integer id)
     {
         SalesDeleteDataResponse entity = new SalesDeleteDataResponse();
 
@@ -257,7 +258,7 @@ public class SalesService extends Application
             if (salesDao != null)
                 entity = salesDao.getSalesDeleteResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }

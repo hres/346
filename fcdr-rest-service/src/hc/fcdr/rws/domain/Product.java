@@ -45,10 +45,12 @@ public class Product implements Serializable
         this.type = "";
     }
 
-    public Product(Long id, String description, String brand, String country,
-            String clusterNumber, String comment, String manufacturer,
-            String cnfCode, Timestamp creationDate, Timestamp lastEditDate,
-            String editedBy, String restaurantType, String type)
+    public Product(final Long id, final String description, final String brand,
+            final String country, final String clusterNumber,
+            final String comment, final String manufacturer,
+            final String cnfCode, final Timestamp creationDate,
+            final Timestamp lastEditDate, final String editedBy,
+            final String restaurantType, final String type)
     {
         super();
         this.id = id;
@@ -66,7 +68,7 @@ public class Product implements Serializable
         this.type = type;
     }
 
-    public Product(Product product)
+    public Product(final Product product)
     {
         super();
         this.id = product.getId();
@@ -90,7 +92,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setId(Long id)
+    public void setId(final Long id)
     {
         this.id = id;
     }
@@ -101,7 +103,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setDescription(String description)
+    public void setDescription(final String description)
     {
         this.description = description;
     }
@@ -112,7 +114,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setBrand(String brand)
+    public void setBrand(final String brand)
     {
         this.brand = brand;
     }
@@ -123,7 +125,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setCountry(String country)
+    public void setCountry(final String country)
     {
         this.country = country;
     }
@@ -134,7 +136,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setClusterNumber(String clusterNumber)
+    public void setClusterNumber(final String clusterNumber)
     {
         this.clusterNumber = clusterNumber;
     }
@@ -145,7 +147,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setComment(String comment)
+    public void setComment(final String comment)
     {
         this.comment = comment;
     }
@@ -156,7 +158,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setManufacturer(String manufacturer)
+    public void setManufacturer(final String manufacturer)
     {
         this.manufacturer = manufacturer;
     }
@@ -167,7 +169,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setCnfCode(String cnfCode)
+    public void setCnfCode(final String cnfCode)
     {
         this.cnfCode = cnfCode;
     }
@@ -178,7 +180,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setCreationDate(Timestamp creationDate)
+    public void setCreationDate(final Timestamp creationDate)
     {
         this.creationDate = creationDate;
     }
@@ -189,7 +191,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setLastEditDate(Timestamp lastEditDate)
+    public void setLastEditDate(final Timestamp lastEditDate)
     {
         this.lastEditDate = lastEditDate;
     }
@@ -200,7 +202,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setEditedBy(String editedBy)
+    public void setEditedBy(final String editedBy)
     {
         this.editedBy = editedBy;
     }
@@ -211,7 +213,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setRestaurantType(String restaurantType)
+    public void setRestaurantType(final String restaurantType)
     {
         this.restaurantType = restaurantType;
     }
@@ -222,7 +224,7 @@ public class Product implements Serializable
     }
 
     @XmlElement
-    public void setType(String type)
+    public void setType(final String type)
     {
         this.type = type;
     }
@@ -271,7 +273,7 @@ public class Product implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
             return true;
@@ -279,7 +281,7 @@ public class Product implements Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Product other = (Product) obj;
+        final Product other = (Product) obj;
         if (brand == null)
         {
             if (other.brand != null)

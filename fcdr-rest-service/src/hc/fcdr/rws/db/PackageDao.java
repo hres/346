@@ -11,22 +11,22 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
+import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.PackageData;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
-import hc.fcdr.rws.domain.Package;
+import hc.fcdr.rws.util.DaoUtil;
 
 public class PackageDao extends PgDao
 {
     private static final Logger logger = Logger.getLogger(
             PackageDao.class.getName());
-    private String              schema;
+    private final String        schema;
 
-    public PackageDao(Connection connection, String schema)
+    public PackageDao(final Connection connection, final String schema)
     {
         super(connection);
         this.schema = schema;
@@ -35,9 +35,9 @@ public class PackageDao extends PgDao
     public List<Package> getPackage() throws DaoException
     {
         ResultSet resultSet = null;
-        List<Package> packageList = new ArrayList<Package>();
+        final List<Package> packageList = new ArrayList<Package>();
 
-        String query = "select * from " + schema + "." + "package";
+        final String query = "select * from " + schema + "." + "package";
 
         try
         {
@@ -46,7 +46,7 @@ public class PackageDao extends PgDao
             while (resultSet.next())
                 packageList.add(DaoUtil.getPackage(resultSet));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -55,12 +55,12 @@ public class PackageDao extends PgDao
         return packageList;
     }
 
-    public Package getPackage(Long packageId) throws DaoException
+    public Package getPackage(final Long packageId) throws DaoException
     {
         ResultSet resultSet = null;
         Package _package = null;
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "package where package_id = ?";
 
         try
@@ -71,7 +71,7 @@ public class PackageDao extends PgDao
             if (resultSet.next())
                 _package = DaoUtil.getPackage(resultSet);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -88,9 +88,9 @@ public class PackageDao extends PgDao
         ResultSet resultSet = null;
         PackageResponse packageResponse = null;
 
-        PackageData data = new PackageData();
+        final PackageData data = new PackageData();
 
-        String query = "select * from " + schema + "." + "package";
+        final String query = "select * from " + schema + "." + "package";
 
         try
         {
@@ -102,7 +102,7 @@ public class PackageDao extends PgDao
                 data.add(packageResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new PackageDataResponse(
@@ -116,15 +116,15 @@ public class PackageDao extends PgDao
 
     // ===
 
-    public PackageDataResponse getPackageResponse(Long packageId)
+    public PackageDataResponse getPackageResponse(final Long packageId)
             throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         PackageResponse packageResponse = null;
 
-        PackageData data = new PackageData();
+        final PackageData data = new PackageData();
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "package where package_id = ?";
 
         try
@@ -138,7 +138,7 @@ public class PackageDao extends PgDao
                 data.add(packageResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new PackageDataResponse(
@@ -150,10 +150,12 @@ public class PackageDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    public PackageDataResponse getPackageResponse(PackageRequest packageRequest)
+    public PackageDataResponse getPackageResponse(
+            final PackageRequest packageRequest)
             throws SQLException, IOException, Exception
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(packageRequest);
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+                packageRequest);
 
         if (queryMap.isEmpty())
             return new PackageDataResponse(
@@ -162,7 +164,7 @@ public class PackageDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new PackageDataResponse(((ResponseCodes) o).getCode(), null,
@@ -194,23 +196,23 @@ public class PackageDao extends PgDao
 
         ResultSet resultSet = null;
         PackageResponse packageResponse = null;
-        PackageData data = new PackageData();
+        final PackageData data = new PackageData();
 
         String query = "select * from " + schema + "." + "package";
 
         // ===
 
-        String orderBy = packageRequest.orderBy;
+        final String orderBy = packageRequest.orderBy;
         Integer offSet = packageRequest.offset;
-        boolean sortOrder = packageRequest.flag;
+        final boolean sortOrder = packageRequest.flag;
 
         String where_clause = "";
         int count = 0;
         String str;
         String sortDirection = null;
 
-        Iterator<String> keys = queryMap.keySet().iterator();
-        Iterator<String> keys_repeat = queryMap.keySet().iterator();
+        final Iterator<String> keys = queryMap.keySet().iterator();
+        final Iterator<String> keys_repeat = queryMap.keySet().iterator();
 
         while (keys.hasNext())
         {
@@ -248,7 +250,7 @@ public class PackageDao extends PgDao
             query += " ORDER BY " + orderBy + " " + sortDirection + " offset "
                     + offSet + " limit 10";
 
-            List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectList = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
@@ -275,7 +277,7 @@ public class PackageDao extends PgDao
                 data.add(packageResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new PackageDataResponse(

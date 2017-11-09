@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 import hc.fcdr.rws.config.ResponseCodes;
-import hc.fcdr.rws.domain.Product;
-import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
+import hc.fcdr.rws.domain.Product;
+import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.model.classification.ClassificationResponse;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
@@ -70,12 +70,13 @@ public final class DaoUtil
      * @throws SQLException
      *             If something fails during creating the PreparedStatement.
      */
-    public static PreparedStatement prepareStatement(Connection connection,
-            String sql, boolean returnGeneratedKeys, Object... values)
+    public static PreparedStatement prepareStatement(
+            final Connection connection, final String sql,
+            final boolean returnGeneratedKeys, final Object... values)
             throws SQLException
     {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql,
-                returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS
+        final PreparedStatement preparedStatement = connection.prepareStatement(
+                sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS
                         : Statement.NO_GENERATED_KEYS);
 
         if (values != null)
@@ -94,8 +95,8 @@ public final class DaoUtil
      * @throws SQLException
      *             If something fails during setting the PreparedStatement values.
      */
-    public static void setValues(PreparedStatement preparedStatement,
-            Object... values) throws SQLException
+    public static void setValues(final PreparedStatement preparedStatement,
+            final Object... values) throws SQLException
     {
         for (int i = 0; i < values.length; i++)
             preparedStatement.setObject(i + 1, values[i]);
@@ -108,7 +109,7 @@ public final class DaoUtil
      *            The java.util.Date to be converted to java.sql.Date.
      * @return The converted java.sql.Date.
      */
-    public static Date toSqlDate(java.util.Date date)
+    public static Date toSqlDate(final java.util.Date date)
     {
         return (date != null) ? new Date(date.getTime()) : null;
     }
@@ -119,14 +120,14 @@ public final class DaoUtil
      * @param connection
      *            The Connection to be closed quietly.
      */
-    public static void close(Connection connection)
+    public static void close(final Connection connection)
     {
         if (connection != null)
             try
             {
                 connection.close();
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 System.err.println(
                         "Closing Connection failed: " + e.getMessage());
@@ -140,14 +141,14 @@ public final class DaoUtil
      * @param statement
      *            The Statement to be closed quietly.
      */
-    public static void close(Statement statement)
+    public static void close(final Statement statement)
     {
         if (statement != null)
             try
             {
                 statement.close();
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 System.err.println(
                         "Closing Statement failed: " + e.getMessage());
@@ -161,14 +162,14 @@ public final class DaoUtil
      * @param resultSet
      *            The ResultSet to be closed quietly.
      */
-    public static void close(ResultSet resultSet)
+    public static void close(final ResultSet resultSet)
     {
         if (resultSet != null)
             try
             {
                 resultSet.close();
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 System.err.println(
                         "Closing ResultSet failed: " + e.getMessage());
@@ -184,7 +185,8 @@ public final class DaoUtil
      * @param statement
      *            The Statement to be closed quietly.
      */
-    public static void close(Connection connection, Statement statement)
+    public static void close(final Connection connection,
+            final Statement statement)
     {
         close(statement);
         close(connection);
@@ -200,8 +202,8 @@ public final class DaoUtil
      * @param resultSet
      *            The ResultSet to be closed quietly.
      */
-    public static void close(Connection connection, Statement statement,
-            ResultSet resultSet)
+    public static void close(final Connection connection,
+            final Statement statement, final ResultSet resultSet)
     {
         close(resultSet);
         close(statement);
@@ -216,7 +218,8 @@ public final class DaoUtil
      * @param resultSet
      *            The ResultSet to be closed quietly.
      */
-    public static void close(Statement statement, ResultSet resultSet)
+    public static void close(final Statement statement,
+            final ResultSet resultSet)
     {
         close(resultSet);
         close(statement);
@@ -232,18 +235,19 @@ public final class DaoUtil
      *            Field we want to obtain the value from
      * @return Long value if the field exists and can be parsed to Long. Null otherwise.
      */
-    public static Long getLongFromResultSet(ResultSet rs, String field)
+    public static Long getLongFromResultSet(final ResultSet rs,
+            final String field)
     {
 
         Long result = null;
 
         try
         {
-            Object value = rs.getObject(field);
+            final Object value = rs.getObject(field);
             if (value != null)
                 result = (Long) value;
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
         }
         return result;
@@ -259,21 +263,22 @@ public final class DaoUtil
      *            Field we want to obtain the value from
      * @return Long value if the field exists and can be parsed to Long. Null otherwise.
      */
-    public static List<String> getArrayFromResultSet(ResultSet rs, String field)
+    public static List<String> getArrayFromResultSet(final ResultSet rs,
+            final String field)
     {
 
         List<String> result;
 
         try
         {
-            Array arrayChunks = rs.getArray(field);
-            String[] chunks = (String[]) arrayChunks.getArray();
+            final Array arrayChunks = rs.getArray(field);
+            final String[] chunks = (String[]) arrayChunks.getArray();
             result = Arrays.asList(chunks);
 
             if (result.contains(null))
                 result = new ArrayList<String>();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             result = new ArrayList<String>();
         }
@@ -281,18 +286,19 @@ public final class DaoUtil
         return result;
     }
 
-    public static Integer getIntFromResultSet(ResultSet rs, String field)
+    public static Integer getIntFromResultSet(final ResultSet rs,
+            final String field)
     {
 
         Integer result = null;
 
         try
         {
-            Object value = rs.getObject(field);
+            final Object value = rs.getObject(field);
             if (value != null)
                 result = (Integer) value;
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
         }
         return result;
@@ -301,10 +307,10 @@ public final class DaoUtil
     // ===
     // ===
 
-    public static Product getProduct(ResultSet result) throws SQLException
+    public static Product getProduct(final ResultSet result) throws SQLException
     {
 
-        Product product = new Product();
+        final Product product = new Product();
 
         product.setId(result.getLong("product_id"));
         product.setDescription(result.getString("product_description"));
@@ -333,11 +339,11 @@ public final class DaoUtil
         return product;
     }
 
-    public static ProductResponse getProductResponse(ResultSet resultSet)
+    public static ProductResponse getProductResponse(final ResultSet resultSet)
             throws SQLException
     {
-        Product product = getProduct(resultSet);
-        ProductResponse productResponse = new ProductResponse(product);
+        final Product product = getProduct(resultSet);
+        final ProductResponse productResponse = new ProductResponse(product);
 
         productResponse.setClassification_number(
                 ((resultSet.getString("classification_number") == null) ? ""
@@ -352,9 +358,9 @@ public final class DaoUtil
         return productResponse;
     }
 
-    public static Map<String, Object> getQueryMap(ProductRequest request)
+    public static Map<String, Object> getQueryMap(final ProductRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if (!request.product_manufacturer.isEmpty())
             queryMap.put("product_manufacturer", request.product_manufacturer);
@@ -430,10 +436,10 @@ public final class DaoUtil
     // ===
 
     public static ProductClassificationResponse getProductClassificationResponse(
-            ResultSet resultSet) throws SQLException
+            final ResultSet resultSet) throws SQLException
     {
-        Product product = getProduct(resultSet);
-        ProductClassificationResponse productClassificationResponse = new ProductClassificationResponse(
+        final Product product = getProduct(resultSet);
+        final ProductClassificationResponse productClassificationResponse = new ProductClassificationResponse(
                 product);
 
         productClassificationResponse.setClassification_number(
@@ -451,9 +457,9 @@ public final class DaoUtil
 
     // ===
 
-    public static Sales getSales(ResultSet result) throws SQLException
+    public static Sales getSales(final ResultSet result) throws SQLException
     {
-        Sales sales = new Sales();
+        final Sales sales = new Sales();
 
         sales.setId(result.getLong("sales_id"));
         sales.setDescription(result.getString("sales_description"));
@@ -473,9 +479,8 @@ public final class DaoUtil
         sales.setAverageRetailPrice(result.getDouble("average_retail_price"));
         sales.setSalesSource(result.getString("sales_source"));
         sales.setNielsenCategory(result.getString("nielsen_category"));
-        sales.setSalesYear(
-                ((result.getString("sales_year") == null) ? ""
-                        : result.getString("sales_year")));
+        sales.setSalesYear(((result.getString("sales_year") == null) ? ""
+                : result.getString("sales_year")));
         sales.setControlLabelFlag(result.getBoolean("control_label_flag"));
         sales.setKiloVolumeTotal(result.getDouble("kilo_volume_total"));
         sales.setKiloVolumeRank(result.getDouble("kilo_volume_rank"));
@@ -498,27 +503,28 @@ public final class DaoUtil
         return sales;
     }
 
-    public static SalesResponseShort getSalesResponseShort(ResultSet resultSet)
-            throws SQLException
+    public static SalesResponseShort getSalesResponseShort(
+            final ResultSet resultSet) throws SQLException
     {
-        Sales sales = getSales(resultSet);
-        SalesResponseShort salesResponseShort = new SalesResponseShort(sales);
+        final Sales sales = getSales(resultSet);
+        final SalesResponseShort salesResponseShort = new SalesResponseShort(
+                sales);
 
         return salesResponseShort;
     }
 
-    public static SalesResponse getSalesResponse(ResultSet resultSet)
+    public static SalesResponse getSalesResponse(final ResultSet resultSet)
             throws SQLException
     {
-        Sales sales = getSales(resultSet);
-        SalesResponse salesResponse = new SalesResponse(sales);
+        final Sales sales = getSales(resultSet);
+        final SalesResponse salesResponse = new SalesResponse(sales);
 
         return salesResponse;
     }
 
-    public static Map<String, Object> getQueryMap(SalesRequest request)
+    public static Map<String, Object> getQueryMap(final SalesRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if (!request.salesUpc.isEmpty())
             if (StringUtilities.isNumeric(request.salesUpc))
@@ -573,10 +579,11 @@ public final class DaoUtil
         return queryMap;
     }
 
-    public static Map<String, Object> getQueryMap(SalesInsertRequest request)
+    public static Map<String, Object> getQueryMap(
+            final SalesInsertRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
-        List<Object> salesInsertList = new ArrayList<Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
+        final List<Object> salesInsertList = new ArrayList<Object>();
 
         if (!request.sales_description.isEmpty())
             queryMap.put("sales_description", request.sales_description);
@@ -797,7 +804,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
                 return queryMap;
             }
-        salesInsertList.add((request.sales_year == 0) ? null : request.sales_year);
+        salesInsertList.add(
+                (request.sales_year == 0) ? null : request.sales_year);
 
         if (!request.control_label_flag.toString().isEmpty())
             queryMap.put("control_label_flag", request.control_label_flag);
@@ -902,7 +910,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        salesInsertList.add(request.classification_number == 0.0 ? null : request.classification_number);
+        salesInsertList.add(request.classification_number == 0.0 ? null
+                : request.classification_number);
 
         if (!request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
@@ -934,11 +943,11 @@ public final class DaoUtil
             }
         salesInsertList.add(request.number_of_units);
 
-        if (request.edited_by != null && !request.edited_by.isEmpty())
+        if ((request.edited_by != null) && !request.edited_by.isEmpty())
             queryMap.put("edited_by", request.edited_by);
         salesInsertList.add(request.edited_by);
 
-        Timestamp now = DateUtil.getCurrentTimeStamp();
+        final Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("creation_date", now);
         salesInsertList.add(now);
         queryMap.put("last_edit_date", now);
@@ -971,10 +980,11 @@ public final class DaoUtil
 
     // ---
 
-    public static Map<String, Object> getQueryMap(SalesUpdateRequest request)
+    public static Map<String, Object> getQueryMap(
+            final SalesUpdateRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
-        List<Object> salesUpdateList = new ArrayList<Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
+        final List<Object> salesUpdateList = new ArrayList<Object>();
 
         if (!request.sales_description.isEmpty())
             queryMap.put("sales_description", request.sales_description);
@@ -1336,7 +1346,7 @@ public final class DaoUtil
             queryMap.put("edited_by", request.edited_by);
         salesUpdateList.add(request.edited_by);
 
-        Timestamp now = DateUtil.getCurrentTimeStamp();
+        final Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("last_edit_date", now);
         salesUpdateList.add(now);
 
@@ -1367,20 +1377,22 @@ public final class DaoUtil
 
     // ---
 
-    public static SalesYearsResponse getSalesYearsResponse(ResultSet resultSet)
-            throws SQLException
+    public static SalesYearsResponse getSalesYearsResponse(
+            final ResultSet resultSet) throws SQLException
     {
-        String salesYear = ((resultSet.getString("sales_year") == null) ? "" : resultSet.getString("sales_year"));
-        
+        final String salesYear = ((resultSet.getString("sales_year") == null)
+                ? ""
+                : resultSet.getString("sales_year"));
+
         return new SalesYearsResponse(salesYear);
-        
+
     }
 
     // ===
 
-    public static Package getPackage(ResultSet result) throws SQLException
+    public static Package getPackage(final ResultSet result) throws SQLException
     {
-        Package _package = new Package();
+        final Package _package = new Package();
 
         _package.setId(result.getLong("package_id"));
         _package.setDescription(result.getString("package_description"));
@@ -1426,18 +1438,18 @@ public final class DaoUtil
         return _package;
     }
 
-    public static PackageResponse getPackageResponse(ResultSet resultSet)
+    public static PackageResponse getPackageResponse(final ResultSet resultSet)
             throws SQLException
     {
-        Package _package = getPackage(resultSet);
-        PackageResponse packageResponse = new PackageResponse(_package);
+        final Package _package = getPackage(resultSet);
+        final PackageResponse packageResponse = new PackageResponse(_package);
 
         return packageResponse;
     }
 
-    public static Map<String, Object> getQueryMap(PackageRequest request)
+    public static Map<String, Object> getQueryMap(final PackageRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if (!request.labelUpc.isEmpty())
             if (StringUtilities.isNumeric(request.labelUpc))
@@ -1479,10 +1491,10 @@ public final class DaoUtil
 
     // ===
 
-    public static Classification getClassification(ResultSet result)
+    public static Classification getClassification(final ResultSet result)
             throws SQLException
     {
-        Classification classification = new Classification();
+        final Classification classification = new Classification();
 
         classification.setId(result.getLong("classification_id"));
         classification.setClassificationNumber(
@@ -1497,10 +1509,10 @@ public final class DaoUtil
     }
 
     public static ClassificationResponse getClassificationResponse(
-            ResultSet resultSet) throws SQLException
+            final ResultSet resultSet) throws SQLException
     {
-        Classification classification = getClassification(resultSet);
-        ClassificationResponse classificationResponse = new ClassificationResponse(
+        final Classification classification = getClassification(resultSet);
+        final ClassificationResponse classificationResponse = new ClassificationResponse(
                 classification);
 
         return classificationResponse;
@@ -1509,10 +1521,10 @@ public final class DaoUtil
     // ===
 
     public static ProductSalesResponse getProductSalesResponse(
-            ResultSet resultSet) throws SQLException
+            final ResultSet resultSet) throws SQLException
     {
-        Sales sales = getSales(resultSet);
-        ProductSalesResponse productSalesResponse = new ProductSalesResponse(
+        final Sales sales = getSales(resultSet);
+        final ProductSalesResponse productSalesResponse = new ProductSalesResponse(
                 sales);
 
         return productSalesResponse;
@@ -1521,10 +1533,10 @@ public final class DaoUtil
     // ===
 
     public static ProductLabelsResponse getProductLabelsResponse(
-            ResultSet resultSet) throws SQLException
+            final ResultSet resultSet) throws SQLException
     {
-        Package _package = getPackage(resultSet);
-        ProductLabelsResponse productLabelsResponse = new ProductLabelsResponse(
+        final Package _package = getPackage(resultSet);
+        final ProductLabelsResponse productLabelsResponse = new ProductLabelsResponse(
                 _package);
 
         return productLabelsResponse;
@@ -1533,10 +1545,10 @@ public final class DaoUtil
     // ===
 
     public static ProductSalesLabelResponse getProductSalesLabelResponse(
-            ResultSet resultSet) throws SQLException
+            final ResultSet resultSet) throws SQLException
     {
-        Product product = getProduct(resultSet);
-        ProductSalesLabelResponse productSalesLabelResponse = new ProductSalesLabelResponse(
+        final Product product = getProduct(resultSet);
+        final ProductSalesLabelResponse productSalesLabelResponse = new ProductSalesLabelResponse(
                 product);
 
         productSalesLabelResponse.setClassification_number(
@@ -1602,9 +1614,9 @@ public final class DaoUtil
     // ---
 
     public static Map<String, Object> getQueryMap(
-            ProductSalesLabelRequest request)
+            final ProductSalesLabelRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if (!request.product_description.isEmpty())
             queryMap.put("product_description", request.product_description);
@@ -1780,9 +1792,10 @@ public final class DaoUtil
 
     // ===
 
-    public static Map<String, Object> getQueryMap(ProductUpdateRequest request)
+    public static Map<String, Object> getQueryMap(
+            final ProductUpdateRequest request)
     {
-        Map<String, Object> queryMap = new HashMap<String, Object>();
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if ((request.product_manufacturer != null)
                 && !request.product_manufacturer.isEmpty())
@@ -1796,7 +1809,8 @@ public final class DaoUtil
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
 
-        if ((request.cluster_number != null) && !request.cluster_number.isEmpty())
+        if ((request.cluster_number != null)
+                && !request.cluster_number.isEmpty())
             if (isType(request.cluster_number, "double"))
                 queryMap.put("cluster_number", request.cluster_number);
             else
@@ -1848,7 +1862,7 @@ public final class DaoUtil
 
     // ===
 
-    public static Boolean isType(String testStr, String type)
+    public static Boolean isType(final String testStr, final String type)
     {
         try
         {
@@ -1862,7 +1876,7 @@ public final class DaoUtil
                 Long.parseLong(testStr);
             return true;
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             return false;
         }

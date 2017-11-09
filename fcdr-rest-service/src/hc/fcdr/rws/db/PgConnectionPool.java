@@ -20,11 +20,11 @@ public class PgConnectionPool extends ConnectionPool
     {
         try
         {
-            InitialContext ic = new InitialContext();
-            String dsName = "java:comp/env/jdbc/fcdrrest";
+            final InitialContext ic = new InitialContext();
+            final String dsName = "java:comp/env/jdbc/fcdrrest";
             source = (javax.sql.DataSource) ic.lookup(dsName);
         }
-        catch (NamingException e)
+        catch (final NamingException e)
         {
             e.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class PgConnectionPool extends ConnectionPool
         {
             return source.getConnection();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             throw new SQLException(e);
         }

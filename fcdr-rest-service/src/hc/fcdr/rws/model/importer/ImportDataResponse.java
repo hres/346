@@ -13,7 +13,8 @@ public class ImportDataResponse
         message = "";
     }
 
-    public ImportDataResponse(int status, ImportData data, String message)
+    public ImportDataResponse(final int status, final ImportData data,
+            final String message)
     {
         super();
         this.status = status;
@@ -26,7 +27,7 @@ public class ImportDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -36,7 +37,7 @@ public class ImportDataResponse
         return data;
     }
 
-    public void setData(ImportData data)
+    public void setData(final ImportData data)
     {
         this.data = data;
     }
@@ -46,7 +47,7 @@ public class ImportDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

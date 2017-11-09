@@ -7,14 +7,14 @@ import hc.fcdr.rws.domain.Sales;
 @XmlRootElement
 public class SalesResponseShort
 {
-    private String  salesUpc;
-    private String  salesDescription;
-    private String  salesSource;
+    private String salesUpc;
+    private String salesDescription;
+    private String salesSource;
     private String salesYear;
-    private String  nielsenCategory;
-    private Double  dollarVolume;
-    private Double  kiloVolume;
-    private Long    productId;
+    private String nielsenCategory;
+    private Double dollarVolume;
+    private Double kiloVolume;
+    private Long   productId;
 
     public SalesResponseShort()
     {
@@ -29,9 +29,11 @@ public class SalesResponseShort
         this.productId = 0L;
     }
 
-    public SalesResponseShort(String salesUpc, String salesDescription,
-            String salesSource, String salesYear, String nielsenCategory,
-            Double dollarVolume, Double kiloVolume, Long productId)
+    public SalesResponseShort(final String salesUpc,
+            final String salesDescription, final String salesSource,
+            final String salesYear, final String nielsenCategory,
+            final Double dollarVolume, final Double kiloVolume,
+            final Long productId)
     {
         super();
         this.salesUpc = salesUpc;
@@ -44,7 +46,7 @@ public class SalesResponseShort
         this.productId = productId;
     }
 
-    public SalesResponseShort(Sales sales)
+    public SalesResponseShort(final Sales sales)
     {
         super();
         this.salesUpc = sales.getUpc();
@@ -62,7 +64,7 @@ public class SalesResponseShort
         return salesUpc;
     }
 
-    public void setSalesUpc(String salesUpc)
+    public void setSalesUpc(final String salesUpc)
     {
         this.salesUpc = salesUpc;
     }
@@ -72,7 +74,7 @@ public class SalesResponseShort
         return salesDescription;
     }
 
-    public void setSalesDescription(String salesDescription)
+    public void setSalesDescription(final String salesDescription)
     {
         this.salesDescription = salesDescription;
     }
@@ -82,7 +84,7 @@ public class SalesResponseShort
         return salesSource;
     }
 
-    public void setSalesSource(String salesSource)
+    public void setSalesSource(final String salesSource)
     {
         this.salesSource = salesSource;
     }
@@ -92,7 +94,7 @@ public class SalesResponseShort
         return salesYear;
     }
 
-    public void setSalesYear(String salesYear)
+    public void setSalesYear(final String salesYear)
     {
         this.salesYear = salesYear;
     }
@@ -102,7 +104,7 @@ public class SalesResponseShort
         return nielsenCategory;
     }
 
-    public void setNielsenCategory(String nielsenCategory)
+    public void setNielsenCategory(final String nielsenCategory)
     {
         this.nielsenCategory = nielsenCategory;
     }
@@ -112,7 +114,7 @@ public class SalesResponseShort
         return dollarVolume;
     }
 
-    public void setDollarVolume(Double dollarVolume)
+    public void setDollarVolume(final Double dollarVolume)
     {
         this.dollarVolume = dollarVolume;
     }
@@ -122,7 +124,7 @@ public class SalesResponseShort
         return kiloVolume;
     }
 
-    public void setKiloVolume(Double kiloVolume)
+    public void setKiloVolume(final Double kiloVolume)
     {
         this.kiloVolume = kiloVolume;
     }
@@ -132,7 +134,7 @@ public class SalesResponseShort
         return productId;
     }
 
-    public void setProductId(Long productId)
+    public void setProductId(final Long productId)
     {
         this.productId = productId;
     }

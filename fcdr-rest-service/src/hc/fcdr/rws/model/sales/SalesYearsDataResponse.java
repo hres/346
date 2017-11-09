@@ -13,8 +13,8 @@ public class SalesYearsDataResponse
         message = "";
     }
 
-    public SalesYearsDataResponse(int status, SalesYearsData data,
-            String message)
+    public SalesYearsDataResponse(final int status, final SalesYearsData data,
+            final String message)
     {
         super();
         this.status = status;
@@ -27,7 +27,7 @@ public class SalesYearsDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -37,7 +37,7 @@ public class SalesYearsDataResponse
         return data;
     }
 
-    public void setData(SalesYearsData data)
+    public void setData(final SalesYearsData data)
     {
         this.data = data;
     }
@@ -47,7 +47,7 @@ public class SalesYearsDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

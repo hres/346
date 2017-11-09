@@ -12,7 +12,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String center(String str, int size)
+    public static String center(final String str, final int size)
     {
         return center(str, size, ' ');
     }
@@ -26,13 +26,13 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String center(String str, int size, char padChar)
+    public static String center(String str, final int size, final char padChar)
     {
         if ((str == null) || (size <= 0))
             return str;
 
-        int strLen = str.length();
-        int pads = size - strLen;
+        final int strLen = str.length();
+        final int pads = size - strLen;
 
         if (pads <= 0)
             return str;
@@ -50,7 +50,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static int indexOf(StringBuffer a, String b)
+    public static int indexOf(final StringBuffer a, final String b)
     {
         return StringUtilities.indexOf(a, b, 0);
     }
@@ -64,13 +64,14 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static int indexOf(StringBuffer a, String b, int pos)
+    public static int indexOf(final StringBuffer a, final String b,
+            final int pos)
     {
         int c = pos;
 
         while (c <= (a.length() - b.length()))
         {
-            String sub = a.substring(c, c + b.length());
+            final String sub = a.substring(c, c + b.length());
             if (sub.equals(b))
                 return c;
             c++;
@@ -84,12 +85,12 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isAlpha(String str)
+    public static boolean isAlpha(final String str)
     {
         if (str == null)
             return false;
 
-        int sz = str.length();
+        final int sz = str.length();
 
         for (int i = 0; i < sz; i++)
             if (Character.isLetter(str.charAt(i)) == false)
@@ -103,12 +104,12 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isAlphaOrSpace(String str)
+    public static boolean isAlphaOrSpace(final String str)
     {
         if (str == null)
             return false;
 
-        int sz = str.length();
+        final int sz = str.length();
 
         for (int i = 0; i < sz; i++)
             if ((Character.isLetter(str.charAt(i)) == false)
@@ -123,7 +124,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isEmpty(String str)
+    public static boolean isEmpty(final String str)
     {
         return ((str == null) || (str.length() == 0));
     }
@@ -137,7 +138,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isNumericL(String s, int len)
+    public static boolean isNumericL(final String s, final int len)
     {
         return (isNumeric(s) && isLength(s, len));
     }
@@ -147,12 +148,12 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isNumeric(String str)
+    public static boolean isNumeric(final String str)
     {
         if ((str == null) || (str.trim().length() == 0))
             return false;
 
-        int sz = str.length();
+        final int sz = str.length();
 
         for (int i = 0; i < sz; i++)
             if (Character.isDigit(str.charAt(i)) == false)
@@ -161,7 +162,7 @@ public class StringUtilities
         return true;
     }
 
-    public static boolean isLength(String s, int len)
+    public static boolean isLength(final String s, final int len)
     {
         if (s.trim().length() == len)
             return true;
@@ -173,12 +174,12 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static boolean isValidName(String str)
+    public static boolean isValidName(final String str)
     {
         if (str == null)
             return false;
 
-        int sz = str.length();
+        final int sz = str.length();
 
         for (int i = 0; i < sz; i++)
             if (!((Character.isLetter(str.charAt(i)) == true)
@@ -198,7 +199,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String leftJustify(String str, int size)
+    public static String leftJustify(final String str, final int size)
     {
         return leftJustify(str, size, ' ');
     }
@@ -212,12 +213,13 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String leftJustify(String str, int size, char padChar)
+    public static String leftJustify(final String str, final int size,
+            final char padChar)
     {
         if (str == null)
             return null;
 
-        int pads = size - str.length();
+        final int pads = size - str.length();
 
         if (pads <= 0)
             return str; // returns original String when possible
@@ -237,7 +239,8 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String leftJustify(String str, int size, String padStr)
+    public static String leftJustify(final String str, final int size,
+            String padStr)
     {
         if (str == null)
             return null;
@@ -245,9 +248,9 @@ public class StringUtilities
         if (isEmpty(padStr))
             padStr = " ";
 
-        int padLen = padStr.length();
-        int strLen = str.length();
-        int pads = size - strLen;
+        final int padLen = padStr.length();
+        final int strLen = str.length();
+        final int pads = size - strLen;
 
         if (pads <= 0)
             return str; // returns original String when possible
@@ -261,8 +264,8 @@ public class StringUtilities
             return str.concat(padStr.substring(0, pads));
         else
         {
-            char[] padding = new char[pads];
-            char[] padChars = padStr.toCharArray();
+            final char[] padding = new char[pads];
+            final char[] padChars = padStr.toCharArray();
 
             for (int i = 0; i < pads; i++)
                 padding[i] = padChars[i % padLen];
@@ -282,7 +285,8 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String overlay(String str, String overlay, int start, int end)
+    public static String overlay(final String str, String overlay, int start,
+            int end)
     {
         if (str == null)
             return null;
@@ -290,7 +294,7 @@ public class StringUtilities
         if (overlay == null)
             overlay = "";
 
-        int len = str.length();
+        final int len = str.length();
         if (start < 0)
             start = 0;
 
@@ -305,7 +309,7 @@ public class StringUtilities
 
         if (start > end)
         {
-            int temp = start;
+            final int temp = start;
             start = end;
             end = temp;
         }
@@ -324,7 +328,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    private static String padding(int repeat, char padChar)
+    private static String padding(final int repeat, final char padChar)
     {
         // be careful of synchronization in this method
         // we are assuming that get and set from an array index is atomic
@@ -348,7 +352,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String repeat(String str, int repeat)
+    public static String repeat(final String str, final int repeat)
     {
         if (str == null)
             return null;
@@ -356,7 +360,7 @@ public class StringUtilities
         if (repeat <= 0)
             return "";
 
-        int inputLength = str.length();
+        final int inputLength = str.length();
 
         if ((repeat == 1) || (inputLength == 0))
             return str;
@@ -364,19 +368,19 @@ public class StringUtilities
         if ((inputLength == 1) && (repeat <= PAD_LIMIT))
             return padding(repeat, str.charAt(0));
 
-        int outputLength = inputLength * repeat;
+        final int outputLength = inputLength * repeat;
         switch (inputLength)
         {
             case 1:
-                char ch = str.charAt(0);
-                char[] output1 = new char[outputLength];
+                final char ch = str.charAt(0);
+                final char[] output1 = new char[outputLength];
                 for (int i = repeat - 1; i >= 0; i--)
                     output1[i] = ch;
                 return new String(output1);
             case 2:
-                char ch0 = str.charAt(0);
-                char ch1 = str.charAt(1);
-                char[] output2 = new char[outputLength];
+                final char ch0 = str.charAt(0);
+                final char ch1 = str.charAt(1);
+                final char[] output2 = new char[outputLength];
                 for (int i = (repeat * 2) - 2; i >= 0; i--, i--)
                 {
                     output2[i] = ch0;
@@ -384,7 +388,7 @@ public class StringUtilities
                 }
                 return new String(output2);
             default:
-                StringBuffer buf = new StringBuffer(outputLength);
+                final StringBuffer buf = new StringBuffer(outputLength);
                 for (int i = 0; i < repeat; i++)
                     buf.append(str);
                 return buf.toString();
@@ -400,9 +404,10 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String replaceAll(String a, String b, String c)
+    public static String replaceAll(final String a, final String b,
+            final String c)
     {
-        StringBuffer d = new StringBuffer(a);
+        final StringBuffer d = new StringBuffer(a);
         StringUtilities.replaceAll(d, b, c);
         return d.toString();
     }
@@ -416,7 +421,8 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static int replaceAll(StringBuffer a, String b, String c)
+    public static int replaceAll(final StringBuffer a, final String b,
+            final String c)
     {
         int pos = StringUtilities.indexOf(a, b);
 
@@ -437,7 +443,7 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String rightJustify(String str, int size)
+    public static String rightJustify(final String str, final int size)
     {
         return rightJustify(str, size, ' ');
     }
@@ -451,12 +457,13 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String rightJustify(String str, int size, char padChar)
+    public static String rightJustify(final String str, final int size,
+            final char padChar)
     {
         if (str == null)
             return null;
 
-        int pads = size - str.length();
+        final int pads = size - str.length();
 
         if (pads <= 0)
             return str; // returns original String when possible
@@ -476,7 +483,8 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String rightJustify(String str, int size, String padStr)
+    public static String rightJustify(final String str, final int size,
+            String padStr)
     {
         if (str == null)
             return null;
@@ -484,9 +492,9 @@ public class StringUtilities
         if (isEmpty(padStr))
             padStr = " ";
 
-        int padLen = padStr.length();
-        int strLen = str.length();
-        int pads = size - strLen;
+        final int padLen = padStr.length();
+        final int strLen = str.length();
+        final int pads = size - strLen;
 
         if (pads <= 0)
             return str; // returns original String when possible
@@ -500,8 +508,8 @@ public class StringUtilities
             return padStr.substring(0, pads).concat(str);
         else
         {
-            char[] padding = new char[pads];
-            char[] padChars = padStr.toCharArray();
+            final char[] padding = new char[pads];
+            final char[] padChars = padStr.toCharArray();
 
             for (int i = 0; i < pads; i++)
                 padding[i] = padChars[i % padLen];
@@ -517,10 +525,10 @@ public class StringUtilities
      *            Placeholder
      * @return Returned data
      */
-    public static String[] split(String aa, String b)
+    public static String[] split(final String aa, final String b)
     {
-        StringBuffer a = new StringBuffer(aa);
-        java.util.Vector<String> s = new java.util.Vector<String>();
+        final StringBuffer a = new StringBuffer(aa);
+        final java.util.Vector<String> s = new java.util.Vector<String>();
         int count = 0;
         int prev = 0;
         int pos = StringUtilities.indexOf(a, b);
@@ -539,7 +547,7 @@ public class StringUtilities
             count++;
         }
 
-        String ss[] = new String[s.size()];
+        final String ss[] = new String[s.size()];
 
         for (int i = 0; i < s.size(); i++)
             ss[i] = s.get(i);

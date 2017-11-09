@@ -31,10 +31,11 @@ public class ProductLabelsResponse
         this.label_last_edited_by = "";
     }
 
-    public ProductLabelsResponse(Long label_id, String label_upc,
-            String label_description, String label_collection_date,
-            String label_source, Timestamp label_creation_date,
-            Timestamp label_last_edit_date, String label_last_edited_by)
+    public ProductLabelsResponse(final Long label_id, final String label_upc,
+            final String label_description, final String label_collection_date,
+            final String label_source, final Timestamp label_creation_date,
+            final Timestamp label_last_edit_date,
+            final String label_last_edited_by)
     {
         super();
         this.label_id = label_id;
@@ -47,7 +48,7 @@ public class ProductLabelsResponse
         this.label_last_edited_by = label_last_edited_by;
     }
 
-    public ProductLabelsResponse(Package _package)
+    public ProductLabelsResponse(final Package _package)
     {
         super();
         this.label_id = _package.getId();
@@ -66,7 +67,7 @@ public class ProductLabelsResponse
         return label_id;
     }
 
-    public void setLabel_id(Long label_id)
+    public void setLabel_id(final Long label_id)
     {
         this.label_id = label_id;
     }
@@ -76,7 +77,7 @@ public class ProductLabelsResponse
         return label_upc;
     }
 
-    public void setLabel_upc(String label_upc)
+    public void setLabel_upc(final String label_upc)
     {
         this.label_upc = label_upc;
     }
@@ -86,7 +87,7 @@ public class ProductLabelsResponse
         return label_description;
     }
 
-    public void setLabel_description(String label_description)
+    public void setLabel_description(final String label_description)
     {
         this.label_description = label_description;
     }
@@ -96,7 +97,7 @@ public class ProductLabelsResponse
         return label_collection_date;
     }
 
-    public void setLabel_collection_date(String label_collection_date)
+    public void setLabel_collection_date(final String label_collection_date)
     {
         this.label_collection_date = label_collection_date;
     }
@@ -106,7 +107,7 @@ public class ProductLabelsResponse
         return label_source;
     }
 
-    public void setLabel_source(String label_source)
+    public void setLabel_source(final String label_source)
     {
         this.label_source = label_source;
     }
@@ -116,7 +117,7 @@ public class ProductLabelsResponse
         return label_creation_date;
     }
 
-    public void setLabel_creation_date(Timestamp label_creation_date)
+    public void setLabel_creation_date(final Timestamp label_creation_date)
     {
         this.label_creation_date = label_creation_date;
     }
@@ -126,7 +127,7 @@ public class ProductLabelsResponse
         return label_last_edit_date;
     }
 
-    public void setLabel_last_edit_date(Timestamp label_last_edit_date)
+    public void setLabel_last_edit_date(final Timestamp label_last_edit_date)
     {
         this.label_last_edit_date = label_last_edit_date;
     }
@@ -136,7 +137,7 @@ public class ProductLabelsResponse
         return label_last_edited_by;
     }
 
-    public void setLabel_last_edited_by(String label_last_edited_by)
+    public void setLabel_last_edited_by(final String label_last_edited_by)
     {
         this.label_last_edited_by = label_last_edited_by;
     }

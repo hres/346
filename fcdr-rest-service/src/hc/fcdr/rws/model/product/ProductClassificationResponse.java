@@ -44,7 +44,7 @@ public class ProductClassificationResponse
         this.classification_type = "";
     }
 
-    public ProductClassificationResponse(Product product)
+    public ProductClassificationResponse(final Product product)
     {
         super();
         this.product_id = product.getId();
@@ -69,7 +69,7 @@ public class ProductClassificationResponse
         return product_id;
     }
 
-    public void setProduct_id(Long product_id)
+    public void setProduct_id(final Long product_id)
     {
         this.product_id = product_id;
     }
@@ -79,7 +79,7 @@ public class ProductClassificationResponse
         return product_manufacturer;
     }
 
-    public void setProduct_manufacturer(String product_manufacturer)
+    public void setProduct_manufacturer(final String product_manufacturer)
     {
         this.product_manufacturer = product_manufacturer;
     }
@@ -89,7 +89,7 @@ public class ProductClassificationResponse
         return product_brand;
     }
 
-    public void setProduct_brand(String product_brand)
+    public void setProduct_brand(final String product_brand)
     {
         this.product_brand = product_brand;
     }
@@ -99,7 +99,7 @@ public class ProductClassificationResponse
         return product_country;
     }
 
-    public void setProduct_country(String product_country)
+    public void setProduct_country(final String product_country)
     {
         this.product_country = product_country;
     }
@@ -109,7 +109,7 @@ public class ProductClassificationResponse
         return cnf_code;
     }
 
-    public void setCnf_code(String cnf_code)
+    public void setCnf_code(final String cnf_code)
     {
         this.cnf_code = cnf_code;
     }
@@ -119,7 +119,7 @@ public class ProductClassificationResponse
         return cluster_number;
     }
 
-    public void setCluster_number(String cluster_number)
+    public void setCluster_number(final String cluster_number)
     {
         this.cluster_number = cluster_number;
     }
@@ -129,7 +129,7 @@ public class ProductClassificationResponse
         return product_description;
     }
 
-    public void setProduct_description(String product_description)
+    public void setProduct_description(final String product_description)
     {
         this.product_description = product_description;
     }
@@ -139,7 +139,7 @@ public class ProductClassificationResponse
         return product_comment;
     }
 
-    public void setProduct_comment(String product_comment)
+    public void setProduct_comment(final String product_comment)
     {
         this.product_comment = product_comment;
     }
@@ -149,7 +149,7 @@ public class ProductClassificationResponse
         return creation_date;
     }
 
-    public void setCreation_date(String creation_date)
+    public void setCreation_date(final String creation_date)
     {
         this.creation_date = creation_date;
     }
@@ -159,7 +159,7 @@ public class ProductClassificationResponse
         return last_edit_date;
     }
 
-    public void setLast_edit_date(String last_edit_date)
+    public void setLast_edit_date(final String last_edit_date)
     {
         this.last_edit_date = last_edit_date;
     }
@@ -169,7 +169,7 @@ public class ProductClassificationResponse
         return edited_by;
     }
 
-    public void setEdited_by(String edited_by)
+    public void setEdited_by(final String edited_by)
     {
         this.edited_by = edited_by;
     }
@@ -179,7 +179,7 @@ public class ProductClassificationResponse
         return restaurant_type;
     }
 
-    public void setRestaurant_type(String restaurant_type)
+    public void setRestaurant_type(final String restaurant_type)
     {
         this.restaurant_type = restaurant_type;
     }
@@ -189,7 +189,7 @@ public class ProductClassificationResponse
         return type;
     }
 
-    public void setType(String type)
+    public void setType(final String type)
     {
         this.type = type;
     }
@@ -199,7 +199,7 @@ public class ProductClassificationResponse
         return classification_number;
     }
 
-    public void setClassification_number(String classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }
@@ -209,7 +209,7 @@ public class ProductClassificationResponse
         return classification_name;
     }
 
-    public void setClassification_name(String classification_name)
+    public void setClassification_name(final String classification_name)
     {
         this.classification_name = classification_name;
     }
@@ -219,7 +219,7 @@ public class ProductClassificationResponse
         return classification_type;
     }
 
-    public void setClassification_type(String classification_type)
+    public void setClassification_type(final String classification_type)
     {
         this.classification_type = classification_type;
     }

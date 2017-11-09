@@ -1,10 +1,14 @@
 package hc.fcdr.rws.reportengine;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
+import static net.sf.dynamicreports.report.builder.DynamicReports.col;
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
+import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+
 import hc.fcdr.rws.importer.ImportReportDetailRow;
 import hc.fcdr.rws.importer.ImportStatistics;
 import net.sf.dynamicreports.report.constant.PageType;
@@ -14,17 +18,17 @@ import net.sf.jasperreports.engine.JRDataSource;
 
 public class ImportReport
 {
-    private ImportStatistics importStatistics;
+    private final ImportStatistics importStatistics;
 
-    private final String     REPORT_DIRECTORY_ROOT = (!System.getProperty(
+    private final String           REPORT_DIRECTORY_ROOT = (!System.getProperty(
             "java.io.tmpdir").endsWith(File.separator)
                     ? (System.getProperty("java.io.tmpdir") + File.separator)
                     : System.getProperty("java.io.tmpdir"));
 
-    private final String     REPORT_FILE           = REPORT_DIRECTORY_ROOT
+    private final String           REPORT_FILE           = REPORT_DIRECTORY_ROOT
             + "fcdrSalesImportReport.pdf";
 
-    public ImportReport(ImportStatistics importStatistics)
+    public ImportReport(final ImportStatistics importStatistics)
     {
         this.importStatistics = importStatistics;
         build();
@@ -74,11 +78,11 @@ public class ImportReport
                     .setDataSource(createDataSource())
                     .toPdf(new FileOutputStream(REPORT_FILE));
         }
-        catch (DRException e)
+        catch (final DRException e)
         {
             e.printStackTrace();
         }
-        catch (FileNotFoundException e)
+        catch (final FileNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -86,9 +90,10 @@ public class ImportReport
 
     private JRDataSource createDataSource()
     {
-        DRDataSource dataSource = new DRDataSource("itemId", "description");
+        final DRDataSource dataSource = new DRDataSource("itemId",
+                "description");
 
-        for (ImportReportDetailRow importReportDetailRow : importStatistics.getImportReportDetailRowList())
+        for (final ImportReportDetailRow importReportDetailRow : importStatistics.getImportReportDetailRowList())
             dataSource.add(importReportDetailRow.getItemId(),
                     importReportDetailRow.getSalesDescription());
 

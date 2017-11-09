@@ -13,7 +13,8 @@ public class PackageDataResponse
         message = "";
     }
 
-    public PackageDataResponse(int status, PackageData data, String message)
+    public PackageDataResponse(final int status, final PackageData data,
+            final String message)
     {
         super();
         this.status = status;
@@ -26,7 +27,7 @@ public class PackageDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -36,7 +37,7 @@ public class PackageDataResponse
         return data;
     }
 
-    public void setData(PackageData data)
+    public void setData(final PackageData data)
     {
         this.data = data;
     }
@@ -46,7 +47,7 @@ public class PackageDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

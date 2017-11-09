@@ -19,8 +19,8 @@ public class ClassificationResponse
         this.classification_type = "";
     }
 
-    public ClassificationResponse(String classificationNumber,
-            String classificationName, String classificationType)
+    public ClassificationResponse(final String classificationNumber,
+            final String classificationName, final String classificationType)
     {
         super();
         this.classification_number = classificationNumber;
@@ -28,7 +28,7 @@ public class ClassificationResponse
         this.classification_type = classificationType;
     }
 
-    public ClassificationResponse(Classification classification)
+    public ClassificationResponse(final Classification classification)
     {
         super();
         this.classification_number = classification.getClassificationNumber();
@@ -41,7 +41,7 @@ public class ClassificationResponse
         return classification_number;
     }
 
-    public void setClassification_number(String classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }
@@ -51,7 +51,7 @@ public class ClassificationResponse
         return classification_name;
     }
 
-    public void setClassification_name(String classification_name)
+    public void setClassification_name(final String classification_name)
     {
         this.classification_name = classification_name;
     }
@@ -61,12 +61,12 @@ public class ClassificationResponse
         return classification_type;
     }
 
-    public void setClassification_type(String classification_type)
+    public void setClassification_type(final String classification_type)
     {
         this.classification_type = classification_type;
     }
 
-    public void setClassificationType(String classificationType)
+    public void setClassificationType(final String classificationType)
     {
         this.classification_type = classificationType;
     }

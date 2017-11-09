@@ -7,6 +7,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -30,14 +31,14 @@ public class ContextManager
     public final static String         MAIL_SUBJECT            = "MAIL_SUBJECT";
     public final static String         MAIL_TEXT               = "MAIL_TEXT";
 
-    public static String getJndiValue(String key)
+    public static String getJndiValue(final String key)
     {
         try
         {
-            Map<String, String> context = getContext();
+            final Map<String, String> context = getContext();
             return context.get(key);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             logger.fatal("Exception retrieving value: " + key + "::"
                     + e.getMessage(), e);
@@ -54,7 +55,7 @@ public class ContextManager
 
     private static void initialEnvVars()
     {
-        Map<String, String> m = new HashMap<String, String>();
+        final Map<String, String> m = new HashMap<String, String>();
 
         m.put(APPLICATION_ENVIRONMENT,
                 getBindingVariable("application_environment"));
@@ -72,25 +73,25 @@ public class ContextManager
         environmentVars = m;
     }
 
-    private static String getBindingVariable(String varName)
+    private static String getBindingVariable(final String varName)
     {
         String value = "";
         try
         {
-            Context initialContext = new InitialContext();
+            final Context initialContext = new InitialContext();
             value = (String) initialContext.lookup(
                     "java:comp/env/" + "fcdr/" + varName);
 
         }
-        catch (NameNotFoundException e)
+        catch (final NameNotFoundException e)
         {
             logger.fatal("WARNING: JNDI binding was not found: " + varName);
         }
-        catch (NamingException e)
+        catch (final NamingException e)
         {
             logger.fatal("WARNING: JNDI binding error: " + varName);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             logger.fatal("WARNING: Unable to locate configuration JNDI key: "
                     + varName);

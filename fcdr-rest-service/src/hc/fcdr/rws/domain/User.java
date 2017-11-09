@@ -24,7 +24,7 @@ public class User implements Serializable
         this.profession = "";
     }
 
-    public User(int id, String name, String profession)
+    public User(final int id, final String name, final String profession)
     {
         super();
         this.id = id;
@@ -38,7 +38,7 @@ public class User implements Serializable
     }
 
     @XmlElement
-    public void setId(int id)
+    public void setId(final int id)
     {
         this.id = id;
     }
@@ -49,7 +49,7 @@ public class User implements Serializable
     }
 
     @XmlElement
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
@@ -60,7 +60,7 @@ public class User implements Serializable
     }
 
     @XmlElement
-    public void setProfession(String profession)
+    public void setProfession(final String profession)
     {
         this.profession = profession;
     }
@@ -78,7 +78,7 @@ public class User implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
             return true;
@@ -86,7 +86,7 @@ public class User implements Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        final User other = (User) obj;
         if (id != other.id)
             return false;
         if (name == null)

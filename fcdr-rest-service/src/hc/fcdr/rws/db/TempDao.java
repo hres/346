@@ -20,28 +20,28 @@ public class TempDao
 
         try
         {
-            File file = new File("Users.dat");
+            final File file = new File("Users.dat");
 
             if (!file.exists())
             {
-                User user = new User(1, "Zoltan", "Teacher");
+                final User user = new User(1, "Zoltan", "Teacher");
                 userList = new ArrayList<User>();
                 userList.add(user);
                 saveUserList(userList);
             }
             else
             {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
+                final FileInputStream fis = new FileInputStream(file);
+                final ObjectInputStream ois = new ObjectInputStream(fis);
                 userList = (List<User>) ois.readObject();
                 ois.close();
             }
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
+        catch (final ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -49,23 +49,23 @@ public class TempDao
         return userList;
     }
 
-    public User getUser(int id)
+    public User getUser(final int id)
     {
-        List<User> users = getAllUsers();
+        final List<User> users = getAllUsers();
 
-        for (User user : users)
+        for (final User user : users)
             if (user.getId() == id)
                 return user;
 
         return null;
     }
 
-    public int addUser(User pUser)
+    public int addUser(final User pUser)
     {
-        List<User> userList = getAllUsers();
+        final List<User> userList = getAllUsers();
         boolean userExists = false;
 
-        for (User user : userList)
+        for (final User user : userList)
             if (user.getId() == pUser.getId())
             {
                 userExists = true;
@@ -82,14 +82,14 @@ public class TempDao
         return 0;
     }
 
-    public int updateUser(User pUser)
+    public int updateUser(final User pUser)
     {
-        List<User> userList = getAllUsers();
+        final List<User> userList = getAllUsers();
 
-        for (User user : userList)
+        for (final User user : userList)
             if (user.getId() == pUser.getId())
             {
-                int index = userList.indexOf(user);
+                final int index = userList.indexOf(user);
                 userList.set(index, pUser);
                 saveUserList(userList);
                 return 1;
@@ -98,14 +98,14 @@ public class TempDao
         return 0;
     }
 
-    public int deleteUser(int id)
+    public int deleteUser(final int id)
     {
-        List<User> userList = getAllUsers();
+        final List<User> userList = getAllUsers();
 
-        for (User user : userList)
+        for (final User user : userList)
             if (user.getId() == id)
             {
-                int index = userList.indexOf(user);
+                final int index = userList.indexOf(user);
                 userList.remove(index);
                 saveUserList(userList);
                 return 1;
@@ -114,23 +114,23 @@ public class TempDao
         return 0;
     }
 
-    private void saveUserList(List<User> userList)
+    private void saveUserList(final List<User> userList)
     {
         try
         {
-            File file = new File("Users.dat");
+            final File file = new File("Users.dat");
             FileOutputStream fos;
 
             fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            final ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(userList);
             oos.close();
         }
-        catch (FileNotFoundException e)
+        catch (final FileNotFoundException e)
         {
             e.printStackTrace();
         }
-        catch (IOException e)
+        catch (final IOException e)
         {
             e.printStackTrace();
         }

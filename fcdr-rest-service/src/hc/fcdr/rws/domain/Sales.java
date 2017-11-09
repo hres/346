@@ -30,7 +30,7 @@ public class Sales implements Serializable
     private Double            averageRetailPrice;
     private String            salesSource;
     private String            nielsenCategory;
-    private String           salesYear;
+    private String            salesYear;
     private Boolean           controlLabelFlag;
     private Double            kiloVolumeTotal;
     private Double            kiloVolumeRank;
@@ -86,20 +86,23 @@ public class Sales implements Serializable
         this.productId = 0L;
     }
 
-    public Sales(Long id, String description, String upc, String brand,
-            String manufacturer, Double dollarRank, Double dollarVolume,
-            Double dollarShare, Double dollarVolumePercentageChange,
-            Double kiloVolume, Double kiloShare,
-            Double kiloVolumePercentageChange, Double averageAcDist,
-            Double averageRetailPrice, String salesSource,
-            String nielsenCategory, String salesYear, Boolean controlLabelFlag,
-            Double kiloVolumeTotal, Double kiloVolumeRank,
-            Double dollarVolumeTotal, Double clusterNumber,
-            Double productGrouping, String salesProductDescription,
-            Double classificationNumber, String classificationType,
-            String salesComment, Date salesCollectionDate,
-            Integer numberOfUnits, Timestamp creationDate,
-            Timestamp lastEditDate, String editedBy, Long productId)
+    public Sales(final Long id, final String description, final String upc,
+            final String brand, final String manufacturer,
+            final Double dollarRank, final Double dollarVolume,
+            final Double dollarShare, final Double dollarVolumePercentageChange,
+            final Double kiloVolume, final Double kiloShare,
+            final Double kiloVolumePercentageChange, final Double averageAcDist,
+            final Double averageRetailPrice, final String salesSource,
+            final String nielsenCategory, final String salesYear,
+            final Boolean controlLabelFlag, final Double kiloVolumeTotal,
+            final Double kiloVolumeRank, final Double dollarVolumeTotal,
+            final Double clusterNumber, final Double productGrouping,
+            final String salesProductDescription,
+            final Double classificationNumber, final String classificationType,
+            final String salesComment, final Date salesCollectionDate,
+            final Integer numberOfUnits, final Timestamp creationDate,
+            final Timestamp lastEditDate, final String editedBy,
+            final Long productId)
     {
         super();
         this.id = id;
@@ -137,7 +140,7 @@ public class Sales implements Serializable
         this.productId = productId;
     }
 
-    public Sales(Sales sales)
+    public Sales(final Sales sales)
     {
         super();
         this.id = sales.getId();
@@ -181,7 +184,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setId(Long id)
+    public void setId(final Long id)
     {
         this.id = id;
     }
@@ -192,7 +195,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setDescription(String description)
+    public void setDescription(final String description)
     {
         this.description = description;
     }
@@ -203,7 +206,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setUpc(String upc)
+    public void setUpc(final String upc)
     {
         this.upc = upc;
     }
@@ -214,7 +217,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setBrand(String brand)
+    public void setBrand(final String brand)
     {
         this.brand = brand;
     }
@@ -225,7 +228,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setManufacturer(String manufacturer)
+    public void setManufacturer(final String manufacturer)
     {
         this.manufacturer = manufacturer;
     }
@@ -236,7 +239,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setDollarRank(Double dollarRank)
+    public void setDollarRank(final Double dollarRank)
     {
         this.dollarRank = dollarRank;
     }
@@ -247,7 +250,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setDollarVolume(Double dollarVolume)
+    public void setDollarVolume(final Double dollarVolume)
     {
         this.dollarVolume = dollarVolume;
     }
@@ -258,7 +261,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setDollarShare(Double dollarShare)
+    public void setDollarShare(final Double dollarShare)
     {
         this.dollarShare = dollarShare;
     }
@@ -270,7 +273,7 @@ public class Sales implements Serializable
 
     @XmlElement
     public void setDollarVolumePercentageChange(
-            Double dollarVolumePercentageChange)
+            final Double dollarVolumePercentageChange)
     {
         this.dollarVolumePercentageChange = dollarVolumePercentageChange;
     }
@@ -281,7 +284,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setKiloVolume(Double kiloVolume)
+    public void setKiloVolume(final Double kiloVolume)
     {
         this.kiloVolume = kiloVolume;
     }
@@ -292,7 +295,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setKiloShare(Double kiloShare)
+    public void setKiloShare(final Double kiloShare)
     {
         this.kiloShare = kiloShare;
     }
@@ -303,7 +306,8 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setKiloVolumePercentageChange(Double kiloVolumePercentageChange)
+    public void setKiloVolumePercentageChange(
+            final Double kiloVolumePercentageChange)
     {
         this.kiloVolumePercentageChange = kiloVolumePercentageChange;
     }
@@ -314,7 +318,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setAverageAcDist(Double averageAcDist)
+    public void setAverageAcDist(final Double averageAcDist)
     {
         this.averageAcDist = averageAcDist;
     }
@@ -325,7 +329,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setAverageRetailPrice(Double averageRetailPrice)
+    public void setAverageRetailPrice(final Double averageRetailPrice)
     {
         this.averageRetailPrice = averageRetailPrice;
     }
@@ -336,7 +340,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setSalesSource(String salesSource)
+    public void setSalesSource(final String salesSource)
     {
         this.salesSource = salesSource;
     }
@@ -347,7 +351,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setNielsenCategory(String nielsenCategory)
+    public void setNielsenCategory(final String nielsenCategory)
     {
         this.nielsenCategory = nielsenCategory;
     }
@@ -358,7 +362,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setSalesYear(String salesYear)
+    public void setSalesYear(final String salesYear)
     {
         this.salesYear = salesYear;
     }
@@ -369,7 +373,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setControlLabelFlag(Boolean controlLabelFlag)
+    public void setControlLabelFlag(final Boolean controlLabelFlag)
     {
         this.controlLabelFlag = controlLabelFlag;
     }
@@ -380,7 +384,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setKiloVolumeTotal(Double kiloVolumeTotal)
+    public void setKiloVolumeTotal(final Double kiloVolumeTotal)
     {
         this.kiloVolumeTotal = kiloVolumeTotal;
     }
@@ -391,7 +395,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setKiloVolumeRank(Double kiloVolumeRank)
+    public void setKiloVolumeRank(final Double kiloVolumeRank)
     {
         this.kiloVolumeRank = kiloVolumeRank;
     }
@@ -402,7 +406,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setDollarVolumeTotal(Double dollarVolumeTotal)
+    public void setDollarVolumeTotal(final Double dollarVolumeTotal)
     {
         this.dollarVolumeTotal = dollarVolumeTotal;
     }
@@ -413,7 +417,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setClusterNumber(Double clusterNumber)
+    public void setClusterNumber(final Double clusterNumber)
     {
         this.clusterNumber = clusterNumber;
     }
@@ -424,7 +428,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setProductGrouping(Double productGrouping)
+    public void setProductGrouping(final Double productGrouping)
     {
         this.productGrouping = productGrouping;
     }
@@ -435,7 +439,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setSalesProductDescription(String salesProductDescription)
+    public void setSalesProductDescription(final String salesProductDescription)
     {
         this.salesProductDescription = salesProductDescription;
     }
@@ -446,7 +450,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setClassificationNumber(Double classificationNumber)
+    public void setClassificationNumber(final Double classificationNumber)
     {
         this.classificationNumber = classificationNumber;
     }
@@ -457,7 +461,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setClassificationType(String classificationType)
+    public void setClassificationType(final String classificationType)
     {
         this.classificationType = classificationType;
     }
@@ -468,7 +472,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setSalesComment(String salesComment)
+    public void setSalesComment(final String salesComment)
     {
         this.salesComment = salesComment;
     }
@@ -479,7 +483,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setSalesCollectionDate(Date salesCollectionDate)
+    public void setSalesCollectionDate(final Date salesCollectionDate)
     {
         this.salesCollectionDate = salesCollectionDate;
     }
@@ -490,7 +494,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setNumberOfUnits(Integer numberOfUnits)
+    public void setNumberOfUnits(final Integer numberOfUnits)
     {
         this.numberOfUnits = numberOfUnits;
     }
@@ -501,7 +505,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setCreationDate(Timestamp creationDate)
+    public void setCreationDate(final Timestamp creationDate)
     {
         this.creationDate = creationDate;
     }
@@ -512,7 +516,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setLastEditDate(Timestamp lastEditDate)
+    public void setLastEditDate(final Timestamp lastEditDate)
     {
         this.lastEditDate = lastEditDate;
     }
@@ -523,7 +527,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setEditedBy(String editedBy)
+    public void setEditedBy(final String editedBy)
     {
         this.editedBy = editedBy;
     }
@@ -534,7 +538,7 @@ public class Sales implements Serializable
     }
 
     @XmlElement
-    public void setProductId(Long productId)
+    public void setProductId(final Long productId)
     {
         this.productId = productId;
     }
@@ -611,7 +615,7 @@ public class Sales implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
             return true;
@@ -619,7 +623,7 @@ public class Sales implements Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Sales other = (Sales) obj;
+        final Sales other = (Sales) obj;
         if (averageAcDist == null)
         {
             if (other.averageAcDist != null)

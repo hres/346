@@ -1,6 +1,7 @@
 package hc.fcdr.rws.model.pkg;
 
 import java.sql.Timestamp;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import hc.fcdr.rws.domain.Package;
@@ -30,10 +31,11 @@ public class PackageResponse
         this.productId = 0L;
     }
 
-    public PackageResponse(String labelUpc, String labelDescription,
-            String labelSource, String labelCollectionDate,
-            Timestamp labelCreationDate, Timestamp labelLastEditDate,
-            String labelLastEditedBy, Long productId)
+    public PackageResponse(final String labelUpc, final String labelDescription,
+            final String labelSource, final String labelCollectionDate,
+            final Timestamp labelCreationDate,
+            final Timestamp labelLastEditDate, final String labelLastEditedBy,
+            final Long productId)
     {
         super();
         this.labelUpc = labelUpc;
@@ -46,7 +48,7 @@ public class PackageResponse
         this.productId = productId;
     }
 
-    public PackageResponse(Package _package)
+    public PackageResponse(final Package _package)
     {
         super();
         this.labelUpc = _package.getUpc();
@@ -65,7 +67,7 @@ public class PackageResponse
         return labelUpc;
     }
 
-    public void setLabelUpc(String labelUpc)
+    public void setLabelUpc(final String labelUpc)
     {
         this.labelUpc = labelUpc;
     }
@@ -75,7 +77,7 @@ public class PackageResponse
         return labelDescription;
     }
 
-    public void setLabelDescription(String labelDescription)
+    public void setLabelDescription(final String labelDescription)
     {
         this.labelDescription = labelDescription;
     }
@@ -85,7 +87,7 @@ public class PackageResponse
         return labelSource;
     }
 
-    public void setLabelSource(String labelSource)
+    public void setLabelSource(final String labelSource)
     {
         this.labelSource = labelSource;
     }
@@ -95,7 +97,7 @@ public class PackageResponse
         return labelCollectionDate;
     }
 
-    public void setLabelCollectionDate(String labelCollectionDate)
+    public void setLabelCollectionDate(final String labelCollectionDate)
     {
         this.labelCollectionDate = labelCollectionDate;
     }
@@ -105,7 +107,7 @@ public class PackageResponse
         return labelCreationDate;
     }
 
-    public void setLabelCreationDate(Timestamp labelCreationDate)
+    public void setLabelCreationDate(final Timestamp labelCreationDate)
     {
         this.labelCreationDate = labelCreationDate;
     }
@@ -115,7 +117,7 @@ public class PackageResponse
         return labelLastEditDate;
     }
 
-    public void setLabelLastEditDate(Timestamp labelLastEditDate)
+    public void setLabelLastEditDate(final Timestamp labelLastEditDate)
     {
         this.labelLastEditDate = labelLastEditDate;
     }
@@ -125,7 +127,7 @@ public class PackageResponse
         return labelLastEditedBy;
     }
 
-    public void setLabelLastEditedBy(String labelLastEditedBy)
+    public void setLabelLastEditedBy(final String labelLastEditedBy)
     {
         this.labelLastEditedBy = labelLastEditedBy;
     }
@@ -135,7 +137,7 @@ public class PackageResponse
         return productId;
     }
 
-    public void setProductId(Long productId)
+    public void setProductId(final Long productId)
     {
         this.productId = productId;
     }

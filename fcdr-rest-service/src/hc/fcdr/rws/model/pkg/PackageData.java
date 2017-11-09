@@ -1,7 +1,7 @@
 package hc.fcdr.rws.model.pkg;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PackageData
 {
@@ -13,7 +13,8 @@ public class PackageData
         this(new ArrayList<PackageResponse>(), 0);
     }
 
-    public PackageData(List<PackageResponse> dataList, Integer count)
+    public PackageData(final List<PackageResponse> dataList,
+            final Integer count)
     {
         this.dataList = dataList;
         this.count = count;
@@ -24,7 +25,7 @@ public class PackageData
         return dataList;
     }
 
-    public void setDataList(List<PackageResponse> dataList)
+    public void setDataList(final List<PackageResponse> dataList)
     {
         this.dataList = dataList;
     }
@@ -34,12 +35,12 @@ public class PackageData
         return count;
     }
 
-    public void setCount(Integer count)
+    public void setCount(final Integer count)
     {
         this.count = count;
     }
 
-    public void add(PackageResponse o)
+    public void add(final PackageResponse o)
     {
         dataList.add(o);
         count++;

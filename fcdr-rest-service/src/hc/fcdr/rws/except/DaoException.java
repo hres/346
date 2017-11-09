@@ -20,19 +20,19 @@ public class DaoException extends Exception
      * @param message
      *            The detail message of the DaoException.
      */
-    public DaoException(ResponseCodes error)
+    public DaoException(final ResponseCodes error)
     {
         super(error.getMessage());
         this.error = error;
     }
 
-    public DaoException(Exception e, ResponseCodes error)
+    public DaoException(final Exception e, final ResponseCodes error)
     {
         super(e);
         this.error = error;
     }
 
-    public DaoException(String message)
+    public DaoException(final String message)
     {
         super(message);
     }
@@ -48,7 +48,7 @@ public class DaoException extends Exception
      * @param cause
      *            The root cause of the DaoException.
      */
-    public DaoException(Throwable cause)
+    public DaoException(final Throwable cause)
     {
         super(cause);
     }
@@ -61,7 +61,7 @@ public class DaoException extends Exception
      * @param cause
      *            The root cause of the DaoException.
      */
-    public DaoException(String message, Throwable cause)
+    public DaoException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

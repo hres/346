@@ -13,8 +13,8 @@ public class ClassificationDataResponse
         message = "";
     }
 
-    public ClassificationDataResponse(int status, ClassificationData data,
-            String message)
+    public ClassificationDataResponse(final int status,
+            final ClassificationData data, final String message)
     {
         super();
         this.status = status;
@@ -27,7 +27,7 @@ public class ClassificationDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -37,7 +37,7 @@ public class ClassificationDataResponse
         return data;
     }
 
-    public void setData(ClassificationData data)
+    public void setData(final ClassificationData data)
     {
         this.data = data;
     }
@@ -47,7 +47,7 @@ public class ClassificationDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

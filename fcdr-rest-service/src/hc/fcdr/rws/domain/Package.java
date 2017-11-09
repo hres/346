@@ -82,21 +82,24 @@ public class Package implements Serializable
         this.productId = 0L;
     }
 
-    public Package(Long id, String description, String upc, String brand,
-            String manufacturer, String country, Double size,
-            String sizeUnitOfMeasure, String storageType,
-            String storageStatements, String healthClaims,
-            String otherPackageStatements, String suggestedDirections,
-            String ingredients, Boolean multiPartFlag,
-            String nutritionFactTable, Double asPreparedPerServingAmount,
-            String asPreparedUnitOfMeasure, Double asSoldPerServingAmount,
-            String asSoldUnitOfMeasure,
-            Double asPreparedPerServingAmountInGrams,
-            Double asSoldPerServingAmountInGrams, String packageComment,
-            String packageSource, String packageProductDescription,
-            Date packageCollectionDate, Integer numberOfUnits,
-            Timestamp creationDate, Timestamp lastEditDate, String editedBy,
-            Long productId)
+    public Package(final Long id, final String description, final String upc,
+            final String brand, final String manufacturer, final String country,
+            final Double size, final String sizeUnitOfMeasure,
+            final String storageType, final String storageStatements,
+            final String healthClaims, final String otherPackageStatements,
+            final String suggestedDirections, final String ingredients,
+            final Boolean multiPartFlag, final String nutritionFactTable,
+            final Double asPreparedPerServingAmount,
+            final String asPreparedUnitOfMeasure,
+            final Double asSoldPerServingAmount,
+            final String asSoldUnitOfMeasure,
+            final Double asPreparedPerServingAmountInGrams,
+            final Double asSoldPerServingAmountInGrams,
+            final String packageComment, final String packageSource,
+            final String packageProductDescription,
+            final Date packageCollectionDate, final Integer numberOfUnits,
+            final Timestamp creationDate, final Timestamp lastEditDate,
+            final String editedBy, final Long productId)
     {
         super();
         this.id = id;
@@ -132,7 +135,7 @@ public class Package implements Serializable
         this.productId = productId;
     }
 
-    public Package(Package _package)
+    public Package(final Package _package)
     {
         super();
         this.id = _package.getId();
@@ -174,7 +177,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setId(Long id)
+    public void setId(final Long id)
     {
         this.id = id;
     }
@@ -185,7 +188,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setDescription(String description)
+    public void setDescription(final String description)
     {
         this.description = description;
     }
@@ -196,7 +199,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setUpc(String upc)
+    public void setUpc(final String upc)
     {
         this.upc = upc;
     }
@@ -207,7 +210,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setBrand(String brand)
+    public void setBrand(final String brand)
     {
         this.brand = brand;
     }
@@ -218,7 +221,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setManufacturer(String manufacturer)
+    public void setManufacturer(final String manufacturer)
     {
         this.manufacturer = manufacturer;
     }
@@ -229,7 +232,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setCountry(String country)
+    public void setCountry(final String country)
     {
         this.country = country;
     }
@@ -240,7 +243,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setSize(Double size)
+    public void setSize(final Double size)
     {
         this.size = size;
     }
@@ -251,7 +254,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setSizeUnitOfMeasure(String sizeUnitOfMeasure)
+    public void setSizeUnitOfMeasure(final String sizeUnitOfMeasure)
     {
         this.sizeUnitOfMeasure = sizeUnitOfMeasure;
     }
@@ -262,7 +265,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setStorageType(String storageType)
+    public void setStorageType(final String storageType)
     {
         this.storageType = storageType;
     }
@@ -273,7 +276,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setStorageStatements(String storageStatements)
+    public void setStorageStatements(final String storageStatements)
     {
         this.storageStatements = storageStatements;
     }
@@ -284,7 +287,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setHealthClaims(String healthClaims)
+    public void setHealthClaims(final String healthClaims)
     {
         this.healthClaims = healthClaims;
     }
@@ -295,7 +298,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setOtherPackageStatements(String otherPackageStatements)
+    public void setOtherPackageStatements(final String otherPackageStatements)
     {
         this.otherPackageStatements = otherPackageStatements;
     }
@@ -306,7 +309,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setSuggestedDirections(String suggestedDirections)
+    public void setSuggestedDirections(final String suggestedDirections)
     {
         this.suggestedDirections = suggestedDirections;
     }
@@ -317,7 +320,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setIngredients(String ingredients)
+    public void setIngredients(final String ingredients)
     {
         this.ingredients = ingredients;
     }
@@ -328,7 +331,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setMultiPartFlag(Boolean multiPartFlag)
+    public void setMultiPartFlag(final Boolean multiPartFlag)
     {
         this.multiPartFlag = multiPartFlag;
     }
@@ -339,7 +342,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setNutritionFactTable(String nutritionFactTable)
+    public void setNutritionFactTable(final String nutritionFactTable)
     {
         this.nutritionFactTable = nutritionFactTable;
     }
@@ -350,7 +353,8 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setAsPreparedPerServingAmount(Double asPreparedPerServingAmount)
+    public void setAsPreparedPerServingAmount(
+            final Double asPreparedPerServingAmount)
     {
         this.asPreparedPerServingAmount = asPreparedPerServingAmount;
     }
@@ -361,7 +365,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setAsPreparedUnitOfMeasure(String asPreparedUnitOfMeasure)
+    public void setAsPreparedUnitOfMeasure(final String asPreparedUnitOfMeasure)
     {
         this.asPreparedUnitOfMeasure = asPreparedUnitOfMeasure;
     }
@@ -372,7 +376,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setAsSoldPerServingAmount(Double asSoldPerServingAmount)
+    public void setAsSoldPerServingAmount(final Double asSoldPerServingAmount)
     {
         this.asSoldPerServingAmount = asSoldPerServingAmount;
     }
@@ -383,7 +387,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setAsSoldUnitOfMeasure(String asSoldUnitOfMeasure)
+    public void setAsSoldUnitOfMeasure(final String asSoldUnitOfMeasure)
     {
         this.asSoldUnitOfMeasure = asSoldUnitOfMeasure;
     }
@@ -395,7 +399,7 @@ public class Package implements Serializable
 
     @XmlElement
     public void setAsPreparedPerServingAmountInGrams(
-            Double asPreparedPerServingAmountInGrams)
+            final Double asPreparedPerServingAmountInGrams)
     {
         this.asPreparedPerServingAmountInGrams = asPreparedPerServingAmountInGrams;
     }
@@ -407,7 +411,7 @@ public class Package implements Serializable
 
     @XmlElement
     public void setAsSoldPerServingAmountInGrams(
-            Double asSoldPerServingAmountInGrams)
+            final Double asSoldPerServingAmountInGrams)
     {
         this.asSoldPerServingAmountInGrams = asSoldPerServingAmountInGrams;
     }
@@ -418,7 +422,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setPackageComment(String packageComment)
+    public void setPackageComment(final String packageComment)
     {
         this.packageComment = packageComment;
     }
@@ -429,7 +433,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setPackageSource(String packageSource)
+    public void setPackageSource(final String packageSource)
     {
         this.packageSource = packageSource;
     }
@@ -440,7 +444,8 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setPackageProductDescription(String packageProductDescription)
+    public void setPackageProductDescription(
+            final String packageProductDescription)
     {
         this.packageProductDescription = packageProductDescription;
     }
@@ -451,7 +456,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setPackageCollectionDate(Date packageCollectionDate)
+    public void setPackageCollectionDate(final Date packageCollectionDate)
     {
         this.packageCollectionDate = packageCollectionDate;
     }
@@ -462,7 +467,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setNumberOfUnits(Integer numberOfUnits)
+    public void setNumberOfUnits(final Integer numberOfUnits)
     {
         this.numberOfUnits = numberOfUnits;
     }
@@ -473,7 +478,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setCreationDate(Timestamp creationDate)
+    public void setCreationDate(final Timestamp creationDate)
     {
         this.creationDate = creationDate;
     }
@@ -484,7 +489,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setLastEditDate(Timestamp lastEditDate)
+    public void setLastEditDate(final Timestamp lastEditDate)
     {
         this.lastEditDate = lastEditDate;
     }
@@ -495,7 +500,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setEditedBy(String editedBy)
+    public void setEditedBy(final String editedBy)
     {
         this.editedBy = editedBy;
     }
@@ -506,7 +511,7 @@ public class Package implements Serializable
     }
 
     @XmlElement
-    public void setProductId(Long productId)
+    public void setProductId(final Long productId)
     {
         this.productId = productId;
     }
@@ -577,7 +582,7 @@ public class Package implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
             return true;
@@ -585,7 +590,7 @@ public class Package implements Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Package other = (Package) obj;
+        final Package other = (Package) obj;
         if (asPreparedPerServingAmount == null)
         {
             if (other.asPreparedPerServingAmount != null)

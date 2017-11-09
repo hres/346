@@ -5,25 +5,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.util.ContextManager;
-import hc.fcdr.rws.domain.Package;
 
 @Path("/PackageService")
 public class PackageService extends Application
@@ -35,7 +35,7 @@ public class PackageService extends Application
     {
         if (packageDao == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -43,7 +43,7 @@ public class PackageService extends Application
                 packageDao = new PackageDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -60,7 +60,7 @@ public class PackageService extends Application
             if (packageDao != null)
                 return packageDao.getPackage();
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -71,14 +71,14 @@ public class PackageService extends Application
     @GET
     @Path("/packageraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Package getPackageRaw(@PathParam("id") long id)
+    public Package getPackageRaw(@PathParam("id") final long id)
     {
         try
         {
             if (packageDao != null)
                 return packageDao.getPackage(id);
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class PackageService extends Application
             if (packageDao != null)
                 entity = packageDao.getPackageResponse();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -114,7 +114,7 @@ public class PackageService extends Application
     @GET
     @Path("/package/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPackage(@PathParam("id") long id)
+    public Response getPackage(@PathParam("id") final long id)
     {
         PackageDataResponse entity = new PackageDataResponse();
 
@@ -123,7 +123,7 @@ public class PackageService extends Application
             if (packageDao != null)
                 entity = packageDao.getPackageResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -148,7 +148,7 @@ public class PackageService extends Application
             if (packageDao != null)
                 entity = packageDao.getPackageResponse(packageRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }

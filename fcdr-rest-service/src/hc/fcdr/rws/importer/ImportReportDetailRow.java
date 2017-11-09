@@ -12,7 +12,8 @@ public class ImportReportDetailRow
         this.salesDescription = "";
     }
 
-    public ImportReportDetailRow(String itemId, String salesDescription)
+    public ImportReportDetailRow(final String itemId,
+            final String salesDescription)
     {
         super();
         this.itemId = itemId;
@@ -24,7 +25,7 @@ public class ImportReportDetailRow
         return itemId;
     }
 
-    public void setItemId(String itemId)
+    public void setItemId(final String itemId)
     {
         this.itemId = itemId;
     }
@@ -34,7 +35,7 @@ public class ImportReportDetailRow
         return salesDescription;
     }
 
-    public void setSalesDescription(String salesDescription)
+    public void setSalesDescription(final String salesDescription)
     {
         this.salesDescription = salesDescription;
     }

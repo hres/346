@@ -1,6 +1,7 @@
 package hc.fcdr.rws.domain;
 
 import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,8 +24,8 @@ public class Classification implements Serializable
 
     }
 
-    public Classification(Long id, String classificationNumber,
-            String classificationName, String classificationType)
+    public Classification(final Long id, final String classificationNumber,
+            final String classificationName, final String classificationType)
     {
         super();
         this.id = id;
@@ -33,7 +34,7 @@ public class Classification implements Serializable
         this.classificationType = classificationType;
     }
 
-    public Classification(Classification classification)
+    public Classification(final Classification classification)
     {
         super();
         this.id = classification.getId();
@@ -48,7 +49,7 @@ public class Classification implements Serializable
     }
 
     @XmlElement
-    public void setId(Long id)
+    public void setId(final Long id)
     {
         this.id = id;
     }
@@ -59,7 +60,7 @@ public class Classification implements Serializable
     }
 
     @XmlElement
-    public void setClassificationNumber(String classificationNumber)
+    public void setClassificationNumber(final String classificationNumber)
     {
         this.classificationNumber = classificationNumber;
     }
@@ -70,7 +71,7 @@ public class Classification implements Serializable
     }
 
     @XmlElement
-    public void setClassificationName(String classificationName)
+    public void setClassificationName(final String classificationName)
     {
         this.classificationName = classificationName;
     }
@@ -81,7 +82,7 @@ public class Classification implements Serializable
     }
 
     @XmlElement
-    public void setClassificationType(String classificationType)
+    public void setClassificationType(final String classificationType)
     {
         this.classificationType = classificationType;
     }
@@ -102,7 +103,7 @@ public class Classification implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
             return true;
@@ -110,7 +111,7 @@ public class Classification implements Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Classification other = (Classification) obj;
+        final Classification other = (Classification) obj;
         if (classificationName == null)
         {
             if (other.classificationName != null)

@@ -144,20 +144,20 @@ public class Mail
      * @@param inputExp The String expression to be parsed.
      * @@return The String array representation of the parsed expression.
      */
-    private String[] parseExp(String inputExp)
+    private String[] parseExp(final String inputExp)
     {
-        java.util.Vector<String> v = new java.util.Vector<String>();
-        java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(
+        final java.util.Vector<String> v = new java.util.Vector<String>();
+        final java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(
                 inputExp, ",;:", false);
 
         while (tokenizer.hasMoreTokens())
         {
-            String token = tokenizer.nextToken();
+            final String token = tokenizer.nextToken();
             if (token.trim().length() > 0)
                 v.add(token);
         }
 
-        String exp[] = new String[v.size()];
+        final String exp[] = new String[v.size()];
         for (int i = 0; i < v.size(); ++i)
             exp[i] = v.get(i);
 
@@ -169,7 +169,7 @@ public class Mail
      * 
      * @@param id The id.
      */
-    public void setId(String id)
+    public void setId(final String id)
     {
         this.id = id;
     }
@@ -179,7 +179,7 @@ public class Mail
      * 
      * @@param imap imap.
      */
-    public void setImap(String imap)
+    public void setImap(final String imap)
     {
         this.imap = imap;
     }
@@ -189,7 +189,7 @@ public class Mail
      * 
      * @@param istream input stream.
      */
-    public void setIstream(InputStream istream)
+    public void setIstream(final InputStream istream)
     {
         this.istream = istream;
     }
@@ -199,7 +199,7 @@ public class Mail
      * 
      * @@param passwd The password.
      */
-    public void setPasswd(String passwd)
+    public void setPasswd(final String passwd)
     {
         this.passwd = passwd;
     }
@@ -209,7 +209,7 @@ public class Mail
      * 
      * @@param receiverAddresses The addresses of the receivers.
      */
-    public void setReceiverAddresses(String receiverAddresses)
+    public void setReceiverAddresses(final String receiverAddresses)
     {
         this.receiverAddresses = parseExp(receiverAddresses);
     }
@@ -219,7 +219,7 @@ public class Mail
      * 
      * @@param receiverName The name of the receiver.
      */
-    public void setReceiverName(String receiverName)
+    public void setReceiverName(final String receiverName)
     {
         this.receiverName = receiverName;
     }
@@ -229,7 +229,7 @@ public class Mail
      * 
      * @@param senderAddress The address of the sender.
      */
-    public void setSenderAddress(String senderAddress)
+    public void setSenderAddress(final String senderAddress)
     {
         this.senderAddress = senderAddress;
     }
@@ -239,7 +239,7 @@ public class Mail
      * 
      * @@param senderName The name of the sender.
      */
-    public void setSenderName(String senderName)
+    public void setSenderName(final String senderName)
     {
         this.senderName = senderName;
     }
@@ -249,7 +249,7 @@ public class Mail
      * 
      * @@param smtp smtp.
      */
-    public void setSmtp(String smtp)
+    public void setSmtp(final String smtp)
     {
         this.smtp = smtp;
     }
@@ -259,7 +259,7 @@ public class Mail
      * 
      * @@param subject The subject line.
      */
-    public void setSubject(String subject)
+    public void setSubject(final String subject)
     {
         this.subject = subject;
     }
@@ -269,7 +269,7 @@ public class Mail
      * 
      * @@param text The text of the email.
      */
-    public void setText(String text)
+    public void setText(final String text)
     {
         this.text = text;
     }

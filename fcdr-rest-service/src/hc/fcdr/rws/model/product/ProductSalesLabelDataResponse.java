@@ -13,8 +13,8 @@ public class ProductSalesLabelDataResponse
         message = "";
     }
 
-    public ProductSalesLabelDataResponse(int status, ProductSalesLabelData data,
-            String message)
+    public ProductSalesLabelDataResponse(final int status,
+            final ProductSalesLabelData data, final String message)
     {
         super();
         this.status = status;
@@ -27,7 +27,7 @@ public class ProductSalesLabelDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -37,7 +37,7 @@ public class ProductSalesLabelDataResponse
         return data;
     }
 
-    public void setData(ProductSalesLabelData data)
+    public void setData(final ProductSalesLabelData data)
     {
         this.data = data;
     }
@@ -47,7 +47,7 @@ public class ProductSalesLabelDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

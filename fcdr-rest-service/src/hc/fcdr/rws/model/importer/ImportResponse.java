@@ -15,14 +15,14 @@ public class ImportResponse
         this.status = 0;
     }
 
-    public ImportResponse(String itemId, int status)
+    public ImportResponse(final String itemId, final int status)
     {
         super();
         this.itemId = itemId;
         this.status = status;
     }
 
-    public ImportResponse(ImportResponse importResponse)
+    public ImportResponse(final ImportResponse importResponse)
     {
         super();
         this.itemId = importResponse.getItemId();
@@ -34,7 +34,7 @@ public class ImportResponse
         return itemId;
     }
 
-    public void setItemId(String itemId)
+    public void setItemId(final String itemId)
     {
         this.itemId = itemId;
     }
@@ -44,7 +44,7 @@ public class ImportResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }

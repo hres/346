@@ -25,7 +25,7 @@ public class SalesResponse
     private Double    average_retail_price;
     private String    sales_source;
     private String    nielsen_category;
-    private String   sales_year;
+    private String    sales_year;
     private Boolean   control_label_flag;
     private Double    kilo_volume_total;
     private Double    kilo_volume_rank;
@@ -81,7 +81,7 @@ public class SalesResponse
 
     }
 
-    public SalesResponse(Sales sales)
+    public SalesResponse(final Sales sales)
     {
         super();
         this.sales_description = sales.getDescription();
@@ -124,7 +124,7 @@ public class SalesResponse
         return sales_description;
     }
 
-    public void setSales_description(String sales_description)
+    public void setSales_description(final String sales_description)
     {
         this.sales_description = sales_description;
     }
@@ -134,7 +134,7 @@ public class SalesResponse
         return sales_upc;
     }
 
-    public void setSales_upc(String sales_upc)
+    public void setSales_upc(final String sales_upc)
     {
         this.sales_upc = sales_upc;
     }
@@ -144,7 +144,7 @@ public class SalesResponse
         return sales_brand;
     }
 
-    public void setSales_brand(String sales_brand)
+    public void setSales_brand(final String sales_brand)
     {
         this.sales_brand = sales_brand;
     }
@@ -154,7 +154,7 @@ public class SalesResponse
         return sales_manufacturer;
     }
 
-    public void setSales_manufacturer(String sales_manufacturer)
+    public void setSales_manufacturer(final String sales_manufacturer)
     {
         this.sales_manufacturer = sales_manufacturer;
     }
@@ -164,7 +164,7 @@ public class SalesResponse
         return dollar_rank;
     }
 
-    public void setDollar_rank(Double dollar_rank)
+    public void setDollar_rank(final Double dollar_rank)
     {
         this.dollar_rank = dollar_rank;
     }
@@ -174,7 +174,7 @@ public class SalesResponse
         return dollar_volume;
     }
 
-    public void setDollar_volume(Double dollar_volume)
+    public void setDollar_volume(final Double dollar_volume)
     {
         this.dollar_volume = dollar_volume;
     }
@@ -184,7 +184,7 @@ public class SalesResponse
         return dollar_share;
     }
 
-    public void setDollar_share(Double dollar_share)
+    public void setDollar_share(final Double dollar_share)
     {
         this.dollar_share = dollar_share;
     }
@@ -195,7 +195,7 @@ public class SalesResponse
     }
 
     public void setDollar_volume_percentage_change(
-            Double dollar_volume_percentage_change)
+            final Double dollar_volume_percentage_change)
     {
         this.dollar_volume_percentage_change = dollar_volume_percentage_change;
     }
@@ -205,7 +205,7 @@ public class SalesResponse
         return kilo_volume;
     }
 
-    public void setKilo_volume(Double kilo_volume)
+    public void setKilo_volume(final Double kilo_volume)
     {
         this.kilo_volume = kilo_volume;
     }
@@ -215,7 +215,7 @@ public class SalesResponse
         return kilo_share;
     }
 
-    public void setKilo_share(Double kilo_share)
+    public void setKilo_share(final Double kilo_share)
     {
         this.kilo_share = kilo_share;
     }
@@ -226,7 +226,7 @@ public class SalesResponse
     }
 
     public void setKilo_volume_percentage_change(
-            Double kilo_volume_percentage_change)
+            final Double kilo_volume_percentage_change)
     {
         this.kilo_volume_percentage_change = kilo_volume_percentage_change;
     }
@@ -236,7 +236,7 @@ public class SalesResponse
         return average_ac_dist;
     }
 
-    public void setAverage_ac_dist(Double average_ac_dist)
+    public void setAverage_ac_dist(final Double average_ac_dist)
     {
         this.average_ac_dist = average_ac_dist;
     }
@@ -246,7 +246,7 @@ public class SalesResponse
         return average_retail_price;
     }
 
-    public void setAverage_retail_price(Double average_retail_price)
+    public void setAverage_retail_price(final Double average_retail_price)
     {
         this.average_retail_price = average_retail_price;
     }
@@ -256,7 +256,7 @@ public class SalesResponse
         return sales_source;
     }
 
-    public void setSales_source(String sales_source)
+    public void setSales_source(final String sales_source)
     {
         this.sales_source = sales_source;
     }
@@ -266,7 +266,7 @@ public class SalesResponse
         return nielsen_category;
     }
 
-    public void setNielsen_category(String nielsen_category)
+    public void setNielsen_category(final String nielsen_category)
     {
         this.nielsen_category = nielsen_category;
     }
@@ -276,7 +276,7 @@ public class SalesResponse
         return sales_year;
     }
 
-    public void setSales_year(String sales_year)
+    public void setSales_year(final String sales_year)
     {
         this.sales_year = sales_year;
     }
@@ -286,7 +286,7 @@ public class SalesResponse
         return control_label_flag;
     }
 
-    public void setControl_label_flag(Boolean control_label_flag)
+    public void setControl_label_flag(final Boolean control_label_flag)
     {
         this.control_label_flag = control_label_flag;
     }
@@ -296,7 +296,7 @@ public class SalesResponse
         return kilo_volume_total;
     }
 
-    public void setKilo_volume_total(Double kilo_volume_total)
+    public void setKilo_volume_total(final Double kilo_volume_total)
     {
         this.kilo_volume_total = kilo_volume_total;
     }
@@ -306,7 +306,7 @@ public class SalesResponse
         return kilo_volume_rank;
     }
 
-    public void setKilo_volume_rank(Double kilo_volume_rank)
+    public void setKilo_volume_rank(final Double kilo_volume_rank)
     {
         this.kilo_volume_rank = kilo_volume_rank;
     }
@@ -316,7 +316,7 @@ public class SalesResponse
         return dollar_volume_total;
     }
 
-    public void setDollar_volume_total(Double dollar_volume_total)
+    public void setDollar_volume_total(final Double dollar_volume_total)
     {
         this.dollar_volume_total = dollar_volume_total;
     }
@@ -326,7 +326,7 @@ public class SalesResponse
         return cluster_number;
     }
 
-    public void setCluster_number(Double cluster_number)
+    public void setCluster_number(final Double cluster_number)
     {
         this.cluster_number = cluster_number;
     }
@@ -336,7 +336,7 @@ public class SalesResponse
         return product_grouping;
     }
 
-    public void setProduct_grouping(Double product_grouping)
+    public void setProduct_grouping(final Double product_grouping)
     {
         this.product_grouping = product_grouping;
     }
@@ -346,7 +346,8 @@ public class SalesResponse
         return sales_product_description;
     }
 
-    public void setSales_product_description(String sales_product_description)
+    public void setSales_product_description(
+            final String sales_product_description)
     {
         this.sales_product_description = sales_product_description;
     }
@@ -356,7 +357,7 @@ public class SalesResponse
         return classification_number;
     }
 
-    public void setClassification_number(Double classification_number)
+    public void setClassification_number(final Double classification_number)
     {
         this.classification_number = classification_number;
     }
@@ -366,7 +367,7 @@ public class SalesResponse
         return classification_type;
     }
 
-    public void setClassification_type(String classification_type)
+    public void setClassification_type(final String classification_type)
     {
         this.classification_type = classification_type;
     }
@@ -376,7 +377,7 @@ public class SalesResponse
         return sales_comment;
     }
 
-    public void setSales_comment(String sales_comment)
+    public void setSales_comment(final String sales_comment)
     {
         this.sales_comment = sales_comment;
     }
@@ -386,7 +387,7 @@ public class SalesResponse
         return sales_collection_date;
     }
 
-    public void setSales_collection_date(Date sales_collection_date)
+    public void setSales_collection_date(final Date sales_collection_date)
     {
         this.sales_collection_date = sales_collection_date;
     }
@@ -396,7 +397,7 @@ public class SalesResponse
         return number_of_units;
     }
 
-    public void setNumber_of_units(Integer number_of_units)
+    public void setNumber_of_units(final Integer number_of_units)
     {
         this.number_of_units = number_of_units;
     }
@@ -406,7 +407,7 @@ public class SalesResponse
         return edited_by;
     }
 
-    public void setEdited_by(String edited_by)
+    public void setEdited_by(final String edited_by)
     {
         this.edited_by = edited_by;
     }
@@ -416,7 +417,7 @@ public class SalesResponse
         return creation_date;
     }
 
-    public void setCreation_date(Timestamp creation_date)
+    public void setCreation_date(final Timestamp creation_date)
     {
         this.creation_date = creation_date;
     }
@@ -426,7 +427,7 @@ public class SalesResponse
         return last_edit_date;
     }
 
-    public void setLast_edit_date(Timestamp last_edit_date)
+    public void setLast_edit_date(final Timestamp last_edit_date)
     {
         this.last_edit_date = last_edit_date;
     }
@@ -436,7 +437,7 @@ public class SalesResponse
         return product_id;
     }
 
-    public void setProduct_id(Long product_id)
+    public void setProduct_id(final Long product_id)
     {
         this.product_id = product_id;
     }

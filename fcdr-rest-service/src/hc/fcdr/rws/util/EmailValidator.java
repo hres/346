@@ -78,14 +78,14 @@ public class EmailValidator
         if (email == null)
             return false;
 
-        Perl5Util matchAsciiPat = new Perl5Util();
+        final Perl5Util matchAsciiPat = new Perl5Util();
         if (!matchAsciiPat.match(LEGAL_ASCII_PATTERN, email))
             return false;
 
         email = stripComments(email);
 
         // Check the whole email address structure
-        Perl5Util emailMatcher = new Perl5Util();
+        final Perl5Util emailMatcher = new Perl5Util();
         if (!emailMatcher.match(EMAIL_PATTERN, email))
             return false;
 
@@ -108,10 +108,10 @@ public class EmailValidator
      *            being validatied.
      * @return true if the email address's domain is valid.
      */
-    protected boolean isValidDomain(String domain)
+    protected boolean isValidDomain(final String domain)
     {
         boolean symbolic = false;
-        Perl5Util ipAddressMatcher = new Perl5Util();
+        final Perl5Util ipAddressMatcher = new Perl5Util();
 
         if (ipAddressMatcher.match(IP_DOMAIN_PATTERN, domain))
         {
@@ -123,7 +123,7 @@ public class EmailValidator
         else
         {
             // Domain is symbolic name
-            Perl5Util domainMatcher = new Perl5Util();
+            final Perl5Util domainMatcher = new Perl5Util();
             symbolic = domainMatcher.match(DOMAIN_PATTERN, domain);
         }
 
@@ -145,9 +145,9 @@ public class EmailValidator
      *            being validated
      * @return true if the user name is valid.
      */
-    protected boolean isValidUser(String user)
+    protected boolean isValidUser(final String user)
     {
-        Perl5Util userMatcher = new Perl5Util();
+        final Perl5Util userMatcher = new Perl5Util();
         return userMatcher.match(USER_PATTERN, user);
     }
 
@@ -158,11 +158,11 @@ public class EmailValidator
      *            Pattren matcher
      * @return true if the ip address is valid.
      */
-    protected boolean isValidIpAddress(Perl5Util ipAddressMatcher)
+    protected boolean isValidIpAddress(final Perl5Util ipAddressMatcher)
     {
         for (int i = 1; i <= 4; i++)
         {
-            String ipSegment = ipAddressMatcher.group(i);
+            final String ipSegment = ipAddressMatcher.group(i);
             if ((ipSegment == null) || (ipSegment.length() <= 0))
                 return false;
 
@@ -172,7 +172,7 @@ public class EmailValidator
             {
                 iIpSegment = Integer.parseInt(ipSegment);
             }
-            catch (NumberFormatException e)
+            catch (final NumberFormatException e)
             {
                 return false;
             }
@@ -193,24 +193,24 @@ public class EmailValidator
      */
     protected boolean isValidSymbolicDomain(String domain)
     {
-        String[] domainSegment = new String[10];
+        final String[] domainSegment = new String[10];
         boolean match = true;
         int i = 0;
-        Perl5Util atomMatcher = new Perl5Util();
+        final Perl5Util atomMatcher = new Perl5Util();
         while (match)
         {
             match = atomMatcher.match(ATOM_PATTERN, domain);
             if (match)
             {
                 domainSegment[i] = atomMatcher.group(1);
-                int l = domainSegment[i].length() + 1;
+                final int l = domainSegment[i].length() + 1;
                 domain = (l >= domain.length()) ? "" : domain.substring(l);
 
                 i++;
             }
         }
 
-        int len = i;
+        final int len = i;
 
         // Make sure there's a host name preceding the domain.
         if (len < 2)
@@ -218,10 +218,10 @@ public class EmailValidator
 
         // TODO: the tld should be checked against some sort of configurable
         // list
-        String tld = domainSegment[len - 1];
+        final String tld = domainSegment[len - 1];
         if (tld.length() > 1)
         {
-            Perl5Util matchTldPat = new Perl5Util();
+            final Perl5Util matchTldPat = new Perl5Util();
             if (!matchTldPat.match(TLD_PATTERN, tld))
                 return false;
         }
@@ -239,12 +239,12 @@ public class EmailValidator
      *            The email address
      * @return address with comments removed.
      */
-    protected String stripComments(String emailStr)
+    protected String stripComments(final String emailStr)
     {
         String input = emailStr;
         String result = emailStr;
-        String commentPat = "s/^((?:[^\"\\\\]|\\\\.)*(?:\"(?:[^\"\\\\]|\\\\.)*\"(?:[^\"\\\\]|\111111\\\\.)*)*)\\((?:[^()\\\\]|\\\\.)*\\)/$1 /osx";
-        Perl5Util commentMatcher = new Perl5Util();
+        final String commentPat = "s/^((?:[^\"\\\\]|\\\\.)*(?:\"(?:[^\"\\\\]|\\\\.)*\"(?:[^\"\\\\]|\111111\\\\.)*)*)\\((?:[^()\\\\]|\\\\.)*\\)/$1 /osx";
+        final Perl5Util commentMatcher = new Perl5Util();
         result = commentMatcher.substitute(commentPat, input);
         // This really needs to be =~ or Perl5Matcher comparison
         while (!result.equals(input))

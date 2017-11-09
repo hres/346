@@ -1,7 +1,7 @@
 package hc.fcdr.rws.model.importer;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImportData
 {
@@ -13,7 +13,7 @@ public class ImportData
         this(new ArrayList<ImportResponse>(), 0);
     }
 
-    public ImportData(List<ImportResponse> dataList, Integer count)
+    public ImportData(final List<ImportResponse> dataList, final Integer count)
     {
         this.dataList = dataList;
         this.count = count;
@@ -24,7 +24,7 @@ public class ImportData
         return dataList;
     }
 
-    public void setDataList(List<ImportResponse> dataList)
+    public void setDataList(final List<ImportResponse> dataList)
     {
         this.dataList = dataList;
     }
@@ -34,12 +34,12 @@ public class ImportData
         return count;
     }
 
-    public void setCount(Integer count)
+    public void setCount(final Integer count)
     {
         this.count = count;
     }
 
-    public void add(ImportResponse o)
+    public void add(final ImportResponse o)
     {
         dataList.add(o);
         count++;

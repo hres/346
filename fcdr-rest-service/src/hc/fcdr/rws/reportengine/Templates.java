@@ -1,6 +1,9 @@
 package hc.fcdr.rws.reportengine;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
+import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
+import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContentsCustomizer;
+import static net.sf.dynamicreports.report.builder.DynamicReports.template;
 
 import java.awt.Color;
 import java.util.Locale;
@@ -56,15 +59,15 @@ public class Templates
                 HorizontalTextAlignment.LEFT);
         subtotalStyle = stl.style(boldStyle).setTopBorder(stl.pen1Point());
 
-        StyleBuilder crosstabGroupStyle = stl.style(columnTitleStyle);
-        StyleBuilder crosstabGroupTotalStyle = stl.style(
+        final StyleBuilder crosstabGroupStyle = stl.style(columnTitleStyle);
+        final StyleBuilder crosstabGroupTotalStyle = stl.style(
                 columnTitleStyle).setBackgroundColor(new Color(170, 170, 170));
-        StyleBuilder crosstabGrandTotalStyle = stl.style(
+        final StyleBuilder crosstabGrandTotalStyle = stl.style(
                 columnTitleStyle).setBackgroundColor(new Color(140, 140, 140));
-        StyleBuilder crosstabCellStyle = stl.style(columnStyle)
-                                            .setBorder(stl.pen1Point());
+        final StyleBuilder crosstabCellStyle = stl.style(columnStyle)
+                                                  .setBorder(stl.pen1Point());
 
-        TableOfContentsCustomizerBuilder tableOfContentsCustomizer = tableOfContentsCustomizer().setHeadingStyle(
+        final TableOfContentsCustomizerBuilder tableOfContentsCustomizer = tableOfContentsCustomizer().setHeadingStyle(
                 0, stl.style(rootStyle).bold());
 
         reportTemplate = template().setLocale(Locale.ENGLISH)
@@ -93,7 +96,8 @@ public class Templates
     /**
      * Creates custom component which is possible to add to any report band component
      */
-    public static ComponentBuilder<?, ?> createTitleComponent(String label)
+    public static ComponentBuilder<?, ?> createTitleComponent(
+            final String label)
     {
         return cmp.horizontalList()
                   .add(
@@ -109,7 +113,7 @@ public class Templates
     }
 
     public static CurrencyValueFormatter createCurrencyValueFormatter(
-            String label)
+            final String label)
     {
         return new CurrencyValueFormatter(label);
     }
@@ -130,15 +134,16 @@ public class Templates
     {
         private static final long serialVersionUID = 1L;
 
-        private String            label;
+        private final String      label;
 
-        public CurrencyValueFormatter(String label)
+        public CurrencyValueFormatter(final String label)
         {
             this.label = label;
         }
 
         @Override
-        public String format(Number value, ReportParameters reportParameters)
+        public String format(final Number value,
+                final ReportParameters reportParameters)
         {
             return label + currencyType.valueToString(value,
                     reportParameters.getLocale());

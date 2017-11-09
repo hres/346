@@ -12,7 +12,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
@@ -31,19 +30,20 @@ import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsData;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
+import hc.fcdr.rws.util.DaoUtil;
 
 public class SalesDao extends PgDao
 {
     private static final Logger logger       = Logger.getLogger(
             SalesDao.class.getName());
-    private String              schema;
+    private final String        schema;
 
     private static final String SQL_INSERT   = "insert into ${table}(${keys}) values(${values})";
     private static final String TABLE_REGEX  = "\\$\\{table\\}";
     private static final String KEYS_REGEX   = "\\$\\{keys\\}";
     private static final String VALUES_REGEX = "\\$\\{values\\}";
 
-    public SalesDao(Connection connection, String schema)
+    public SalesDao(final Connection connection, final String schema)
     {
         super(connection);
         this.schema = schema;
@@ -52,9 +52,9 @@ public class SalesDao extends PgDao
     public List<Sales> getSales() throws DaoException
     {
         ResultSet resultSet = null;
-        List<Sales> salesList = new ArrayList<Sales>();
+        final List<Sales> salesList = new ArrayList<Sales>();
 
-        String query = "select * from " + schema + "." + "sales";
+        final String query = "select * from " + schema + "." + "sales";
 
         try
         {
@@ -63,7 +63,7 @@ public class SalesDao extends PgDao
             while (resultSet.next())
                 salesList.add(DaoUtil.getSales(resultSet));
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -72,12 +72,12 @@ public class SalesDao extends PgDao
         return salesList;
     }
 
-    public Sales getSales(Long salesId) throws DaoException
+    public Sales getSales(final Long salesId) throws DaoException
     {
         ResultSet resultSet = null;
         Sales sales = null;
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "sales where sales_id = ?";
 
         try
@@ -88,7 +88,7 @@ public class SalesDao extends PgDao
             if (resultSet.next())
                 sales = DaoUtil.getSales(resultSet);
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -97,11 +97,11 @@ public class SalesDao extends PgDao
         return sales;
     }
 
-    public Integer checkBySalesUpc(String salesUpc) throws DaoException
+    public Integer checkBySalesUpc(final String salesUpc) throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select sales_product_id_fkey from " + schema + "."
+        final String query = "select sales_product_id_fkey from " + schema + "."
                 + "sales where sales_upc = ?";
 
         try
@@ -112,7 +112,7 @@ public class SalesDao extends PgDao
             if (resultSet.next())
                 return resultSet.getInt("sales_product_id_fkey");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -121,11 +121,12 @@ public class SalesDao extends PgDao
         return null;
     }
 
-    public String getSalesUpcByProductId(Integer productId) throws DaoException
+    public String getSalesUpcByProductId(final Integer productId)
+            throws DaoException
     {
         ResultSet resultSet = null;
 
-        String query = "select sales_upc from " + schema + "."
+        final String query = "select sales_upc from " + schema + "."
                 + "sales where sales_product_id_fkey = ?";
 
         try
@@ -136,7 +137,7 @@ public class SalesDao extends PgDao
             if (resultSet.next())
                 return resultSet.getString("sales_upc");
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -144,12 +145,12 @@ public class SalesDao extends PgDao
 
         return null;
     }
-    
-    public Integer insert(List<Object> csvFieldList) throws DaoException
+
+    public Integer insert(final List<Object> csvFieldList) throws DaoException
     {
         csvFieldList.remove(0);
 
-        String[] columns =
+        final String[] columns =
         { "sales_upc", "sales_description", "sales_brand", "sales_manufacturer",
                 "dollar_rank", "dollar_volume", "dollar_share",
                 "dollar_volume_percentage_change", "kilo_volume", "kilo_share",
@@ -173,15 +174,16 @@ public class SalesDao extends PgDao
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
         // returns the sales_id upon successful insert
-        Object o = executeUpdate(query, csvFieldList.toArray());
+        final Object o = executeUpdate(query, csvFieldList.toArray());
 
         return (Integer) o;
     }
 
     public SalesInsertDataResponse getSalesInsertResponse(
-            SalesInsertRequest salesInsertRequest) throws DaoException
+            final SalesInsertRequest salesInsertRequest) throws DaoException
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(salesInsertRequest);
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+                salesInsertRequest);
 
         if (queryMap.isEmpty())
             return new SalesInsertDataResponse(
@@ -190,13 +192,13 @@ public class SalesDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new SalesInsertDataResponse(((ResponseCodes) o).getCode(),
                     ((ResponseCodes) o).getMessage());
         }
-        
+
         // Check for valid classification_number.
         if (!checkClassification(salesInsertRequest.classification_number))
             return new SalesInsertDataResponse(
@@ -209,7 +211,7 @@ public class SalesDao extends PgDao
                     ResponseCodes.INVALID_UPC_PRODUCTID.getCode(),
                     ResponseCodes.INVALID_UPC_PRODUCTID.getMessage());
 
-        String[] columns =
+        final String[] columns =
         { "sales_description", "sales_upc", "sales_brand", "sales_manufacturer",
                 "dollar_rank", "dollar_volume", "dollar_share",
                 "dollar_volume_percentage_change", "kilo_volume", "kilo_share",
@@ -231,11 +233,11 @@ public class SalesDao extends PgDao
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        List<Object> salesInsertList = (List<Object>) queryMap.get(
+        final List<Object> salesInsertList = (List<Object>) queryMap.get(
                 "sales_insert_list");
 
         // Returns the sales_id upon successful insert.
-        Object o = executeUpdate(query, salesInsertList.toArray());
+        final Object o = executeUpdate(query, salesInsertList.toArray());
 
         return new SalesInsertDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
@@ -243,19 +245,14 @@ public class SalesDao extends PgDao
 
     // ===
 
-    public Boolean checkForSameSalesUpcProductId(String upc, Integer productId)
-            throws DaoException
+    public Boolean checkForSameSalesUpcProductId(final String upc,
+            final Integer productId) throws DaoException
     {
-//        String salesUpc = getSalesUpcByProductId(productId);
-//
-//        if (!salesUpc.equals(upc))
-//            return false;
-        
-        Integer salesProductId = checkBySalesUpc(upc);
-        
+        final Integer salesProductId = checkBySalesUpc(upc);
+
         if (salesProductId == null)
             return true;
-        
+
         if (!salesProductId.equals(productId))
             return false;
 
@@ -265,9 +262,10 @@ public class SalesDao extends PgDao
     // ===
 
     public SalesUpdateDataResponse getSalesUpdateResponse(
-            SalesUpdateRequest salesUpdateRequest) throws DaoException
+            final SalesUpdateRequest salesUpdateRequest) throws DaoException
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(salesUpdateRequest);
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+                salesUpdateRequest);
 
         if (queryMap.isEmpty())
             return new SalesUpdateDataResponse(
@@ -276,7 +274,7 @@ public class SalesDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new SalesUpdateDataResponse(((ResponseCodes) o).getCode(),
@@ -284,14 +282,14 @@ public class SalesDao extends PgDao
         }
 
         // Check for sales.
-        Sales sales = getSales(salesUpdateRequest.sales_id);
+        final Sales sales = getSales(salesUpdateRequest.sales_id);
 
         if ((sales == null) || (sales.getId() == 0L))
             return new SalesUpdateDataResponse(
                     ResponseCodes.NO_PRODUCT_FOUND.getCode(),
                     ResponseCodes.NO_PRODUCT_FOUND.getMessage());
 
-        String[] columns =
+        final String[] columns =
         { "sales_description", "sales_upc", "sales_brand", "sales_manufacturer",
                 "dollar_rank", "dollar_volume", "dollar_share",
                 "dollar_volume_percentage_change", "kilo_volume", "kilo_share",
@@ -308,7 +306,7 @@ public class SalesDao extends PgDao
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
 
-        String query = "update " + schema + "." + "sales set "
+        final String query = "update " + schema + "." + "sales set "
                 + "sales_description = COALESCE(?, sales_description), "
                 + "sales_upc = COALESCE(?, sales_upc), "
                 + "sales_brand = COALESCE(?, sales_brand), "
@@ -341,10 +339,10 @@ public class SalesDao extends PgDao
                 + "last_edit_date = COALESCE(?, last_edit_date) "
                 + "where sales_id = ?";
 
-        List<Object> salesUpdateList = (List<Object>) queryMap.get(
+        final List<Object> salesUpdateList = (List<Object>) queryMap.get(
                 "sales_update_list");
 
-        Object o = executeUpdate(query, salesUpdateList.toArray());
+        final Object o = executeUpdate(query, salesUpdateList.toArray());
 
         return new SalesUpdateDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
@@ -358,9 +356,9 @@ public class SalesDao extends PgDao
         ResultSet resultSet = null;
         SalesResponse salesResponse = null;
 
-        SalesData data = new SalesData();
+        final SalesData data = new SalesData();
 
-        String query = "select * from " + schema + "." + "sales";
+        final String query = "select * from " + schema + "." + "sales";
 
         try
         {
@@ -372,7 +370,7 @@ public class SalesDao extends PgDao
                 data.add(salesResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new SalesDataResponse(
@@ -392,9 +390,9 @@ public class SalesDao extends PgDao
         ResultSet resultSet = null;
         SalesYearsResponse salesYearsResponse = null;
 
-        SalesYearsData data = new SalesYearsData();
+        final SalesYearsData data = new SalesYearsData();
 
-        String query = "select distinct sales_year from " + schema + "."
+        final String query = "select distinct sales_year from " + schema + "."
                 + "sales order by sales_year asc";
 
         try
@@ -407,7 +405,7 @@ public class SalesDao extends PgDao
                 data.add(salesYearsResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new SalesYearsDataResponse(
@@ -421,15 +419,15 @@ public class SalesDao extends PgDao
 
     // ===
 
-    public SalesDataResponse getSalesResponse(Long salesId)
+    public SalesDataResponse getSalesResponse(final Long salesId)
             throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         SalesResponse salesResponse = null;
 
-        SalesData data = new SalesData();
+        final SalesData data = new SalesData();
 
-        String query = "select * from " + schema + "."
+        final String query = "select * from " + schema + "."
                 + "sales where sales_id = ?";
 
         try
@@ -443,7 +441,7 @@ public class SalesDao extends PgDao
                 data.add(salesResponse);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new SalesDataResponse(
@@ -455,10 +453,11 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    public SalesDataResponseShort getSalesResponse(SalesRequest salesRequest)
+    public SalesDataResponseShort getSalesResponse(
+            final SalesRequest salesRequest)
             throws SQLException, IOException, Exception
     {
-        Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
 
         if (queryMap.isEmpty())
             return new SalesDataResponseShort(
@@ -467,7 +466,7 @@ public class SalesDao extends PgDao
 
         if (queryMap.containsKey("inputError"))
         {
-            Object o = queryMap.get("inputError");
+            final Object o = queryMap.get("inputError");
             queryMap.remove("inputError");
 
             return new SalesDataResponseShort(((ResponseCodes) o).getCode(),
@@ -499,23 +498,23 @@ public class SalesDao extends PgDao
 
         ResultSet resultSet = null;
         SalesResponseShort salesResponseShort = null;
-        SalesDataShort data = new SalesDataShort();
+        final SalesDataShort data = new SalesDataShort();
 
         String query = "select * from " + schema + "." + "sales";
 
         // ===
 
-        String orderBy = salesRequest.orderBy;
+        final String orderBy = salesRequest.orderBy;
         Integer offSet = salesRequest.offset;
-        boolean sortOrder = salesRequest.flag;
+        final boolean sortOrder = salesRequest.flag;
 
         String where_clause = "";
         int count = 0;
         String str;
         String sortDirection = null;
 
-        Iterator<String> keys = queryMap.keySet().iterator();
-        Iterator<String> keys_repeat = queryMap.keySet().iterator();
+        final Iterator<String> keys = queryMap.keySet().iterator();
+        final Iterator<String> keys_repeat = queryMap.keySet().iterator();
 
         while (keys.hasNext())
         {
@@ -555,7 +554,7 @@ public class SalesDao extends PgDao
             query += " ORDER BY " + orderBy + " " + sortDirection + " offset "
                     + offSet + " limit 10";
 
-            List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectList = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
@@ -582,7 +581,7 @@ public class SalesDao extends PgDao
                 data.add(salesResponseShort);
             }
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             return new SalesDataResponseShort(
@@ -600,14 +599,15 @@ public class SalesDao extends PgDao
 
     }
 
-    public SalesDeleteDataResponse getSalesDeleteResponse(Integer id)
+    public SalesDeleteDataResponse getSalesDeleteResponse(final Integer id)
             throws SQLException, IOException, Exception
     {
-        String sql = "delete from " + schema + "." + "sales where sales_id = ?";
+        final String sql = "delete from " + schema + "."
+                + "sales where sales_id = ?";
 
         try
         {
-            Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
+            final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
             { id });
 
             if (deletedRow == 0)
@@ -615,7 +615,7 @@ public class SalesDao extends PgDao
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -625,15 +625,15 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    public Boolean checkClassification(Double classificationNumber)
+    public Boolean checkClassification(final Double classificationNumber)
             throws DaoException
     {
-        if (classificationNumber == null || classificationNumber == 0.0)
+        if ((classificationNumber == null) || (classificationNumber == 0.0))
             return true;
-        
+
         ResultSet resultSet = null;
 
-        String query = "select classification_id from " + schema + "."
+        final String query = "select classification_id from " + schema + "."
                 + "classification where classification_number = ?";
 
         try
@@ -644,7 +644,7 @@ public class SalesDao extends PgDao
             if (resultSet.next())
                 return true;
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);

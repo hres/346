@@ -5,14 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,7 +42,7 @@ public class ProductService extends Application
     {
         if (productDao == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -50,7 +50,7 @@ public class ProductService extends Application
                 productDao = new ProductDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -67,7 +67,7 @@ public class ProductService extends Application
             if (productDao != null)
                 return productDao.getProducts();
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             e.printStackTrace();
         }
@@ -78,14 +78,14 @@ public class ProductService extends Application
     @GET
     @Path("/productsraw/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductsRaw(@PathParam("id") int id)
+    public Product getProductsRaw(@PathParam("id") final int id)
     {
         try
         {
             if (productDao != null)
                 return productDao.getProduct(id);
         }
-        catch (DaoException e)
+        catch (final DaoException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class ProductService extends Application
             if (productDao != null)
                 entity = productDao.getProductResponse();
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -123,7 +123,7 @@ public class ProductService extends Application
     @GET
     @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts(@PathParam("id") int id)
+    public Response getProducts(@PathParam("id") final int id)
     {
         ProductDataResponse entity = new ProductDataResponse();
 
@@ -132,7 +132,7 @@ public class ProductService extends Application
             if (productDao != null)
                 entity = productDao.getProductResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -147,7 +147,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassifications/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassifications(@PathParam("id") int id)
+    public Response getProductClassifications(@PathParam("id") final int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = false;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -158,7 +158,7 @@ public class ProductService extends Application
                 entity = productDao.getProductClassificationResponse(id,
                         RETURN_FIRST_RECORD_FOUND);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -172,7 +172,7 @@ public class ProductService extends Application
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductClassification(@PathParam("id") int id)
+    public Response getProductClassification(@PathParam("id") final int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = true;
         ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
@@ -183,7 +183,7 @@ public class ProductService extends Application
                 entity = productDao.getProductClassificationResponse(id,
                         RETURN_FIRST_RECORD_FOUND);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -212,7 +212,7 @@ public class ProductService extends Application
             if (productDao != null)
                 entity = productDao.getProductResponse(productRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -241,7 +241,7 @@ public class ProductService extends Application
                 entity = productDao.getProductSalesLabelResponse(
                         productSalesLabelRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -257,7 +257,7 @@ public class ProductService extends Application
     @GET
     @Path("/productsales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductSales(@PathParam("id") long id)
+    public Response getProductSales(@PathParam("id") final long id)
     {
         ProductSalesDataResponse entity = new ProductSalesDataResponse();
 
@@ -266,7 +266,7 @@ public class ProductService extends Application
             if (productDao != null)
                 entity = productDao.getProductSalesResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -282,7 +282,7 @@ public class ProductService extends Application
     @GET
     @Path("/productlabels/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductLabels(@PathParam("id") long id)
+    public Response getProductLabels(@PathParam("id") final long id)
     {
         ProductLabelsDataResponse entity = new ProductLabelsDataResponse();
 
@@ -291,7 +291,7 @@ public class ProductService extends Application
             if (productDao != null)
                 entity = productDao.getProductLabelsResponse(id);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }
@@ -319,7 +319,7 @@ public class ProductService extends Application
                 entity = productDao.getProductUpdateResponse(
                         productUpdateRequest);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();

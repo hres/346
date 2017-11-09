@@ -1,7 +1,7 @@
 package hc.fcdr.rws.model.classification;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClassificationData
 {
@@ -13,8 +13,8 @@ public class ClassificationData
         this(new ArrayList<ClassificationResponse>(), 0);
     }
 
-    public ClassificationData(List<ClassificationResponse> dataList,
-            Integer count)
+    public ClassificationData(final List<ClassificationResponse> dataList,
+            final Integer count)
     {
         this.dataList = dataList;
         this.count = count;
@@ -25,7 +25,7 @@ public class ClassificationData
         return dataList;
     }
 
-    public void setDataList(List<ClassificationResponse> dataList)
+    public void setDataList(final List<ClassificationResponse> dataList)
     {
         this.dataList = dataList;
     }
@@ -35,12 +35,12 @@ public class ClassificationData
         return count;
     }
 
-    public void setCount(Integer count)
+    public void setCount(final Integer count)
     {
         this.count = count;
     }
 
-    public void add(ClassificationResponse o)
+    public void add(final ClassificationResponse o)
     {
         dataList.add(o);
         count++;

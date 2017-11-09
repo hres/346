@@ -19,12 +19,12 @@ public class PgDao
             PgDao.class.getName());
     protected Connection        connection;
 
-    public PgDao(Connection connection)
+    public PgDao(final Connection connection)
     {
         this.connection = connection;
     }
 
-    protected ResultSet executeQuery(String query, Object[] values)
+    protected ResultSet executeQuery(final String query, final Object[] values)
             throws DaoException
     {
 
@@ -38,7 +38,7 @@ public class PgDao
             resultSet = preparedStatement.executeQuery();
 
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -47,7 +47,7 @@ public class PgDao
         return resultSet;
     }
 
-    protected Object executeUpdate(String query, Object[] values)
+    protected Object executeUpdate(final String query, final Object[] values)
             throws DaoException
     {
 
@@ -59,7 +59,7 @@ public class PgDao
         {
             preparedStatement = prepareStatement(connection, query, true,
                     values);
-            int affectedRows = preparedStatement.executeUpdate();
+            final int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0)
                 throw new NoRowsAffectedDAOException(
@@ -79,7 +79,7 @@ public class PgDao
                 return affectedRows;
 
         }
-        catch (SQLException e)
+        catch (final SQLException e)
         {
             logger.error(e);
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);

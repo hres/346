@@ -11,7 +11,7 @@ public class ProductUpdateDataResponse
         message = "";
     }
 
-    public ProductUpdateDataResponse(int status, String message)
+    public ProductUpdateDataResponse(final int status, final String message)
     {
         super();
         this.status = status;
@@ -23,7 +23,7 @@ public class ProductUpdateDataResponse
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(final int status)
     {
         this.status = status;
     }
@@ -33,7 +33,7 @@ public class ProductUpdateDataResponse
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.ws.rs.Produces;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,7 +44,7 @@ public class ImportService extends Application
     {
         if (loader == null)
         {
-            PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
             pgConnectionPool.initialize();
 
             try
@@ -52,7 +52,7 @@ public class ImportService extends Application
                 loader = new CSVLoader(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (SQLException e)
+            catch (final SQLException e)
             {
                 e.printStackTrace();
             }
@@ -66,14 +66,14 @@ public class ImportService extends Application
     public Response getImport(final ImportRequest importRequest)
             throws SQLException, IOException, Exception
     {
-        String importInputDir = importRequest.inputDir;
-        boolean sendMail = importRequest.sendMail;
+        final String importInputDir = importRequest.inputDir;
+        final boolean sendMail = importRequest.sendMail;
 
-        ImportResponse entity0 = new ImportResponse();
+        final ImportResponse entity0 = new ImportResponse();
         ImportDataResponse entity = new ImportDataResponse();
 
         // ===
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
 
         properties.setProperty("mailSmtp",
                 ContextManager.getJndiValue("MAIL_SMTP"));
@@ -147,15 +147,16 @@ public class ImportService extends Application
 
         try
         {
-            ImportStatistics importStatistics = loader.loadCSV(
+            final ImportStatistics importStatistics = loader.loadCSV(
                     /// importInputDir + "SALESDATA_20170921.csv",
                     importInputDir + "salesdata_20171003_short.csv", "sales",
                     false);
 
             // Generate report.
-            ImportReport importReport = new ImportReport(importStatistics);
+            final ImportReport importReport = new ImportReport(
+                    importStatistics);
         }
-        catch (java.lang.NumberFormatException e)
+        catch (final java.lang.NumberFormatException e)
         {
             entity = new ImportDataResponse(
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
@@ -166,7 +167,7 @@ public class ImportService extends Application
                            .entity(entity)
                            .build();
         }
-        catch (com.opencsv.exceptions.CsvDataTypeMismatchException e1)
+        catch (final com.opencsv.exceptions.CsvDataTypeMismatchException e1)
         {
             entity = new ImportDataResponse(
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
@@ -177,7 +178,7 @@ public class ImportService extends Application
                            .entity(entity)
                            .build();
         }
-        catch (Exception e2)
+        catch (final Exception e2)
         {
             entity = new ImportDataResponse(
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
@@ -193,7 +194,7 @@ public class ImportService extends Application
 
         if (sendMail)
         {
-            String[] filesToAttach = new String[]
+            final String[] filesToAttach = new String[]
             { REPORT_FILE };
 
             if (!sendEmail(properties, filesToAttach))
@@ -216,16 +217,17 @@ public class ImportService extends Application
                        .build();
     }
 
-    private boolean sendEmail(Properties properties, String[] filesToAttach)
+    private boolean sendEmail(final Properties properties,
+            final String[] filesToAttach)
     {
-        MailProcessor mailProcessor = new MailProcessor(properties);
+        final MailProcessor mailProcessor = new MailProcessor(properties);
 
         try
         {
             mailProcessor.setAttachments(filesToAttach);
             mailProcessor.sendMessage();
         }
-        catch (MailProcessorException e)
+        catch (final MailProcessorException e)
         {
             return false;
         }
