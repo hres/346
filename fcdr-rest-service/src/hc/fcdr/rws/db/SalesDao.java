@@ -196,6 +196,12 @@ public class SalesDao extends PgDao
             return new SalesInsertDataResponse(((ResponseCodes) o).getCode(),
                     ((ResponseCodes) o).getMessage());
         }
+        
+        // Check for valid classification_number.
+        if (!checkClassification(salesInsertRequest.classification_number))
+            return new SalesInsertDataResponse(
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
 
         if (!checkForSameSalesUpcProductId(salesInsertRequest.sales_upc,
                 salesInsertRequest.product_id))
@@ -619,4 +625,31 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
+    public Boolean checkClassification(Double classificationNumber)
+            throws DaoException
+    {
+        if (classificationNumber == null || classificationNumber == 0.0)
+            return true;
+        
+        ResultSet resultSet = null;
+
+        String query = "select classification_id from " + schema + "."
+                + "classification where classification_number = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { classificationNumber });
+
+            if (resultSet.next())
+                return true;
+        }
+        catch (SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return false;
+    }
 }

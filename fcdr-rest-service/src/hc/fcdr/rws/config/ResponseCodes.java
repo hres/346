@@ -33,6 +33,7 @@ public enum ResponseCodes
  INVALID_DATE(602, "Invalid date(s) entered"),
  INVALID_UPC(603, "Invalid upc code entered"),
  INVALID_UPC_PRODUCTID(604, "Invalid upc code and product id entered"),
+ INVALID_CLASSIFICATION_NUMBER(605, "Invalid classification number"),
  NO_PRODUCT_FOUND(700, "No product found"),
  MISSING_PRODUCT_DESCRIPTION(701, "Missing Product Description"),
  CANNOT_DELETE_SALES_RECORD(702, "Cannot delete sales record"),

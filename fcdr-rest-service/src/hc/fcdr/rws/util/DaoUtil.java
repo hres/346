@@ -902,7 +902,7 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
-        salesInsertList.add(request.classification_number);
+        salesInsertList.add(request.classification_number == 0.0 ? null : request.classification_number);
 
         if (!request.classification_type.isEmpty())
             queryMap.put("classification_type", request.classification_type);
