@@ -256,7 +256,7 @@ public class SalesDao extends PgDao
         if (salesProductId == null)
             return true;
         
-        if (salesProductId != productId)
+        if (!salesProductId.equals(productId))
             return false;
 
         return true;
