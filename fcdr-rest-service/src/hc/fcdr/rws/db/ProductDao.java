@@ -21,6 +21,8 @@ import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
 import hc.fcdr.rws.model.product.ProductData;
 import hc.fcdr.rws.model.product.ProductDataResponse;
+import hc.fcdr.rws.model.product.ProductInsertDataResponse;
+import hc.fcdr.rws.model.product.ProductInsertRequest;
 import hc.fcdr.rws.model.product.ProductLabelsData;
 import hc.fcdr.rws.model.product.ProductLabelsDataResponse;
 import hc.fcdr.rws.model.product.ProductLabelsResponse;
@@ -35,6 +37,7 @@ import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
 
@@ -380,7 +383,7 @@ public class ProductDao extends PgDao
     // ===
 
     public ProductSalesDataResponse getProductSalesResponse(
-            final Long productId) throws SQLException, IOException, Exception
+            final long productId) throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductSalesResponse productSalesResponse = null;
@@ -417,7 +420,7 @@ public class ProductDao extends PgDao
     // ===
 
     public ProductLabelsDataResponse getProductLabelsResponse(
-            final Long productId) throws SQLException, IOException, Exception
+            final long productId) throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
         ProductLabelsResponse productLabelsResponse = null;
@@ -1144,6 +1147,78 @@ public class ProductDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
+    
+   public ProductInsertDataResponse getProductInsertResponse(ProductInsertRequest productInsertRequest) throws DaoException{
+    	
+	   boolean flag = true;
+	   Integer classificationId = null;
+	     final String[] columns =
+	         { "product_manufacturer", "product_brand", "cnf_code", "cluster_number",  "product_description",  "product_comment",
+	        		 "type",   "restaurant_type", "creation_date", "last_edit_date"
+	                 };
+	     
+       final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+    		   productInsertRequest);
+    	
+       if (queryMap.isEmpty())
+           return new ProductInsertDataResponse(
+        		   ResponseCodes.EMPTY_REQUEST.getCode(),
+                   ResponseCodes.EMPTY_REQUEST.getMessage());
+
+       if (queryMap.containsKey("inputError"))
+       {
+           final Object o = queryMap.get("inputError");
+           queryMap.remove("inputError");
+
+           return new ProductInsertDataResponse(((ResponseCodes) o).getCode(),
+                   ((ResponseCodes) o).getMessage());
+       }
+
+       if(productInsertRequest.getClassification_number() != null){
+       if (checkClassification(productInsertRequest.getClassification_number()) < 1){
+    	   flag = false;
+           return new ProductInsertDataResponse(
+                   ResponseCodes.INVALID_INPUT_FIELDS.getCode(),
+                   ResponseCodes.INVALID_INPUT_FIELDS.getMessage());
+       }else{
+    	   classificationId = checkClassification(productInsertRequest.getClassification_number());
+    	   
+       }
+       }else{
+    	   flag = false;
+       }
+       
+       String questionmarks = StringUtils.repeat("?,", columns.length);
+       questionmarks = (String) questionmarks.subSequence(0,
+               questionmarks.length() - 1);
+
+       String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
+               schema + "." + "product");
+       query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
+       query = query.replaceFirst(VALUES_REGEX, questionmarks);
+       
+       @SuppressWarnings("unchecked")
+	final List<Object> productInsertList = (List<Object>) queryMap.get(
+               "product_insert_list");
+
+       // Returns the sales_id upon successful insert.
+       final Object o = executeUpdate(query, productInsertList.toArray());
+       
+       if(flag){
+           // Create a new record in the product_classification table.
+           final List<Object> sqlArgumentList = new ArrayList<Object>();
+           sqlArgumentList.add(o);
+           sqlArgumentList.add(classificationId);
+           final Object result = insertProductClassification(
+                   sqlArgumentList);
+       }
+       ProductInsertDataResponse response = new ProductInsertDataResponse(ResponseCodes.OK.getCode(),
+               ResponseCodes.OK.getMessage());
+       
+       response.setId(o);
+       
+       return response;
+    }
     // ===
 
     private String prefix(final String str0)

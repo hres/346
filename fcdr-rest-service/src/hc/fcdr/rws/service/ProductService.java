@@ -23,6 +23,8 @@ import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductDataResponse;
+import hc.fcdr.rws.model.product.ProductInsertDataResponse;
+import hc.fcdr.rws.model.product.ProductInsertRequest;
 import hc.fcdr.rws.model.product.ProductLabelsDataResponse;
 import hc.fcdr.rws.model.product.ProductRequest;
 import hc.fcdr.rws.model.product.ProductSalesDataResponse;
@@ -331,6 +333,36 @@ public class ProductService extends Application
                        .build();
     }
 
+    // ===========
+    
+    @POST
+    @Path("/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response create(final ProductInsertRequest productInsertRequest)
+            throws SQLException, IOException, Exception
+    {
+    	ProductInsertDataResponse entity = new ProductInsertDataResponse();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductInsertResponse(
+                		productInsertRequest);
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+    
+    
     // ===========
 
     @OPTIONS

@@ -200,7 +200,6 @@ public class SalesService extends Application
             throws SQLException, IOException, Exception
     {
         SalesInsertDataResponse entity = new SalesInsertDataResponse();
-
         try
         {
             if (salesDao != null)
@@ -227,7 +226,8 @@ public class SalesService extends Application
             throws SQLException, IOException, Exception
     {
         SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
-
+        System.out.println("the number_of_units id: "+ salesUpdateRequest.number_of_units);
+        
         try
         {
             if (salesDao != null)
