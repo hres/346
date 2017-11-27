@@ -9,15 +9,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.PackageData;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
+import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
 
 public class PackageDao extends PgDao
@@ -25,6 +30,10 @@ public class PackageDao extends PgDao
     private static final Logger logger = Logger.getLogger(
             PackageDao.class.getName());
     private final String        schema;
+    private static final String SQL_INSERT   = "insert into ${table}(${keys}) values(${values})";
+    private static final String TABLE_REGEX  = "\\$\\{table\\}";
+    private static final String KEYS_REGEX   = "\\$\\{keys\\}";
+    private static final String VALUES_REGEX = "\\$\\{values\\}";
 
     public PackageDao(final Connection connection, final String schema)
     {
@@ -82,6 +91,70 @@ public class PackageDao extends PgDao
 
     // ===
 
+    public InsertPackageResponse getPackageInsertResponse(PackageInsertRequest packageInsertRequest) throws DaoException
+    {
+    	
+    	SalesDao salesDao = null;
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+        		packageInsertRequest);
+
+        if (queryMap.isEmpty())
+            return new InsertPackageResponse(
+                    ResponseCodes.EMPTY_REQUEST.getCode(),
+                    ResponseCodes.EMPTY_REQUEST.getMessage());
+
+        if (queryMap.containsKey("inputError"))
+        {
+            final Object o = queryMap.get("inputError");
+            queryMap.remove("inputError");
+
+            return new InsertPackageResponse(((ResponseCodes) o).getCode(),
+                    ((ResponseCodes) o).getMessage());
+        }
+
+        // Check for valid classification_number.
+        if (!salesDao.checkClassification(packageInsertRequest.getPackage_classification_number()))
+            return new InsertPackageResponse(
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+
+
+
+        final String[] columns =
+        { "package_description", "package_upc", "sales_brand", "package_manufacturer",
+                "package_country", "package_size", "package_size_unit_of_measure",
+                "storage_type", "storage_statements", "other_package_statements",
+                "suggested_directions", "ingredients","multi_part_flag",
+                "nutrition_fact_table", "as_prepared_per_serving_amount", "as_prepared_unit_of_measure",
+                "as_sold_per_serving_amount", "as_sold_unit_of_measure", "as_prepared_per_serving_amount_in_grams",
+                "as_sold_per_serving_amount_in_grams", "package_comment", "package_source", "package_product_description",
+                "package_collection_date", "number_of_units", "edited_by", "informed_dining_program","nft_last_update_date",
+                "product_grouping", "child_item", "package_classification_number", "package_classification_name", "nielsen_item_rank",
+                "nutrient_claims", "package_nielsen_category", "common_household_measure",
+                "creation_date", "last_edit_date", "package_product_id_fkey" };
+
+        
+        
+        String questionmarks = StringUtils.repeat("?,", columns.length);
+        questionmarks = (String) questionmarks.subSequence(0,
+                questionmarks.length() - 1);
+
+        String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
+                schema + "." + "sales");
+        query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
+        query = query.replaceFirst(VALUES_REGEX, questionmarks);
+
+        final List<Object> packageInsertList = (List<Object>) queryMap.get(
+                "package_insert_list");
+
+        // Returns the sales_id upon successful insert.
+        final Object o = executeUpdate(query, packageInsertList.toArray());
+
+        return new InsertPackageResponse(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
+    }
+    ///=======
+    
     public PackageDataResponse getPackageResponse()
             throws SQLException, IOException, Exception
     {
@@ -294,5 +367,6 @@ public class PackageDao extends PgDao
                 ResponseCodes.OK.getMessage());
 
     }
+    
 
 }

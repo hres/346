@@ -20,6 +20,7 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.model.classification.ClassificationResponse;
+import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
@@ -358,6 +359,258 @@ public final class DaoUtil
 
         return productResponse;
     }
+    //packageInsertRequest
+    
+    
+    public static Map<String, Object> getQueryMap(final PackageInsertRequest request){
+    	
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
+        final List<Object> labelInsertList = new ArrayList<Object>();
+
+        if (!request.getPackage_description().isEmpty())
+            queryMap.put("package_description", request.getPackage_description());
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        labelInsertList.add(request.getPackage_description());
+  
+        
+        if (!request.getPackage_upc().isEmpty())
+            queryMap.put("package_upc",request.getPackage_upc());
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        labelInsertList.add(request.getPackage_upc());
+     
+        
+        if (!request.getPackage_brand().isEmpty())
+            queryMap.put("package_brand",request.getPackage_brand());
+    
+        labelInsertList.add(request.getPackage_upc());
+        
+        if (!request.getPackage_manufacturer().isEmpty())
+            queryMap.put("package_manufacturer",request.getPackage_manufacturer());
+    
+        labelInsertList.add(request.getPackage_manufacturer());      
+        
+        if (!request.getPackage_country().isEmpty())
+            queryMap.put("package_country",request.getPackage_country());
+    
+        labelInsertList.add(request.getPackage_country());   
+        
+        
+        if (request.getPackage_size() != null)
+            queryMap.put("package_size",request.getPackage_size());
+    
+        labelInsertList.add(request.getPackage_size());   
+        
+        if (!request.getPackage_size_unit_of_measure().isEmpty())
+            queryMap.put("package_size_unit_of_measure",request.getPackage_size_unit_of_measure());
+    
+        labelInsertList.add(request.getPackage_size_unit_of_measure());   
+        
+        if (!request.getStorage_type().isEmpty())
+            queryMap.put("storage_type",request.getStorage_type());
+    
+        labelInsertList.add(request.getStorage_type());  
+ 
+        if (!request.getStorage_statements().isEmpty())
+            queryMap.put("storage_statements",request.getStorage_statements());
+    
+        labelInsertList.add(request.getStorage_statements());  
+        
+        if (!request.getHealth_claims().isEmpty())
+            queryMap.put("health_claims",request.getHealth_claims());
+    
+        labelInsertList.add(request.getHealth_claims());         
+        
+        if (!request.getOther_package_statements().isEmpty())
+            queryMap.put("other_package_statements",request.getOther_package_statements());
+    
+        labelInsertList.add(request.getOther_package_statements());  
+        
+        if (!request.getSuggested_directions().isEmpty())
+            queryMap.put("suggested_directions",request.getSuggested_directions());
+    
+        labelInsertList.add(request.getSuggested_directions());         
+        
+        if (!request.getIngredients().isEmpty())
+            queryMap.put("ingredients",request.getIngredients());
+    
+        labelInsertList.add(request.getIngredients());
+        
+        
+        if (request.getMulti_part_flag() != null)
+            queryMap.put("ingredients",request.getMulti_part_flag());
+    
+        labelInsertList.add(request.getMulti_part_flag());
+        
+        
+        if (!request.getNutrition_fact_table().isEmpty())
+            queryMap.put("nutrition_fact_table",request.getNutrition_fact_table());
+    
+        labelInsertList.add(request.getNutrition_fact_table());
+        
+        if (request.getAs_prepared_per_serving_amount() != null)
+            queryMap.put("as_prepared_per_serving_amount",request.getAs_prepared_per_serving_amount());
+    
+        labelInsertList.add(request.getAs_prepared_per_serving_amount());   
+  
+        
+        if (!request.getAs_prepared_unit_of_measure().isEmpty())
+            queryMap.put("as_prepared_unit_of_measure",request.getAs_prepared_unit_of_measure());
+    
+        labelInsertList.add(request.getAs_prepared_unit_of_measure());    
+        
+        if (request.getAs_sold_per_serving_amount() != null)
+            queryMap.put("as_sold_per_serving_amount",request.getAs_sold_per_serving_amount());
+    
+        labelInsertList.add(request.getAs_sold_per_serving_amount());  
+  
+        if (!request.getAs_sold_unit_of_measure().isEmpty())
+            queryMap.put("as_sold_unit_of_measure",request.getAs_sold_unit_of_measure());
+    
+        labelInsertList.add(request.getAs_sold_unit_of_measure());  
+        
+        if (request.getAs_prepared_per_serving_amount_in_grams() != null)
+            queryMap.put("as_prepared_per_serving_amount_in_grams",request.getAs_prepared_per_serving_amount_in_grams());
+    
+        labelInsertList.add(request.getAs_prepared_per_serving_amount_in_grams()); 
+        
+        if (request.getAs_sold_per_serving_amount_in_grams() != null)
+            queryMap.put("as_sold_per_serving_amount_in_grams",request.getAs_sold_per_serving_amount_in_grams());
+    
+        labelInsertList.add(request.getAs_sold_per_serving_amount_in_grams()); 
+        
+        if (!request.getPackage_comment().isEmpty())
+            queryMap.put("package_comment",request.getPackage_comment());
+    
+        labelInsertList.add(request.getPackage_comment());     
+        
+        if (!request.getPackage_source().isEmpty())
+            queryMap.put("package_source",request.getPackage_source());
+        else
+        	
+    
+        labelInsertList.add(request.getPackage_source());  
+   
+        if (!request.getPackage_product_description().isEmpty())
+            queryMap.put("package_product_description",request.getPackage_product_description());
+    
+        labelInsertList.add(request.getPackage_product_description());  
+   
+        if (request.getNumber_of_units() != null)
+            queryMap.put("number_of_units",request.getNumber_of_units());
+    
+        labelInsertList.add(request.getNumber_of_units());
+        
+        if (request.getInformed_dining_program() != null)
+            queryMap.put("informed_dining_program",request.getInformed_dining_program());
+    
+        labelInsertList.add(request.getInformed_dining_program());
+        
+        if (request.getProduct_grouping() != null)
+            queryMap.put("product_grouping",request.getProduct_grouping());
+    
+        labelInsertList.add(request.getProduct_grouping());
+        
+        if (request.getNielsen_item_rank() != null)
+            queryMap.put("nielsen_item_rank",request.getNielsen_item_rank());
+    
+        labelInsertList.add(request.getNielsen_item_rank());
+    
+        if (!request.getNutrient_claims().isEmpty())
+            queryMap.put("nutrient_claims",request.getNutrient_claims());
+    
+        labelInsertList.add(request.getNutrient_claims()); 
+        
+        if (!request.getPackage_nielsen_category().isEmpty())
+            queryMap.put("package_nielsen_category",request.getPackage_nielsen_category());
+    
+        labelInsertList.add(request.getPackage_nielsen_category()); 
+        
+        if (!request.getCommon_household_measure().isEmpty())
+            queryMap.put("common_household_measure",request.getCommon_household_measure());
+    
+        labelInsertList.add(request.getCommon_household_measure());     
+        
+        if (request.getChild_item() != null)
+            queryMap.put("child_item",request.getChild_item());
+    
+        labelInsertList.add(request.getChild_item());
+        
+        if (!request.getPackage_classification_name().isEmpty())
+            queryMap.put("package_classification_name",request.getPackage_classification_name());
+    
+        labelInsertList.add(request.getPackage_classification_name());  
+        
+        if (!request.getEdited_by().isEmpty())
+            queryMap.put("edited_by",request.getEdited_by());
+    
+        labelInsertList.add(request.getEdited_by());    
+        
+        
+        if (request.getPackage_classification_number() != null)
+            queryMap.put("package_classification_number",request.getPackage_classification_number());
+    
+        labelInsertList.add(request.getPackage_classification_number());
+        
+        if (request.getProduct_id() != null)
+        {
+            if (isType(request.getProduct_id().toString(), "int"))
+            {
+                if (request.getProduct_id() > 0)
+                    queryMap.put("package_product_id_fkey", request.getProduct_id());
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        labelInsertList.add(request.getProduct_id());    
+
+        if (!request.getPackage_collection_date().isEmpty())
+        {
+            queryMap.put("package_collection_date",
+                    request.getPackage_collection_date());
+            labelInsertList.add(Date.valueOf(request.getPackage_collection_date()));
+        }
+        else
+        	labelInsertList.add(null);
+        
+        if (!request.getPackage_collection_date().isEmpty())
+        {
+            queryMap.put("nft_last_update_date",
+                    request.getNft_last_update_date());
+            labelInsertList.add(Date.valueOf(request.getNft_last_update_date()));
+        }
+        else
+        	labelInsertList.add(null);
+
+
+        final Timestamp now = DateUtil.getCurrentTimeStamp();
+        queryMap.put("creation_date", now);
+        labelInsertList.add(now);
+        queryMap.put("last_edit_date", now);
+        labelInsertList.add(now);
+
+        queryMap.put("package_insert_list", labelInsertList);
+
+        return queryMap;
+    }
+    
+    
+    ///
 
     public static Map<String, Object> getQueryMap(final ProductRequest request)
     {
@@ -670,17 +923,17 @@ public final class DaoUtil
         
         
         if (request.salesYear != null)
-        {
-            if (request.salesYear instanceof Number)
+            if (isType(request.salesYear.toString(), "int"))
             {
-              
+                if (request.salesYear > 0)
                     queryMap.put("sales_year", request.salesYear);
             }
             else
+            {
                 queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
-        }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+       
 
         if (!request.nielsenCategory.isEmpty())
             queryMap.put("nielsen_category", request.nielsenCategory);

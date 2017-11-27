@@ -270,8 +270,11 @@ public class ProductDao extends PgDao
         }
 
         ResultSet resultSet = null;
+        ResultSet resultSetCount = null;
         ProductResponse productResponse = null;
         final ProductData data = new ProductData();
+        Integer number_of_records = null;
+        //set the count
 
         String query = "select p.product_id, p.product_description, p.product_brand, "
                 + " p.product_country, p.cluster_number, p.product_comment, p.product_manufacturer, p.cnf_code, "
@@ -285,6 +288,16 @@ public class ProductDao extends PgDao
 
         // ===
 
+        
+        //Query to get the count
+        String query_count = "select count(*) AS COUNT from "
+                + schema + "." + "product p " + "left outer join " + schema
+                + "."
+                + "product_classification pc on p.product_id = pc.product_classification_product_id_fkey left outer join "
+                + schema + "."
+                + "classification c on pc.product_classification_classification_id_fkey = c.classification_id";
+        
+        ///////////
         final String orderBy = productRequest.orderby;
         Integer offSet = productRequest.offset;
         final boolean sortOrder = productRequest.flag;
@@ -328,6 +341,7 @@ public class ProductDao extends PgDao
         {
             if ((where_clause != null) && (where_clause.length() > 0))
                 query += " where " + where_clause.trim();
+            	query_count += " where " + where_clause.trim();
 
             if (sortOrder)
                 sortDirection = "ASC";
@@ -346,16 +360,22 @@ public class ProductDao extends PgDao
                     + " offset " + offSet + " limit 10";
 
             final List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectListCount = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
                 {
                     str = keys_repeat.next();
                     objectList.add("%" + queryMap.get(str) + "%");
+                    objectListCount.add("%" + queryMap.get(str) + "%");
+                  
                 }
 
             resultSet = executeQuery(query, objectList.toArray());
-
+            resultSetCount = executeQuery(query_count, objectListCount.toArray());
+ 
+            resultSetCount.next();
+		      number_of_records = resultSetCount.getInt("COUNT");
             while (resultSet.next())
             {
                 productResponse = DaoUtil.getProductResponse(resultSet);
@@ -374,6 +394,8 @@ public class ProductDao extends PgDao
             return new ProductDataResponse(
                     ResponseCodes.NO_DATA_FOUND.getCode(), null,
                     ResponseCodes.NO_DATA_FOUND.getMessage());
+
+	     data.setCount(number_of_records);
 
         return new ProductDataResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
@@ -462,6 +484,7 @@ public class ProductDao extends PgDao
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 productSalesLabelRequest);
+        final Map<String, Object> queryMapCount = queryMap;
 
         if (queryMap.isEmpty())
             return new ProductSalesLabelDataResponse(
@@ -490,6 +513,7 @@ public class ProductDao extends PgDao
             salesCollectionDateFrom = (String) queryMap.get(
                     "sales_collection_date_from");
             queryMap.remove("sales_collection_date_from");
+            queryMapCount.remove("sales_collection_date_from");
             as = true;
         }
 
@@ -498,6 +522,7 @@ public class ProductDao extends PgDao
             salesCollectionDateTo = (String) queryMap.get(
                     "sales_collection_date_to");
             queryMap.remove("sales_collection_date_to");
+            queryMapCount.remove("sales_collection_date_to");
             bs = true;
         }
 
@@ -514,6 +539,7 @@ public class ProductDao extends PgDao
             labelCollectionDateFrom = (String) queryMap.get(
                     "package_collection_date_from");
             queryMap.remove("package_collection_date_from");
+            queryMapCount.remove("package_collection_date_from");
             al = true;
         }
 
@@ -522,6 +548,7 @@ public class ProductDao extends PgDao
             labelCollectionDateTo = (String) queryMap.get(
                     "package_collection_date_to");
             queryMap.remove("package_collection_date_to");
+            queryMapCount.remove("package_collection_date_to");
             bl = true;
         }
 
@@ -537,6 +564,7 @@ public class ProductDao extends PgDao
         {
             dollarRankFrom = (Double) queryMap.get("dollar_rank_from");
             queryMap.remove("dollar_rank_from");
+            queryMapCount.remove("dollar_rank_from");
             ad = true;
         }
 
@@ -544,12 +572,16 @@ public class ProductDao extends PgDao
         {
             dollarRankTo = (Double) queryMap.get("dollar_rank_to");
             queryMap.remove("dollar_rank_to");
+            queryMapCount.remove("dollar_rank_to");
             bd = true;
         }
 
         /// ===
 
         ResultSet resultSet = null;
+        ResultSet resultSetCount = null;
+        Integer number_of_records = null;
+
         ProductSalesLabelResponse productSalesLabelResponse = null;
         final ProductSalesLabelData data = new ProductSalesLabelData();
 
@@ -566,7 +598,17 @@ public class ProductDao extends PgDao
                 + "sales s on p.product_id = s.sales_product_id_fkey "
                 + " left outer join " + schema + "."
                 + "package l on p.product_id = l.package_product_id_fkey ";
-
+        
+        String query_count = "select count(*) AS COUNT from "
+                + schema + "." + "product p " + "left outer join " + schema
+                + "."
+                + "product_classification pc on p.product_id = pc.product_classification_product_id_fkey left outer join "
+                + schema + "."
+                + "classification c on pc.product_classification_classification_id_fkey = c.classification_id "
+                + " left outer join " + schema + "."
+                + "sales s on p.product_id = s.sales_product_id_fkey "
+                + " left outer join " + schema + "."
+                + "package l on p.product_id = l.package_product_id_fkey ";
         // ===
 
         final String orderBy = label2Package(productSalesLabelRequest.orderby);
@@ -574,6 +616,8 @@ public class ProductDao extends PgDao
         final boolean sortOrder = productSalesLabelRequest.flag;
 
         String where_clause = "";
+        String where_clause_count = "";
+
         int count = 0;
         String str0;
         String str;
@@ -593,39 +637,56 @@ public class ProductDao extends PgDao
                     || str0.equals("classification_number"))
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
-            if (count == 0)
+            if (count == 0){
                 where_clause += " " + str1 + " LIKE ?";
-            else
+               
+            }
+            else{
                 where_clause += " AND " + str1 + " LIKE ?";
 
+            }
             ++count;
         }
 
         /// ===
 
         if (as && bs)
-            if (count == 0)
+            if (count == 0){
                 where_clause += " s.sales_collection_date BETWEEN ? AND ? ";
-            else
+               
+            }
+            else{
                 where_clause += " AND s.sales_collection_date BETWEEN ? AND ? ";
+                
+            }
 
         /// ===
         /// ===
 
         if (al && bl)
-            if (count == 0)
+            if (count == 0){
                 where_clause += " l.package_collection_date BETWEEN ? AND ? ";
-            else
+                
+            }
+            else{
                 where_clause += " AND l.package_collection_date BETWEEN ? AND ? ";
+              
+                
+            }
 
         /// ===
         /// ===
 
         if (ad && bd)
-            if (count == 0)
+            if (count == 0){
                 where_clause += " s.dollar_rank BETWEEN ? AND ? ";
-            else
+          
+                
+            }
+            else{
                 where_clause += " AND s.dollar_rank BETWEEN ? AND ? ";
+               
+            }
 
         /// ===
 
@@ -633,6 +694,7 @@ public class ProductDao extends PgDao
         {
             if ((where_clause != null) && (where_clause.length() > 0))
                 query += " where " + where_clause.trim();
+            	query_count += " where " + where_clause.trim();
 
             if (sortOrder)
                 sortDirection = "ASC";
@@ -680,9 +742,12 @@ public class ProductDao extends PgDao
             }
 
             /// ===
-
+            System.out.println(query);
             resultSet = executeQuery(query, objectList.toArray());
-
+            resultSetCount = executeQuery(query_count, objectList.toArray());
+            System.out.println("++++ "+ query_count);
+            resultSetCount.next();
+		     number_of_records = resultSetCount.getInt("COUNT");
             while (resultSet.next())
             {
                 productSalesLabelResponse = DaoUtil.getProductSalesLabelResponse(
@@ -698,6 +763,7 @@ public class ProductDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
 
+        data.setCount(number_of_records);
         if (data.getCount() == 0)
             return new ProductSalesLabelDataResponse(
                     ResponseCodes.NO_DATA_FOUND.getCode(), null,

@@ -48,6 +48,7 @@ public class SalesDao extends PgDao
         super(connection);
         this.schema = schema;
     }
+    
 
     public List<Sales> getSales() throws DaoException
     {
@@ -466,6 +467,8 @@ public class SalesDao extends PgDao
             throws SQLException, IOException, Exception
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
+        final Map<String, Object> queryMapCount = queryMap;
+
 
         if (queryMap.isEmpty())
             return new SalesDataResponseShort(
@@ -492,6 +495,7 @@ public class SalesDao extends PgDao
         {
             collectionDateFrom = (String) queryMap.get("collection_date_from");
             queryMap.remove("collection_date_from");
+            queryMapCount.remove("collection_date_from");
             a = true;
         }
 
@@ -499,6 +503,8 @@ public class SalesDao extends PgDao
         {
             collectionDateTo = (String) queryMap.get("collection_date_to");
             queryMap.remove("collection_date_to");
+            queryMapCount.remove("collection_date_to");
+
             b = true;
         }
 
@@ -507,8 +513,13 @@ public class SalesDao extends PgDao
         ResultSet resultSet = null;
         SalesResponseShort salesResponseShort = null;
         final SalesDataShort data = new SalesDataShort();
-
+        Integer number_of_records = null;
+        
+        ResultSet resultSetCount = null;
+        SalesResponseShort salesResponseShortCount = null;
+        
         String query = "select * from " + schema + "." + "sales";
+        String query_count = "select count(*) AS COUNT from " + schema + "." + "sales";
 
         // ===
 
@@ -517,6 +528,8 @@ public class SalesDao extends PgDao
         final boolean sortOrder = salesRequest.flag;
 
         String where_clause = "";
+        String where_clause_count = "";
+
         int count = 0;
         String str;
         String sortDirection = null;
@@ -530,29 +543,39 @@ public class SalesDao extends PgDao
 
             if (str.equals("sales_year"))
                 str = "CAST (" + str + " AS TEXT)";
-            if (count == 0)
+            if (count == 0){
                 where_clause += " " + str + " LIKE ?";
-            else
+            	where_clause_count += " " + str + " LIKE ?";
+            }
+            else{
                 where_clause += " AND " + str + " LIKE ?";
-
+            	where_clause_count += " AND " + str + " LIKE ?";
+            }
             ++count;
         }
 
         /// ===
 
         if (a && b)
-            if (count == 0)
+            if (count == 0){
                 where_clause += " sales_collection_date BETWEEN ? AND ? ";
-            else
+                where_clause_count += " sales_collection_date BETWEEN ? AND ? ";
+
+            }
+            else{
                 where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
+                where_clause_count += " AND sales_collection_date BETWEEN ? AND ? ";
+               
+            }
 
         /// ===
 
         try
         {
-            if ((where_clause != null) && (where_clause.length() > 0))
+            if ((where_clause != null) && (where_clause.length() > 0)){
                 query += " where " + where_clause;
-
+                query_count += " where " + where_clause_count;
+            }
             if (sortOrder)
                 sortDirection = "ASC";
             else
@@ -563,12 +586,15 @@ public class SalesDao extends PgDao
                     + offSet + " limit 10";
 
             final List<Object> objectList = new ArrayList<Object>();
+            final List<Object> objectListCount = new ArrayList<Object>();
 
             if (count > 0)
                 while (keys_repeat.hasNext())
                 {
                     str = keys_repeat.next();
                     objectList.add("%" + queryMap.get(str) + "%");
+                    objectListCount.add("%" + queryMap.get(str) + "%");
+
                 }
 
             /// ===
@@ -577,12 +603,21 @@ public class SalesDao extends PgDao
             {
                 objectList.add(java.sql.Date.valueOf(collectionDateFrom));
                 objectList.add(java.sql.Date.valueOf(collectionDateTo));
+                
+                objectListCount.add(java.sql.Date.valueOf(collectionDateFrom));
+                objectListCount.add(java.sql.Date.valueOf(collectionDateTo));
             }
 
             /// ===
 
             resultSet = executeQuery(query, objectList.toArray());
-
+            resultSetCount = executeQuery(query_count, objectListCount.toArray());
+            
+            resultSetCount.next();
+            
+		    number_of_records = resultSetCount.getInt("COUNT");
+		    
+		      
             while (resultSet.next())
             {
                 salesResponseShort = DaoUtil.getSalesResponseShort(resultSet);
@@ -597,6 +632,8 @@ public class SalesDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
 
+	     data.setCount(number_of_records);
+
         if (data.getCount() == 0)
             return new SalesDataResponseShort(
                     ResponseCodes.NO_DATA_FOUND.getCode(), null,
@@ -607,6 +644,8 @@ public class SalesDao extends PgDao
 
     }
 
+    
+    
     public SalesDeleteDataResponse getSalesDeleteResponse(final Integer id)
             throws SQLException, IOException, Exception
     {

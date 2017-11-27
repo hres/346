@@ -21,8 +21,12 @@ import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
+import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
+import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/PackageService")
@@ -158,7 +162,31 @@ public class PackageService extends Application
                        .entity(entity)
                        .build();
     }
+    @POST
+    @Path("/insert")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response insert(final PackageInsertRequest packageInsertRequest)
+            throws SQLException, IOException, Exception
+    {
+        InsertPackageResponse entity = new InsertPackageResponse();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getPackageInsertResponse(packageInsertRequest);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
 
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+
+    // ===
     @OPTIONS
     @Path("/package")
     @Produces(MediaType.APPLICATION_XML)
