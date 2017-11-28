@@ -94,7 +94,7 @@ public class PackageDao extends PgDao
     public InsertPackageResponse getPackageInsertResponse(PackageInsertRequest packageInsertRequest) throws DaoException
     {
     	
-    	SalesDao salesDao = null;
+    
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
         		packageInsertRequest);
 
@@ -113,25 +113,26 @@ public class PackageDao extends PgDao
         }
 
         // Check for valid classification_number.
-        if (!salesDao.checkClassification(packageInsertRequest.getPackage_classification_number()))
+        if(packageInsertRequest.getClassification_number() != null){
+        if (!checkClassification(packageInsertRequest.getClassification_number()))
             return new InsertPackageResponse(
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
 
-
+        }
 
         final String[] columns =
-        { "package_description", "package_upc", "sales_brand", "package_manufacturer",
+        { "package_description", "package_upc", "package_brand", "package_manufacturer",
                 "package_country", "package_size", "package_size_unit_of_measure",
-                "storage_type", "storage_statements", "other_package_statements",
+                "storage_type", "storage_statements", "health_claims", "other_package_statements",
                 "suggested_directions", "ingredients","multi_part_flag",
                 "nutrition_fact_table", "as_prepared_per_serving_amount", "as_prepared_unit_of_measure",
                 "as_sold_per_serving_amount", "as_sold_unit_of_measure", "as_prepared_per_serving_amount_in_grams",
                 "as_sold_per_serving_amount_in_grams", "package_comment", "package_source", "package_product_description",
-                "package_collection_date", "number_of_units", "edited_by", "informed_dining_program","nft_last_update_date",
-                "product_grouping", "child_item", "package_classification_number", "package_classification_name", "nielsen_item_rank",
-                "nutrient_claims", "package_nielsen_category", "common_household_measure",
-                "creation_date", "last_edit_date", "package_product_id_fkey" };
+                 "number_of_units", "informed_dining_program", "product_grouping","nielsen_item_rank", "nutrient_claims",
+                 "package_nielsen_category", "common_household_measure", "child_item","package_classification_name","edited_by",
+                 "package_classification_number","package_product_id_fkey", "package_collection_date",   "nft_last_update_date",              
+                "creation_date", "last_edit_date", "calculated" };
 
         
         
@@ -140,7 +141,7 @@ public class PackageDao extends PgDao
                 questionmarks.length() - 1);
 
         String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
-                schema + "." + "sales");
+                schema + "." + "package");
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
@@ -149,9 +150,10 @@ public class PackageDao extends PgDao
 
         // Returns the sales_id upon successful insert.
         final Object o = executeUpdate(query, packageInsertList.toArray());
-
-        return new InsertPackageResponse(ResponseCodes.OK.getCode(),
-                ResponseCodes.OK.getMessage());
+        InsertPackageResponse insertPackageResponse = new InsertPackageResponse(ResponseCodes.OK.getCode(), ResponseCodes.OK.getMessage());
+        insertPackageResponse.setId(o);
+        return insertPackageResponse;
+               
     }
     ///=======
     
@@ -366,6 +368,34 @@ public class PackageDao extends PgDao
         return new PackageDataResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
 
+    }
+
+    public Boolean checkClassification(final Double classificationNumber)
+            throws DaoException
+    {
+        if ((classificationNumber == null) || (classificationNumber == 0.0))
+            return true;
+
+        ResultSet resultSet = null;
+
+        final String query = "select classification_id from " + schema + "."
+                + "classification where classification_number = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { classificationNumber });
+
+            if (resultSet.next())
+                return true;
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return false;
     }
     
 

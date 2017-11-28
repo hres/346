@@ -69,9 +69,9 @@ public class PackageInsertRequest {
 	@XmlElement(nillable=true)
 	private Boolean child_item  ;         
 	@XmlElement(nillable=true)
-	private Double package_classification_number ;   
+	private Double classification_number ;   
 	@XmlElement(nillable=true)
-	private String package_classification_name  ; 
+	private String classification_name  ; 
 	@XmlElement(nillable=true)
 	private Double nielsen_item_rank    ;   
 	@XmlElement(nillable=true)
@@ -80,13 +80,20 @@ public class PackageInsertRequest {
 	private String package_nielsen_category  ;   
 	@XmlElement(nillable=true)
 	private String common_household_measure ;
+	@XmlElement(nillable=true)
 	private String creation_date ;
+	@XmlElement(nillable=true)
 	private String last_edit_date ;
+	@XmlElement(nillable=true)
+	private Boolean calculated;
 
 	
 	
 	
 	
+
+
+
 	public PackageInsertRequest() {
 		super();
 		this.product_id = null;
@@ -121,14 +128,15 @@ public class PackageInsertRequest {
 		this.nft_last_update_date = null;
 		this.product_grouping = null;
 		this.child_item = null;
-		this.package_classification_number = null;
-		this.package_classification_name = null;
+		this.classification_number = null;
+		this.classification_name = null;
 		this.nielsen_item_rank = null;
 		this.nutrient_claims = null;
 		this.package_nielsen_category = null;
 		this.common_household_measure = null;
 		this.creation_date = null ;
 		this.last_edit_date = null;
+		this.calculated = null;
 	}       
 	
 	
@@ -143,8 +151,9 @@ public class PackageInsertRequest {
 			String package_comment, String package_source, String package_product_description,
 			String package_collection_date, Integer number_of_units, String edited_by, Boolean informed_dining_program,
 			String nft_last_update_date, Double product_grouping, Boolean child_item,
-			Double package_classification_number, String package_classification_name, Double nielsen_item_rank,
-			String nutrient_claims, String package_nielsen_category, String common_household_measure, String creation_date, String last_edit_date) {
+			Double classification_number, String classification_name, Double nielsen_item_rank,
+			String nutrient_claims, String package_nielsen_category, String common_household_measure, String creation_date, String last_edit_date,
+			Boolean calculated) {
 		super();
 		this.product_id = product_id;
 		this.package_description = package_description;
@@ -178,17 +187,27 @@ public class PackageInsertRequest {
 		this.nft_last_update_date = nft_last_update_date;
 		this.product_grouping = product_grouping;
 		this.child_item = child_item;
-		this.package_classification_number = package_classification_number;
-		this.package_classification_name = package_classification_name;
+		this.classification_number = classification_number;
+		this.classification_name = classification_name;
 		this.nielsen_item_rank = nielsen_item_rank;
 		this.nutrient_claims = nutrient_claims;
 		this.package_nielsen_category = package_nielsen_category;
 		this.common_household_measure = common_household_measure;
 		this.creation_date = creation_date;
 		this.last_edit_date = last_edit_date;
+		this.calculated = calculated;
 	}
 
 
+	public Boolean getCalculated() {
+		return calculated;
+	}
+
+
+
+	public void setCalculated(Boolean calculated) {
+		this.calculated = calculated;
+	}
 
 	public String getCreation_date() {
 		return creation_date;
@@ -598,26 +617,26 @@ public class PackageInsertRequest {
 
 
 
-	public Double getPackage_classification_number() {
-		return package_classification_number;
+	public Double getClassification_number() {
+		return classification_number;
 	}
 
 
 
-	public void setPackage_classification_number(Double package_classification_number) {
-		this.package_classification_number = package_classification_number;
+	public void setClassification_number(Double classification_number) {
+		this.classification_number = classification_number;
 	}
 
 
 
-	public String getPackage_classification_name() {
-		return package_classification_name;
+	public String getClassification_name() {
+		return classification_name;
 	}
 
 
 
-	public void setPackage_classification_name(String package_classification_name) {
-		this.package_classification_name = package_classification_name;
+	public void setClassification_name(String classification_name) {
+		this.classification_name = classification_name;
 	}
 
 
