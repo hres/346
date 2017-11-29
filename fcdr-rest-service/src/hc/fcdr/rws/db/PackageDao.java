@@ -21,6 +21,9 @@ import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.pkg.PackageViewData;
+import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
+import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
@@ -120,6 +123,12 @@ public class PackageDao extends PgDao
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
 
         }
+        
+        if (!checkForSamePackageUpcProductId(packageInsertRequest.getPackage_upc(),
+        		packageInsertRequest.getProduct_id()))
+            return new InsertPackageResponse(
+                    ResponseCodes.INVALID_UPC_PRODUCTID.getCode(),
+                    ResponseCodes.INVALID_UPC_PRODUCTID.getMessage());
 
         final String[] columns =
         { "package_description", "package_upc", "package_brand", "package_manufacturer",
@@ -191,13 +200,14 @@ public class PackageDao extends PgDao
 
     // ===
 
-    public PackageDataResponse getPackageResponse(final Long packageId)
+    public PackageViewResponse getPackageResponse(final Long packageId)
             throws SQLException, IOException, Exception
     {
         ResultSet resultSet = null;
-        PackageResponse packageResponse = null;
+        PackageViewData packageResponse = null;
 
-        final PackageData data = new PackageData();
+        System.out.println("here 2");
+        final PackageViewDataResponse data = new PackageViewDataResponse();
 
         final String query = "select * from " + schema + "."
                 + "package where package_id = ?";
@@ -209,19 +219,22 @@ public class PackageDao extends PgDao
 
             if (resultSet.next())
             {
-                packageResponse = DaoUtil.getPackageResponse(resultSet);
+            	 System.out.println("here 3");
+                packageResponse = DaoUtil.getPackageResponseView(resultSet);
+                System.out.println("here 4" + packageResponse.toString());
+                
                 data.add(packageResponse);
             }
         }
         catch (final SQLException e)
         {
             logger.error(e);
-            return new PackageDataResponse(
+            return new PackageViewResponse(
                     ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
 
-        return new PackageDataResponse(ResponseCodes.OK.getCode(), data,
+        return new PackageViewResponse(ResponseCodes.OK.getCode(), data,
                 ResponseCodes.OK.getMessage());
     }
 
@@ -397,6 +410,41 @@ public class PackageDao extends PgDao
 
         return false;
     }
-    
+    public Boolean checkForSamePackageUpcProductId(final String upc,
+            final Integer productId) throws DaoException
+    {
+        final Integer packageProductId = checkByPackageUpc(upc);
+
+        if (packageProductId == null)
+            return true;
+
+        if (!packageProductId.equals(productId))
+            return false;
+
+        return true;
+    }
+    public Integer checkByPackageUpc(final String packageUpc) throws DaoException
+    {
+        ResultSet resultSet = null;
+
+        final String query = "select package_product_id_fkey from " + schema + "."
+                + "package where package_upc = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[]
+            { packageUpc });
+
+            if (resultSet.next())
+                return resultSet.getInt("package_product_id_fkey");
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return null;
+    }
 
 }

@@ -25,6 +25,7 @@ import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
+import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.ContextManager;
@@ -120,7 +121,8 @@ public class PackageService extends Application
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPackage(@PathParam("id") final long id)
     {
-        PackageDataResponse entity = new PackageDataResponse();
+    	System.out.println("here");
+    	PackageViewResponse entity = new PackageViewResponse();
 
         try
         {

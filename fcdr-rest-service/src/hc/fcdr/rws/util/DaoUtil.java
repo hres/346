@@ -23,6 +23,7 @@ import hc.fcdr.rws.model.classification.ClassificationResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
 import hc.fcdr.rws.model.product.ProductInsertRequest;
 import hc.fcdr.rws.model.product.ProductLabelsResponse;
@@ -377,6 +378,7 @@ public final class DaoUtil
         labelInsertList.add(request.getPackage_description());
   
         
+        
         if (!request.getPackage_upc().isEmpty())
             queryMap.put("package_upc",request.getPackage_upc());
         else
@@ -390,7 +392,7 @@ public final class DaoUtil
         if (!request.getPackage_brand().isEmpty())
             queryMap.put("package_brand",request.getPackage_brand());
     
-        labelInsertList.add(request.getPackage_upc());
+        labelInsertList.add(request.getPackage_brand());
         
         if (!request.getPackage_manufacturer().isEmpty())
             queryMap.put("package_manufacturer",request.getPackage_manufacturer());
@@ -445,7 +447,7 @@ public final class DaoUtil
         
         
         if (request.getMulti_part_flag() != null)
-            queryMap.put("ingredients",request.getMulti_part_flag());
+            queryMap.put("multi_part_flag",request.getMulti_part_flag());
     
         labelInsertList.add(request.getMulti_part_flag());
         
@@ -494,6 +496,10 @@ public final class DaoUtil
         if (!request.getPackage_source().isEmpty())
             queryMap.put("package_source",request.getPackage_source());
         else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
         	
     
         labelInsertList.add(request.getPackage_source());  
@@ -543,21 +549,21 @@ public final class DaoUtil
     
         labelInsertList.add(request.getChild_item());
         
-        if (!request.getPackage_classification_name().isEmpty())
-            queryMap.put("package_classification_name",request.getPackage_classification_name());
+        if (!request.getClassification_name().isEmpty())
+            queryMap.put("package_classification_name",request.getClassification_name());
     
-        labelInsertList.add(request.getPackage_classification_name());  
+        labelInsertList.add(request.getClassification_name());  
         
-        if (!request.getEdited_by().isEmpty())
+        if (request.getEdited_by() != null)
             queryMap.put("edited_by",request.getEdited_by());
     
         labelInsertList.add(request.getEdited_by());    
         
         
-        if (request.getPackage_classification_number() != null)
-            queryMap.put("package_classification_number",request.getPackage_classification_number());
+        if (request.getClassification_number() != null)
+            queryMap.put("package_classification_number",request.getClassification_number());
     
-        labelInsertList.add(request.getPackage_classification_number());
+        labelInsertList.add(request.getClassification_number());
         
         if (request.getProduct_id() != null)
         {
@@ -587,16 +593,19 @@ public final class DaoUtil
         }
         else
         	labelInsertList.add(null);
-        
+    
         if (!request.getPackage_collection_date().isEmpty())
         {
             queryMap.put("nft_last_update_date",
-                    request.getNft_last_update_date());
-            labelInsertList.add(Date.valueOf(request.getNft_last_update_date()));
+                    request.getPackage_collection_date());
+            labelInsertList.add(Date.valueOf(request.getPackage_collection_date()));
         }
         else
-        	labelInsertList.add(null);
-
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        
 
         final Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("creation_date", now);
@@ -604,6 +613,10 @@ public final class DaoUtil
         queryMap.put("last_edit_date", now);
         labelInsertList.add(now);
 
+        if (request.getCalculated() != null)
+            queryMap.put("calculated",request.getCalculated());
+    
+        labelInsertList.add(request.getCalculated());
         queryMap.put("package_insert_list", labelInsertList);
 
         return queryMap;
@@ -1807,6 +1820,106 @@ public final class DaoUtil
     {
         final Package _package = getPackage(resultSet);
         final PackageResponse packageResponse = new PackageResponse(_package);
+
+        return packageResponse;
+    }
+    public static PackageViewData getPackageResponseView(final ResultSet resultSet)
+            throws SQLException
+    {
+        final PackageViewData packageResponse = new PackageViewData();
+        	packageResponse.setPackage_id(resultSet.getInt("package_id"));
+
+        	packageResponse.setProduct_id(resultSet.getInt("package_product_id_fkey"));
+
+        	packageResponse.setPackage_description(resultSet.getString("package_description"));
+
+        	packageResponse.setPackage_upc(resultSet.getString("package_upc"));
+        	packageResponse.setPackage_brand(resultSet.getString("package_brand"));
+        	
+        	packageResponse.setPackage_manufacturer(resultSet.getString("package_manufacturer"));
+        	packageResponse.setPackage_country(resultSet.getString("package_country"));
+        	
+            Double package_size = resultSet.getDouble("package_size");            
+        	packageResponse.setPackage_size(resultSet.wasNull()?null: package_size);
+        	
+        	packageResponse.setPackage_size_unit_of_measure(resultSet.getString("package_size_unit_of_measure"));
+        	packageResponse.setStorage_type(resultSet.getString("storage_type"));
+        	System.out.println("we are here 5");
+
+        	packageResponse.setStorage_statements(resultSet.getString("storage_statements"));
+        	packageResponse.setHealth_claims(resultSet.getString("health_claims"));
+        	packageResponse.setOther_package_statements(resultSet.getString("other_package_statements"));
+        	packageResponse.setSuggested_directions(resultSet.getString("suggested_directions"));
+        	packageResponse.setIngredients(resultSet.getString("ingredients"));
+        	
+            Boolean multi_part_flag = resultSet.getBoolean("multi_part_flag");            
+        	packageResponse.setMulti_part_flag(resultSet.wasNull()?null: multi_part_flag);
+
+
+        	packageResponse.setNutrition_fact_table(resultSet.getString("nutrition_fact_table"));
+        	
+            Double as_prepared_per_serving_amount = resultSet.getDouble("as_prepared_per_serving_amount");            
+        	packageResponse.setAs_prepared_per_serving_amount(resultSet.wasNull()?null: as_prepared_per_serving_amount);
+        	
+
+        	packageResponse.setAs_prepared_unit_of_measure(resultSet.getString("as_prepared_unit_of_measure"));
+
+            Double as_sold_per_serving_amount = resultSet.getDouble("as_sold_per_serving_amount");            
+        	packageResponse.setAs_sold_per_serving_amount(resultSet.wasNull()?null: as_sold_per_serving_amount);
+        	       	
+        	packageResponse.setAs_sold_unit_of_measure(resultSet.getString("as_sold_unit_of_measure"));
+        	
+        	
+        	
+            Double as_prepared_per_serving_amount_in_grams = resultSet.getDouble("as_prepared_per_serving_amount_in_grams");            
+        	packageResponse.setAs_prepared_per_serving_amount_in_grams(resultSet.wasNull()?null: as_prepared_per_serving_amount_in_grams);
+ 
+            Double as_sold_per_serving_amount_in_grams = resultSet.getDouble("as_sold_per_serving_amount_in_grams");            
+        	packageResponse.setAs_sold_per_serving_amount_in_grams(resultSet.wasNull()?null: as_sold_per_serving_amount_in_grams);
+ 
+        	packageResponse.setPackage_comment(resultSet.getString("package_comment"));
+        	packageResponse.setPackage_source(resultSet.getString("package_source"));
+        	packageResponse.setPackage_product_description(resultSet.getString("package_product_description"));
+        	packageResponse.setPackage_collection_date(resultSet.getString("package_collection_date"));
+        	
+            Integer number_of_units = resultSet.getInt("number_of_units");            
+        	packageResponse.setNumber_of_units(resultSet.wasNull()?null: number_of_units);
+ 
+        	
+          	packageResponse.setEdited_by(resultSet.getString("edited_by"));
+        	System.out.println("we are here 6");
+
+            Boolean informed_dining_program = resultSet.getBoolean("informed_dining_program");            
+        	packageResponse.setInformed_dining_program(resultSet.wasNull()?null: informed_dining_program);
+ 
+        	
+        	packageResponse.setNft_last_update_date(resultSet.getString("nft_last_update_date"));
+        	System.out.println("we are here 7");
+
+            Double product_grouping = resultSet.getDouble("product_grouping");            
+        	packageResponse.setProduct_grouping(resultSet.wasNull()?null: product_grouping);
+ 
+            Boolean child_item = resultSet.getBoolean("child_item");            
+        	packageResponse.setChild_item(resultSet.wasNull()?null: child_item);
+ 
+            Double package_classification_number = resultSet.getDouble("package_classification_number");            
+        	packageResponse.setClassification_number(resultSet.wasNull()?null: package_classification_number);
+        	
+        	packageResponse.setClassification_name(resultSet.getString("package_classification_name"));
+        	
+            Double nielsen_item_rank = resultSet.getDouble("nielsen_item_rank");            
+        	packageResponse.setNielsen_item_rank(resultSet.wasNull()?null: nielsen_item_rank);
+        	
+        	packageResponse.setNutrient_claims(resultSet.getString("nutrient_claims"));
+        	packageResponse.setPackage_nielsen_category(resultSet.getString("package_nielsen_category"));
+        	packageResponse.setCommon_household_measure(resultSet.getString("common_household_measure"));
+
+        	packageResponse.setCreation_date(resultSet.getString("creation_date"));
+        	packageResponse.setLast_edit_date(resultSet.getString("last_edit_date"));
+ 
+            Boolean calculated = resultSet.getBoolean("calculated");            
+        	packageResponse.setCalculated(resultSet.wasNull()?null: calculated);
+        	
 
         return packageResponse;
     }

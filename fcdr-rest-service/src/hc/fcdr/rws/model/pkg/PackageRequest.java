@@ -1,24 +1,22 @@
 package hc.fcdr.rws.model.pkg;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 public class PackageRequest
 {
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  labelUpc;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  labelDescription;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  labelSource;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  labelIngredients;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  collectionDateFrom;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  collectionDateTo;
-    @XmlElement
+	@XmlElement(nillable=true)
     public String  orderBy;
     @XmlElement
     public Integer offset;
