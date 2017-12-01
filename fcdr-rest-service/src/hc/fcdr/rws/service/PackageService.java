@@ -3,6 +3,7 @@ package hc.fcdr.rws.service;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,8 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
+import hc.fcdr.rws.model.pkg.NftModel;
+import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
@@ -188,6 +191,39 @@ public class PackageService extends Application
                        .build();
     }
 
+    
+    @POST
+    @Path("/insertNft")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response insertNft(final NftRequest nftRequest)
+            throws SQLException, IOException, Exception
+    {
+    	
+    	System.out.println("Flag "+nftRequest.getFlag() );
+    	System.out.println("Package id  "+nftRequest.getPackage_id());
+
+    	for(NftModel element : nftRequest.getNft()){
+    		
+    		System.out.println("name = "+ element.getAmount());
+    	}
+//        InsertPackageResponse entity = new InsertPackageResponse();
+//        try
+//        {
+//            if (packageDao != null)
+//                entity = packageDao.getPackageInsertResponse(packageInsertRequest);
+//        }
+//        catch (final Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+
+        	return null;
+//        return Response.status(Response.Status.OK)
+//                       .type(MediaType.APPLICATION_JSON)
+//                       .entity(entity)
+//                       .build();
+    }
     // ===
     @OPTIONS
     @Path("/package")

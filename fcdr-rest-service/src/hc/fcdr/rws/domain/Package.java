@@ -63,7 +63,7 @@ public class Package implements Serializable
         this.otherPackageStatements = "";
         this.suggestedDirections = "";
         this.ingredients = "";
-        this.multiPartFlag = false;
+        this.multiPartFlag = null;
         this.nutritionFactTable = "";
         this.asPreparedPerServingAmount = 0.0;
         this.asPreparedUnitOfMeasure = "";
