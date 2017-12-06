@@ -15,13 +15,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.ComponentName;
+import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
@@ -29,11 +33,14 @@ import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.ContextManager;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Path("/PackageService")
+
 public class PackageService extends Application
 {
     static PackageDao packageDao = null;
@@ -200,29 +207,23 @@ public class PackageService extends Application
             throws SQLException, IOException, Exception
     {
     	
-    	System.out.println("Flag "+nftRequest.getFlag() );
-    	System.out.println("Package id  "+nftRequest.getPackage_id());
 
-    	for(NftModel element : nftRequest.getNft()){
-    		
-    		System.out.println("name = "+ element.getAmount());
-    	}
-//        InsertPackageResponse entity = new InsertPackageResponse();
-//        try
-//        {
-//            if (packageDao != null)
-//                entity = packageDao.getPackageInsertResponse(packageInsertRequest);
-//        }
-//        catch (final Exception e)
-//        {
-//            e.printStackTrace();
-//        }
+    	ResponseGeneric entity = new ResponseGeneric();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getNftInsertResponse(nftRequest);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
 
-        	return null;
-//        return Response.status(Response.Status.OK)
-//                       .type(MediaType.APPLICATION_JSON)
-//                       .entity(entity)
-//                       .build();
+        	//return null;
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
     // ===
     @OPTIONS
@@ -232,4 +233,36 @@ public class PackageService extends Application
     {
         return "<operations>GET, PUT, POST, DELETE</operations>";
     }
+    
+    @GET
+    @Path("/listofcomponents")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getComponentName()throws SQLException, IOException, Exception
+    {
+    	ComponentNameResponse entity = new ComponentNameResponse();
+    
+    	
+        //List<String> entity =  new ArrayList<String>();
+
+        try
+        {
+            if (packageDao != null)
+            	entity =  packageDao.getComponents();
+            
+        }
+        catch (final DaoException e)
+        {
+            e.printStackTrace();
+        }
+
+       // return new ArrayList<String>();
+
+//    	Response response = Response.ok(entity).build();
+        //return response;
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(entity)
+                .build();
+    }
+
 }

@@ -20,6 +20,8 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.model.classification.ClassificationResponse;
+import hc.fcdr.rws.model.pkg.NftModel;
+import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
@@ -360,8 +362,139 @@ public final class DaoUtil
 
         return productResponse;
     }
-    //packageInsertRequest
+    //NftRequest nftRequest
+    public static Map<String, Object> getQueryMap( NftRequest nftRequest){
+    	  
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
+
+    		for(NftModel element : nftRequest.getNft()){
+    		
+    			if(element.getName().isEmpty()){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
+    	            return queryMap;
+    				
+    			}
+    			if((element.getAmount() == null && !element.getUnit_of_measure().isEmpty()) || (element.getAmount() != null && element.getUnit_of_measure().isEmpty())){
+    				
+
+    				queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
+    	            return queryMap;
+    				
+    			}
+    			queryMap.put(element.getName(),"placeholder");
+    	}
+    	
+    		if(!queryMap.isEmpty()){
+    			if(!queryMap.containsKey("Fat")){
+    			
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Energy")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Energy KJ")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Saturated Fat")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Trans Fat")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Omega-6 Polyunsaturated Fat")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Omega-3 Polyunsaturated Fat")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Carbohydrates")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Fibre")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Insoluble Fibre")){
+    			
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Sugar")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Sugar Alcohols")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Starch")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Protein")){
+    				
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Cholesterol")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Sodium")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    			if(!queryMap.containsKey("Saturated + Trans Fat")){
+    				
+
+    	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+    	            return queryMap;
+    			}
+    		}
+    		//queryMap.key
+    	return queryMap;
+    	
+    	
+    	
     
+    }
     
     public static Map<String, Object> getQueryMap(final PackageInsertRequest request){
     	

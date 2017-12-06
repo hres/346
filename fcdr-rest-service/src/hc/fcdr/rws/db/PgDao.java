@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.except.NoRowsAffectedDAOException;
+import hc.fcdr.rws.model.pkg.NftModel;
+import hc.fcdr.rws.model.pkg.NftRequest;
 
 public class PgDao
 {
@@ -86,5 +88,43 @@ public class PgDao
         }
 
         return key;
+    }
+    
+    protected boolean executeInsertNft(NftRequest nftRequest,  String schema)
+            throws DaoException, SQLException
+    {
+    	
+    	String query = "insert into "+schema+"."+"product_component(component_id, package_id, amount,"
+    					+ " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+    					+ "select component_id, ?, ?, ?, ?, ? from fcdrschema.component "
+    					+ "where component_id = ("
+    					+ "select component_id from "+schema+"."+"component where component_name= ?)";
+    	
+    	try {
+    		connection.setAutoCommit(false);
+    		for(NftModel element : nftRequest.getNft()){
+    			//ecuteInsertNft(element, nftRequest.getPackage_id(), nftRequest.getFlag(), schema);
+    			
+    		
+    		
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+												  preparedStatement.setObject(1, nftRequest.getPackage_id());
+												  preparedStatement.setObject(2, element.getAmount());
+												  preparedStatement.setObject(3, element.getUnit_of_measure());
+												  preparedStatement.setObject(4, element.getDaily_value());
+												  preparedStatement.setObject(5, nftRequest.getFlag());
+												  preparedStatement.setObject(6, element.getName());
+												  preparedStatement.executeUpdate();
+    		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			connection.rollback();
+			e.printStackTrace();
+			
+			return false;
+		}
+    	connection.commit();
+    	return true; 
+
     }
 }

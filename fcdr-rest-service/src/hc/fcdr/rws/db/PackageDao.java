@@ -13,9 +13,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.config.ResponseCodes;
+import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.ComponentName;
+import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
+import hc.fcdr.rws.model.pkg.NftModel;
+import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.PackageData;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
@@ -24,6 +29,7 @@ import hc.fcdr.rws.model.pkg.PackageResponse;
 import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
@@ -93,6 +99,27 @@ public class PackageDao extends PgDao
     }
 
     // ===
+    public ResponseGeneric getNftInsertResponse( NftRequest nftRequest)throws DaoException, SQLException{
+    	
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(nftRequest);
+        		
+        if (queryMap.containsKey("inputError"))
+        {
+            final Object o = queryMap.get("inputError");
+            queryMap.remove("inputError");
+
+            return new ResponseGeneric(((ResponseCodes) o).getCode(),
+                    ((ResponseCodes) o).getMessage());
+        }
+        
+
+	executeInsertNft(nftRequest, schema);
+	
+
+
+        return new ResponseGeneric(ResponseCodes.OK.getCode(), 
+                ResponseCodes.OK.getMessage());
+    }
 
     public InsertPackageResponse getPackageInsertResponse(PackageInsertRequest packageInsertRequest) throws DaoException
     {
@@ -409,6 +436,29 @@ public class PackageDao extends PgDao
         }
 
         return false;
+    }
+    
+    public ComponentNameResponse getComponents() throws DaoException
+    {
+        ResultSet resultSet = null;
+        final ComponentNameResponse componentList = new ComponentNameResponse();
+
+        final String query = "select component_name from " + schema + "." + "component";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            	componentList.add(new ComponentName(resultSet.getString("component_name")));
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return componentList;
     }
     public Boolean checkForSamePackageUpcProductId(final String upc,
             final Integer productId) throws DaoException
