@@ -118,6 +118,11 @@ public class SalesService extends Application
                        .entity(entity)
                        .build();
     }
+    
+    // ==============================
+
+
+
 
     @GET
     @Path("/sales")

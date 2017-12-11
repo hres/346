@@ -27,8 +27,10 @@ import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
+import hc.fcdr.rws.model.pkg.NftGetModel;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
+import hc.fcdr.rws.model.pkg.NftView;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
@@ -213,6 +215,33 @@ public class PackageService extends Application
         {
             if (packageDao != null)
                 entity = packageDao.getNftInsertResponse(nftRequest);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        	//return null;
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+    // ===
+    @POST
+    @Path("/getNft")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getNft(NftGetModel nftGetModel)
+            throws SQLException, IOException, Exception
+    {
+    	
+
+    	NftView entity = new NftView();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getNft(nftGetModel.getPackage_id(), nftGetModel.getFlag());
         }
         catch (final Exception e)
         {

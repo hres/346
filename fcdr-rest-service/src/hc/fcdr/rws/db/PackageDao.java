@@ -21,6 +21,7 @@ import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
+import hc.fcdr.rws.model.pkg.NftView;
 import hc.fcdr.rws.model.pkg.PackageData;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
@@ -99,6 +100,33 @@ public class PackageDao extends PgDao
     }
 
     // ===
+    
+
+    public NftView getNft(final Integer packageId, Boolean flag) throws DaoException
+    {
+    	NftView resultSet = null;
+
+        final String query = "select  amount, amount_unit_of_measure, percentage_daily_value, component_name  from " + schema + "."
+                + "product_component pc INNER JOIN "+schema+"."
+                		+ "component c on pc.component_id = c.component_id where package_id = ? and as_ppd_flag = ? order by nft_order";
+
+        System.out.println(query);
+        try
+        {
+            resultSet = executeGetNft(query, packageId, flag);
+            resultSet.setStatus(200);
+           
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        
+        return resultSet;
+    }
+
+    // ===
     public ResponseGeneric getNftInsertResponse( NftRequest nftRequest)throws DaoException, SQLException{
     	
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(nftRequest);
@@ -112,8 +140,36 @@ public class PackageDao extends PgDao
                     ((ResponseCodes) o).getMessage());
         }
         
+        System.out.println("The flag has the value of "+nftRequest.getFlag());
+        if(nftRequest.getFlag() == null){
+        	return new ResponseGeneric(0,
+                    "Invalid flag");
+        }else if(nftRequest.getFlag()==true){
+        	
+            if(checkIfHasNft(nftRequest, schema, true) > 0){
+            	
+            	return new ResponseGeneric(777,
+                        "Has an NFT as sold already");
+                
+            }else{
+            	executeInsertNft(nftRequest, schema);
+            }	
+        }else if(nftRequest.getFlag()==false){
+            if(checkIfHasNft(nftRequest, schema, false) > 0){
+            	return new ResponseGeneric(778,
+                        "Has an NFT as sold prepared");
+                
+            }else{
+            	executeInsertNft(nftRequest, schema);
+            }
+        }else{
+        	return new ResponseGeneric(0,
+                    "Invalid flag");
+        }
+        
 
-	executeInsertNft(nftRequest, schema);
+	
+	
 	
 
 
@@ -437,6 +493,8 @@ public class PackageDao extends PgDao
 
         return false;
     }
+    
+
     
     public ComponentNameResponse getComponents() throws DaoException
     {
