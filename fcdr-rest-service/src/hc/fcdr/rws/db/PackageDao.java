@@ -343,7 +343,7 @@ public class PackageDao extends PgDao
         }
 
         /// ===
-
+        Integer number_of_records = null;
         String collectionDateFrom = "";
         String collectionDateTo = "";
         boolean a = false;
@@ -366,10 +366,13 @@ public class PackageDao extends PgDao
         /// ===
 
         ResultSet resultSet = null;
+        ResultSet resultSetCount = null;
+
         PackageResponse packageResponse = null;
         final PackageData data = new PackageData();
 
         String query = "select * from " + schema + "." + "package";
+        String query_count = "select count(*) AS COUNT from " + schema + "." + "package";
 
         // ===
 
@@ -378,6 +381,8 @@ public class PackageDao extends PgDao
         final boolean sortOrder = packageRequest.flag;
 
         String where_clause = "";
+        String where_clause_count = "";
+
         int count = 0;
         String str;
         String sortDirection = null;
@@ -409,8 +414,11 @@ public class PackageDao extends PgDao
 
         try
         {
-            if ((where_clause != null) && (where_clause.length() > 0))
+            if ((where_clause != null) && (where_clause.length() > 0)){
                 query += " where " + where_clause;
+                query_count += " where " + where_clause;
+                
+            }
 
             if (sortOrder)
                 sortDirection = "ASC";
@@ -441,6 +449,10 @@ public class PackageDao extends PgDao
             /// ===
 
             resultSet = executeQuery(query, objectList.toArray());
+            resultSetCount = executeQuery(query_count, objectList.toArray());
+            resultSetCount.next();
+            
+		     number_of_records = resultSetCount.getInt("COUNT");
 
             while (resultSet.next())
             {
@@ -455,6 +467,7 @@ public class PackageDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
+	     data.setCount(number_of_records);
 
         if (data.getCount() == 0)
             return new PackageDataResponse(

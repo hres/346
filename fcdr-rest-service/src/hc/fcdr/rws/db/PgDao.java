@@ -18,10 +18,12 @@ import hc.fcdr.rws.model.pkg.NftView;
 
 public class PgDao
 {
-    private static final Logger logger = Logger.getLogger(
+    		private static final Logger logger = Logger.getLogger(
             PgDao.class.getName());
+    
     protected Connection        connection;
 
+    
     public PgDao(final Connection connection)
     {
         this.connection = connection;
@@ -60,9 +62,12 @@ public class PgDao
 
         try
         {
+        
             preparedStatement = prepareStatement(connection, query, true,
                     values);
+        	System.out.println(preparedStatement);
             final int affectedRows = preparedStatement.executeUpdate();
+            
             	System.out.println("the number returned is: " + affectedRows);
             if (affectedRows == 0)
                 throw new NoRowsAffectedDAOException(
@@ -98,7 +103,7 @@ public class PgDao
     	
     	String query = "insert into "+schema+"."+"product_component(component_id, package_id, amount,"
     					+ " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
-    					+ "select component_id, ?, ?, ?, ?, ? from fcdrschema.component "
+    					+ "select component_id, ?, ?, ?, ?, ? from "+schema+".component "
     					+ "where component_id = ("
     					+ "select component_id from "+schema+"."+"component where component_name= ?)";
     	

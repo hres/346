@@ -1,6 +1,7 @@
 package hc.fcdr.rws.service;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Classification;
@@ -48,16 +50,17 @@ public class PackageService extends Application
     static PackageDao packageDao = null;
 
     @PostConstruct
-    public static void initialize()
+    public static void initialize() throws IOException, Exception
     {
         if (packageDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-            pgConnectionPool.initialize();
+//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+//            pgConnectionPool.initialize();
 
             try
             {
-                packageDao = new PackageDao(pgConnectionPool.getConnection(),
+            	Connection connection = Connect.getConnections();
+                packageDao = new PackageDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)

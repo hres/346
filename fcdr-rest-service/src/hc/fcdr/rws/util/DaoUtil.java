@@ -386,7 +386,7 @@ public final class DaoUtil
     			queryMap.put(element.getName(),"placeholder");
     	}
     	
-    		if(!queryMap.isEmpty()){
+    		if(!queryMap.isEmpty() && nftRequest.getFlag() ==true){
     			if(!queryMap.containsKey("Fat")){
     			
     	            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -495,6 +495,8 @@ public final class DaoUtil
     	
     
     }
+    
+    
     
     public static Map<String, Object> getQueryMap(final PackageInsertRequest request){
     	
