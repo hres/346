@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDataResponseShort;
@@ -699,4 +700,6 @@ public class SalesDao extends PgDao
 
         return false;
     }
+    
+
 }

@@ -28,6 +28,7 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftGetModel;
 import hc.fcdr.rws.model.pkg.NftModel;
@@ -42,6 +43,7 @@ import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.ContextManager;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 @Path("/PackageService")
 
@@ -203,7 +205,31 @@ public class PackageService extends Application
                        .build();
     }
 
+    @GET
+    @Path("/unitOfMeasure")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUnitOfMeasure()
+    {
+    GenericList entity = new GenericList();
+
     
+    try
+    {
+        if (packageDao != null)
+            entity = packageDao.getListOfUnits();
+    }
+    catch (final Exception e)
+    {
+        e.printStackTrace();
+    }
+
+    	//return null;
+    return Response.status(Response.Status.OK)
+                   .type(MediaType.APPLICATION_JSON)
+                   .entity(entity)
+                   .build();
+    	
+    }
     @POST
     @Path("/insertNft")
     @Produces(MediaType.APPLICATION_JSON)

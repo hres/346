@@ -18,6 +18,7 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
@@ -566,6 +567,30 @@ public class PackageDao extends PgDao
         }
 
         return null;
+    }
+    
+    public GenericList getListOfUnits() throws DaoException{
+    	
+    	GenericList genericList = new GenericList();
+    	String query = "select unit_of_measure_name from "+ schema + ".unit_of_measure";;
+    	ResultSet resultSet = null;
+    	try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+            	genericList.getDataList().add(resultSet.getString("unit_of_measure_name"));
+   
+            }
+    		
+        } catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+		return genericList;
+    	
     }
 
 }

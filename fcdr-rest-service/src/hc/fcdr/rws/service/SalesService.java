@@ -22,6 +22,7 @@ import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDataResponseShort;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
