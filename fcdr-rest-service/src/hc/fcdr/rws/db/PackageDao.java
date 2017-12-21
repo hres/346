@@ -28,6 +28,7 @@ import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.pkg.PackageUpdateRequest;
 import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
@@ -249,6 +250,121 @@ public class PackageDao extends PgDao
                
     }
     ///=======
+    
+    public InsertPackageResponse getPackageUpdateResponse(PackageUpdateRequest packageUpdateRequest) throws DaoException
+    {
+    	
+    
+        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
+        		packageUpdateRequest);
+
+        if (queryMap.isEmpty())
+            return new InsertPackageResponse(
+                    ResponseCodes.EMPTY_REQUEST.getCode(),
+                    ResponseCodes.EMPTY_REQUEST.getMessage());
+
+        if (queryMap.containsKey("inputError"))
+        {
+            final Object o = queryMap.get("inputError");
+            queryMap.remove("inputError");
+
+            return new InsertPackageResponse(((ResponseCodes) o).getCode(),
+                    ((ResponseCodes) o).getMessage());
+        }
+
+        // Check for valid classification_number.
+        if(packageUpdateRequest.getClassification_number() != null){
+        if (!checkClassification(packageUpdateRequest.getClassification_number()))
+            return new InsertPackageResponse(
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
+                    ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+
+        }
+        
+
+
+        final String[] columns =
+        { "package_description",  "package_brand", "package_manufacturer",
+                "package_country", "package_size", "package_size_unit_of_measure",
+                "storage_type", "storage_statements", "health_claims", "other_package_statements",
+                "suggested_directions", "ingredients","multi_part_flag",
+                "nutrition_fact_table", "as_prepared_per_serving_amount", "as_prepared_unit_of_measure",
+                "as_sold_per_serving_amount", "as_sold_unit_of_measure", "as_prepared_per_serving_amount_in_grams",
+                "as_sold_per_serving_amount_in_grams", "package_comment", "package_source", "package_product_description",
+                 "number_of_units", "informed_dining_program", "product_grouping","nielsen_item_rank", "nutrient_claims",
+                 "package_nielsen_category", "common_household_measure", "child_item","package_classification_name","edited_by",
+                 "package_classification_number","package_collection_date",   "nft_last_update_date",              
+                 "last_edit_date", "calculated","package_id" };
+
+        
+        
+        String questionmarks = StringUtils.repeat("?,", columns.length);
+        questionmarks = (String) questionmarks.subSequence(0,
+                questionmarks.length() - 1);
+
+//        String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
+//                schema + "." + "package");
+//        query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
+//        query = query.replaceFirst(VALUES_REGEX, questionmarks);
+
+        
+        
+        final String query = "update " + schema + "." + "package set package_description = ?, "
+        		+ "package_brand = ?, "
+        		+ "package_manufacturer = ?, "
+        		+ "package_country = ?, "
+        		+ "package_size = ?, "
+        		+ "package_size_unit_of_measure = ?, "
+        		+ "storage_type = ?, "
+        		+ "storage_statements = ?, "
+        		+ "health_claims = ?, "
+        		+ "other_package_statements = ?, "
+        		+ "suggested_directions = ?, "
+        		+ "ingredients = ?, "
+        		+ "multi_part_flag = ?, "
+        		+ "nutrition_fact_table = ?, "
+        		+ "as_prepared_per_serving_amount = ?, "
+        		+ "as_prepared_unit_of_measure = ?, "
+        		+ "as_sold_per_serving_amount = ?, "
+        		+ "as_sold_unit_of_measure = ?, "
+        		+ "as_prepared_per_serving_amount_in_grams = ?, "
+        		+ "as_sold_per_serving_amount_in_grams = ?, "
+        		+ "package_comment = ?, "
+        		+ "package_source = ?, "
+        		+ "package_product_description = ?, "
+        		+ "number_of_units = ?, "
+        		+ "informed_dining_program = ?, "
+        		+ "product_grouping = ?, "
+        		+ "nielsen_item_rank = ?, "
+        		+ "nutrient_claims = ?, "
+        		+ "package_nielsen_category = ?, "
+        		+ "common_household_measure = ?, "
+        		+ "child_item = ?, "
+        		+ "package_classification_name = ?, "
+        		+ "edited_by = ?, "
+        		+ "package_classification_number = ?, "
+        		+ "package_collection_date = ?, "
+        		+ "nft_last_update_date = ?, "
+        		+ "last_edit_date = ?, "
+        		+ "calculated = ? "
+        		 + "where package_id= ? ";
+        		
+        
+        
+        
+        
+        
+        
+        @SuppressWarnings("unchecked")
+		final List<Object> packageUpdateList = (List<Object>) queryMap.get(
+                "package_update_list");
+
+        // Returns the sales_id upon successful insert.
+        final Object o = executeUpdate(query, packageUpdateList.toArray());
+        InsertPackageResponse insertPackageResponse = new InsertPackageResponse(ResponseCodes.OK.getCode(), ResponseCodes.OK.getMessage());
+        return insertPackageResponse;
+               
+    }
     
     public PackageDataResponse getPackageResponse()
             throws SQLException, IOException, Exception

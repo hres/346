@@ -37,6 +37,7 @@ import hc.fcdr.rws.model.pkg.NftView;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
+import hc.fcdr.rws.model.pkg.PackageUpdateRequest;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
@@ -205,6 +206,31 @@ public class PackageService extends Application
                        .build();
     }
 
+    @POST
+    @Path("/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(final PackageUpdateRequest packageUpdateRequest)
+            throws SQLException, IOException, Exception
+    {
+    	
+    	System.out.println("les valeurs sont: \n "+packageUpdateRequest.getPackage_collection_date());
+        InsertPackageResponse entity = new InsertPackageResponse();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getPackageUpdateResponse(packageUpdateRequest);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
     @GET
     @Path("/unitOfMeasure")
     @Produces(MediaType.APPLICATION_JSON)

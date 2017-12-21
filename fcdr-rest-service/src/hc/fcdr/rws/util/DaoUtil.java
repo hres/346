@@ -25,6 +25,7 @@ import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
 import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageResponse;
+import hc.fcdr.rws.model.pkg.PackageUpdateRequest;
 import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
 import hc.fcdr.rws.model.product.ProductInsertRequest;
@@ -760,6 +761,265 @@ public final class DaoUtil
     
     ///
 
+    
+ 
+    
+    public static Map<String, Object> getQueryMap(final PackageUpdateRequest request){
+    	
+        final Map<String, Object> queryMap = new HashMap<String, Object>();
+        final List<Object> labelUpdateList = new ArrayList<Object>();
+
+        System.out.println(request.toString());
+        if (!request.getPackage_description().isEmpty())
+            queryMap.put("package_description", request.getPackage_description());
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        labelUpdateList.add(request.getPackage_description());
+  
+       
+     
+        
+        if (request.getPackage_brand() != null)
+            queryMap.put("package_brand",request.getPackage_brand());
+    
+        labelUpdateList.add(request.getPackage_brand());
+        
+        if (request.getPackage_manufacturer() != null)
+            queryMap.put("package_manufacturer",request.getPackage_manufacturer());
+    
+        labelUpdateList.add(request.getPackage_manufacturer());      
+        
+        if (request.getPackage_country() != null)
+            queryMap.put("package_country",request.getPackage_country());
+    
+        labelUpdateList.add(request.getPackage_country());   
+        
+        
+        if (request.getPackage_size() != null)
+            queryMap.put("package_size",request.getPackage_size());
+    
+        labelUpdateList.add(request.getPackage_size());   
+        
+        if (request.getPackage_size_unit_of_measure() != null)
+            queryMap.put("package_size_unit_of_measure",request.getPackage_size_unit_of_measure());
+    
+        labelUpdateList.add(request.getPackage_size_unit_of_measure());   
+        
+        if (request.getStorage_type() != null)
+            queryMap.put("storage_type",request.getStorage_type());
+    
+        labelUpdateList.add(request.getStorage_type());  
+ 
+        if (request.getStorage_statements() != null)
+            queryMap.put("storage_statements",request.getStorage_statements());
+    
+        labelUpdateList.add(request.getStorage_statements());  
+        
+        if (request.getHealth_claims() != null)
+            queryMap.put("health_claims",request.getHealth_claims());
+    
+        labelUpdateList.add(request.getHealth_claims());         
+        
+        if (request.getOther_package_statements() != null)
+            queryMap.put("other_package_statements",request.getOther_package_statements());
+    
+        labelUpdateList.add(request.getOther_package_statements());  
+        
+        if ( request.getSuggested_directions() != null)
+            queryMap.put("suggested_directions",request.getSuggested_directions());
+    
+        labelUpdateList.add(request.getSuggested_directions());         
+        
+        if (request.getIngredients() != null)
+            queryMap.put("ingredients",request.getIngredients());
+    
+        labelUpdateList.add(request.getIngredients());
+        
+        
+        if (request.getMulti_part_flag() != null)
+            queryMap.put("multi_part_flag",request.getMulti_part_flag());
+    
+        labelUpdateList.add(request.getMulti_part_flag());
+        
+        
+        if (request.getNutrition_fact_table() != null)
+            queryMap.put("nutrition_fact_table",request.getNutrition_fact_table());
+    
+        labelUpdateList.add(request.getNutrition_fact_table());
+        
+        if (request.getAs_prepared_per_serving_amount() != null)
+            queryMap.put("as_prepared_per_serving_amount",request.getAs_prepared_per_serving_amount());
+    
+        labelUpdateList.add(request.getAs_prepared_per_serving_amount());   
+  
+        
+        if (request.getAs_prepared_unit_of_measure() != null)
+            queryMap.put("as_prepared_unit_of_measure",request.getAs_prepared_unit_of_measure());
+    
+        labelUpdateList.add(request.getAs_prepared_unit_of_measure());    
+        
+        if (request.getAs_sold_per_serving_amount() != null)
+            queryMap.put("as_sold_per_serving_amount",request.getAs_sold_per_serving_amount());
+    
+        labelUpdateList.add(request.getAs_sold_per_serving_amount());  
+  
+        if (request.getAs_sold_unit_of_measure() != null)
+            queryMap.put("as_sold_unit_of_measure",request.getAs_sold_unit_of_measure());
+    
+        labelUpdateList.add(request.getAs_sold_unit_of_measure());  
+        
+        if (request.getAs_prepared_per_serving_amount_in_grams() != null)
+            queryMap.put("as_prepared_per_serving_amount_in_grams",request.getAs_prepared_per_serving_amount_in_grams());
+    
+        labelUpdateList.add(request.getAs_prepared_per_serving_amount_in_grams()); 
+        
+        if (request.getAs_sold_per_serving_amount_in_grams() != null)
+            queryMap.put("as_sold_per_serving_amount_in_grams",request.getAs_sold_per_serving_amount_in_grams());
+    
+        labelUpdateList.add(request.getAs_sold_per_serving_amount_in_grams()); 
+        
+        if (request.getPackage_comment() != null)
+            queryMap.put("package_comment",request.getPackage_comment());
+    
+        labelUpdateList.add(request.getPackage_comment());     
+        
+        if (request.getPackage_source() != null)
+            queryMap.put("package_source",request.getPackage_source());
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        	
+    
+        labelUpdateList.add(request.getPackage_source());  
+   
+        if (request.getPackage_product_description() != null)
+            queryMap.put("package_product_description",request.getPackage_product_description());
+    
+        labelUpdateList.add(request.getPackage_product_description());  
+   
+        if (request.getNumber_of_units() != null)
+            queryMap.put("number_of_units",request.getNumber_of_units());
+    
+        labelUpdateList.add(request.getNumber_of_units());
+        
+        if (request.getInformed_dining_program() != null)
+            queryMap.put("informed_dining_program",request.getInformed_dining_program());
+    
+        labelUpdateList.add(request.getInformed_dining_program());
+        
+        if (request.getProduct_grouping() != null)
+            queryMap.put("product_grouping",request.getProduct_grouping());
+    
+        labelUpdateList.add(request.getProduct_grouping());
+        
+        if (request.getNielsen_item_rank() != null)
+            queryMap.put("nielsen_item_rank",request.getNielsen_item_rank());
+    
+        labelUpdateList.add(request.getNielsen_item_rank());
+    
+        if (request.getNutrient_claims() != null)
+            queryMap.put("nutrient_claims",request.getNutrient_claims());
+    
+        labelUpdateList.add(request.getNutrient_claims()); 
+        
+        if (request.getPackage_nielsen_category() != null)
+            queryMap.put("package_nielsen_category",request.getPackage_nielsen_category());
+    
+        labelUpdateList.add(request.getPackage_nielsen_category()); 
+        
+        if (request.getCommon_household_measure() != null)
+            queryMap.put("common_household_measure",request.getCommon_household_measure());
+    
+        labelUpdateList.add(request.getCommon_household_measure());     
+        
+        if (request.getChild_item() != null)
+            queryMap.put("child_item",request.getChild_item());
+    
+        labelUpdateList.add(request.getChild_item());
+        
+        if (request.getClassification_name() != null)
+            queryMap.put("package_classification_name",request.getClassification_name());
+    
+        labelUpdateList.add(request.getClassification_name());  
+        
+        if (request.getEdited_by() != null)
+            queryMap.put("edited_by",request.getEdited_by());
+    
+        labelUpdateList.add(request.getEdited_by());    
+        
+        
+        if (request.getClassification_number() != null)
+            queryMap.put("package_classification_number",request.getClassification_number());
+    
+        labelUpdateList.add(request.getClassification_number());
+        
+ 
+
+        if (request.getPackage_collection_date() != null)
+        {
+            queryMap.put("package_collection_date",
+                    request.getPackage_collection_date());
+            labelUpdateList.add(Date.valueOf(request.getPackage_collection_date()));
+        }
+        else{
+        	queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+        	return queryMap;
+        }
+    
+        if (request.getNft_last_update_date() != null)
+        {
+            queryMap.put("nft_last_update_date",
+                    request.getNft_last_update_date());
+            labelUpdateList.add(Date.valueOf(request.getNft_last_update_date()));
+        }
+        else
+        {
+        	labelUpdateList.add(null);
+           // queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+           // return queryMap;
+        }
+        
+
+        final Timestamp now = DateUtil.getCurrentTimeStamp();
+
+        queryMap.put("last_edit_date", now);
+        labelUpdateList.add(now);
+
+        if (request.getCalculated() != null)
+            queryMap.put("calculated",request.getCalculated());
+        labelUpdateList.add(request.getCalculated());
+        if (request.getPackage_id() != null)
+        {
+            if (isType(request.getPackage_id().toString(), "int"))
+            {
+                if (request.getPackage_id() > 0)
+                    queryMap.put("package_id", request.getPackage_id());
+            }
+            else
+            {
+                queryMap.put("inputError", ResponseCodes.INVALID_INTEGER);
+                return queryMap;
+            }
+        }
+        else
+        {
+            queryMap.put("inputError", ResponseCodes.MISSING_MANDATORY_FIELDS);
+            return queryMap;
+        }
+        labelUpdateList.add(request.getPackage_id());   
+        
+        queryMap.put("package_update_list", labelUpdateList);
+
+        return queryMap;
+    }
+    
+    
+    ///
     public static Map<String, Object> getQueryMap(final ProductRequest request)
     {
         final Map<String, Object> queryMap = new HashMap<String, Object>();
