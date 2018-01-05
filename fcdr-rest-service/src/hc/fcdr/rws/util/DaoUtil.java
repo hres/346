@@ -372,6 +372,7 @@ public final class DaoUtil
     		
     			if(element.getName().isEmpty()){
     				
+    				System.out.println("name of invalid "+element.getName() + " amount"+element.getAmount());
 
     	            queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
     	            return queryMap;
@@ -379,7 +380,7 @@ public final class DaoUtil
     			}
     			if((element.getAmount() == null && !element.getUnit_of_measure().isEmpty()) || (element.getAmount() != null && element.getUnit_of_measure().isEmpty())){
     				
-
+    				System.out.println("name of invalid "+element.getName()+ " amount"+element.getAmount());
     				queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
     	            return queryMap;
     				

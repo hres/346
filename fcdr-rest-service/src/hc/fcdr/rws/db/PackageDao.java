@@ -33,6 +33,7 @@ import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
+import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
@@ -123,8 +124,8 @@ public class PackageDao extends PgDao
         {
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
-        }
-        
+        }	
+        System.out.println(resultSet);
         return resultSet;
     }
 
@@ -178,8 +179,72 @@ public class PackageDao extends PgDao
         return new ResponseGeneric(ResponseCodes.OK.getCode(), 
                 ResponseCodes.OK.getMessage());
     }
+    public ResponseGeneric getNftUpdateResponse( NftRequest nftRequest)throws DaoException, SQLException{
+    	
+    	//nftRequest.getNft().size();
+    	
+    	if(nftRequest.getFlag() == null || (!(nftRequest.getPackage_id() instanceof Number))){
+    		
+    		return new ResponseGeneric(ResponseCodes.INVALID_INPUT_FIELDS.getCode(),
+        			ResponseCodes.INVALID_INPUT_FIELDS.getMessage());
+    		
+    	}
+        final String sql = "delete from " + schema + "."
+                + "product_component where package_id = ? and as_ppd_flag = ?";
+    	
+        if(nftRequest.getNft().size() < 1){
+            try
+            {
+                final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]{ nftRequest.getPackage_id(), nftRequest.getFlag() });
+                
 
-    public InsertPackageResponse getPackageInsertResponse(PackageInsertRequest packageInsertRequest) throws DaoException
+                if (deletedRow == 0)
+                    return new ResponseGeneric(
+                            ResponseCodes.BAD_REQUEST.getCode(),
+                            ResponseCodes.BAD_REQUEST.getMessage());
+            }
+            catch (final Exception e)
+            {
+                logger.error(e);
+                throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+            }
+        	
+        	
+        }else{
+        	try{
+        		connection.setAutoCommit(false);
+        		final Map<String, Object> queryMap = DaoUtil.getQueryMap(nftRequest);
+        		
+                if (queryMap.containsKey("inputError"))
+                {
+                    final Object o = queryMap.get("inputError");
+                    queryMap.remove("inputError");
+
+                    return new ResponseGeneric(((ResponseCodes) o).getCode(),
+                            ((ResponseCodes) o).getMessage());
+                }
+                final Integer deletedRows = (Integer) executeUpdate(sql, new Object[]{ nftRequest.getPackage_id(), nftRequest.getFlag() });
+                executeUpdateNft(nftRequest, schema);
+        		
+        		
+        		
+        	}catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			connection.rollback();
+    			e.printStackTrace();
+    			
+    			//return false;
+    		}
+        	
+        }
+        connection.commit();
+        return new ResponseGeneric(ResponseCodes.OK.getCode(), 
+                ResponseCodes.OK.getMessage());
+    	
+    	
+    
+    }
+    public InsertPackageResponse getPackageInsertResponse(PackageInsertRequest packageInsertRequest) throws DaoException, SQLException
     {
     	
     
@@ -251,7 +316,7 @@ public class PackageDao extends PgDao
     }
     ///=======
     
-    public InsertPackageResponse getPackageUpdateResponse(PackageUpdateRequest packageUpdateRequest) throws DaoException
+    public InsertPackageResponse getPackageUpdateResponse(PackageUpdateRequest packageUpdateRequest) throws DaoException, SQLException
     {
     	
     
@@ -645,6 +710,7 @@ public class PackageDao extends PgDao
             logger.error(e);
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
+        System.out.println("list "+componentList.toString());
 
         return componentList;
     }

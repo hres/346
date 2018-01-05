@@ -1,5 +1,7 @@
 package hc.fcdr.rws.service;
 
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +17,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.ClassificationDao;
+import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
 import hc.fcdr.rws.util.ContextManager;
+import hc.fcdr.rws.db.Connect;
+
 
 @Path("/ClassificationService")
 public class ClassificationService extends Application
@@ -27,17 +32,20 @@ public class ClassificationService extends Application
     static ClassificationDao classificationDao = null;
 
     @PostConstruct
-    public static void initialize()
+    public static void initialize() throws IOException, Exception
     {
         if (classificationDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-            pgConnectionPool.initialize();
+//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+//            pgConnectionPool.initialize();
 
             try
             {
+            	Connect connect = new Connect();
+            	Connection connection = connect.getConnections();
+
                 classificationDao = new ClassificationDao(
-                        pgConnectionPool.getConnection(),
+                		connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)

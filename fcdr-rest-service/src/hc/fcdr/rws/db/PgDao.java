@@ -53,7 +53,7 @@ public class PgDao
     }
 
     protected Object executeUpdate(final String query, final Object[] values)
-            throws DaoException
+            throws DaoException, SQLException
     {
 
         Object key = null;
@@ -62,7 +62,7 @@ public class PgDao
 
         try
         {
-        
+        	connection.setAutoCommit(false);
             preparedStatement = prepareStatement(connection, query, true,
                     values);
         	System.out.println(preparedStatement);
@@ -79,6 +79,8 @@ public class PgDao
 
                 if (generatedKeys.next()){
                     key = generatedKeys.getObject(1);
+                	System.out.println("Id of the package: " + key);
+
                 }
                 else
                     throw new DaoException(
@@ -93,7 +95,7 @@ public class PgDao
             logger.error(e);
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-
+        connection.commit();
         return key;
     }
     
@@ -135,7 +137,40 @@ public class PgDao
 
     }
     
-    
+    protected boolean executeUpdateNft(NftRequest nftRequest,  String schema)
+            throws DaoException, SQLException
+    {
+    	
+    	String query = "insert into "+schema+"."+"product_component(component_id, package_id, amount,"
+    					+ " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+    					+ "select component_id, ?, ?, ?, ?, ? from "+schema+".component "
+    					+ "where component_id = ("
+    					+ "select component_id from "+schema+"."+"component where component_name= ?)";
+    	
+    	try {
+    		for(NftModel element : nftRequest.getNft()){
+    			//ecuteInsertNft(element, nftRequest.getPackage_id(), nftRequest.getFlag(), schema);
+    			
+    		
+    		
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+												  preparedStatement.setObject(1, nftRequest.getPackage_id());
+												  preparedStatement.setObject(2, element.getAmount());
+												  preparedStatement.setObject(3, element.getUnit_of_measure());
+												  preparedStatement.setObject(4, element.getDaily_value());
+												  preparedStatement.setObject(5, nftRequest.getFlag());
+												  preparedStatement.setObject(6, element.getName());
+												  preparedStatement.executeUpdate();
+    		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			return false;
+		}
+    	return true; 
+
+    }
     protected NftView executeGetNft(String query, Integer package_id, Boolean flag)
             throws DaoException, SQLException
     {
@@ -157,7 +192,7 @@ public class PgDao
 
 													  Double amount = resultSet.getDouble("amount");
 													  amount = resultSet.wasNull()?null:resultSet.getDouble("amount");
-													  
+													  System.out.println(resultSet.getString("component_name") + ": "+amount);
 													  String amount_unit_of_measure = resultSet.getString("amount_unit_of_measure");
 													  amount_unit_of_measure = resultSet.wasNull()?null:resultSet.getString("amount_unit_of_measure");
 

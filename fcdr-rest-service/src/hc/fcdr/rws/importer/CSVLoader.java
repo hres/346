@@ -2,6 +2,7 @@ package hc.fcdr.rws.importer;
 
 import java.io.FileReader;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,7 +196,7 @@ public class CSVLoader
     }
 
     private void insertProductSalesRecords(
-            final List<ImportSalesData> importSalesDataList)
+            final List<ImportSalesData> importSalesDataList) throws SQLException
     {
         // Get the first record just for the product.
         final ImportSalesData importSalesData = importSalesDataList.get(0);

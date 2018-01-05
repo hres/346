@@ -62,7 +62,9 @@ public class PackageService extends Application
 
             try
             {
+            	Connect connect = new Connect();
             	Connection connection = Connect.getConnections();
+
                 packageDao = new PackageDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
@@ -284,6 +286,33 @@ public class PackageService extends Application
     }
     // ===
     @POST
+    @Path("/updateNft")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateNft(final NftRequest nftRequest)
+            throws SQLException, IOException, Exception
+    {
+    	
+
+    	ResponseGeneric entity = new ResponseGeneric();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getNftUpdateResponse(nftRequest);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        	//return null;
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
+    }
+    // ===
+    @POST
     @Path("/getNft")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -304,6 +333,7 @@ public class PackageService extends Application
         }
 
         	//return null;
+
         return Response.status(Response.Status.OK)
                        .type(MediaType.APPLICATION_JSON)
                        .entity(entity)

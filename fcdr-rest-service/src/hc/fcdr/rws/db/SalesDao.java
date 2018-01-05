@@ -148,7 +148,7 @@ public class SalesDao extends PgDao
         return null;
     }
 
-    public Integer insert(final List<Object> csvFieldList) throws DaoException
+    public Integer insert(final List<Object> csvFieldList) throws DaoException, SQLException
     {
         csvFieldList.remove(0);
 
@@ -183,7 +183,7 @@ public class SalesDao extends PgDao
 
     public SalesInsertDataResponse getSalesInsertResponse(
     		
-            final SalesInsertRequest salesInsertRequest) throws DaoException
+            final SalesInsertRequest salesInsertRequest) throws DaoException, SQLException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesInsertRequest);
@@ -267,7 +267,7 @@ public class SalesDao extends PgDao
     // ===
 
     public SalesUpdateDataResponse getSalesUpdateResponse(
-            final SalesUpdateRequest salesUpdateRequest) throws DaoException
+            final SalesUpdateRequest salesUpdateRequest) throws DaoException, SQLException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesUpdateRequest);
@@ -657,7 +657,7 @@ public class SalesDao extends PgDao
         {
             final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]{ id });
             
-
+            connection.setAutoCommit(false);
             if (deletedRow == 0)
                 return new SalesDeleteDataResponse(
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
@@ -666,9 +666,10 @@ public class SalesDao extends PgDao
         catch (final Exception e)
         {
             logger.error(e);
+            connection.rollback();
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-
+        connection.commit();
         return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }

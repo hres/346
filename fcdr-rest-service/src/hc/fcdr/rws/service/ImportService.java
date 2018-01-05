@@ -2,6 +2,7 @@ package hc.fcdr.rws.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
+import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
@@ -40,16 +42,20 @@ public class ImportService extends Application
             + "fcdrSalesImportReport.pdf";
 
     @PostConstruct
-    public static void initialize()
+    public static void initialize() throws IOException, Exception
     {
         if (loader == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-            pgConnectionPool.initialize();
+//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+//            pgConnectionPool.initialize();
 
             try
+            
             {
-                loader = new CSVLoader(pgConnectionPool.getConnection(),
+            	Connect connect = new Connect();
+            	Connection connection = connect.getConnections();
+
+                loader = new CSVLoader(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
