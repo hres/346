@@ -51,7 +51,9 @@ public enum ResponseCodes
  MISSING_KILO_VOLUME_TOTAL(711, "Missing kilo volume total"),
  MISSING_DOLLAR_VOLUME_TOTAL(712, "Missing dollar volume total"),
  MISSING_PRODUCT_ID(713, "Missing product id"),
- MISSING_SALES_ID(714, "Missing sales id");
+ MISSING_SALES_ID(714, "Missing sales id"),
+ MISSING_MANDATORY_FIELDS(803, "Missing mandatory field(s)"),
+ INVALID_INPUT_FIELDS(804, "Invalid input field(s)");
 
     private final int    code;
     private final String message;
