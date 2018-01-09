@@ -38,65 +38,65 @@ public class ProductSalesLabelResponse
     public ProductSalesLabelResponse()
     {
         super();
-        this.product_id = 0L;
-        this.product_description = "";
-        this.product_brand = "";
-        this.product_manufacturer = "";
-        this.cnf_code = "";
-        this.cluster_number = "";
-        this.product_comment = "";
+        product_id = 0L;
+        product_description = "";
+        product_brand = "";
+        product_manufacturer = "";
+        cnf_code = "";
+        cluster_number = "";
+        product_comment = "";
 
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
 
-        this.sales_year = "";
-        this.sales_description = "";
-        this.sales_upc = "";
-        this.nielsen_category = "";
-        this.sales_source = "";
-        this.sales_collection_date = "";
-        this.dollar_rank = "";
-        this.sales_comment = "";
+        sales_year = "";
+        sales_description = "";
+        sales_upc = "";
+        nielsen_category = "";
+        sales_source = "";
+        sales_collection_date = "";
+        dollar_rank = "";
+        sales_comment = "";
 
-        this.label_upc = "";
-        this.label_description = "";
-        this.label_source = "";
-        this.label_ingredients = "";
-        this.label_collection_date = "";
-        this.label_comment = "";
+        label_upc = "";
+        label_description = "";
+        label_source = "";
+        label_ingredients = "";
+        label_collection_date = "";
+        label_comment = "";
     }
 
     public ProductSalesLabelResponse(final Product product)
     {
         super();
-        this.product_id = product.getId();
-        this.product_description = product.getDescription();
-        this.product_brand = product.getBrand();
-        this.product_manufacturer = product.getManufacturer();
-        this.cnf_code = product.getCnfCode();
-        this.cluster_number = product.getClusterNumber();
-        this.product_comment = product.getComment();
+        product_id = product.getId();
+        product_description = product.getDescription();
+        product_brand = product.getBrand();
+        product_manufacturer = product.getManufacturer();
+        cnf_code = product.getCnfCode();
+        cluster_number = product.getClusterNumber();
+        product_comment = product.getComment();
 
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
 
-        this.sales_year = "";
-        this.sales_description = "";
-        this.sales_upc = "";
-        this.nielsen_category = "";
-        this.sales_source = "";
-        this.sales_collection_date = "";
-        this.dollar_rank = "";
-        this.sales_comment = "";
+        sales_year = "";
+        sales_description = "";
+        sales_upc = "";
+        nielsen_category = "";
+        sales_source = "";
+        sales_collection_date = "";
+        dollar_rank = "";
+        sales_comment = "";
 
-        this.label_upc = "";
-        this.label_description = "";
-        this.label_source = "";
-        this.label_ingredients = "";
-        this.label_collection_date = "";
-        this.label_comment = "";
+        label_upc = "";
+        label_description = "";
+        label_source = "";
+        label_ingredients = "";
+        label_collection_date = "";
+        label_comment = "";
     }
 
     public Long getProduct_id()

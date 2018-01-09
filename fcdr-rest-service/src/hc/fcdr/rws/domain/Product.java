@@ -30,19 +30,19 @@ public class Product implements Serializable
     public Product()
     {
         super();
-        this.id = 0L;
-        this.description = "";
-        this.brand = "";
-        this.country = "";
-        this.clusterNumber = "";
-        this.comment = "";
-        this.manufacturer = "";
-        this.cnfCode = "";
-        this.creationDate = null;
-        this.lastEditDate = null;
-        this.editedBy = "";
-        this.restaurantType = "";
-        this.type = "";
+        id = 0L;
+        description = "";
+        brand = "";
+        country = "";
+        clusterNumber = "";
+        comment = "";
+        manufacturer = "";
+        cnfCode = "";
+        creationDate = null;
+        lastEditDate = null;
+        editedBy = "";
+        restaurantType = "";
+        type = "";
     }
 
     public Product(final Long id, final String description, final String brand,
@@ -71,19 +71,19 @@ public class Product implements Serializable
     public Product(final Product product)
     {
         super();
-        this.id = product.getId();
-        this.description = product.getDescription();
-        this.brand = product.getBrand();
-        this.country = product.getCountry();
-        this.clusterNumber = product.getClusterNumber();
-        this.comment = product.getComment();
-        this.manufacturer = product.getManufacturer();
-        this.cnfCode = product.getCnfCode();
-        this.creationDate = product.getCreationDate();
-        this.lastEditDate = product.getLastEditDate();
-        this.editedBy = product.getEditedBy();
-        this.restaurantType = product.getRestaurantType();
-        this.type = product.getType();
+        id = product.getId();
+        description = product.getDescription();
+        brand = product.getBrand();
+        country = product.getCountry();
+        clusterNumber = product.getClusterNumber();
+        comment = product.getComment();
+        manufacturer = product.getManufacturer();
+        cnfCode = product.getCnfCode();
+        creationDate = product.getCreationDate();
+        lastEditDate = product.getLastEditDate();
+        editedBy = product.getEditedBy();
+        restaurantType = product.getRestaurantType();
+        type = product.getType();
     }
 
     public Long getId()

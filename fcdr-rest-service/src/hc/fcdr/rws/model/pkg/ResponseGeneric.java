@@ -1,11 +1,11 @@
 package hc.fcdr.rws.model.pkg;
 
-public class ResponseGeneric {
+public class ResponseGeneric
+{
 
-	
-	  private int    status;
-	   private String message;
-	    
+    private int    status;
+    private String message;
+
     public ResponseGeneric()
     {
         status = 0;
@@ -18,8 +18,8 @@ public class ResponseGeneric {
         this.status = status;
         this.message = message;
     }
-    
-	public int getStatus()
+
+    public int getStatus()
     {
         return status;
     }
@@ -38,6 +38,5 @@ public class ResponseGeneric {
     {
         this.message = message;
     }
-
 
 }

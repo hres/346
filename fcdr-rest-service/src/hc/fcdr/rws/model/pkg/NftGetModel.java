@@ -1,37 +1,42 @@
 package hc.fcdr.rws.model.pkg;
 
-public class NftGetModel {
+public class NftGetModel
+{
 
-	private Integer package_id;
-	private Boolean flag;
-	
-	public NftGetModel() {
-		this.package_id = null;
-		this.flag = null;
-	}
-	
-	public NftGetModel(Integer package_id, Boolean flag) {
-		super();
-		this.package_id = package_id;
-		this.flag = flag;
-	}
+    private Integer package_id;
+    private Boolean flag;
 
-	public Integer getPackage_id() {
-		return package_id;
-	}
+    public NftGetModel()
+    {
+        package_id = null;
+        flag = null;
+    }
 
-	public void setPackage_id(Integer package_id) {
-		this.package_id = package_id;
-	}
+    public NftGetModel(final Integer package_id, final Boolean flag)
+    {
+        super();
+        this.package_id = package_id;
+        this.flag = flag;
+    }
 
-	public Boolean getFlag() {
-		return flag;
-	}
+    public Integer getPackage_id()
+    {
+        return package_id;
+    }
 
-	public void setFlag(Boolean flag) {
-		this.flag = flag;
-	}
-	
-	
-	
+    public void setPackage_id(final Integer package_id)
+    {
+        this.package_id = package_id;
+    }
+
+    public Boolean getFlag()
+    {
+        return flag;
+    }
+
+    public void setFlag(final Boolean flag)
+    {
+        this.flag = flag;
+    }
+
 }

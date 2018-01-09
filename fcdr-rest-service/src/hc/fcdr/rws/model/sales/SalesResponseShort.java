@@ -19,14 +19,14 @@ public class SalesResponseShort
     public SalesResponseShort()
     {
         super();
-        this.salesUpc = "";
-        this.salesDescription = "";
-        this.salesSource = "";
-        this.salesYear = "";
-        this.nielsenCategory = "";
-        this.dollarVolume = 0.0;
-        this.kiloVolume = 0.0;
-        this.productId = 0L;
+        salesUpc = "";
+        salesDescription = "";
+        salesSource = "";
+        salesYear = "";
+        nielsenCategory = "";
+        dollarVolume = 0.0;
+        kiloVolume = 0.0;
+        productId = 0L;
     }
 
     public SalesResponseShort(final String salesUpc,
@@ -49,14 +49,14 @@ public class SalesResponseShort
     public SalesResponseShort(final Sales sales)
     {
         super();
-        this.salesUpc = sales.getUpc();
-        this.salesDescription = sales.getDescription();
-        this.salesSource = sales.getSalesSource();
-        this.salesYear = sales.getSalesYear();
-        this.nielsenCategory = sales.getNielsenCategory();
-        this.dollarVolume = sales.getDollarVolume();
-        this.kiloVolume = sales.getKiloVolume();
-        this.productId = sales.getProductId();
+        salesUpc = sales.getUpc();
+        salesDescription = sales.getDescription();
+        salesSource = sales.getSalesSource();
+        salesYear = sales.getSalesYear();
+        nielsenCategory = sales.getNielsenCategory();
+        dollarVolume = sales.getDollarVolume();
+        kiloVolume = sales.getKiloVolume();
+        productId = sales.getProductId();
     }
 
     public String getSalesUpc()

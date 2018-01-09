@@ -20,7 +20,7 @@ public class Classification implements Serializable
     public Classification()
     {
         super();
-        this.id = 0L;
+        id = 0L;
 
     }
 
@@ -37,10 +37,10 @@ public class Classification implements Serializable
     public Classification(final Classification classification)
     {
         super();
-        this.id = classification.getId();
-        this.classificationNumber = classification.getClassificationNumber();
-        this.classificationName = classification.getClassificationName();
-        this.classificationType = classification.getClassificationType();
+        id = classification.getId();
+        classificationNumber = classification.getClassificationNumber();
+        classificationName = classification.getClassificationName();
+        classificationType = classification.getClassificationType();
     }
 
     public Long getId()

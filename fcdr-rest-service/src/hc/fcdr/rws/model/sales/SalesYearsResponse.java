@@ -12,7 +12,7 @@ public class SalesYearsResponse
     public SalesYearsResponse()
     {
         super();
-        this.salesYear = "";
+        salesYear = "";
     }
 
     public SalesYearsResponse(final String salesYear)
@@ -24,7 +24,7 @@ public class SalesYearsResponse
     public SalesYearsResponse(final Sales sales)
     {
         super();
-        this.salesYear = sales.getSalesYear();
+        salesYear = sales.getSalesYear();
     }
 
     public String getSalesYear()

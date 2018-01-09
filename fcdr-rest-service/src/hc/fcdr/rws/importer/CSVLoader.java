@@ -35,7 +35,7 @@ public class CSVLoader
      */
     public CSVLoader(final Connection connection, final String schema)
     {
-        this.separator = ',';
+        separator = ',';
         salesDao = new SalesDao(connection, schema);
         productDao = new ProductDao(connection, schema);
     }
@@ -54,10 +54,8 @@ public class CSVLoader
         List<ImportSalesData> importSalesDataList = new ArrayList<ImportSalesData>();
 
         importSalesDataList = new CsvToBeanBuilder(
-                new FileReader(csvFile)).withType(ImportSalesData.class)
-                                        .withSkipLines(1)
-                                        .build()
-                                        .parse();
+                new FileReader(csvFile)).withType(
+                        ImportSalesData.class).withSkipLines(1).build().parse();
 
         stopWatch.split();
         System.out.println("Total time spent on loading the sales data: "
@@ -248,7 +246,7 @@ public class CSVLoader
                 csvFieldList2.add(DateUtil.getCurrentTimeStamp()); // last_edit_date
                 csvFieldList2.add("Zoltan3"); // edited by
                 csvFieldList2.add(productId); // TODO check fo null
-                final Integer salesId = salesDao.insert(csvFieldList2);
+                salesDao.insert(csvFieldList2);
             }
         }
         catch (final DaoException e)

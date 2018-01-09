@@ -314,11 +314,10 @@ public class StringUtilities
             end = temp;
         }
 
-        return new StringBuffer(((len + start) - end) + overlay.length()
-                + 1).append(str.substring(0, start))
-                    .append(overlay)
-                    .append(str.substring(end))
-                    .toString();
+        return new StringBuffer(
+                ((len + start) - end) + overlay.length() + 1).append(
+                        str.substring(0, start)).append(overlay).append(
+                                str.substring(end)).toString();
     }
 
     /**
@@ -529,14 +528,12 @@ public class StringUtilities
     {
         final StringBuffer a = new StringBuffer(aa);
         final java.util.Vector<String> s = new java.util.Vector<String>();
-        int count = 0;
         int prev = 0;
         int pos = StringUtilities.indexOf(a, b);
 
         while (pos != -1)
         {
             s.add(a.substring(prev, pos /*- 1 */));
-            count++;
             prev = pos + 1;
             pos = StringUtilities.indexOf(a, b, prev);
         }
@@ -544,7 +541,6 @@ public class StringUtilities
         if (prev < aa.length())
         {
             s.add(a.substring(prev, aa.length()));
-            count++;
         }
 
         final String ss[] = new String[s.size()];

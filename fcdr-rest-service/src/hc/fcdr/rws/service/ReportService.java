@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.Connect;
-import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.model.report.ReportDataResponse;
 import hc.fcdr.rws.model.report.ReportRequest;
@@ -30,14 +29,10 @@ public class ReportService extends Application
     public static void initialize() throws IOException, Exception
     {
         if (productDao == null)
-        {
-//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-//            pgConnectionPool.initialize();
-
             try
             {
-            	Connect connect = new Connect();
-            	Connection connection = connect.getConnections();	
+                final Connect connect = new Connect();
+                final Connection connection = Connect.getConnections();
                 productDao = new ProductDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
@@ -45,7 +40,6 @@ public class ReportService extends Application
             {
                 e.printStackTrace();
             }
-        }
     }
 
     @POST
@@ -60,10 +54,8 @@ public class ReportService extends Application
         entity.setStatus(ResponseCodes.OK.getCode());
         entity.setMessage(ResponseCodes.OK.getMessage());
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
 }

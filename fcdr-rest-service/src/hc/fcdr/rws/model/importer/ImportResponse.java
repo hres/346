@@ -11,8 +11,8 @@ public class ImportResponse
     public ImportResponse()
     {
         super();
-        this.itemId = "";
-        this.status = 0;
+        itemId = "";
+        status = 0;
     }
 
     public ImportResponse(final String itemId, final int status)
@@ -25,8 +25,8 @@ public class ImportResponse
     public ImportResponse(final ImportResponse importResponse)
     {
         super();
-        this.itemId = importResponse.getItemId();
-        this.status = importResponse.getStatus();
+        itemId = importResponse.getItemId();
+        status = importResponse.getStatus();
     }
 
     public String getItemId()

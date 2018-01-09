@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,22 +15,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PackageDao;
-import hc.fcdr.rws.db.PgConnectionPool;
-import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftGetModel;
-import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.NftView;
 import hc.fcdr.rws.model.pkg.PackageDataResponse;
@@ -40,11 +34,7 @@ import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageUpdateRequest;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
-import hc.fcdr.rws.model.sales.SalesInsertDataResponse;
-import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.ContextManager;
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 @Path("/PackageService")
 
@@ -56,14 +46,10 @@ public class PackageService extends Application
     public static void initialize() throws IOException, Exception
     {
         if (packageDao == null)
-        {
-//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-//            pgConnectionPool.initialize();
-
             try
             {
-            	Connect connect = new Connect();
-            	Connection connection = Connect.getConnections();
+                new Connect();
+                final Connection connection = Connect.getConnections();
 
                 packageDao = new PackageDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
@@ -72,7 +58,6 @@ public class PackageService extends Application
             {
                 e.printStackTrace();
             }
-        }
     }
 
     @GET
@@ -130,10 +115,8 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -141,8 +124,8 @@ public class PackageService extends Application
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPackage(@PathParam("id") final long id)
     {
-    	System.out.println("here");
-    	PackageViewResponse entity = new PackageViewResponse();
+        System.out.println("here");
+        PackageViewResponse entity = new PackageViewResponse();
 
         try
         {
@@ -154,10 +137,8 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -179,11 +160,10 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
     @POST
     @Path("/insert")
     @Produces(MediaType.APPLICATION_JSON)
@@ -195,17 +175,16 @@ public class PackageService extends Application
         try
         {
             if (packageDao != null)
-                entity = packageDao.getPackageInsertResponse(packageInsertRequest);
+                entity = packageDao.getPackageInsertResponse(
+                        packageInsertRequest);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -215,49 +194,48 @@ public class PackageService extends Application
     public Response update(final PackageUpdateRequest packageUpdateRequest)
             throws SQLException, IOException, Exception
     {
-    	
-    	System.out.println("les valeurs sont: \n "+packageUpdateRequest.getPackage_collection_date());
+
+        System.out.println("les valeurs sont: \n "
+                + packageUpdateRequest.getPackage_collection_date());
         InsertPackageResponse entity = new InsertPackageResponse();
         try
         {
             if (packageDao != null)
-                entity = packageDao.getPackageUpdateResponse(packageUpdateRequest);
+                entity = packageDao.getPackageUpdateResponse(
+                        packageUpdateRequest);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
     @GET
     @Path("/unitOfMeasure")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnitOfMeasure()
     {
-    GenericList entity = new GenericList();
+        GenericList entity = new GenericList();
 
-    
-    try
-    {
-        if (packageDao != null)
-            entity = packageDao.getListOfUnits();
-    }
-    catch (final Exception e)
-    {
-        e.printStackTrace();
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getListOfUnits();
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // return null;
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
+
     }
 
-    	//return null;
-    return Response.status(Response.Status.OK)
-                   .type(MediaType.APPLICATION_JSON)
-                   .entity(entity)
-                   .build();
-    	
-    }
     @POST
     @Path("/insertNft")
     @Produces(MediaType.APPLICATION_JSON)
@@ -265,9 +243,8 @@ public class PackageService extends Application
     public Response insertNft(final NftRequest nftRequest)
             throws SQLException, IOException, Exception
     {
-    	
 
-    	ResponseGeneric entity = new ResponseGeneric();
+        ResponseGeneric entity = new ResponseGeneric();
         try
         {
             if (packageDao != null)
@@ -278,12 +255,11 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        	//return null;
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        // return null;
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
     // ===
     @POST
     @Path("/updateNft")
@@ -292,9 +268,8 @@ public class PackageService extends Application
     public Response updateNft(final NftRequest nftRequest)
             throws SQLException, IOException, Exception
     {
-    	
 
-    	ResponseGeneric entity = new ResponseGeneric();
+        ResponseGeneric entity = new ResponseGeneric();
         try
         {
             if (packageDao != null)
@@ -305,40 +280,38 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        	//return null;
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        // return null;
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
     // ===
     @POST
     @Path("/getNft")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getNft(NftGetModel nftGetModel)
+    public Response getNft(final NftGetModel nftGetModel)
             throws SQLException, IOException, Exception
     {
-    	
 
-    	NftView entity = new NftView();
+        NftView entity = new NftView();
         try
         {
             if (packageDao != null)
-                entity = packageDao.getNft(nftGetModel.getPackage_id(), nftGetModel.getFlag());
+                entity = packageDao.getNft(nftGetModel.getPackage_id(),
+                        nftGetModel.getFlag());
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        	//return null;
+        // return null;
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
     // ===
     @OPTIONS
     @Path("/package")
@@ -347,36 +320,34 @@ public class PackageService extends Application
     {
         return "<operations>GET, PUT, POST, DELETE</operations>";
     }
-    
+
     @GET
     @Path("/listofcomponents")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getComponentName()throws SQLException, IOException, Exception
+    public Response getComponentName()
+            throws SQLException, IOException, Exception
     {
-    	ComponentNameResponse entity = new ComponentNameResponse();
-    
-    	
-        //List<String> entity =  new ArrayList<String>();
+        ComponentNameResponse entity = new ComponentNameResponse();
+
+        // List<String> entity = new ArrayList<String>();
 
         try
         {
             if (packageDao != null)
-            	entity =  packageDao.getComponents();
-            
+                entity = packageDao.getComponents();
+
         }
         catch (final DaoException e)
         {
             e.printStackTrace();
         }
 
-       // return new ArrayList<String>();
+        // return new ArrayList<String>();
 
-//    	Response response = Response.ok(entity).build();
-        //return response;
-        return Response.status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(entity)
-                .build();
+        // Response response = Response.ok(entity).build();
+        // return response;
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
 }

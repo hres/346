@@ -4,7 +4,6 @@ public class ProductUpdateDataResponse
 {
     private int    status;
     private String message;
-    
 
     public ProductUpdateDataResponse()
     {

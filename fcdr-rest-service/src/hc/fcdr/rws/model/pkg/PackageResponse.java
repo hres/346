@@ -13,7 +13,7 @@ public class PackageResponse
     private String    labelUpc;
     private String    labelDescription;
     private String    labelSource;
-    private Date    labelCollectionDate;
+    private Date      labelCollectionDate;
     private Timestamp labelCreationDate;
     private Timestamp labelLastEditDate;
     private String    labelLastEditedBy;
@@ -22,14 +22,14 @@ public class PackageResponse
     public PackageResponse()
     {
         super();
-        this.labelUpc = null;
-        this.labelDescription = null;
-        this.labelSource = null;
-        this.labelCollectionDate = null;
-        this.labelCreationDate = null;
-        this.labelLastEditDate = null;
-        this.labelLastEditedBy = "";
-        this.productId = 0L;
+        labelUpc = null;
+        labelDescription = null;
+        labelSource = null;
+        labelCollectionDate = null;
+        labelCreationDate = null;
+        labelLastEditDate = null;
+        labelLastEditedBy = "";
+        productId = 0L;
     }
 
     public PackageResponse(final String labelUpc, final String labelDescription,
@@ -52,14 +52,14 @@ public class PackageResponse
     public PackageResponse(final Package _package)
     {
         super();
-        this.labelUpc = _package.getUpc();
-        this.labelDescription = _package.getDescription();
-        this.labelSource = _package.getPackageSource();
-        this.labelCollectionDate =_package.getPackageCollectionDate(); 
-        this.labelCreationDate = _package.getCreationDate();
-        this.labelLastEditDate = _package.getLastEditDate();
-        this.labelLastEditedBy = _package.getEditedBy();
-        this.productId = _package.getProductId();
+        labelUpc = _package.getUpc();
+        labelDescription = _package.getDescription();
+        labelSource = _package.getPackageSource();
+        labelCollectionDate = _package.getPackageCollectionDate();
+        labelCreationDate = _package.getCreationDate();
+        labelLastEditDate = _package.getLastEditDate();
+        labelLastEditedBy = _package.getEditedBy();
+        productId = _package.getProductId();
     }
 
     public String getLabelUpc()

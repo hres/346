@@ -1,12 +1,10 @@
 package hc.fcdr.rws.model.product;
 
-
 public class ProductInsertDataResponse
 {
     private int    status;
     private String message;
     private Object id = null;
-    
 
     public ProductInsertDataResponse()
     {
@@ -21,16 +19,17 @@ public class ProductInsertDataResponse
         this.message = message;
     }
 
-    
-    public Object getId() {
-		return id;
-	}
+    public Object getId()
+    {
+        return id;
+    }
 
-	public void setId(Object id) {
-		this.id = id;
-	}
+    public void setId(final Object id)
+    {
+        this.id = id;
+    }
 
-	public int getStatus()
+    public int getStatus()
     {
         return status;
     }

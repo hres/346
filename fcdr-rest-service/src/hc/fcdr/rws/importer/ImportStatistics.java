@@ -15,12 +15,12 @@ public class ImportStatistics
     public ImportStatistics()
     {
         super();
-        this.importDateTime = "";
-        this.totalLoadingTime = 0L;
-        this.totalProcessingTime = 0L;
-        this.numberOfRecordsProcessed = 0;
-        this.numberOfInvalidRecords = 0;
-        this.importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
+        importDateTime = "";
+        totalLoadingTime = 0L;
+        totalProcessingTime = 0L;
+        numberOfRecordsProcessed = 0;
+        numberOfInvalidRecords = 0;
+        importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
     }
 
     public String getImportDateTime()

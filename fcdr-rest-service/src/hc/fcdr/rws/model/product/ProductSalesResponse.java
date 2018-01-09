@@ -17,12 +17,12 @@ public class ProductSalesResponse
     public ProductSalesResponse()
     {
         super();
-        this.sales_id = 0L;
-        this.sales_upc = "";
-        this.dollar_volume = 0.0;
-        this.sales_year = "";
-        this.nielsen_category = "";
-        this.sales_source = "";
+        sales_id = 0L;
+        sales_upc = "";
+        dollar_volume = 0.0;
+        sales_year = "";
+        nielsen_category = "";
+        sales_source = "";
     }
 
     public ProductSalesResponse(final Long sales_id, final String sales_upc,
@@ -41,13 +41,13 @@ public class ProductSalesResponse
     public ProductSalesResponse(final Sales sales)
     {
         super();
-        this.sales_id = sales.getId();
-        this.sales_upc = sales.getUpc();
-        this.dollar_volume = sales.getDollarVolume();
-        this.sales_year = (sales.getSalesYear() == null) ? ""
+        sales_id = sales.getId();
+        sales_upc = sales.getUpc();
+        dollar_volume = sales.getDollarVolume();
+        sales_year = (sales.getSalesYear() == null) ? ""
                 : sales.getSalesYear().toString();
-        this.nielsen_category = sales.getNielsenCategory();
-        this.sales_source = sales.getSalesSource();
+        nielsen_category = sales.getNielsenCategory();
+        sales_source = sales.getSalesSource();
     }
 
     public Long getSales_id()

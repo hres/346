@@ -19,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.Connect;
-import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
@@ -46,14 +45,14 @@ public class ProductService extends Application
     {
         if (productDao == null)
         {
-//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-//            pgConnectionPool.initialize();
-        	;
+            // final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            // pgConnectionPool.initialize();
+            ;
 
             try
             {
-            	Connect connect = new Connect();
-            	Connection connection = connect.getConnections();
+                final Connect connect = new Connect();
+                final Connection connection = Connect.getConnections();
                 productDao = new ProductDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
@@ -121,10 +120,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -145,10 +142,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -170,10 +165,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -195,10 +188,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -224,10 +215,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -253,10 +242,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -278,10 +265,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -303,10 +288,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -332,14 +315,12 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
-    
+
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -347,13 +328,13 @@ public class ProductService extends Application
     public Response create(final ProductInsertRequest productInsertRequest)
             throws SQLException, IOException, Exception
     {
-    	ProductInsertDataResponse entity = new ProductInsertDataResponse();
+        ProductInsertDataResponse entity = new ProductInsertDataResponse();
 
         try
         {
             if (productDao != null)
                 entity = productDao.getProductInsertResponse(
-                		productInsertRequest);
+                        productInsertRequest);
         }
         catch (final Exception e)
         {
@@ -361,13 +342,10 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
-    
-    
+
     // ===========
 
     @OPTIONS

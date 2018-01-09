@@ -39,7 +39,7 @@ public class DaoException extends Exception
 
     public ResponseCodes getError()
     {
-        return this.error;
+        return error;
     }
 
     /**

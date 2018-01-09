@@ -27,41 +27,41 @@ public class ProductClassificationResponse
     public ProductClassificationResponse()
     {
         super();
-        this.product_id = 0L;
-        this.product_manufacturer = "";
-        this.product_brand = "";
-        this.cnf_code = "";
-        this.cluster_number = "";
-        this.product_description = "";
-        this.product_comment = "";
-        this.creation_date = "";
-        this.last_edit_date = "";
-        this.edited_by = "";
-        this.restaurant_type = "";
-        this.type = "";
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        product_id = 0L;
+        product_manufacturer = "";
+        product_brand = "";
+        cnf_code = "";
+        cluster_number = "";
+        product_description = "";
+        product_comment = "";
+        creation_date = "";
+        last_edit_date = "";
+        edited_by = "";
+        restaurant_type = "";
+        type = "";
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
     }
 
     public ProductClassificationResponse(final Product product)
     {
         super();
-        this.product_id = product.getId();
-        this.product_manufacturer = product.getManufacturer();
-        this.product_brand = product.getBrand();
-        this.cnf_code = product.getCnfCode();
-        this.cluster_number = product.getClusterNumber();
-        this.product_description = product.getDescription();
-        this.product_comment = product.getComment();
-        this.creation_date = product.getCreationDate().toString();
-        this.last_edit_date = product.getLastEditDate().toString();
-        this.edited_by = product.getEditedBy();
-        this.restaurant_type = product.getRestaurantType();
-        this.type = product.getType();
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        product_id = product.getId();
+        product_manufacturer = product.getManufacturer();
+        product_brand = product.getBrand();
+        cnf_code = product.getCnfCode();
+        cluster_number = product.getClusterNumber();
+        product_description = product.getDescription();
+        product_comment = product.getComment();
+        creation_date = product.getCreationDate().toString();
+        last_edit_date = product.getLastEditDate().toString();
+        edited_by = product.getEditedBy();
+        restaurant_type = product.getRestaurantType();
+        type = product.getType();
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
     }
 
     public Long getProduct_id()

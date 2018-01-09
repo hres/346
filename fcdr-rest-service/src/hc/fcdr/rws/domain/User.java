@@ -19,9 +19,9 @@ public class User implements Serializable
     public User()
     {
         super();
-        this.id = 0;
-        this.name = "";
-        this.profession = "";
+        id = 0;
+        name = "";
+        profession = "";
     }
 
     public User(final int id, final String name, final String profession)

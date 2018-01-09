@@ -41,22 +41,21 @@ public class SimpleReportExample
         final JasperReportBuilder report = DynamicReports.report();// a new report
         report.columns(
                 Columns.column("Id", "classification_id",
-                        DataTypes.integerType())
-                       .setHorizontalAlignment(HorizontalAlignment.LEFT),
+                        DataTypes.integerType()).setHorizontalAlignment(
+                                HorizontalAlignment.LEFT),
                 Columns.column("Number", "classification_number",
                         DataTypes.stringType()),
                 Columns.column("Type", "classification_type",
-                        DataTypes.stringType())
-                       .setHorizontalAlignment(HorizontalAlignment.LEFT))
-              .title(// title of the report
-                      Components.text("SimpleReportExample")
-                                .setHorizontalAlignment(
-                                        HorizontalAlignment.CENTER))
-              .pageFooter(Components.pageXofY())// show page number on the page
-                                                // footer
-              .setDataSource(
-                      "select classification_id, classification_number, classification_type from fcdrschema.classification",
-                      connection);
+                        DataTypes.stringType()).setHorizontalAlignment(
+                                HorizontalAlignment.LEFT)).title(// title of the report
+                                        Components.text(
+                                                "SimpleReportExample").setHorizontalAlignment(
+                                                        HorizontalAlignment.CENTER)).pageFooter(
+                                                                Components.pageXofY())// show page number on the page
+                                                                                      // footer
+                .setDataSource(
+                        "select classification_id, classification_number, classification_type from fcdrschema.classification",
+                        connection);
 
         try
         {

@@ -20,11 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.Connect;
-import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDataResponseShort;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
@@ -45,14 +43,10 @@ public class SalesService extends Application
     public static void initialize() throws IOException, Exception
     {
         if (salesDao == null)
-        {
-//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-//            pgConnectionPool.initialize();
-
             try
             {
-            	Connect connect = new Connect();
-            	Connection connection = connect.getConnections();
+                final Connect connect = new Connect();
+                final Connection connection = Connect.getConnections();
                 salesDao = new SalesDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
@@ -60,7 +54,6 @@ public class SalesService extends Application
             {
                 e.printStackTrace();
             }
-        }
     }
 
     @GET
@@ -118,16 +111,11 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
-    
+
     // ==============================
-
-
-
 
     @GET
     @Path("/sales")
@@ -146,10 +134,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -169,10 +155,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -194,10 +178,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -220,10 +202,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -236,8 +216,9 @@ public class SalesService extends Application
             throws SQLException, IOException, Exception
     {
         SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
-        System.out.println("the number_of_units id: "+ salesUpdateRequest.number_of_units);
-        
+        System.out.println("the number_of_units id: "
+                + salesUpdateRequest.number_of_units);
+
         try
         {
             if (salesDao != null)
@@ -248,10 +229,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -273,10 +252,8 @@ public class SalesService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+        return Response.status(Response.Status.OK).type(
+                MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===

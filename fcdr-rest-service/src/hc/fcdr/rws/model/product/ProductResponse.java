@@ -21,16 +21,16 @@ public class ProductResponse
     public ProductResponse()
     {
         super();
-        this.product_id = 0L;
-        this.product_manufacturer = "";
-        this.product_brand = "";
-        this.cnf_code = "";
-        this.cluster_number = "";
-        this.product_description = "";
-        this.product_comment = "";
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        product_id = 0L;
+        product_manufacturer = "";
+        product_brand = "";
+        cnf_code = "";
+        cluster_number = "";
+        product_description = "";
+        product_comment = "";
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
     }
 
     public ProductResponse(final Long id, final String manufacturer,
@@ -40,17 +40,17 @@ public class ProductResponse
             final String classificationName, final String classificationType)
     {
         super();
-        this.product_id = id;
-        this.product_manufacturer = manufacturer;
-        this.product_brand = brand;
-        this.cnf_code = cnfCode;
-        this.cluster_number = clusterNumber;
-        this.product_description = description;
-        this.product_comment = comment;
+        product_id = id;
+        product_manufacturer = manufacturer;
+        product_brand = brand;
+        cnf_code = cnfCode;
+        cluster_number = clusterNumber;
+        product_description = description;
+        product_comment = comment;
 
-        this.classification_number = classificationNumber;
-        this.classification_name = classificationName;
-        this.classification_type = classificationType;
+        classification_number = classificationNumber;
+        classification_name = classificationName;
+        classification_type = classificationType;
     }
 
     public ProductResponse(final Product product,
@@ -58,31 +58,31 @@ public class ProductResponse
             final String classificationType)
     {
         super();
-        this.product_id = product.getId();
-        this.product_manufacturer = product.getManufacturer();
-        this.product_brand = product.getBrand();
-        this.cnf_code = product.getCnfCode();
-        this.cluster_number = product.getClusterNumber();
-        this.product_description = product.getDescription();
-        this.product_comment = product.getComment();
-        this.classification_number = classificationNumber;
-        this.classification_name = classificationName;
-        this.classification_type = classificationType;
+        product_id = product.getId();
+        product_manufacturer = product.getManufacturer();
+        product_brand = product.getBrand();
+        cnf_code = product.getCnfCode();
+        cluster_number = product.getClusterNumber();
+        product_description = product.getDescription();
+        product_comment = product.getComment();
+        classification_number = classificationNumber;
+        classification_name = classificationName;
+        classification_type = classificationType;
     }
 
     public ProductResponse(final Product product)
     {
         super();
-        this.product_id = product.getId();
-        this.product_manufacturer = product.getManufacturer();
-        this.product_brand = product.getBrand();
-        this.cnf_code = product.getCnfCode();
-        this.cluster_number = product.getClusterNumber();
-        this.product_description = product.getDescription();
-        this.product_comment = product.getComment();
-        this.classification_number = "";
-        this.classification_name = "";
-        this.classification_type = "";
+        product_id = product.getId();
+        product_manufacturer = product.getManufacturer();
+        product_brand = product.getBrand();
+        cnf_code = product.getCnfCode();
+        cluster_number = product.getClusterNumber();
+        product_description = product.getDescription();
+        product_comment = product.getComment();
+        classification_number = "";
+        classification_name = "";
+        classification_type = "";
     }
 
     public Long getProduct_id()
@@ -187,7 +187,7 @@ public class ProductResponse
 
     public void setClassificationType(final String classificationType)
     {
-        this.classification_type = classificationType;
+        classification_type = classificationType;
     }
 
 }

@@ -8,8 +8,8 @@ public class ImportReportDetailRow
     public ImportReportDetailRow()
     {
         super();
-        this.itemId = "";
-        this.salesDescription = "";
+        itemId = "";
+        salesDescription = "";
     }
 
     public ImportReportDetailRow(final String itemId,

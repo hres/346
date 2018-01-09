@@ -8,8 +8,8 @@ public class ReportDataResponse
     public ReportDataResponse()
     {
         super();
-        this.status = 0;
-        this.message = "";
+        status = 0;
+        message = "";
     }
 
     public int getStatus()

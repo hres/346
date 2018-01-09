@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.sales.SalesData;
 import hc.fcdr.rws.model.sales.SalesDataResponse;
 import hc.fcdr.rws.model.sales.SalesDataResponseShort;
@@ -49,7 +48,6 @@ public class SalesDao extends PgDao
         super(connection);
         this.schema = schema;
     }
-    
 
     public List<Sales> getSales() throws DaoException
     {
@@ -148,7 +146,8 @@ public class SalesDao extends PgDao
         return null;
     }
 
-    public Integer insert(final List<Object> csvFieldList) throws DaoException, SQLException
+    public Integer insert(final List<Object> csvFieldList)
+            throws DaoException, SQLException
     {
         csvFieldList.remove(0);
 
@@ -182,8 +181,9 @@ public class SalesDao extends PgDao
     }
 
     public SalesInsertDataResponse getSalesInsertResponse(
-    		
-            final SalesInsertRequest salesInsertRequest) throws DaoException, SQLException
+
+            final SalesInsertRequest salesInsertRequest)
+            throws DaoException, SQLException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesInsertRequest);
@@ -227,8 +227,6 @@ public class SalesDao extends PgDao
                 "sales_collection_date", "number_of_units", "edited_by",
                 "creation_date", "last_edit_date", "sales_product_id_fkey" };
 
-        
-        
         String questionmarks = StringUtils.repeat("?,", columns.length);
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
@@ -241,8 +239,7 @@ public class SalesDao extends PgDao
         final List<Object> salesInsertList = (List<Object>) queryMap.get(
                 "sales_insert_list");
 
-        // Returns the sales_id upon successful insert.
-        final Object o = executeUpdate(query, salesInsertList.toArray());
+        executeUpdate(query, salesInsertList.toArray());
 
         return new SalesInsertDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
@@ -267,7 +264,8 @@ public class SalesDao extends PgDao
     // ===
 
     public SalesUpdateDataResponse getSalesUpdateResponse(
-            final SalesUpdateRequest salesUpdateRequest) throws DaoException, SQLException
+            final SalesUpdateRequest salesUpdateRequest)
+            throws DaoException, SQLException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesUpdateRequest);
@@ -312,44 +310,29 @@ public class SalesDao extends PgDao
                 questionmarks.length() - 1);
 
         final String query = "update " + schema + "." + "sales set "
-                + "sales_description = ?,"
-                + "sales_upc = ?, "
-                + "sales_brand = ?, "
-                + "sales_manufacturer = ?, "
-                + "dollar_rank = ?, "
-                + "dollar_volume = ?, "
-                + "dollar_share = ?, "
-                + "dollar_volume_percentage_change = ?,"
-                + "kilo_volume = ?, "
-                + "kilo_share = ?, "
-                + "kilo_volume_percentage_change = ?,"
-                + "average_ac_dist = ?, "
-                + "average_retail_price = ?, "
-                + "sales_source = ?, "
-                + "nielsen_category = ?,"
-                + "sales_year = ?,  "
-                + "control_label_flag = ?,"
-                + "kilo_volume_total = ?, "
-                + "kilo_volume_rank = ?,"
-                + "dollar_volume_total = ?,"
-                + "cluster_number = ?, "
-                + "product_grouping = ?, "
+                + "sales_description = ?," + "sales_upc = ?, "
+                + "sales_brand = ?, " + "sales_manufacturer = ?, "
+                + "dollar_rank = ?, " + "dollar_volume = ?, "
+                + "dollar_share = ?, " + "dollar_volume_percentage_change = ?,"
+                + "kilo_volume = ?, " + "kilo_share = ?, "
+                + "kilo_volume_percentage_change = ?," + "average_ac_dist = ?, "
+                + "average_retail_price = ?, " + "sales_source = ?, "
+                + "nielsen_category = ?," + "sales_year = ?,  "
+                + "control_label_flag = ?," + "kilo_volume_total = ?, "
+                + "kilo_volume_rank = ?," + "dollar_volume_total = ?,"
+                + "cluster_number = ?, " + "product_grouping = ?, "
                 + "sales_product_description = ?,"
-                + "classification_number = ?, "
-                + "classification_type = ?, "
-                + "sales_comment = ?,"
-                + "sales_collection_date = ?, "
-                + "number_of_units = ?, "
-                + "edited_by = ?, "
-                + "last_edit_date = ? "
-                + "where sales_id= ? ";
+                + "classification_number = ?, " + "classification_type = ?, "
+                + "sales_comment = ?," + "sales_collection_date = ?, "
+                + "number_of_units = ?, " + "edited_by = ?, "
+                + "last_edit_date = ? " + "where sales_id= ? ";
 
         final List<Object> salesUpdateList = (List<Object>) queryMap.get(
                 "sales_update_list");
-        
-        	System.out.println(salesUpdateList.toArray()[27] + "OYESOOOO");
 
-        final Object o = executeUpdate(query, salesUpdateList.toArray());
+        System.out.println(salesUpdateList.toArray()[27] + "OYESOOOO");
+
+        executeUpdate(query, salesUpdateList.toArray());
 
         return new SalesUpdateDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
@@ -439,8 +422,8 @@ public class SalesDao extends PgDao
 
         try
         {
-            resultSet = executeQuery(query, new Object[] { salesId });
-           
+            resultSet = executeQuery(query, new Object[]
+            { salesId });
 
             if (resultSet.next())
             {
@@ -460,16 +443,12 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    
-    
-    
     public SalesDataResponseShort getSalesResponse(
             final SalesRequest salesRequest)
             throws SQLException, IOException, Exception
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(salesRequest);
         final Map<String, Object> queryMapCount = queryMap;
-
 
         if (queryMap.isEmpty())
             return new SalesDataResponseShort(
@@ -515,12 +494,11 @@ public class SalesDao extends PgDao
         SalesResponseShort salesResponseShort = null;
         final SalesDataShort data = new SalesDataShort();
         Integer number_of_records = null;
-        
+
         ResultSet resultSetCount = null;
-        SalesResponseShort salesResponseShortCount = null;
-        
         String query = "select * from " + schema + "." + "sales";
-        String query_count = "select count(*) AS COUNT from " + schema + "." + "sales";
+        String query_count = "select count(*) AS COUNT from " + schema + "."
+                + "sales";
 
         // ===
 
@@ -544,13 +522,15 @@ public class SalesDao extends PgDao
 
             if (str.equals("sales_year"))
                 str = "CAST (" + str + " AS TEXT)";
-            if (count == 0){
+            if (count == 0)
+            {
                 where_clause += " " + str + " LIKE ?";
-            	where_clause_count += " " + str + " LIKE ?";
+                where_clause_count += " " + str + " LIKE ?";
             }
-            else{
+            else
+            {
                 where_clause += " AND " + str + " LIKE ?";
-            	where_clause_count += " AND " + str + " LIKE ?";
+                where_clause_count += " AND " + str + " LIKE ?";
             }
             ++count;
         }
@@ -558,22 +538,25 @@ public class SalesDao extends PgDao
         /// ===
 
         if (a && b)
-            if (count == 0){
+            if (count == 0)
+            {
                 where_clause += " sales_collection_date BETWEEN ? AND ? ";
                 where_clause_count += " sales_collection_date BETWEEN ? AND ? ";
 
             }
-            else{
+            else
+            {
                 where_clause += " AND sales_collection_date BETWEEN ? AND ? ";
                 where_clause_count += " AND sales_collection_date BETWEEN ? AND ? ";
-               
+
             }
 
         /// ===
 
         try
         {
-            if ((where_clause != null) && (where_clause.length() > 0)){
+            if ((where_clause != null) && (where_clause.length() > 0))
+            {
                 query += " where " + where_clause;
                 query_count += " where " + where_clause_count;
             }
@@ -604,7 +587,7 @@ public class SalesDao extends PgDao
             {
                 objectList.add(java.sql.Date.valueOf(collectionDateFrom));
                 objectList.add(java.sql.Date.valueOf(collectionDateTo));
-                
+
                 objectListCount.add(java.sql.Date.valueOf(collectionDateFrom));
                 objectListCount.add(java.sql.Date.valueOf(collectionDateTo));
             }
@@ -612,13 +595,13 @@ public class SalesDao extends PgDao
             /// ===
 
             resultSet = executeQuery(query, objectList.toArray());
-            resultSetCount = executeQuery(query_count, objectListCount.toArray());
-            
+            resultSetCount = executeQuery(query_count,
+                    objectListCount.toArray());
+
             resultSetCount.next();
-            
-		    number_of_records = resultSetCount.getInt("COUNT");
-		    
-		      
+
+            number_of_records = resultSetCount.getInt("COUNT");
+
             while (resultSet.next())
             {
                 salesResponseShort = DaoUtil.getSalesResponseShort(resultSet);
@@ -633,7 +616,7 @@ public class SalesDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
 
-	     data.setCount(number_of_records);
+        data.setCount(number_of_records);
 
         if (data.getCount() == 0)
             return new SalesDataResponseShort(
@@ -645,8 +628,6 @@ public class SalesDao extends PgDao
 
     }
 
-    
-    
     public SalesDeleteDataResponse getSalesDeleteResponse(final Integer id)
             throws SQLException, IOException, Exception
     {
@@ -655,8 +636,9 @@ public class SalesDao extends PgDao
 
         try
         {
-            final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]{ id });
-            
+            final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
+            { id });
+
             connection.setAutoCommit(false);
             if (deletedRow == 0)
                 return new SalesDeleteDataResponse(
@@ -701,6 +683,5 @@ public class SalesDao extends PgDao
 
         return false;
     }
-    
 
 }
