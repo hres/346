@@ -1,6 +1,7 @@
 package hc.fcdr.rws.model.product;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,7 +13,7 @@ public class ProductLabelsResponse
     private Long      label_id;
     private String    label_upc;
     private String    label_description;
-    private String    label_collection_date;
+    private Date    label_collection_date;
     private String    label_source;
     private Timestamp label_creation_date;
     private Timestamp label_last_edit_date;
@@ -24,7 +25,7 @@ public class ProductLabelsResponse
         this.label_id = 0L;
         this.label_upc = "";
         this.label_description = "";
-        this.label_collection_date = "";
+        this.label_collection_date = null;
         this.label_source = "";
         this.label_creation_date = null;
         this.label_last_edit_date = null;
@@ -32,7 +33,7 @@ public class ProductLabelsResponse
     }
 
     public ProductLabelsResponse(final Long label_id, final String label_upc,
-            final String label_description, final String label_collection_date,
+            final String label_description, final Date label_collection_date,
             final String label_source, final Timestamp label_creation_date,
             final Timestamp label_last_edit_date,
             final String label_last_edited_by)
@@ -55,7 +56,7 @@ public class ProductLabelsResponse
         this.label_upc = _package.getUpc();
         this.label_description = _package.getDescription();
         this.label_collection_date = _package.getPackageCollectionDate()
-                                             .toString();
+                                             ;
         this.label_source = _package.getPackageSource();
         this.label_creation_date = _package.getCreationDate();
         this.label_last_edit_date = _package.getLastEditDate();
@@ -92,12 +93,12 @@ public class ProductLabelsResponse
         this.label_description = label_description;
     }
 
-    public String getLabel_collection_date()
+    public Date getLabel_collection_date()
     {
         return label_collection_date;
     }
 
-    public void setLabel_collection_date(final String label_collection_date)
+    public void setLabel_collection_date(final Date label_collection_date)
     {
         this.label_collection_date = label_collection_date;
     }

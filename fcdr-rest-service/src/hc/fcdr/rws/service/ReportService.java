@@ -1,6 +1,7 @@
 package hc.fcdr.rws.service;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
+import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.model.report.ReportDataResponse;
@@ -25,16 +27,18 @@ public class ReportService extends Application
     static ProductDao productDao = null;
 
     @PostConstruct
-    public static void initialize()
+    public static void initialize() throws IOException, Exception
     {
         if (productDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
-            pgConnectionPool.initialize();
+//            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+//            pgConnectionPool.initialize();
 
             try
             {
-                productDao = new ProductDao(pgConnectionPool.getConnection(),
+            	Connect connect = new Connect();
+            	Connection connection = connect.getConnections();	
+                productDao = new ProductDao(connection,
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)

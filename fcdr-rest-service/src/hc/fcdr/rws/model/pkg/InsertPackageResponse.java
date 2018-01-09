@@ -1,0 +1,52 @@
+package hc.fcdr.rws.model.pkg;
+
+public class InsertPackageResponse {
+
+	  private int    status;
+	    private String message;
+	    private Object id = null;
+	    
+
+	    public InsertPackageResponse()
+	    {
+	        status = 0;
+	        message = "";
+	    }
+
+	    public InsertPackageResponse(final int status, final String message)
+	    {
+	        super();
+	        this.status = status;
+	        this.message = message;
+	    }
+
+	    
+	    public Object getId() {
+			return id;
+		}
+
+		public void setId(Object id) {
+			this.id = id;
+		}
+
+		public int getStatus()
+	    {
+	        return status;
+	    }
+
+	    public void setStatus(final int status)
+	    {
+	        this.status = status;
+	    }
+
+	    public String getMessage()
+	    {
+	        return message;
+	    }
+
+	    public void setMessage(final String message)
+	    {
+	        this.message = message;
+	    }
+
+}

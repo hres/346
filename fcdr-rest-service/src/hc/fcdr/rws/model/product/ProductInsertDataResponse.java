@@ -1,25 +1,36 @@
 package hc.fcdr.rws.model.product;
 
-public class ProductUpdateDataResponse
+
+public class ProductInsertDataResponse
 {
     private int    status;
     private String message;
+    private Object id = null;
     
 
-    public ProductUpdateDataResponse()
+    public ProductInsertDataResponse()
     {
         status = 0;
         message = "";
     }
 
-    public ProductUpdateDataResponse(final int status, final String message)
+    public ProductInsertDataResponse(final int status, final String message)
     {
         super();
         this.status = status;
         this.message = message;
     }
 
-    public int getStatus()
+    
+    public Object getId() {
+		return id;
+	}
+
+	public void setId(Object id) {
+		this.id = id;
+	}
+
+	public int getStatus()
     {
         return status;
     }

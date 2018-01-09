@@ -1,25 +1,25 @@
-package hc.fcdr.rws.model.product;
+package hc.fcdr.rws.model.pkg;
 
-public class ProductUpdateDataResponse
-{
-    private int    status;
-    private String message;
-    
+public class ResponseGeneric {
 
-    public ProductUpdateDataResponse()
+	
+	  private int    status;
+	   private String message;
+	    
+    public ResponseGeneric()
     {
         status = 0;
         message = "";
     }
 
-    public ProductUpdateDataResponse(final int status, final String message)
+    public ResponseGeneric(final int status, final String message)
     {
         super();
         this.status = status;
         this.message = message;
     }
-
-    public int getStatus()
+    
+	public int getStatus()
     {
         return status;
     }
@@ -38,5 +38,6 @@ public class ProductUpdateDataResponse
     {
         this.message = message;
     }
+
 
 }

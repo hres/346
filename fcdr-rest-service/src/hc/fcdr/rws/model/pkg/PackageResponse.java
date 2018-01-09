@@ -1,6 +1,7 @@
 package hc.fcdr.rws.model.pkg;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,7 +13,7 @@ public class PackageResponse
     private String    labelUpc;
     private String    labelDescription;
     private String    labelSource;
-    private String    labelCollectionDate;
+    private Date    labelCollectionDate;
     private Timestamp labelCreationDate;
     private Timestamp labelLastEditDate;
     private String    labelLastEditedBy;
@@ -21,9 +22,9 @@ public class PackageResponse
     public PackageResponse()
     {
         super();
-        this.labelUpc = "";
-        this.labelDescription = "";
-        this.labelSource = "";
+        this.labelUpc = null;
+        this.labelDescription = null;
+        this.labelSource = null;
         this.labelCollectionDate = null;
         this.labelCreationDate = null;
         this.labelLastEditDate = null;
@@ -32,7 +33,7 @@ public class PackageResponse
     }
 
     public PackageResponse(final String labelUpc, final String labelDescription,
-            final String labelSource, final String labelCollectionDate,
+            final String labelSource, final Date labelCollectionDate,
             final Timestamp labelCreationDate,
             final Timestamp labelLastEditDate, final String labelLastEditedBy,
             final Long productId)
@@ -54,8 +55,7 @@ public class PackageResponse
         this.labelUpc = _package.getUpc();
         this.labelDescription = _package.getDescription();
         this.labelSource = _package.getPackageSource();
-        this.labelCollectionDate = _package.getPackageCollectionDate()
-                                           .toString();
+        this.labelCollectionDate =_package.getPackageCollectionDate(); 
         this.labelCreationDate = _package.getCreationDate();
         this.labelLastEditDate = _package.getLastEditDate();
         this.labelLastEditedBy = _package.getEditedBy();
@@ -92,12 +92,12 @@ public class PackageResponse
         this.labelSource = labelSource;
     }
 
-    public String getLabelCollectionDate()
+    public Date getLabelCollectionDate()
     {
         return labelCollectionDate;
     }
 
-    public void setLabelCollectionDate(final String labelCollectionDate)
+    public void setLabelCollectionDate(final Date labelCollectionDate)
     {
         this.labelCollectionDate = labelCollectionDate;
     }

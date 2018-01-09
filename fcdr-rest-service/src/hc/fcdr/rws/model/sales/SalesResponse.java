@@ -3,81 +3,114 @@ package hc.fcdr.rws.model.sales;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
 import hc.fcdr.rws.domain.Sales;
 
-@XmlRootElement
+
 public class SalesResponse
 {
+    @XmlElement(nillable=true)
     private String    sales_description;
+    @XmlElement(nillable=true)
     private String    sales_upc;
+    @XmlElement(nillable=true)
     private String    sales_brand;
+    @XmlElement(nillable=true)
     private String    sales_manufacturer;
+    @XmlElement(nillable=true)
     private Double    dollar_rank;
+    @XmlElement(nillable=true)
     private Double    dollar_volume;
+    @XmlElement(nillable=true)
     private Double    dollar_share;
+    @XmlElement(nillable=true)
     private Double    dollar_volume_percentage_change;
+    @XmlElement(nillable=true)
     private Double    kilo_volume;
+    @XmlElement(nillable=true)
     private Double    kilo_share;
+    @XmlElement(nillable=true)
     private Double    kilo_volume_percentage_change;
+    @XmlElement(nillable=true)
     private Double    average_ac_dist;
+    @XmlElement(nillable=true)
     private Double    average_retail_price;
     private String    sales_source;
     private String    nielsen_category;
+    @XmlElement(nillable=true)
     private String    sales_year;
+    @XmlElement(nillable=true)
     private Boolean   control_label_flag;
+    @XmlElement(nillable=true)
     private Double    kilo_volume_total;
+    @XmlElement(nillable=true)
     private Double    kilo_volume_rank;
+    @XmlElement(nillable=true)
     private Double    dollar_volume_total;
+    @XmlElement(nillable=true)
     private Double    cluster_number;
+    @XmlElement(nillable=true)
     private Double    product_grouping;
+ 
     private String    sales_product_description;
+    @XmlElement(nillable=true)
     private Double    classification_number;
+    @XmlElement(nillable=true)
     private String    classification_type;
+    @XmlElement(nillable=true)
     private String    sales_comment;
-    private Date      sales_collection_date;
+    @XmlElement(nillable=true)
+    private String      sales_collection_date;
+    @XmlElement(nillable=true)
     private Integer   number_of_units;
+    @XmlElement(nillable=true)
     private String    edited_by;
+    @XmlElement(nillable=true)
     private Timestamp creation_date;
+    @XmlElement(nillable=true)
     private Timestamp last_edit_date;
+    @XmlElement(nillable=true)
     private Long      product_id;
+    @XmlElement(nillable=true)
+    private Long      sales_id;
 
     public SalesResponse()
     {
         super();
-        this.sales_description = "";
-        this.sales_upc = "";
-        this.sales_brand = "";
-        this.sales_manufacturer = "";
-        this.dollar_rank = 0.0;
-        this.dollar_volume = 0.0;
-        this.dollar_share = 0.0;
-        this.dollar_volume_percentage_change = 0.0;
-        this.kilo_volume = 0.0;
-        this.kilo_share = 0.0;
-        this.kilo_volume_percentage_change = 0.0;
-        this.average_ac_dist = 0.0;
-        this.average_retail_price = 0.0;
-        this.sales_source = "";
-        this.nielsen_category = "";
-        this.sales_year = "";
-        this.control_label_flag = false;
-        this.kilo_volume_total = 0.0;
-        this.kilo_volume_rank = 0.0;
-        this.dollar_volume_total = 0.0;
-        this.cluster_number = 0.0;
-        this.product_grouping = 0.0;
-        this.sales_product_description = "";
-        this.classification_number = 0.0;
-        this.classification_type = "";
-        this.sales_comment = "";
+        this.sales_description = null;
+        this.sales_upc = null;
+        this.sales_brand = null;
+        this.sales_manufacturer = null;
+        this.dollar_rank = null;
+        this.dollar_volume = null;
+        this.dollar_share = null;
+        this.dollar_volume_percentage_change = null;
+        this.kilo_volume = null;
+        this.kilo_share = null;
+        this.kilo_volume_percentage_change = null;
+        this.average_ac_dist = null;
+        this.average_retail_price = null;
+        this.sales_source = null;
+        this.nielsen_category = null;
+        this.sales_year = null;
+        this.control_label_flag = null;
+        this.kilo_volume_total = null;
+        this.kilo_volume_rank = null;
+        this.dollar_volume_total = null;
+        this.cluster_number = null;
+        this.product_grouping = null;
+        this.sales_product_description = null;
+        this.classification_number = null;
+        this.classification_type = null;
+        this.sales_comment = null;
         this.sales_collection_date = null;
-        this.number_of_units = 0;
-        this.edited_by = "";
+        this.number_of_units = null;
+        this.edited_by = null;
         this.creation_date = null;
         this.last_edit_date = null;
-        this.product_id = 0L;
+        this.product_id = null;
+        this.sales_id = null;
 
     }
 
@@ -116,6 +149,8 @@ public class SalesResponse
         this.creation_date = sales.getCreationDate();
         this.last_edit_date = sales.getLastEditDate();
         this.product_id = sales.getProductId();
+        this.sales_id = sales.getId();
+        System.out.println("the sales id is " + this.sales_id);
 
     }
 
@@ -382,13 +417,12 @@ public class SalesResponse
         this.sales_comment = sales_comment;
     }
 
-    public Date getSales_collection_date()
+    public String getSales_collection_date()
     {
         return sales_collection_date;
     }
 
-    public void setSales_collection_date(final Date sales_collection_date)
-    {
+    public void setSales_collection_date(String sales_collection_date){
         this.sales_collection_date = sales_collection_date;
     }
 
@@ -440,6 +474,15 @@ public class SalesResponse
     public void setProduct_id(final Long product_id)
     {
         this.product_id = product_id;
+    }
+    public Long geSales_id()
+    {
+        return sales_id;
+    }
+
+    public void setSales_id(final Long sales_id)
+    {
+        this.product_id = sales_id;
     }
 
 }
