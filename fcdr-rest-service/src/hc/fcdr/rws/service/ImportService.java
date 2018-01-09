@@ -2,7 +2,6 @@ package hc.fcdr.rws.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -16,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
-import hc.fcdr.rws.db.Connect;
+import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
 import hc.fcdr.rws.importer.ImportStatistics;
@@ -41,22 +40,23 @@ public class ImportService extends Application
             + "fcdrSalesImportReport.pdf";
 
     @PostConstruct
-    public static void initialize() throws IOException, Exception
+    public static void initialize()
     {
         if (loader == null)
+        {
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            pgConnectionPool.initialize();
+
             try
-
             {
-                final Connect connect = new Connect();
-                final Connection connection = Connect.getConnections();
-
-                loader = new CSVLoader(connection,
+                loader = new CSVLoader(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
                 e.printStackTrace();
             }
+        }
     }
 
     @POST
@@ -68,8 +68,6 @@ public class ImportService extends Application
     {
         final String importInputDir = importRequest.inputDir;
         final boolean sendMail = importRequest.sendMail;
-
-        new ImportResponse();
         ImportDataResponse entity = new ImportDataResponse();
 
         // ===
@@ -152,6 +150,7 @@ public class ImportService extends Application
                     importInputDir + "salesdata_20171003_short.csv", "sales",
                     false);
 
+            // Generate report.
             new ImportReport(importStatistics);
         }
         catch (final java.lang.NumberFormatException e)
@@ -160,8 +159,10 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
         catch (final com.opencsv.exceptions.CsvDataTypeMismatchException e1)
         {
@@ -169,8 +170,10 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
         catch (final Exception e2)
         {
@@ -178,8 +181,10 @@ public class ImportService extends Application
                     ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                     ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-            return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                    MediaType.APPLICATION_JSON).entity(entity).build();
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                           .type(MediaType.APPLICATION_JSON)
+                           .entity(entity)
+                           .build();
         }
 
         // ===
@@ -195,14 +200,18 @@ public class ImportService extends Application
                         ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
                         ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
-                return Response.status(Response.Status.NOT_ACCEPTABLE).type(
-                        MediaType.APPLICATION_JSON).entity(entity).build();
+                return Response.status(Response.Status.NOT_ACCEPTABLE)
+                               .type(MediaType.APPLICATION_JSON)
+                               .entity(entity)
+                               .build();
             }
         }
         // ===
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     private boolean sendEmail(final Properties properties,

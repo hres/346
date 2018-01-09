@@ -1,7 +1,6 @@
 package hc.fcdr.rws.service;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import hc.fcdr.rws.db.Connect;
 import hc.fcdr.rws.db.PackageDao;
+import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
@@ -43,21 +42,23 @@ public class PackageService extends Application
     static PackageDao packageDao = null;
 
     @PostConstruct
-    public static void initialize() throws IOException, Exception
+    public static void initialize()
     {
         if (packageDao == null)
+        {
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            pgConnectionPool.initialize();
+
             try
             {
-                new Connect();
-                final Connection connection = Connect.getConnections();
-
-                packageDao = new PackageDao(connection,
+                packageDao = new PackageDao(pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
                 e.printStackTrace();
             }
+        }
     }
 
     @GET
@@ -124,8 +125,12 @@ public class PackageService extends Application
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPackage(@PathParam("id") final long id)
     {
-        System.out.println("here");
+        
+        //TODO verify
         PackageViewResponse entity = new PackageViewResponse();
+        
+        //TODO previous
+        //PackageDataResponse entity = new PackageDataResponse();
 
         try
         {
@@ -312,15 +317,6 @@ public class PackageService extends Application
                 MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-    // ===
-    @OPTIONS
-    @Path("/package")
-    @Produces(MediaType.APPLICATION_XML)
-    public String getSupportedOperations()
-    {
-        return "<operations>GET, PUT, POST, DELETE</operations>";
-    }
-
     @GET
     @Path("/listofcomponents")
     @Produces(MediaType.APPLICATION_JSON)
@@ -328,8 +324,6 @@ public class PackageService extends Application
             throws SQLException, IOException, Exception
     {
         ComponentNameResponse entity = new ComponentNameResponse();
-
-        // List<String> entity = new ArrayList<String>();
 
         try
         {
@@ -342,12 +336,19 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        // return new ArrayList<String>();
-
-        // Response response = Response.ok(entity).build();
-        // return response;
         return Response.status(Response.Status.OK).type(
                 MediaType.APPLICATION_JSON).entity(entity).build();
     }
+    
+    // ===
+    @OPTIONS
+    @Path("/package")
+    @Produces(MediaType.APPLICATION_XML)
+    public String getSupportedOperations()
+    {
+        return "<operations>GET, PUT, POST, DELETE</operations>";
+    }
+
+    
 
 }

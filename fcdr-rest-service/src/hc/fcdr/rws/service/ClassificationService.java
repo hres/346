@@ -1,7 +1,5 @@
 package hc.fcdr.rws.service;
 
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.ClassificationDao;
-import hc.fcdr.rws.db.Connect;
+import hc.fcdr.rws.db.PgConnectionPool;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
@@ -29,21 +27,24 @@ public class ClassificationService extends Application
     static ClassificationDao classificationDao = null;
 
     @PostConstruct
-    public static void initialize() throws IOException, Exception
+    public static void initialize()
     {
         if (classificationDao == null)
+        {
+            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            pgConnectionPool.initialize();
+
             try
             {
-                final Connect connect = new Connect();
-                final Connection connection = Connect.getConnections();
-
-                classificationDao = new ClassificationDao(connection,
+                classificationDao = new ClassificationDao(
+                        pgConnectionPool.getConnection(),
                         ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
                 e.printStackTrace();
             }
+        }
     }
 
     @GET
@@ -101,8 +102,10 @@ public class ClassificationService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @GET
@@ -122,8 +125,10 @@ public class ClassificationService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                       .type(MediaType.APPLICATION_JSON)
+                       .entity(entity)
+                       .build();
     }
 
     @OPTIONS
