@@ -21,8 +21,8 @@ import hc.fcdr.rws.util.DateUtil;
 
 public class CSVLoader
 {
-    private static final Logger logger = Logger.getLogger(
-            CSVLoader.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(CSVLoader.class.getName());
     private char                separator;
     private final SalesDao      salesDao;
     private final ProductDao    productDao;
@@ -51,11 +51,13 @@ public class CSVLoader
         stopWatch.start();
         System.out.println("Loading of sales data started...");
 
-        List<ImportSalesData> importSalesDataList = new ArrayList<ImportSalesData>();
+        List<ImportSalesData> importSalesDataList =
+                new ArrayList<ImportSalesData>();
 
-        importSalesDataList = new CsvToBeanBuilder(
-                new FileReader(csvFile)).withType(
-                        ImportSalesData.class).withSkipLines(1).build().parse();
+        importSalesDataList =
+                new CsvToBeanBuilder(new FileReader(csvFile))
+                        .withType(ImportSalesData.class).withSkipLines(1)
+                        .build().parse();
 
         stopWatch.split();
         System.out.println("Total time spent on loading the sales data: "
@@ -81,10 +83,13 @@ public class CSVLoader
     {
         final Integer numberOfRecordsProcessed = importSalesDataList.size();
         Integer numberOfInvalidRecords = 0;
-        final List<ImportReportDetailRow> importReportDetailRowList = new ArrayList<ImportReportDetailRow>();
+        final List<ImportReportDetailRow> importReportDetailRowList =
+                new ArrayList<ImportReportDetailRow>();
 
-        List<ImportSalesData> importSalesDataListUpc = new ArrayList<ImportSalesData>();
-        final Map<String, List<ImportSalesData>> m1 = new HashMap<String, List<ImportSalesData>>();
+        List<ImportSalesData> importSalesDataListUpc =
+                new ArrayList<ImportSalesData>();
+        final Map<String, List<ImportSalesData>> m1 =
+                new HashMap<String, List<ImportSalesData>>();
 
         for (final ImportSalesData importSalesData : importSalesDataList)
         {
@@ -114,7 +119,8 @@ public class CSVLoader
                 salesDao.insert(csvFieldList);
 
                 // update product
-                final List<Object> fieldsForProductUpdateList = importSalesData.getFieldsForProductUpdateList();
+                final List<Object> fieldsForProductUpdateList =
+                        importSalesData.getFieldsForProductUpdateList();
                 fieldsForProductUpdateList.add(productId);
                 productDao.update(fieldsForProductUpdateList,
                         classificationNumber, classificationType);
@@ -133,16 +139,19 @@ public class CSVLoader
                 m1.put(salesUpc, importSalesDataListUpc);
             }
 
-            final ImportReportDetailRow importReportDetailRow = new ImportReportDetailRow(
-                    importSalesData.getItemId().toString(),
-                    importSalesData.getSalesDescription());
+            final ImportReportDetailRow importReportDetailRow =
+                    new ImportReportDetailRow(
+                            importSalesData.getItemId().toString(),
+                            importSalesData.getSalesDescription());
             importReportDetailRowList.add(importReportDetailRow);
 
         } // end for
 
-        final Map<Double, List<ImportSalesData>> m2 = new HashMap<Double, List<ImportSalesData>>();
+        final Map<Double, List<ImportSalesData>> m2 =
+                new HashMap<Double, List<ImportSalesData>>();
 
-        for (final Map.Entry<String, List<ImportSalesData>> entry : m1.entrySet())
+        for (final Map.Entry<String, List<ImportSalesData>> entry : m1
+                .entrySet())
         {
             /// m1.forEach((k, v) -> {
 
@@ -154,13 +163,14 @@ public class CSVLoader
             {
                 // Collect the remaining records by program_grouping
                 final Double productGrouping = v.get(0).getProductGrouping();
-                List<ImportSalesData> importSalesDataListProductGrouping = new ArrayList<ImportSalesData>();
+                List<ImportSalesData> importSalesDataListProductGrouping =
+                        new ArrayList<ImportSalesData>();
 
                 if ((productGrouping != null)
                         && (m2.containsKey(productGrouping)))
                 {
-                    importSalesDataListProductGrouping = m2.get(
-                            productGrouping);
+                    importSalesDataListProductGrouping =
+                            m2.get(productGrouping);
                     importSalesDataListProductGrouping.add(v.get(0));
                     m2.replace(productGrouping,
                             importSalesDataListProductGrouping);
@@ -169,7 +179,8 @@ public class CSVLoader
                         && !(m2.containsKey(productGrouping)))
                 {
                     // One sales record for one product.
-                    importSalesDataListProductGrouping = new ArrayList<ImportSalesData>();
+                    importSalesDataListProductGrouping =
+                            new ArrayList<ImportSalesData>();
                     importSalesDataListProductGrouping.add(v.get(0));
                     m2.put(productGrouping, importSalesDataListProductGrouping);
                 }
@@ -179,7 +190,8 @@ public class CSVLoader
             /// });
         }
 
-        for (final Map.Entry<Double, List<ImportSalesData>> entry : m2.entrySet())
+        for (final Map.Entry<Double, List<ImportSalesData>> entry : m2
+                .entrySet())
         {
             final List<ImportSalesData> v = entry.getValue();
             /// m2.forEach((k, v) -> {
@@ -189,8 +201,8 @@ public class CSVLoader
 
         importStatistics.setNumberOfRecordsProcessed(numberOfRecordsProcessed);
         importStatistics.setNumberOfInvalidRecords(numberOfInvalidRecords);
-        importStatistics.setImportReportDetailRowList(
-                importReportDetailRowList);
+        importStatistics
+                .setImportReportDetailRowList(importReportDetailRowList);
     }
 
     private void insertProductSalesRecords(
@@ -200,10 +212,13 @@ public class CSVLoader
         final ImportSalesData importSalesData = importSalesDataList.get(0);
 
         // create product, then create sales record
-        final String productDescription = ((importSalesData.getSalesProductDescription() != null)
-                && !importSalesData.getSalesProductDescription().isEmpty())
-                        ? importSalesData.getSalesProductDescription()
-                        : importSalesData.getSalesDescription();
+        final String productDescription =
+                ((importSalesData.getSalesProductDescription() != null)
+                        && !importSalesData.getSalesProductDescription()
+                                .isEmpty())
+                                        ? importSalesData
+                                                .getSalesProductDescription()
+                                        : importSalesData.getSalesDescription();
 
         final List<Object> csvFieldList = importSalesData.getCsvFieldList();
 
@@ -226,8 +241,9 @@ public class CSVLoader
         {
             final Double classificationNumber = (Double) csvFieldList.get(25);
             final String classificationType = (String) csvFieldList.get(26);
-            productId = productDao.insert(fieldsForProductInsertList,
-                    classificationNumber, classificationType);
+            productId =
+                    productDao.insert(fieldsForProductInsertList,
+                            classificationNumber, classificationType);
         }
         catch (final DaoException e)
         {
@@ -238,7 +254,8 @@ public class CSVLoader
         {
             for (final ImportSalesData importSalesData2 : importSalesDataList)
             {
-                final List<Object> csvFieldList2 = importSalesData2.getCsvFieldList();
+                final List<Object> csvFieldList2 =
+                        importSalesData2.getCsvFieldList();
 
                 // create a new sales record for this product.
                 csvFieldList2.add(1); // number of units

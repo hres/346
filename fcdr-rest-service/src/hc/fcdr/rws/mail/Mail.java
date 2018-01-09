@@ -147,8 +147,8 @@ public class Mail
     private String[] parseExp(final String inputExp)
     {
         final java.util.Vector<String> v = new java.util.Vector<String>();
-        final java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(
-                inputExp, ",;:", false);
+        final java.util.StringTokenizer tokenizer =
+                new java.util.StringTokenizer(inputExp, ",;:", false);
 
         while (tokenizer.hasMoreTokens())
         {
@@ -277,8 +277,9 @@ public class Mail
     @Override
     public String toString()
     {
-        return "Mail [id=" + id + ", imap=" + imap + ", istream=" + istream
-                + ", passwd=" + passwd + ", receiverAddresses="
+        return "Mail [id="
+                + id + ", imap=" + imap + ", istream=" + istream + ", passwd="
+                + passwd + ", receiverAddresses="
                 + Arrays.toString(receiverAddresses) + ", receiverName="
                 + receiverName + ", senderAddress=" + senderAddress
                 + ", senderName=" + senderName + ", smtp=" + smtp + ", subject="

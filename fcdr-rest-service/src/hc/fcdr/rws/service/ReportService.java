@@ -34,8 +34,9 @@ public class ReportService extends Application
 
             try
             {
-                productDao = new ProductDao(pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                productDao =
+                        new ProductDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -57,9 +58,7 @@ public class ReportService extends Application
         entity.setMessage(ResponseCodes.OK.getMessage());
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
 }

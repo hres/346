@@ -19,8 +19,8 @@ import hc.fcdr.rws.util.DaoUtil;
 
 public class ClassificationDao extends PgDao
 {
-    private static final Logger logger = Logger.getLogger(
-            ClassificationDao.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(ClassificationDao.class.getName());
     private final String        schema;
 
     public ClassificationDao(final Connection connection, final String schema)
@@ -32,7 +32,8 @@ public class ClassificationDao extends PgDao
     public List<Classification> getClassification() throws DaoException
     {
         ResultSet resultSet = null;
-        final List<Classification> classificationList = new ArrayList<Classification>();
+        final List<Classification> classificationList =
+                new ArrayList<Classification>();
 
         final String query = "select * from " + schema + "." + "classification";
 
@@ -58,8 +59,10 @@ public class ClassificationDao extends PgDao
         ResultSet resultSet = null;
         Classification classification = null;
 
-        final String query = "select * from " + schema + "."
-                + "classification where classification_id = ?";
+        final String query =
+                "select * from "
+                        + schema + "."
+                        + "classification where classification_id = ?";
 
         try
         {
@@ -96,8 +99,8 @@ public class ClassificationDao extends PgDao
 
             while (resultSet.next())
             {
-                classificationResponse = DaoUtil.getClassificationResponse(
-                        resultSet);
+                classificationResponse =
+                        DaoUtil.getClassificationResponse(resultSet);
                 data.add(classificationResponse);
             }
         }
@@ -124,8 +127,10 @@ public class ClassificationDao extends PgDao
 
         final ClassificationData data = new ClassificationData();
 
-        final String query = "select * from " + schema + "."
-                + "classification where classification_id = ?";
+        final String query =
+                "select * from "
+                        + schema + "."
+                        + "classification where classification_id = ?";
 
         try
         {
@@ -134,8 +139,8 @@ public class ClassificationDao extends PgDao
 
             if (resultSet.next())
             {
-                classificationResponse = DaoUtil.getClassificationResponse(
-                        resultSet);
+                classificationResponse =
+                        DaoUtil.getClassificationResponse(resultSet);
                 data.add(classificationResponse);
             }
         }

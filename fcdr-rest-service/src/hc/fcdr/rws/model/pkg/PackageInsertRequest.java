@@ -6,85 +6,125 @@ public class PackageInsertRequest
 {
 
     private Integer product_id;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_upc;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_brand;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_manufacturer;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_country;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  package_size;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_size_unit_of_measure;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  storage_type;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  storage_statements;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  health_claims;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  other_package_statements;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  suggested_directions;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  ingredients;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Boolean multi_part_flag;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  nutrition_fact_table;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  as_prepared_per_serving_amount;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  as_prepared_unit_of_measure;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  as_sold_per_serving_amount;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  as_sold_unit_of_measure;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  as_prepared_per_serving_amount_in_grams;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  as_sold_per_serving_amount_in_grams;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_comment;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_source;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_product_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_collection_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Integer number_of_units;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  edited_by;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Boolean informed_dining_program;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  nft_last_update_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  product_grouping;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Boolean child_item;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  classification_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  classification_name;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  nielsen_item_rank;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  nutrient_claims;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  package_nielsen_category;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  common_household_measure;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  creation_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  last_edit_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Boolean calculated;
 
     public PackageInsertRequest()
@@ -180,8 +220,10 @@ public class PackageInsertRequest
         this.as_prepared_unit_of_measure = as_prepared_unit_of_measure;
         this.as_sold_per_serving_amount = as_sold_per_serving_amount;
         this.as_sold_unit_of_measure = as_sold_unit_of_measure;
-        this.as_prepared_per_serving_amount_in_grams = as_prepared_per_serving_amount_in_grams;
-        this.as_sold_per_serving_amount_in_grams = as_sold_per_serving_amount_in_grams;
+        this.as_prepared_per_serving_amount_in_grams =
+                as_prepared_per_serving_amount_in_grams;
+        this.as_sold_per_serving_amount_in_grams =
+                as_sold_per_serving_amount_in_grams;
         this.package_comment = package_comment;
         this.package_source = package_source;
         this.package_product_description = package_product_description;
@@ -446,7 +488,8 @@ public class PackageInsertRequest
     public void setAs_prepared_per_serving_amount_in_grams(
             final Double as_prepared_per_serving_amount_in_grams)
     {
-        this.as_prepared_per_serving_amount_in_grams = as_prepared_per_serving_amount_in_grams;
+        this.as_prepared_per_serving_amount_in_grams =
+                as_prepared_per_serving_amount_in_grams;
     }
 
     public Double getAs_sold_per_serving_amount_in_grams()
@@ -457,7 +500,8 @@ public class PackageInsertRequest
     public void setAs_sold_per_serving_amount_in_grams(
             final Double as_sold_per_serving_amount_in_grams)
     {
-        this.as_sold_per_serving_amount_in_grams = as_sold_per_serving_amount_in_grams;
+        this.as_sold_per_serving_amount_in_grams =
+                as_sold_per_serving_amount_in_grams;
     }
 
     public String getPackage_comment()

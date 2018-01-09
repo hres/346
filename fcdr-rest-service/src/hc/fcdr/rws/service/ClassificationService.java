@@ -36,9 +36,9 @@ public class ClassificationService extends Application
 
             try
             {
-                classificationDao = new ClassificationDao(
-                        pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                classificationDao =
+                        new ClassificationDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -103,9 +103,7 @@ public class ClassificationService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -126,9 +124,7 @@ public class ClassificationService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @OPTIONS

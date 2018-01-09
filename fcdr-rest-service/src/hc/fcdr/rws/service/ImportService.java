@@ -22,7 +22,6 @@ import hc.fcdr.rws.importer.ImportStatistics;
 import hc.fcdr.rws.mail.MailProcessor;
 import hc.fcdr.rws.model.importer.ImportDataResponse;
 import hc.fcdr.rws.model.importer.ImportRequest;
-import hc.fcdr.rws.model.importer.ImportResponse;
 import hc.fcdr.rws.reportengine.ImportReport;
 import hc.fcdr.rws.util.ContextManager;
 
@@ -31,13 +30,13 @@ public class ImportService extends Application
 {
     static CSVLoader     loader                = null;
 
-    private final String REPORT_DIRECTORY_ROOT = (!System.getProperty(
-            "java.io.tmpdir").endsWith(File.separator)
+    private final String REPORT_DIRECTORY_ROOT =
+            (!System.getProperty("java.io.tmpdir").endsWith(File.separator)
                     ? (System.getProperty("java.io.tmpdir") + File.separator)
                     : System.getProperty("java.io.tmpdir"));
 
-    private final String REPORT_FILE           = REPORT_DIRECTORY_ROOT
-            + "fcdrSalesImportReport.pdf";
+    private final String REPORT_FILE           =
+            REPORT_DIRECTORY_ROOT + "fcdrSalesImportReport.pdf";
 
     @PostConstruct
     public static void initialize()
@@ -49,8 +48,9 @@ public class ImportService extends Application
 
             try
             {
-                loader = new CSVLoader(pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                loader =
+                        new CSVLoader(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -145,46 +145,44 @@ public class ImportService extends Application
 
         try
         {
-            final ImportStatistics importStatistics = loader.loadCSV(
-                    /// importInputDir + "SALESDATA_20170921.csv",
-                    importInputDir + "salesdata_20171003_short.csv", "sales",
-                    false);
+            final ImportStatistics importStatistics =
+                    loader.loadCSV(
+                            /// importInputDir + "SALESDATA_20170921.csv",
+                            importInputDir + "salesdata_20171003_short.csv",
+                            "sales", false);
 
             // Generate report.
             new ImportReport(importStatistics);
         }
         catch (final java.lang.NumberFormatException e)
         {
-            entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+            entity =
+                    new ImportDataResponse(
+                            ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                            ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
             return Response.status(Response.Status.NOT_ACCEPTABLE)
-                           .type(MediaType.APPLICATION_JSON)
-                           .entity(entity)
-                           .build();
+                    .type(MediaType.APPLICATION_JSON).entity(entity).build();
         }
         catch (final com.opencsv.exceptions.CsvDataTypeMismatchException e1)
         {
-            entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+            entity =
+                    new ImportDataResponse(
+                            ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                            ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
             return Response.status(Response.Status.NOT_ACCEPTABLE)
-                           .type(MediaType.APPLICATION_JSON)
-                           .entity(entity)
-                           .build();
+                    .type(MediaType.APPLICATION_JSON).entity(entity).build();
         }
         catch (final Exception e2)
         {
-            entity = new ImportDataResponse(
-                    ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-                    ResponseCodes.NOT_ACCEPTABLE.getMessage());
+            entity =
+                    new ImportDataResponse(
+                            ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                            ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
             return Response.status(Response.Status.NOT_ACCEPTABLE)
-                           .type(MediaType.APPLICATION_JSON)
-                           .entity(entity)
-                           .build();
+                    .type(MediaType.APPLICATION_JSON).entity(entity).build();
         }
 
         // ===
@@ -196,22 +194,20 @@ public class ImportService extends Application
 
             if (!sendEmail(properties, filesToAttach))
             {
-                entity = new ImportDataResponse(
-                        ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
-                        ResponseCodes.NOT_ACCEPTABLE.getMessage());
+                entity =
+                        new ImportDataResponse(
+                                ResponseCodes.NOT_ACCEPTABLE.getCode(), null,
+                                ResponseCodes.NOT_ACCEPTABLE.getMessage());
 
                 return Response.status(Response.Status.NOT_ACCEPTABLE)
-                               .type(MediaType.APPLICATION_JSON)
-                               .entity(entity)
-                               .build();
+                        .type(MediaType.APPLICATION_JSON).entity(entity)
+                        .build();
             }
         }
         // ===
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     private boolean sendEmail(final Properties properties,

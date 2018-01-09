@@ -48,8 +48,9 @@ public class SalesService extends Application
 
             try
             {
-                salesDao = new SalesDao(pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                salesDao =
+                        new SalesDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -114,9 +115,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -137,9 +136,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -160,9 +157,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -185,9 +180,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -212,9 +205,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -239,9 +230,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -264,9 +253,7 @@ public class SalesService extends Application
         }
 
         return Response.status(Response.Status.OK)
-                       .type(MediaType.APPLICATION_JSON)
-                       .entity(entity)
-                       .build();
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===

@@ -15,8 +15,8 @@ public class ReportRequest
     @Override
     public String toString()
     {
-        return "ImportRequest [inputDir=" + inputDir + ", sendMail=" + sendMail
-                + "]";
+        return "ImportRequest [inputDir="
+                + inputDir + ", sendMail=" + sendMail + "]";
     }
 
 }

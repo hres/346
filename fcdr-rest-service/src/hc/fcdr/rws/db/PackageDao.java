@@ -2,6 +2,7 @@ package hc.fcdr.rws.db;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
+import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.NftView;
 import hc.fcdr.rws.model.pkg.PackageData;
@@ -33,15 +35,13 @@ import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.util.DaoUtil;
 
-import java.sql.PreparedStatement;
-import hc.fcdr.rws.model.pkg.NftModel;
-
 public class PackageDao extends PgDao
 {
-    private static final Logger logger       = Logger.getLogger(
-            PackageDao.class.getName());
+    private static final Logger logger       =
+            Logger.getLogger(PackageDao.class.getName());
     private final String        schema;
-    private static final String SQL_INSERT   = "insert into ${table}(${keys}) values(${values})";
+    private static final String SQL_INSERT   =
+            "insert into ${table}(${keys}) values(${values})";
     private static final String TABLE_REGEX  = "\\$\\{table\\}";
     private static final String KEYS_REGEX   = "\\$\\{keys\\}";
     private static final String VALUES_REGEX = "\\$\\{values\\}";
@@ -80,8 +80,9 @@ public class PackageDao extends PgDao
         ResultSet resultSet = null;
         Package _package = null;
 
-        final String query = "select * from " + schema + "."
-                + "package where package_id = ?";
+        final String query =
+                "select * from "
+                        + schema + "." + "package where package_id = ?";
 
         try
         {
@@ -107,10 +108,11 @@ public class PackageDao extends PgDao
     {
         NftView resultSet = null;
 
-        final String query = "select  amount, amount_unit_of_measure, percentage_daily_value, component_name  from "
-                + schema + "." + "product_component pc INNER JOIN " + schema
-                + "."
-                + "component c on pc.component_id = c.component_id where package_id = ? and as_ppd_flag = ? order by nft_order";
+        final String query =
+                "select  amount, amount_unit_of_measure, percentage_daily_value, component_name  from "
+                        + schema + "." + "product_component pc INNER JOIN "
+                        + schema + "."
+                        + "component c on pc.component_id = c.component_id where package_id = ? and as_ppd_flag = ? order by nft_order";
 
         System.out.println(query);
         try
@@ -145,7 +147,7 @@ public class PackageDao extends PgDao
         }
 
         System.out.println("The flag has the value of " + nftRequest.getFlag());
-        
+
         if (nftRequest.getFlag() == null)
             return new ResponseGeneric(0, "Invalid flag");
         else if (nftRequest.getFlag() == true)
@@ -181,14 +183,16 @@ public class PackageDao extends PgDao
             return new ResponseGeneric(
                     ResponseCodes.INVALID_INPUT_FIELDS.getCode(),
                     ResponseCodes.INVALID_INPUT_FIELDS.getMessage());
-        final String sql = "delete from " + schema + "."
-                + "product_component where package_id = ? and as_ppd_flag = ?";
+        final String sql =
+                "delete from "
+                        + schema + "."
+                        + "product_component where package_id = ? and as_ppd_flag = ?";
 
         if (nftRequest.getNft().size() < 1)
             try
             {
-                final Integer deletedRow = (Integer) executeUpdate(sql,
-                        new Object[]
+                final Integer deletedRow =
+                        (Integer) executeUpdate(sql, new Object[]
                         { nftRequest.getPackage_id(), nftRequest.getFlag() });
 
                 if (deletedRow == 0)
@@ -205,8 +209,8 @@ public class PackageDao extends PgDao
             try
             {
                 connection.setAutoCommit(false);
-                final Map<String, Object> queryMap = DaoUtil.getQueryMap(
-                        nftRequest);
+                final Map<String, Object> queryMap =
+                        DaoUtil.getQueryMap(nftRequest);
 
                 if (queryMap.containsKey("inputError"))
                 {
@@ -219,7 +223,7 @@ public class PackageDao extends PgDao
                 executeUpdate(sql, new Object[]
                 { nftRequest.getPackage_id(), nftRequest.getFlag() });
                 updateNft(nftRequest, schema);
-                
+
                 connection.commit();
             }
             catch (final SQLException e)
@@ -230,7 +234,7 @@ public class PackageDao extends PgDao
 
                 // return false;
             }
-        
+
         return new ResponseGeneric(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
 
@@ -241,8 +245,8 @@ public class PackageDao extends PgDao
             throws DaoException, SQLException
     {
 
-        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
-                packageInsertRequest);
+        final Map<String, Object> queryMap =
+                DaoUtil.getQueryMap(packageInsertRequest);
 
         if (queryMap.isEmpty())
             return new InsertPackageResponse(
@@ -264,7 +268,8 @@ public class PackageDao extends PgDao
                     packageInsertRequest.getClassification_number()))
                 return new InsertPackageResponse(
                         ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
-                        ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+                        ResponseCodes.INVALID_CLASSIFICATION_NUMBER
+                                .getMessage());
 
         if (!checkForSamePackageUpcProductId(
                 packageInsertRequest.getPackage_upc(),
@@ -274,7 +279,8 @@ public class PackageDao extends PgDao
                     ResponseCodes.INVALID_UPC_PRODUCTID.getMessage());
 
         final String[] columns =
-        { "package_description", "package_upc", "package_brand",
+        {
+                "package_description", "package_upc", "package_brand",
                 "package_manufacturer", "package_country", "package_size",
                 "package_size_unit_of_measure", "storage_type",
                 "storage_statements", "health_claims",
@@ -294,26 +300,28 @@ public class PackageDao extends PgDao
                 "creation_date", "last_edit_date", "calculated" };
 
         String questionmarks = StringUtils.repeat("?,", columns.length);
-        questionmarks = (String) questionmarks.subSequence(0,
-                questionmarks.length() - 1);
+        questionmarks =
+                (String) questionmarks.subSequence(0,
+                        questionmarks.length() - 1);
 
-        String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
-                schema + "." + "package");
+        String query =
+                SQL_INSERT.replaceFirst(TABLE_REGEX, schema + "." + "package");
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        final List<Object> packageInsertList = (List<Object>) queryMap.get(
-                "package_insert_list");
+        final List<Object> packageInsertList =
+                (List<Object>) queryMap.get("package_insert_list");
 
         // Returns the sales_id upon successful insert.
         final Object o = executeUpdate(query, packageInsertList.toArray());
-        final InsertPackageResponse insertPackageResponse = new InsertPackageResponse(
-                ResponseCodes.OK.getCode(), ResponseCodes.OK.getMessage());
+        final InsertPackageResponse insertPackageResponse =
+                new InsertPackageResponse(ResponseCodes.OK.getCode(),
+                        ResponseCodes.OK.getMessage());
         insertPackageResponse.setId(o);
         return insertPackageResponse;
 
     }
-    
+
     /// =======
 
     public InsertPackageResponse getPackageUpdateResponse(
@@ -321,8 +329,8 @@ public class PackageDao extends PgDao
             throws DaoException, SQLException
     {
 
-        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
-                packageUpdateRequest);
+        final Map<String, Object> queryMap =
+                DaoUtil.getQueryMap(packageUpdateRequest);
 
         if (queryMap.isEmpty())
             return new InsertPackageResponse(
@@ -344,10 +352,12 @@ public class PackageDao extends PgDao
                     packageUpdateRequest.getClassification_number()))
                 return new InsertPackageResponse(
                         ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
-                        ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+                        ResponseCodes.INVALID_CLASSIFICATION_NUMBER
+                                .getMessage());
 
         final String[] columns =
-        { "package_description", "package_brand", "package_manufacturer",
+        {
+                "package_description", "package_brand", "package_manufacturer",
                 "package_country", "package_size",
                 "package_size_unit_of_measure", "storage_type",
                 "storage_statements", "health_claims",
@@ -367,48 +377,55 @@ public class PackageDao extends PgDao
                 "package_id" };
 
         String questionmarks = StringUtils.repeat("?,", columns.length);
-        questionmarks = (String) questionmarks.subSequence(0,
-                questionmarks.length() - 1);
+        questionmarks =
+                (String) questionmarks.subSequence(0,
+                        questionmarks.length() - 1);
 
         // String query = SQL_INSERT.replaceFirst(TABLE_REGEX,
         // schema + "." + "package");
         // query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
         // query = query.replaceFirst(VALUES_REGEX, questionmarks);
 
-        final String query = "update " + schema + "."
-                + "package set package_description = ?, "
-                + "package_brand = ?, " + "package_manufacturer = ?, "
-                + "package_country = ?, " + "package_size = ?, "
-                + "package_size_unit_of_measure = ?, " + "storage_type = ?, "
-                + "storage_statements = ?, " + "health_claims = ?, "
-                + "other_package_statements = ?, "
-                + "suggested_directions = ?, " + "ingredients = ?, "
-                + "multi_part_flag = ?, " + "nutrition_fact_table = ?, "
-                + "as_prepared_per_serving_amount = ?, "
-                + "as_prepared_unit_of_measure = ?, "
-                + "as_sold_per_serving_amount = ?, "
-                + "as_sold_unit_of_measure = ?, "
-                + "as_prepared_per_serving_amount_in_grams = ?, "
-                + "as_sold_per_serving_amount_in_grams = ?, "
-                + "package_comment = ?, " + "package_source = ?, "
-                + "package_product_description = ?, " + "number_of_units = ?, "
-                + "informed_dining_program = ?, " + "product_grouping = ?, "
-                + "nielsen_item_rank = ?, " + "nutrient_claims = ?, "
-                + "package_nielsen_category = ?, "
-                + "common_household_measure = ?, " + "child_item = ?, "
-                + "package_classification_name = ?, " + "edited_by = ?, "
-                + "package_classification_number = ?, "
-                + "package_collection_date = ?, " + "nft_last_update_date = ?, "
-                + "last_edit_date = ?, " + "calculated = ? "
-                + "where package_id= ? ";
+        final String query =
+                "update "
+                        + schema + "." + "package set package_description = ?, "
+                        + "package_brand = ?, " + "package_manufacturer = ?, "
+                        + "package_country = ?, " + "package_size = ?, "
+                        + "package_size_unit_of_measure = ?, "
+                        + "storage_type = ?, " + "storage_statements = ?, "
+                        + "health_claims = ?, "
+                        + "other_package_statements = ?, "
+                        + "suggested_directions = ?, " + "ingredients = ?, "
+                        + "multi_part_flag = ?, " + "nutrition_fact_table = ?, "
+                        + "as_prepared_per_serving_amount = ?, "
+                        + "as_prepared_unit_of_measure = ?, "
+                        + "as_sold_per_serving_amount = ?, "
+                        + "as_sold_unit_of_measure = ?, "
+                        + "as_prepared_per_serving_amount_in_grams = ?, "
+                        + "as_sold_per_serving_amount_in_grams = ?, "
+                        + "package_comment = ?, " + "package_source = ?, "
+                        + "package_product_description = ?, "
+                        + "number_of_units = ?, "
+                        + "informed_dining_program = ?, "
+                        + "product_grouping = ?, " + "nielsen_item_rank = ?, "
+                        + "nutrient_claims = ?, "
+                        + "package_nielsen_category = ?, "
+                        + "common_household_measure = ?, " + "child_item = ?, "
+                        + "package_classification_name = ?, "
+                        + "edited_by = ?, "
+                        + "package_classification_number = ?, "
+                        + "package_collection_date = ?, "
+                        + "nft_last_update_date = ?, " + "last_edit_date = ?, "
+                        + "calculated = ? " + "where package_id= ? ";
 
         @SuppressWarnings("unchecked")
-        final List<Object> packageUpdateList = (List<Object>) queryMap.get(
-                "package_update_list");
+        final List<Object> packageUpdateList =
+                (List<Object>) queryMap.get("package_update_list");
 
         executeUpdate(query, packageUpdateList.toArray());
-        final InsertPackageResponse insertPackageResponse = new InsertPackageResponse(
-                ResponseCodes.OK.getCode(), ResponseCodes.OK.getMessage());
+        final InsertPackageResponse insertPackageResponse =
+                new InsertPackageResponse(ResponseCodes.OK.getCode(),
+                        ResponseCodes.OK.getMessage());
         return insertPackageResponse;
 
     }
@@ -454,8 +471,9 @@ public class PackageDao extends PgDao
         PackageViewData packageResponse = null;
         final PackageViewDataResponse data = new PackageViewDataResponse();
 
-        final String query = "select * from " + schema + "."
-                + "package where package_id = ?";
+        final String query =
+                "select * from "
+                        + schema + "." + "package where package_id = ?";
 
         try
         {
@@ -484,8 +502,8 @@ public class PackageDao extends PgDao
             final PackageRequest packageRequest)
             throws SQLException, IOException, Exception
     {
-        final Map<String, Object> queryMap = DaoUtil.getQueryMap(
-                packageRequest);
+        final Map<String, Object> queryMap =
+                DaoUtil.getQueryMap(packageRequest);
 
         if (queryMap.isEmpty())
             return new PackageDataResponse(
@@ -531,8 +549,8 @@ public class PackageDao extends PgDao
         final PackageData data = new PackageData();
 
         String query = "select * from " + schema + "." + "package";
-        String query_count = "select count(*) AS COUNT from " + schema + "."
-                + "package";
+        String query_count =
+                "select count(*) AS COUNT from " + schema + "." + "package";
 
         // ===
 
@@ -585,8 +603,10 @@ public class PackageDao extends PgDao
                 sortDirection = "DESC";
 
             offSet = offSet * 10;
-            query += " ORDER BY " + orderBy + " " + sortDirection + " offset "
-                    + offSet + " limit 10";
+            query +=
+                    " ORDER BY "
+                            + orderBy + " " + sortDirection + " offset "
+                            + offSet + " limit 10";
 
             final List<Object> objectList = new ArrayList<Object>();
 
@@ -626,7 +646,7 @@ public class PackageDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
-        
+
         data.setCount(number_of_records);
 
         if (data.getCount() == 0)
@@ -647,8 +667,10 @@ public class PackageDao extends PgDao
 
         ResultSet resultSet = null;
 
-        final String query = "select classification_id from " + schema + "."
-                + "classification where classification_number = ?";
+        final String query =
+                "select classification_id from "
+                        + schema + "."
+                        + "classification where classification_number = ?";
 
         try
         {
@@ -672,8 +694,8 @@ public class PackageDao extends PgDao
         ResultSet resultSet = null;
         final ComponentNameResponse componentList = new ComponentNameResponse();
 
-        final String query = "select component_name from " + schema + "."
-                + "component";
+        final String query =
+                "select component_name from " + schema + "." + "component";
 
         try
         {
@@ -712,8 +734,9 @@ public class PackageDao extends PgDao
     {
         ResultSet resultSet = null;
 
-        final String query = "select package_product_id_fkey from " + schema
-                + "." + "package where package_upc = ?";
+        final String query =
+                "select package_product_id_fkey from "
+                        + schema + "." + "package where package_upc = ?";
 
         try
         {
@@ -736,8 +759,9 @@ public class PackageDao extends PgDao
     {
 
         final GenericList genericList = new GenericList();
-        final String query = "select unit_of_measure_name from " + schema
-                + ".unit_of_measure";
+        final String query =
+                "select unit_of_measure_name from "
+                        + schema + ".unit_of_measure";
         ;
         ResultSet resultSet = null;
         try
@@ -745,8 +769,8 @@ public class PackageDao extends PgDao
             resultSet = executeQuery(query, null);
 
             while (resultSet.next())
-                genericList.getDataList().add(
-                        resultSet.getString("unit_of_measure_name"));
+                genericList.getDataList()
+                        .add(resultSet.getString("unit_of_measure_name"));
 
         }
         catch (final SQLException e)
@@ -757,27 +781,29 @@ public class PackageDao extends PgDao
         return genericList;
 
     }
-    
-    private boolean insertNft(final NftRequest nftRequest,
-            final String schema) throws DaoException, SQLException
+
+    private boolean insertNft(final NftRequest nftRequest, final String schema)
+            throws DaoException, SQLException
     {
 
-        final String query = "insert into " + schema + "."
-                + "product_component(component_id, package_id, amount,"
-                + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
-                + "select component_id, ?, ?, ?, ?, ? from " + schema
-                + ".component " + "where component_id = ("
-                + "select component_id from " + schema + "."
-                + "component where component_name= ?)";
+        final String query =
+                "insert into "
+                        + schema + "."
+                        + "product_component(component_id, package_id, amount,"
+                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+                        + "select component_id, ?, ?, ?, ?, ? from " + schema
+                        + ".component " + "where component_id = ("
+                        + "select component_id from " + schema + "."
+                        + "component where component_name= ?)";
 
         try
         {
             connection.setAutoCommit(false);
-            
+
             for (final NftModel element : nftRequest.getNft())
             {
-                final PreparedStatement preparedStatement = connection.prepareStatement(
-                        query);
+                final PreparedStatement preparedStatement =
+                        connection.prepareStatement(query);
                 preparedStatement.setObject(1, nftRequest.getPackage_id());
                 preparedStatement.setObject(2, element.getAmount());
                 preparedStatement.setObject(3, element.getUnit_of_measure());
@@ -786,7 +812,7 @@ public class PackageDao extends PgDao
                 preparedStatement.setObject(6, element.getName());
                 preparedStatement.executeUpdate();
             }
-            
+
             connection.commit();
         }
         catch (final SQLException e)
@@ -797,22 +823,24 @@ public class PackageDao extends PgDao
 
             return false;
         }
-        
+
         return true;
 
     }
 
-    private boolean updateNft(final NftRequest nftRequest,
-            final String schema) throws DaoException, SQLException
+    private boolean updateNft(final NftRequest nftRequest, final String schema)
+            throws DaoException, SQLException
     {
 
-        final String query = "insert into " + schema + "."
-                + "product_component(component_id, package_id, amount,"
-                + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
-                + "select component_id, ?, ?, ?, ?, ? from " + schema
-                + ".component " + "where component_id = ("
-                + "select component_id from " + schema + "."
-                + "component where component_name= ?)";
+        final String query =
+                "insert into "
+                        + schema + "."
+                        + "product_component(component_id, package_id, amount,"
+                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+                        + "select component_id, ?, ?, ?, ?, ? from " + schema
+                        + ".component " + "where component_id = ("
+                        + "select component_id from " + schema + "."
+                        + "component where component_name= ?)";
 
         try
         {
@@ -820,8 +848,8 @@ public class PackageDao extends PgDao
             {
                 // ecuteInsertNft(element, nftRequest.getPackage_id(), nftRequest.getFlag(), schema);
 
-                final PreparedStatement preparedStatement = connection.prepareStatement(
-                        query);
+                final PreparedStatement preparedStatement =
+                        connection.prepareStatement(query);
                 preparedStatement.setObject(1, nftRequest.getPackage_id());
                 preparedStatement.setObject(2, element.getAmount());
                 preparedStatement.setObject(3, element.getUnit_of_measure());
@@ -842,9 +870,8 @@ public class PackageDao extends PgDao
 
     }
 
-    private NftView getNft(final String query,
-            final Integer package_id, final Boolean flag)
-            throws DaoException, SQLException
+    private NftView getNft(final String query, final Integer package_id,
+            final Boolean flag) throws DaoException, SQLException
     {
         final NftView nftList = new NftView();
         ResultSet resultSet = null;
@@ -852,8 +879,8 @@ public class PackageDao extends PgDao
         try
         {
 
-            final PreparedStatement preparedStatement = connection.prepareStatement(
-                    query);
+            final PreparedStatement preparedStatement =
+                    connection.prepareStatement(query);
             preparedStatement.setObject(1, package_id);
             preparedStatement.setObject(2, flag);
             resultSet = preparedStatement.executeQuery();
@@ -861,23 +888,29 @@ public class PackageDao extends PgDao
             while (resultSet.next())
             {
                 String name = resultSet.getString("component_name");
-                name = resultSet.wasNull() ? null
-                        : resultSet.getString("component_name");
+                name =
+                        resultSet.wasNull()
+                                ? null : resultSet.getString("component_name");
 
                 Double amount = resultSet.getDouble("amount");
-                amount = resultSet.wasNull() ? null
-                        : resultSet.getDouble("amount");
+                amount =
+                        resultSet.wasNull()
+                                ? null : resultSet.getDouble("amount");
                 System.out.println(
                         resultSet.getString("component_name") + ": " + amount);
-                String amount_unit_of_measure = resultSet.getString(
-                        "amount_unit_of_measure");
-                amount_unit_of_measure = resultSet.wasNull() ? null
-                        : resultSet.getString("amount_unit_of_measure");
+                String amount_unit_of_measure =
+                        resultSet.getString("amount_unit_of_measure");
+                amount_unit_of_measure =
+                        resultSet.wasNull()
+                                ? null
+                                : resultSet.getString("amount_unit_of_measure");
 
-                Double percentage_daily_value = resultSet.getDouble(
-                        "percentage_daily_value");
-                percentage_daily_value = resultSet.wasNull() ? null
-                        : resultSet.getDouble("percentage_daily_value");
+                Double percentage_daily_value =
+                        resultSet.getDouble("percentage_daily_value");
+                percentage_daily_value =
+                        resultSet.wasNull()
+                                ? null
+                                : resultSet.getDouble("percentage_daily_value");
                 // String name, Double amount, String unit_of_measure, Double daily_value
                 nftList.getNft().add(new NftModel(name, amount,
                         amount_unit_of_measure, percentage_daily_value));
@@ -902,13 +935,15 @@ public class PackageDao extends PgDao
         ResultSet resultSetCount = null;
         int number_of_records = 0;
 
-        final String query = "select count (*) AS COUNT from " + schema + "."
-                + "product_component where as_ppd_flag = ? and package_id = ?";
+        final String query =
+                "select count (*) AS COUNT from "
+                        + schema + "."
+                        + "product_component where as_ppd_flag = ? and package_id = ?";
 
         try
         {
-            final PreparedStatement preparedStatement = connection.prepareStatement(
-                    query);
+            final PreparedStatement preparedStatement =
+                    connection.prepareStatement(query);
             preparedStatement.setObject(1, flag);
             preparedStatement.setObject(2, nftRequest.getPackage_id());
             resultSetCount = preparedStatement.executeQuery();

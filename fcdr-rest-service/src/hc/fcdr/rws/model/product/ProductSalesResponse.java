@@ -44,8 +44,9 @@ public class ProductSalesResponse
         sales_id = sales.getId();
         sales_upc = sales.getUpc();
         dollar_volume = sales.getDollarVolume();
-        sales_year = (sales.getSalesYear() == null) ? ""
-                : sales.getSalesYear().toString();
+        sales_year =
+                (sales.getSalesYear() == null)
+                        ? "" : sales.getSalesYear().toString();
         nielsen_category = sales.getNielsenCategory();
         sales_source = sales.getSalesSource();
     }

@@ -5,7 +5,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "user")
+@XmlRootElement(
+        name = "user")
 public class User implements Serializable
 {
     /**
@@ -72,8 +73,9 @@ public class User implements Serializable
         int result = 1;
         result = (prime * result) + id;
         result = (prime * result) + ((name == null) ? 0 : name.hashCode());
-        result = (prime * result)
-                + ((profession == null) ? 0 : profession.hashCode());
+        result =
+                (prime * result)
+                        + ((profession == null) ? 0 : profession.hashCode());
         return result;
     }
 

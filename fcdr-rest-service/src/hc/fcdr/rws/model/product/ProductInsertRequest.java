@@ -5,27 +5,38 @@ import javax.xml.bind.annotation.XmlElement;
 public class ProductInsertRequest
 {
 
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  product_manufacturer;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  product_brand;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  product_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  product_comment;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Integer cnf_code;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  cluster_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  restaurant_type;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  type;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double  classification_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  classification_name;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String  classification_type;
 
     public ProductInsertRequest()

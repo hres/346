@@ -826,8 +826,9 @@ public class Sales implements Serializable
     @Override
     public String toString()
     {
-        return "Sales [id=" + id + ", description=" + description + ", upc="
-                + upc + ", brand=" + brand + ", manufacturer=" + manufacturer
+        return "Sales [id="
+                + id + ", description=" + description + ", upc=" + upc
+                + ", brand=" + brand + ", manufacturer=" + manufacturer
                 + ", dollarRank=" + dollarRank + ", dollarVolume="
                 + dollarVolume + ", dollarShare=" + dollarShare
                 + ", dollarVolumePercentageChange="

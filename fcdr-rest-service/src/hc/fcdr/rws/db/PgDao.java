@@ -15,8 +15,8 @@ import hc.fcdr.rws.except.NoRowsAffectedDAOException;
 
 public class PgDao
 {
-    private static final Logger logger = Logger.getLogger(
-            PgDao.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(PgDao.class.getName());
 
     protected Connection        connection;
 
@@ -34,8 +34,8 @@ public class PgDao
 
         try
         {
-            preparedStatement = prepareStatement(connection, query, false,
-                    values);
+            preparedStatement =
+                    prepareStatement(connection, query, false, values);
             resultSet = preparedStatement.executeQuery();
 
         }
@@ -59,8 +59,8 @@ public class PgDao
         try
         {
             connection.setAutoCommit(false);
-            preparedStatement = prepareStatement(connection, query, true,
-                    values);
+            preparedStatement =
+                    prepareStatement(connection, query, true, values);
             final int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0)

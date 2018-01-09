@@ -32,12 +32,12 @@ public class SalesRequest
     @Override
     public String toString()
     {
-        return "SalesRequest [salesUpc=" + salesUpc + ", salesDescription="
-                + salesDescription + ", salesSource=" + salesSource
-                + ", salesYear=" + salesYear + ", nielsenCategory="
-                + nielsenCategory + ", salesComment=" + salesComment
-                + ", orderBy=" + orderBy + ", offset=" + offset + ", flag="
-                + flag + "]";
+        return "SalesRequest [salesUpc="
+                + salesUpc + ", salesDescription=" + salesDescription
+                + ", salesSource=" + salesSource + ", salesYear=" + salesYear
+                + ", nielsenCategory=" + nielsenCategory + ", salesComment="
+                + salesComment + ", orderBy=" + orderBy + ", offset=" + offset
+                + ", flag=" + flag + "]";
     }
 
 }

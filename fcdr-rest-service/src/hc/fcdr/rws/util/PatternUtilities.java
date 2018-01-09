@@ -14,20 +14,21 @@ public class PatternUtilities
     public static void main(final String[] args)
     {
         // String toBeConverted = "a bc&#947;&#948;xy z"; // gamma,delta
-        final String toBeConverted = "Example_file_áâãäåæçèéêëìíîïðñóòô__PiÃ¯Â¿Â½`'(C__c{os[me_éäÿ{a©_&#945;&#946;&#947;&#948;&#949;&#950;&#951;&#952;&#953;.pdf";
+        final String toBeConverted =
+                "Example_file_áâãäåæçèéêëìíîïðñóòô__PiÃ¯Â¿Â½`'(C__c{os[me_éäÿ{a©_&#945;&#946;&#947;&#948;&#949;&#950;&#951;&#952;&#953;.pdf";
         final String convertedString = convertDecimalNCR2String(toBeConverted);
         System.out.println("toBeConverted = " + toBeConverted);
         System.out.println("    Converted = " + convertedString);
 
         final String toBeDecoded = "%CE%B1"; // alpha
         final String decodedString = decodeUTF8(toBeDecoded);
-        System.out.println("toBeDecoded = " + toBeDecoded + ", decoded = "
-                + decodedString);
+        System.out.println("toBeDecoded = "
+                + toBeDecoded + ", decoded = " + decodedString);
 
         final String toBeEncoded = "β";
         final String encodedString = encodeUTF8(toBeEncoded);
-        System.out.println("toBeEncoded = " + toBeEncoded + ", encoded = "
-                + encodedString);
+        System.out.println("toBeEncoded = "
+                + toBeEncoded + ", encoded = " + encodedString);
     }
 
     /**
@@ -75,8 +76,10 @@ public class PatternUtilities
             if (i > 0)
                 outputString += " ";
 
-            final int n = Integer.parseInt(
-                    listArray[i].substring(2, listArray[i].length()), 10);
+            final int n =
+                    Integer.parseInt(
+                            listArray[i].substring(2, listArray[i].length()),
+                            10);
             outputString += Integer.toHexString(n);
         }
 
@@ -103,24 +106,30 @@ public class PatternUtilities
             if (n <= 0x7F)
                 outputString += toPercentUTF8(Integer.toHexString(n));
             else if (n <= 0x7FF)
-                outputString += toPercentUTF8(
-                        Integer.toHexString(0xC0 | ((n >> 6) & 0x1F)) + " "
-                                + Integer.toHexString(0x80 | (n & 0x3F)));
+                outputString +=
+                        toPercentUTF8(Integer
+                                .toHexString(0xC0 | ((n >> 6) & 0x1F))
+                                + " " + Integer.toHexString(0x80 | (n & 0x3F)));
             else if (n <= 0xFFFF)
-                outputString += toPercentUTF8(
-                        Integer.toHexString(0xE0 | ((n >> 12) & 0x0F)) + " "
+                outputString +=
+                        toPercentUTF8(Integer
+                                .toHexString(0xE0 | ((n >> 12) & 0x0F))
+                                + " "
                                 + Integer.toHexString(0x80 | ((n >> 6) & 0x3F))
                                 + " " + Integer.toHexString(0x80 | (n & 0x3F)));
             else if (n <= 0x10FFFF)
-                outputString += toPercentUTF8(
-                        Integer.toHexString(0xF0 | ((n >> 18) & 0x07)) + " "
+                outputString +=
+                        toPercentUTF8(Integer
+                                .toHexString(0xF0 | ((n >> 18) & 0x07))
+                                + " "
                                 + Integer.toHexString(0x80 | ((n >> 12) & 0x3F))
                                 + " "
                                 + Integer.toHexString(0x80 | ((n >> 6) & 0x3F))
                                 + " " + Integer.toHexString(0x80 | (n & 0x3F)));
             else
-                outputString += "Cannot convert code point to utf8 "
-                        + Integer.toHexString(n) + "!";
+                outputString +=
+                        "Cannot convert code point to utf8 "
+                                + Integer.toHexString(n) + "!";
         }
 
         return (outputString);

@@ -49,8 +49,9 @@ public class ProductService extends Application
 
             try
             {
-                productDao = new ProductDao(pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                productDao =
+                        new ProductDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -116,8 +117,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -138,8 +139,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -148,21 +149,23 @@ public class ProductService extends Application
     public Response getProductClassifications(@PathParam("id") final int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = false;
-        ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
+        ProductClassificationDataResponse entity =
+                new ProductClassificationDataResponse();
 
         try
         {
             if (productDao != null)
-                entity = productDao.getProductClassificationResponse(id,
-                        RETURN_FIRST_RECORD_FOUND);
+                entity =
+                        productDao.getProductClassificationResponse(id,
+                                RETURN_FIRST_RECORD_FOUND);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -171,21 +174,23 @@ public class ProductService extends Application
     public Response getProductClassification(@PathParam("id") final int id)
     {
         final Boolean RETURN_FIRST_RECORD_FOUND = true;
-        ProductClassificationDataResponse entity = new ProductClassificationDataResponse();
+        ProductClassificationDataResponse entity =
+                new ProductClassificationDataResponse();
 
         try
         {
             if (productDao != null)
-                entity = productDao.getProductClassificationResponse(id,
-                        RETURN_FIRST_RECORD_FOUND);
+                entity =
+                        productDao.getProductClassificationResponse(id,
+                                RETURN_FIRST_RECORD_FOUND);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -211,8 +216,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -225,21 +230,23 @@ public class ProductService extends Application
             final ProductSalesLabelRequest productSalesLabelRequest)
             throws SQLException, IOException, Exception
     {
-        ProductSalesLabelDataResponse entity = new ProductSalesLabelDataResponse();
+        ProductSalesLabelDataResponse entity =
+                new ProductSalesLabelDataResponse();
 
         try
         {
             if (productDao != null)
-                entity = productDao.getProductSalesLabelResponse(
-                        productSalesLabelRequest);
+                entity =
+                        productDao.getProductSalesLabelResponse(
+                                productSalesLabelRequest);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -261,8 +268,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -284,8 +291,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -302,8 +309,9 @@ public class ProductService extends Application
         try
         {
             if (productDao != null)
-                entity = productDao.getProductUpdateResponse(
-                        productUpdateRequest);
+                entity =
+                        productDao
+                                .getProductUpdateResponse(productUpdateRequest);
         }
         catch (final Exception e)
         {
@@ -311,8 +319,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========
@@ -329,8 +337,9 @@ public class ProductService extends Application
         try
         {
             if (productDao != null)
-                entity = productDao.getProductInsertResponse(
-                        productInsertRequest);
+                entity =
+                        productDao
+                                .getProductInsertResponse(productInsertRequest);
         }
         catch (final Exception e)
         {
@@ -338,8 +347,8 @@ public class ProductService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===========

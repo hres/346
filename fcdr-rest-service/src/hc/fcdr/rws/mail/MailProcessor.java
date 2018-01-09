@@ -105,13 +105,14 @@ public class MailProcessor
             if (aMessage == null)
                 throw new MessagingException();
 
-            final ArrayList<InternetAddress> recipients = new ArrayList<InternetAddress>();
+            final ArrayList<InternetAddress> recipients =
+                    new ArrayList<InternetAddress>();
             InternetAddress internetAddress;
 
             for (int i = 0; i < (mail.getReceiverAddresses()).length; ++i)
             {
-                internetAddress = new InternetAddress(
-                        (mail.getReceiverAddresses())[i]);
+                internetAddress =
+                        new InternetAddress((mail.getReceiverAddresses())[i]);
 
                 if (internetAddress != null)
                     recipients.add(internetAddress);
@@ -120,8 +121,9 @@ public class MailProcessor
             final Address toAddresses[] = recipients.toArray(new Address[0]);
 
             if (mail.getSenderName() != null)
-                fromAddress = new InternetAddress(mail.getSenderAddress(),
-                        mail.getSenderName());
+                fromAddress =
+                        new InternetAddress(mail.getSenderAddress(),
+                                mail.getSenderName());
             else
                 fromAddress = new InternetAddress(mail.getSenderAddress());
 
@@ -184,8 +186,8 @@ public class MailProcessor
         }
         catch (final MessagingException e)
         {
-            log.error("MessagingException ::  " + mail.getReceiverAddresses()
-                    + "\n" + e.getMessage());
+            log.error("MessagingException ::  "
+                    + mail.getReceiverAddresses() + "\n" + e.getMessage());
             throw new MailProcessorException(e.getMessage());
         }
         catch (final Exception e)

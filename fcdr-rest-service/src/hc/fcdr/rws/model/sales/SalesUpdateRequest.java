@@ -4,63 +4,91 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class SalesUpdateRequest
 {
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_upc;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_brand;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_manufacturer;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_rank;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_share;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume_percentage_change;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_share;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_percentage_change;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  average_ac_dist;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  average_retail_price;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_source;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  nielsen_category;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Integer sales_year;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Boolean control_label_flag;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_total;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_rank;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume_total;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  cluster_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  product_grouping;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_product_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  classification_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  classification_type;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_comment;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_collection_date;
 
     public Integer number_of_units;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  edited_by;
     public Long    sales_id;
 
@@ -154,12 +182,12 @@ public class SalesUpdateRequest
     @Override
     public String toString()
     {
-        return "SalesInsertRequest [sales_description=" + sales_description
-                + ", sales_upc=" + sales_upc + ", sales_brand=" + sales_brand
-                + ", sales_manufacturer=" + sales_manufacturer
-                + ", dollar_rank=" + dollar_rank + ", dollar_volume="
-                + dollar_volume + ", dollar_share=" + dollar_share
-                + ", dollar_volume_percentage_change="
+        return "SalesInsertRequest [sales_description="
+                + sales_description + ", sales_upc=" + sales_upc
+                + ", sales_brand=" + sales_brand + ", sales_manufacturer="
+                + sales_manufacturer + ", dollar_rank=" + dollar_rank
+                + ", dollar_volume=" + dollar_volume + ", dollar_share="
+                + dollar_share + ", dollar_volume_percentage_change="
                 + dollar_volume_percentage_change + ", kilo_volume="
                 + kilo_volume + ", kilo_share=" + kilo_share
                 + ", kilo_volume_percentage_change="

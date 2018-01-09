@@ -15,17 +15,21 @@ import org.apache.log4j.Logger;
  */
 public class ContextManager
 {
-    private static final Logger        logger                  = Logger.getLogger(
-            ContextManager.class.getName());
+    private static final Logger        logger                  =
+            Logger.getLogger(ContextManager.class.getName());
 
     private static Map<String, String> environmentVars;
 
-    public final static String         APPLICATION_ENVIRONMENT = "APPLICATION_ENVIRONMENT";
+    public final static String         APPLICATION_ENVIRONMENT =
+            "APPLICATION_ENVIRONMENT";
     public final static String         SCHEMA                  = "SCHEMA";
     public final static String         MAIL_SMTP               = "MAIL_SMTP";
-    public final static String         MAIL_SENDER_NAME        = "MAIL_SENDER_NAME";
-    public final static String         MAIL_SENDER_ADDRESS     = "MAIL_SENDER_ADDRESS";
-    public final static String         MAIL_RECEIVER_ADDRESS   = "MAIL_RECEIVER_ADDRESS";
+    public final static String         MAIL_SENDER_NAME        =
+            "MAIL_SENDER_NAME";
+    public final static String         MAIL_SENDER_ADDRESS     =
+            "MAIL_SENDER_ADDRESS";
+    public final static String         MAIL_RECEIVER_ADDRESS   =
+            "MAIL_RECEIVER_ADDRESS";
     public final static String         MAIL_ID                 = "MAIL_ID";
     public final static String         MAIL_PASSWD             = "MAIL_PASSWD";
     public final static String         MAIL_SUBJECT            = "MAIL_SUBJECT";
@@ -40,8 +44,8 @@ public class ContextManager
         }
         catch (final Exception e)
         {
-            logger.fatal("Exception retrieving value: " + key + "::"
-                    + e.getMessage(), e);
+            logger.fatal("Exception retrieving value: "
+                    + key + "::" + e.getMessage(), e);
             return null;
         }
     }
@@ -79,8 +83,9 @@ public class ContextManager
         try
         {
             final Context initialContext = new InitialContext();
-            value = (String) initialContext.lookup(
-                    "java:comp/env/" + "fcdr/" + varName);
+            value =
+                    (String) initialContext
+                            .lookup("java:comp/env/" + "fcdr/" + varName);
 
         }
         catch (final NameNotFoundException e)

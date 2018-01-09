@@ -43,10 +43,10 @@ public class ProductUpdateRequest
         productFieldList.add(product_brand);
         productFieldList.add(product_description);
         productFieldList.add(product_comment);
-        productFieldList.add(
-                cnf_code.isEmpty() ? null : Integer.parseInt(cnf_code));
-        productFieldList.add(cluster_number.isEmpty() ? null
-                : Double.parseDouble(cluster_number));
+        productFieldList
+                .add(cnf_code.isEmpty() ? null : Integer.parseInt(cnf_code));
+        productFieldList.add(cluster_number.isEmpty()
+                ? null : Double.parseDouble(cluster_number));
         productFieldList.add(restaurant_type);
         productFieldList.add(type);
         productFieldList.add(edited_by);
@@ -68,8 +68,8 @@ public class ProductUpdateRequest
     @Override
     public String toString()
     {
-        return "ProductUpdateRequest [product_id=" + product_id
-                + ", product_manufacturer=" + product_manufacturer
+        return "ProductUpdateRequest [product_id="
+                + product_id + ", product_manufacturer=" + product_manufacturer
                 + ", product_brand=" + product_brand + ", product_description="
                 + product_description + ", product_comment=" + product_comment
                 + ", cnf_code=" + cnf_code + ", cluster_number="

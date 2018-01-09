@@ -4,63 +4,92 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class SalesInsertRequest
 {
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_upc                       = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_brand;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_manufacturer;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_rank                     = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume                   = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_share                    = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume_percentage_change = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume                     = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_share                      = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_percentage_change   = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  average_ac_dist                 = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  average_retail_price            = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_source;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  nielsen_category;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Integer sales_year                      = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Boolean control_label_flag              = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_total               = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  kilo_volume_rank                = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  dollar_volume_total             = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  cluster_number                  = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  product_grouping                = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_product_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Double  classification_number           = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  classification_type             = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_comment;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  sales_collection_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public Integer number_of_units                 = null;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     public String  edited_by;
     public Integer product_id                      = null;
 
@@ -457,12 +486,12 @@ public class SalesInsertRequest
     @Override
     public String toString()
     {
-        return "SalesInsertRequest [sales_description=" + sales_description
-                + ", sales_upc=" + sales_upc + ", sales_brand=" + sales_brand
-                + ", sales_manufacturer=" + sales_manufacturer
-                + ", dollar_rank=" + dollar_rank + ", dollar_volume="
-                + dollar_volume + ", dollar_share=" + dollar_share
-                + ", dollar_volume_percentage_change="
+        return "SalesInsertRequest [sales_description="
+                + sales_description + ", sales_upc=" + sales_upc
+                + ", sales_brand=" + sales_brand + ", sales_manufacturer="
+                + sales_manufacturer + ", dollar_rank=" + dollar_rank
+                + ", dollar_volume=" + dollar_volume + ", dollar_share="
+                + dollar_share + ", dollar_volume_percentage_change="
                 + dollar_volume_percentage_change + ", kilo_volume="
                 + kilo_volume + ", kilo_share=" + kilo_share
                 + ", kilo_volume_percentage_change="

@@ -38,11 +38,11 @@ public class ProductRequest
     @Override
     public String toString()
     {
-        return "ProductRequest [product_manufacturer=" + product_manufacturer
-                + ", product_brand=" + product_brand + ", cnf_code=" + cnf_code
-                + ", cluster_number=" + cluster_number
-                + ", product_description=" + product_description
-                + ", product_comment=" + product_comment
+        return "ProductRequest [product_manufacturer="
+                + product_manufacturer + ", product_brand=" + product_brand
+                + ", cnf_code=" + cnf_code + ", cluster_number="
+                + cluster_number + ", product_description="
+                + product_description + ", product_comment=" + product_comment
                 + ", classification_number=" + classification_number
                 + ", classification_name=" + classification_name
                 + ", classification_type=" + classification_type + ", orderby="

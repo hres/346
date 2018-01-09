@@ -17,8 +17,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.DbConnection;
+import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
@@ -51,8 +51,9 @@ public class PackageService extends Application
 
             try
             {
-                packageDao = new PackageDao(pgConnectionPool.getConnection(),
-                        ContextManager.getJndiValue("SCHEMA"));
+                packageDao =
+                        new PackageDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -116,8 +117,8 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -125,12 +126,12 @@ public class PackageService extends Application
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPackage(@PathParam("id") final long id)
     {
-        
-        //TODO verify
+
+        // TODO verify
         PackageViewResponse entity = new PackageViewResponse();
-        
-        //TODO previous
-        //PackageDataResponse entity = new PackageDataResponse();
+
+        // TODO previous
+        // PackageDataResponse entity = new PackageDataResponse();
 
         try
         {
@@ -142,8 +143,8 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -165,8 +166,8 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -180,16 +181,17 @@ public class PackageService extends Application
         try
         {
             if (packageDao != null)
-                entity = packageDao.getPackageInsertResponse(
-                        packageInsertRequest);
+                entity =
+                        packageDao
+                                .getPackageInsertResponse(packageInsertRequest);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @POST
@@ -206,16 +208,17 @@ public class PackageService extends Application
         try
         {
             if (packageDao != null)
-                entity = packageDao.getPackageUpdateResponse(
-                        packageUpdateRequest);
+                entity =
+                        packageDao
+                                .getPackageUpdateResponse(packageUpdateRequest);
         }
         catch (final Exception e)
         {
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -236,8 +239,8 @@ public class PackageService extends Application
         }
 
         // return null;
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
 
     }
 
@@ -261,8 +264,8 @@ public class PackageService extends Application
         }
 
         // return null;
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -286,8 +289,8 @@ public class PackageService extends Application
         }
 
         // return null;
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     // ===
@@ -303,8 +306,9 @@ public class PackageService extends Application
         try
         {
             if (packageDao != null)
-                entity = packageDao.getNft(nftGetModel.getPackage_id(),
-                        nftGetModel.getFlag());
+                entity =
+                        packageDao.getNft(nftGetModel.getPackage_id(),
+                                nftGetModel.getFlag());
         }
         catch (final Exception e)
         {
@@ -313,8 +317,8 @@ public class PackageService extends Application
 
         // return null;
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
     @GET
@@ -336,10 +340,10 @@ public class PackageService extends Application
             e.printStackTrace();
         }
 
-        return Response.status(Response.Status.OK).type(
-                MediaType.APPLICATION_JSON).entity(entity).build();
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
-    
+
     // ===
     @OPTIONS
     @Path("/package")
@@ -348,7 +352,5 @@ public class PackageService extends Application
     {
         return "<operations>GET, PUT, POST, DELETE</operations>";
     }
-
-    
 
 }

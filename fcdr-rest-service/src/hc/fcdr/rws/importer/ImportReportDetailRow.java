@@ -43,8 +43,8 @@ public class ImportReportDetailRow
     @Override
     public String toString()
     {
-        return "ImportReportDetailLine [itemId=" + itemId
-                + ", salesDescription=" + salesDescription + "]";
+        return "ImportReportDetailLine [itemId="
+                + itemId + ", salesDescription=" + salesDescription + "]";
     }
 
 }

@@ -88,8 +88,8 @@ public class ImportStatistics
     @Override
     public String toString()
     {
-        return "ImportStatistics [importDateTime=" + importDateTime
-                + ", totalLoadingTime=" + totalLoadingTime
+        return "ImportStatistics [importDateTime="
+                + importDateTime + ", totalLoadingTime=" + totalLoadingTime
                 + ", totalProcessingTime=" + totalProcessingTime
                 + ", numberOfRecordsProcessed=" + numberOfRecordsProcessed
                 + ", numberOfInvalidRecords=" + numberOfInvalidRecords

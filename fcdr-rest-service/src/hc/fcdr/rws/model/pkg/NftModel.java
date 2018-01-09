@@ -6,10 +6,12 @@ public class NftModel
 {
 
     private String name;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double amount;
     private String unit_of_measure;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double daily_value;
 
     public NftModel()

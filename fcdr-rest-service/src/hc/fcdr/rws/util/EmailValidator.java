@@ -12,39 +12,43 @@ import org.apache.oro.text.perl.Perl5Util;
 public class EmailValidator
 {
 
-    private static final String         SPECIAL_CHARS       = "\\000-\\037\\(\\)<>@,;!#$%&'*+/=?^`{|}~:'\\\\\\\"\\.\\[\\]\\177";// forRef:
-                                                                                                                                // characters
-                                                                                                                                // !#$%&'*+/=?^`{|}~
-                                                                                                                                // added
-                                                                                                                                // extra
-                                                                                                                                // to
-                                                                                                                                // this
-                                                                                                                                // to
-                                                                                                                                // prevent
-    private static final String         VALID_CHARS         = "[^\\s"
-            + SPECIAL_CHARS + "]";
+    private static final String         SPECIAL_CHARS       =
+            "\\000-\\037\\(\\)<>@,;!#$%&'*+/=?^`{|}~:'\\\\\\\"\\.\\[\\]\\177";  // forRef:
+                                                                                // characters
+                                                                                // !#$%&'*+/=?^`{|}~
+                                                                                // added
+                                                                                // extra
+                                                                                // to
+                                                                                // this
+                                                                                // to
+                                                                                // prevent
+    private static final String         VALID_CHARS         =
+            "[^\\s" + SPECIAL_CHARS + "]";
     private static final String         QUOTED_USER         = "(\"[^\"]*\")";
     private static final String         ATOM                = VALID_CHARS + '+';
-    private static final String         WORD                = "((" + VALID_CHARS
-            + "|')+|" + QUOTED_USER + ")";
+    private static final String         WORD                =
+            "((" + VALID_CHARS + "|')+|" + QUOTED_USER + ")";
 
     // Each pattern must be surrounded by /
-    private static final String         LEGAL_ASCII_PATTERN = "/^[\\000-\\177]+$/";
+    private static final String         LEGAL_ASCII_PATTERN =
+            "/^[\\000-\\177]+$/";
     private static final String         EMAIL_PATTERN       = "/^(.+)@(.+)$/";
-    private static final String         IP_DOMAIN_PATTERN   = "/^\\[(\\d{1,3})[.](\\d{1,3})[.](\\d{1,3})[.](\\d{1,3})\\]$/";
+    private static final String         IP_DOMAIN_PATTERN   =
+            "/^\\[(\\d{1,3})[.](\\d{1,3})[.](\\d{1,3})[.](\\d{1,3})\\]$/";
     private static final String         TLD_PATTERN         = "/^([a-zA-Z]+)$/";
 
-    private static final String         USER_PATTERN        = "/^\\s*" + WORD
-            + "(\\." + WORD + ")*$/";
-    private static final String         DOMAIN_PATTERN      = "/^" + ATOM
-            + "(\\." + ATOM + ")*\\s*$/";
-    private static final String         ATOM_PATTERN        = "/(" + ATOM
-            + ")/";
+    private static final String         USER_PATTERN        =
+            "/^\\s*" + WORD + "(\\." + WORD + ")*$/";
+    private static final String         DOMAIN_PATTERN      =
+            "/^" + ATOM + "(\\." + ATOM + ")*\\s*$/";
+    private static final String         ATOM_PATTERN        =
+            "/(" + ATOM + ")/";
 
     /**
      * Singleton instance of this class.
      */
-    private static final EmailValidator EMAIL_VALIDATOR     = new EmailValidator();
+    private static final EmailValidator EMAIL_VALIDATOR     =
+            new EmailValidator();
 
     /**
      * Returns the Singleton instance of this validator.
@@ -243,7 +247,8 @@ public class EmailValidator
     {
         String input = emailStr;
         String result = emailStr;
-        final String commentPat = "s/^((?:[^\"\\\\]|\\\\.)*(?:\"(?:[^\"\\\\]|\\\\.)*\"(?:[^\"\\\\]|\111111\\\\.)*)*)\\((?:[^()\\\\]|\\\\.)*\\)/$1 /osx";
+        final String commentPat =
+                "s/^((?:[^\"\\\\]|\\\\.)*(?:\"(?:[^\"\\\\]|\\\\.)*\"(?:[^\"\\\\]|\111111\\\\.)*)*)\\((?:[^()\\\\]|\\\\.)*\\)/$1 /osx";
         final Perl5Util commentMatcher = new Perl5Util();
         result = commentMatcher.substitute(commentPat, input);
         // This really needs to be =~ or Perl5Matcher comparison

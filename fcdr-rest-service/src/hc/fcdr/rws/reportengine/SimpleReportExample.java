@@ -23,9 +23,10 @@ public class SimpleReportExample
         try
         {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/fcdrdb", "fcdruser",
-                    "fcdruser");
+            connection =
+                    DriverManager.getConnection(
+                            "jdbc:postgresql://localhost:5432/fcdrdb",
+                            "fcdruser", "fcdruser");
         }
         catch (final SQLException e)
         {
@@ -41,18 +42,19 @@ public class SimpleReportExample
         final JasperReportBuilder report = DynamicReports.report();// a new report
         report.columns(
                 Columns.column("Id", "classification_id",
-                        DataTypes.integerType()).setHorizontalAlignment(
-                                HorizontalAlignment.LEFT),
+                        DataTypes.integerType())
+                        .setHorizontalAlignment(HorizontalAlignment.LEFT),
                 Columns.column("Number", "classification_number",
                         DataTypes.stringType()),
                 Columns.column("Type", "classification_type",
-                        DataTypes.stringType()).setHorizontalAlignment(
-                                HorizontalAlignment.LEFT)).title(// title of the report
-                                        Components.text(
-                                                "SimpleReportExample").setHorizontalAlignment(
-                                                        HorizontalAlignment.CENTER)).pageFooter(
-                                                                Components.pageXofY())// show page number on the page
-                                                                                      // footer
+                        DataTypes.stringType())
+                        .setHorizontalAlignment(HorizontalAlignment.LEFT))
+                .title(// title of the report
+                        Components.text("SimpleReportExample")
+                                .setHorizontalAlignment(
+                                        HorizontalAlignment.CENTER))
+                .pageFooter(Components.pageXofY())// show page number on the page
+                                                  // footer
                 .setDataSource(
                         "select classification_id, classification_number, classification_type from fcdrschema.classification",
                         connection);

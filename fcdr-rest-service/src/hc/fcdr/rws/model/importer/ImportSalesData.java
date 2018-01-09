@@ -9,89 +9,117 @@ import hc.fcdr.rws.util.DateUtil;
 
 public class ImportSalesData
 {
-    @CsvBindByPosition(position = 0)
+    @CsvBindByPosition(
+            position = 0)
     private Double  itemId;
 
-    @CsvBindByPosition(position = 1)
+    @CsvBindByPosition(
+            position = 1)
     private String  salesUpc;
 
-    @CsvBindByPosition(position = 2)
+    @CsvBindByPosition(
+            position = 2)
     private String  salesDescription;
 
-    @CsvBindByPosition(position = 3)
+    @CsvBindByPosition(
+            position = 3)
     private String  salesBrand;
 
-    @CsvBindByPosition(position = 4)
+    @CsvBindByPosition(
+            position = 4)
     private String  salesManufacturer;
 
-    @CsvBindByPosition(position = 5)
+    @CsvBindByPosition(
+            position = 5)
     private Double  dollarRank;
 
-    @CsvBindByPosition(position = 6)
+    @CsvBindByPosition(
+            position = 6)
     private Double  dollarVolume;
 
-    @CsvBindByPosition(position = 7)
+    @CsvBindByPosition(
+            position = 7)
     private Double  dollarShare;
 
-    @CsvBindByPosition(position = 8)
+    @CsvBindByPosition(
+            position = 8)
     private Double  dollarVolumePercentageChange;
 
-    @CsvBindByPosition(position = 9)
+    @CsvBindByPosition(
+            position = 9)
     private Double  kiloVolume;
 
-    @CsvBindByPosition(position = 10)
+    @CsvBindByPosition(
+            position = 10)
     private Double  kiloShare;
 
-    @CsvBindByPosition(position = 11)
+    @CsvBindByPosition(
+            position = 11)
     private Double  kiloVolumePercentageChange;
 
-    @CsvBindByPosition(position = 12)
+    @CsvBindByPosition(
+            position = 12)
     private Double  averageAcDist;
 
-    @CsvBindByPosition(position = 13)
+    @CsvBindByPosition(
+            position = 13)
     private Double  averageRetailPrice;
 
-    @CsvBindByPosition(position = 14)
+    @CsvBindByPosition(
+            position = 14)
     private String  salesSource;
 
-    @CsvBindByPosition(position = 15)
+    @CsvBindByPosition(
+            position = 15)
     private String  nielsenCategory;
 
-    @CsvBindByPosition(position = 16)
+    @CsvBindByPosition(
+            position = 16)
     /// @CsvDate("yyyy-mm-dd")
     private String  salesCollectionDate;
 
-    @CsvBindByPosition(position = 17)
+    @CsvBindByPosition(
+            position = 17)
     private Integer salesYear;
 
-    @CsvBindByPosition(position = 18)
+    @CsvBindByPosition(
+            position = 18)
     private Boolean controlLabelFlag;
 
-    @CsvBindByPosition(position = 19)
+    @CsvBindByPosition(
+            position = 19)
     private Double  kiloVolumeTotal;
 
-    @CsvBindByPosition(position = 20)
+    @CsvBindByPosition(
+            position = 20)
     private Double  kiloVolumeRank;
 
-    @CsvBindByPosition(position = 21)
+    @CsvBindByPosition(
+            position = 21)
     private Double  dollarVolumeTotal;
 
-    @CsvBindByPosition(position = 22)
+    @CsvBindByPosition(
+            position = 22)
     private Double  clusterNumber;
 
-    @CsvBindByPosition(position = 23)
+    @CsvBindByPosition(
+            position = 23)
     private Double  productGrouping;
 
-    @CsvBindByPosition(position = 24)
+    @CsvBindByPosition(
+            position = 24)
     private String  salesProductDescription;
 
-    @CsvBindByPosition(position = 25)
+    @CsvBindByPosition(
+            position = 25)
     private Double  classificationNumber;
 
-    @CsvBindByPosition(position = 26)
+    @CsvBindByPosition(
+            position = 26)
     private String  classificationType;
 
-    @CsvBindByPosition(position = 27)
+    @CsvBindByPosition(
+            position = 27)
     private String  salesComment;
 
     public ImportSalesData()
@@ -483,12 +511,12 @@ public class ImportSalesData
     @Override
     public String toString()
     {
-        return "ImportSalesData [salesUpc=" + salesUpc + ", salesDescription="
-                + salesDescription + ", salesBrand=" + salesBrand
-                + ", salesManufacturer=" + salesManufacturer + ", dollarRank="
-                + dollarRank + ", dollarVolume=" + dollarVolume
-                + ", dollarShare=" + dollarShare
-                + ", dollarVolumePercentageChange="
+        return "ImportSalesData [salesUpc="
+                + salesUpc + ", salesDescription=" + salesDescription
+                + ", salesBrand=" + salesBrand + ", salesManufacturer="
+                + salesManufacturer + ", dollarRank=" + dollarRank
+                + ", dollarVolume=" + dollarVolume + ", dollarShare="
+                + dollarShare + ", dollarVolumePercentageChange="
                 + dollarVolumePercentageChange + ", kiloVolume=" + kiloVolume
                 + ", kiloShare=" + kiloShare + ", kiloVolumePercentageChange="
                 + kiloVolumePercentageChange + ", averageAcDist="

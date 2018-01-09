@@ -12,7 +12,8 @@ import javax.sql.DataSource;
 public class DbConnection
 {
     // Temp solution.
-    static final String URL      = "jdbc:postgresql://localhost:5432/basedebonnee";
+    static final String URL      =
+            "jdbc:postgresql://localhost:5432/basedebonnee";
     static final String USER     = "postgres";
     static final String PASSWORD = "romario";
 
@@ -36,7 +37,7 @@ public class DbConnection
             e.printStackTrace();
         }
     }
-    
+
     // Uses context.xml
     public synchronized Connection getConnection() throws SQLException
     {
@@ -55,8 +56,8 @@ public class DbConnection
             throws SQLException, Exception, IOException
     {
         Class.forName("org.postgresql.Driver");
-        final Connection connection = DriverManager.getConnection(URL, USER,
-                PASSWORD);
+        final Connection connection =
+                DriverManager.getConnection(URL, USER, PASSWORD);
 
         if (connection != null)
             return connection;

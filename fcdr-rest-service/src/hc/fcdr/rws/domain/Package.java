@@ -7,7 +7,8 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "package")
+@XmlRootElement(
+        name = "package")
 public class Package implements Serializable
 {
     /**
@@ -122,7 +123,8 @@ public class Package implements Serializable
         this.asPreparedUnitOfMeasure = asPreparedUnitOfMeasure;
         this.asSoldPerServingAmount = asSoldPerServingAmount;
         this.asSoldUnitOfMeasure = asSoldUnitOfMeasure;
-        this.asPreparedPerServingAmountInGrams = asPreparedPerServingAmountInGrams;
+        this.asPreparedPerServingAmountInGrams =
+                asPreparedPerServingAmountInGrams;
         this.asSoldPerServingAmountInGrams = asSoldPerServingAmountInGrams;
         this.packageComment = packageComment;
         this.packageSource = packageSource;
@@ -158,8 +160,10 @@ public class Package implements Serializable
         asPreparedUnitOfMeasure = _package.getAsPreparedUnitOfMeasure();
         asSoldPerServingAmount = _package.getAsSoldPerServingAmount();
         asSoldUnitOfMeasure = _package.getAsSoldUnitOfMeasure();
-        asPreparedPerServingAmountInGrams = _package.getAsPreparedPerServingAmountInGrams();
-        asSoldPerServingAmountInGrams = _package.getAsSoldPerServingAmountInGrams();
+        asPreparedPerServingAmountInGrams =
+                _package.getAsPreparedPerServingAmountInGrams();
+        asSoldPerServingAmountInGrams =
+                _package.getAsSoldPerServingAmountInGrams();
         packageComment = _package.getPackageComment();
         packageSource = _package.getPackageSource();
         packageProductDescription = _package.getPackageProductDescription();
@@ -401,7 +405,8 @@ public class Package implements Serializable
     public void setAsPreparedPerServingAmountInGrams(
             final Double asPreparedPerServingAmountInGrams)
     {
-        this.asPreparedPerServingAmountInGrams = asPreparedPerServingAmountInGrams;
+        this.asPreparedPerServingAmountInGrams =
+                asPreparedPerServingAmountInGrams;
     }
 
     public Double getAsSoldPerServingAmountInGrams()
@@ -521,62 +526,107 @@ public class Package implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((asPreparedPerServingAmount == null) ? 0
-                : asPreparedPerServingAmount.hashCode());
-        result = (prime * result)
-                + ((asPreparedPerServingAmountInGrams == null) ? 0
-                        : asPreparedPerServingAmountInGrams.hashCode());
-        result = (prime * result) + ((asPreparedUnitOfMeasure == null) ? 0
-                : asPreparedUnitOfMeasure.hashCode());
-        result = (prime * result) + ((asSoldPerServingAmount == null) ? 0
-                : asSoldPerServingAmount.hashCode());
-        result = (prime * result) + ((asSoldPerServingAmountInGrams == null) ? 0
-                : asSoldPerServingAmountInGrams.hashCode());
-        result = (prime * result) + ((asSoldUnitOfMeasure == null) ? 0
-                : asSoldUnitOfMeasure.hashCode());
+        result =
+                (prime * result)
+                        + ((asPreparedPerServingAmount == null)
+                                ? 0 : asPreparedPerServingAmount.hashCode());
+        result =
+                (prime * result)
+                        + ((asPreparedPerServingAmountInGrams == null)
+                                ? 0
+                                : asPreparedPerServingAmountInGrams.hashCode());
+        result =
+                (prime * result)
+                        + ((asPreparedUnitOfMeasure == null)
+                                ? 0 : asPreparedUnitOfMeasure.hashCode());
+        result =
+                (prime * result)
+                        + ((asSoldPerServingAmount == null)
+                                ? 0 : asSoldPerServingAmount.hashCode());
+        result =
+                (prime * result)
+                        + ((asSoldPerServingAmountInGrams == null)
+                                ? 0 : asSoldPerServingAmountInGrams.hashCode());
+        result =
+                (prime * result)
+                        + ((asSoldUnitOfMeasure == null)
+                                ? 0 : asSoldUnitOfMeasure.hashCode());
         result = (prime * result) + ((brand == null) ? 0 : brand.hashCode());
-        result = (prime * result)
-                + ((country == null) ? 0 : country.hashCode());
-        result = (prime * result)
-                + ((creationDate == null) ? 0 : creationDate.hashCode());
-        result = (prime * result)
-                + ((description == null) ? 0 : description.hashCode());
-        result = (prime * result)
-                + ((editedBy == null) ? 0 : editedBy.hashCode());
-        result = (prime * result)
-                + ((healthClaims == null) ? 0 : healthClaims.hashCode());
+        result =
+                (prime * result) + ((country == null) ? 0 : country.hashCode());
+        result =
+                (prime * result)
+                        + ((creationDate == null)
+                                ? 0 : creationDate.hashCode());
+        result =
+                (prime * result)
+                        + ((description == null) ? 0 : description.hashCode());
+        result =
+                (prime * result)
+                        + ((editedBy == null) ? 0 : editedBy.hashCode());
+        result =
+                (prime * result)
+                        + ((healthClaims == null)
+                                ? 0 : healthClaims.hashCode());
         result = (prime * result) + ((id == null) ? 0 : id.hashCode());
-        result = (prime * result)
-                + ((ingredients == null) ? 0 : ingredients.hashCode());
-        result = (prime * result)
-                + ((lastEditDate == null) ? 0 : lastEditDate.hashCode());
-        result = (prime * result)
-                + ((manufacturer == null) ? 0 : manufacturer.hashCode());
-        result = (prime * result)
-                + ((multiPartFlag == null) ? 0 : multiPartFlag.hashCode());
-        result = (prime * result)
-                + ((numberOfUnits == null) ? 0 : numberOfUnits.hashCode());
-        result = (prime * result) + ((otherPackageStatements == null) ? 0
-                : otherPackageStatements.hashCode());
-        result = (prime * result) + ((packageCollectionDate == null) ? 0
-                : packageCollectionDate.hashCode());
-        result = (prime * result)
-                + ((packageComment == null) ? 0 : packageComment.hashCode());
-        result = (prime * result) + ((packageProductDescription == null) ? 0
-                : packageProductDescription.hashCode());
-        result = (prime * result)
-                + ((packageSource == null) ? 0 : packageSource.hashCode());
-        result = (prime * result)
-                + ((productId == null) ? 0 : productId.hashCode());
+        result =
+                (prime * result)
+                        + ((ingredients == null) ? 0 : ingredients.hashCode());
+        result =
+                (prime * result)
+                        + ((lastEditDate == null)
+                                ? 0 : lastEditDate.hashCode());
+        result =
+                (prime * result)
+                        + ((manufacturer == null)
+                                ? 0 : manufacturer.hashCode());
+        result =
+                (prime * result)
+                        + ((multiPartFlag == null)
+                                ? 0 : multiPartFlag.hashCode());
+        result =
+                (prime * result)
+                        + ((numberOfUnits == null)
+                                ? 0 : numberOfUnits.hashCode());
+        result =
+                (prime * result)
+                        + ((otherPackageStatements == null)
+                                ? 0 : otherPackageStatements.hashCode());
+        result =
+                (prime * result)
+                        + ((packageCollectionDate == null)
+                                ? 0 : packageCollectionDate.hashCode());
+        result =
+                (prime * result)
+                        + ((packageComment == null)
+                                ? 0 : packageComment.hashCode());
+        result =
+                (prime * result)
+                        + ((packageProductDescription == null)
+                                ? 0 : packageProductDescription.hashCode());
+        result =
+                (prime * result)
+                        + ((packageSource == null)
+                                ? 0 : packageSource.hashCode());
+        result =
+                (prime * result)
+                        + ((productId == null) ? 0 : productId.hashCode());
         result = (prime * result) + ((size == null) ? 0 : size.hashCode());
-        result = (prime * result) + ((sizeUnitOfMeasure == null) ? 0
-                : sizeUnitOfMeasure.hashCode());
-        result = (prime * result) + ((storageStatements == null) ? 0
-                : storageStatements.hashCode());
-        result = (prime * result)
-                + ((storageType == null) ? 0 : storageType.hashCode());
-        result = (prime * result) + ((suggestedDirections == null) ? 0
-                : suggestedDirections.hashCode());
+        result =
+                (prime * result)
+                        + ((sizeUnitOfMeasure == null)
+                                ? 0 : sizeUnitOfMeasure.hashCode());
+        result =
+                (prime * result)
+                        + ((storageStatements == null)
+                                ? 0 : storageStatements.hashCode());
+        result =
+                (prime * result)
+                        + ((storageType == null) ? 0 : storageType.hashCode());
+        result =
+                (prime * result)
+                        + ((suggestedDirections == null)
+                                ? 0 : suggestedDirections.hashCode());
         result = (prime * result) + ((upc == null) ? 0 : upc.hashCode());
         return result;
     }
@@ -596,16 +646,16 @@ public class Package implements Serializable
             if (other.asPreparedPerServingAmount != null)
                 return false;
         }
-        else if (!asPreparedPerServingAmount.equals(
-                other.asPreparedPerServingAmount))
+        else if (!asPreparedPerServingAmount
+                .equals(other.asPreparedPerServingAmount))
             return false;
         if (asPreparedPerServingAmountInGrams == null)
         {
             if (other.asPreparedPerServingAmountInGrams != null)
                 return false;
         }
-        else if (!asPreparedPerServingAmountInGrams.equals(
-                other.asPreparedPerServingAmountInGrams))
+        else if (!asPreparedPerServingAmountInGrams
+                .equals(other.asPreparedPerServingAmountInGrams))
             return false;
         if (asPreparedUnitOfMeasure == null)
         {
@@ -626,8 +676,8 @@ public class Package implements Serializable
             if (other.asSoldPerServingAmountInGrams != null)
                 return false;
         }
-        else if (!asSoldPerServingAmountInGrams.equals(
-                other.asSoldPerServingAmountInGrams))
+        else if (!asSoldPerServingAmountInGrams
+                .equals(other.asSoldPerServingAmountInGrams))
             return false;
         if (asSoldUnitOfMeasure == null)
         {
@@ -746,8 +796,8 @@ public class Package implements Serializable
             if (other.packageProductDescription != null)
                 return false;
         }
-        else if (!packageProductDescription.equals(
-                other.packageProductDescription))
+        else if (!packageProductDescription
+                .equals(other.packageProductDescription))
             return false;
         if (packageSource == null)
         {
@@ -811,8 +861,9 @@ public class Package implements Serializable
     @Override
     public String toString()
     {
-        return "Package [id=" + id + ", description=" + description + ", upc="
-                + upc + ", brand=" + brand + ", manufacturer=" + manufacturer
+        return "Package [id="
+                + id + ", description=" + description + ", upc=" + upc
+                + ", brand=" + brand + ", manufacturer=" + manufacturer
                 + ", country=" + country + ", size=" + size
                 + ", sizeUnitOfMeasure=" + sizeUnitOfMeasure + ", storageType="
                 + storageType + ", storageStatements=" + storageStatements

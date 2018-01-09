@@ -87,10 +87,10 @@ public class DateUtil
 
     public static int compare(final String date1, final String date2)
     {
-        final java.sql.Timestamp ts1 = java.sql.Timestamp.valueOf(
-                date1 + " 00:00:00");
-        final java.sql.Timestamp ts2 = java.sql.Timestamp.valueOf(
-                date2 + " 00:00:00");
+        final java.sql.Timestamp ts1 =
+                java.sql.Timestamp.valueOf(date1 + " 00:00:00");
+        final java.sql.Timestamp ts2 =
+                java.sql.Timestamp.valueOf(date2 + " 00:00:00");
 
         return ts1.compareTo(ts2);
     }
@@ -294,8 +294,10 @@ public class DateUtil
         final String runMonth = df2.format(now.get(Calendar.MONTH) + 1);
         final String runYear = df4.format(now.get(Calendar.YEAR));
 
-        s += runYear + " " + runMonth + " " + runDay + " " + runHours + ":"
-                + runMinutes;
+        s +=
+                runYear
+                        + " " + runMonth + " " + runDay + " " + runHours + ":"
+                        + runMinutes;
 
         return s;
     }
@@ -474,36 +476,41 @@ public class DateUtil
             {
                 final long time1 = date1.getTime();
                 final long time2 = date2.getTime();
-                final long min1 = (time1 < 0 ? (time1 - ((1000 * 60 * 60) - 1))
-                        : time1) / (1000 * 60 * 60);
-                final long min2 = (time2 < 0 ? (time2 - ((1000 * 60 * 60) - 1))
-                        : time2) / (1000 * 60 * 60);
+                final long min1 =
+                        (time1 < 0 ? (time1 - ((1000 * 60 * 60) - 1)) : time1)
+                                / (1000 * 60 * 60);
+                final long min2 =
+                        (time2 < 0 ? (time2 - ((1000 * 60 * 60) - 1)) : time2)
+                                / (1000 * 60 * 60);
                 return negative ? (min1 - min2) : (min2 - min1);
             }
             case Calendar.MINUTE:
             {
                 final long time1 = date1.getTime();
                 final long time2 = date2.getTime();
-                final long min1 = (time1 < 0 ? (time1 - ((1000 * 60) - 1))
-                        : time1) / (1000 * 60);
-                final long min2 = (time2 < 0 ? (time2 - ((1000 * 60) - 1))
-                        : time2) / (1000 * 60);
+                final long min1 =
+                        (time1 < 0 ? (time1 - ((1000 * 60) - 1)) : time1)
+                                / (1000 * 60);
+                final long min2 =
+                        (time2 < 0 ? (time2 - ((1000 * 60) - 1)) : time2)
+                                / (1000 * 60);
                 return negative ? (min1 - min2) : (min2 - min1);
             }
             case Calendar.SECOND:
             {
                 final long time1 = date1.getTime();
                 final long time2 = date2.getTime();
-                final long sec1 = (time1 < 0 ? (time1 - (1000 - 1)) : time1)
-                        / 1000;
-                final long sec2 = (time2 < 0 ? (time2 - (1000 - 1)) : time2)
-                        / 1000;
+                final long sec1 =
+                        (time1 < 0 ? (time1 - (1000 - 1)) : time1) / 1000;
+                final long sec2 =
+                        (time2 < 0 ? (time2 - (1000 - 1)) : time2) / 1000;
 
                 return negative ? (sec1 - sec2) : (sec2 - sec1);
             }
             case Calendar.MILLISECOND:
             {
-                return negative ? (date1.getTime() - date2.getTime())
+                return negative
+                        ? (date1.getTime() - date2.getTime())
                         : (date2.getTime() - date1.getTime());
             }
             case Calendar.DATE:
@@ -512,8 +519,10 @@ public class DateUtil
                 final int day1 = cal1.get(Calendar.DAY_OF_YEAR);
                 final int day2 = cal2.get(Calendar.DAY_OF_YEAR);
 
-                final int maxDay1 = year1 == year2 ? 0
-                        : cal1.getActualMaximum(Calendar.DAY_OF_YEAR);
+                final int maxDay1 =
+                        year1 == year2
+                                ? 0
+                                : cal1.getActualMaximum(Calendar.DAY_OF_YEAR);
                 int days = (maxDay1 - day1) + day2;
 
                 final Calendar cal = Calendar.getInstance(tz);
@@ -643,19 +652,20 @@ public class DateUtil
         return rightFormated;
     }
 
-    private static List<SimpleDateFormat> dateFormats = new ArrayList<SimpleDateFormat>()
-    {
-        private static final long serialVersionUID = 1L;
-        {
-            add(new SimpleDateFormat("M/dd/yyyy"));
-            add(new SimpleDateFormat("dd.M.yyyy"));
-            add(new SimpleDateFormat("M/dd/yyyy hh:mm:ss a"));
-            add(new SimpleDateFormat("dd.M.yyyy hh:mm:ss a"));
-            add(new SimpleDateFormat("dd.MMM.yyyy"));
-            add(new SimpleDateFormat("dd-MMM-yyyy"));
-            add(new SimpleDateFormat("yyyy-mm-dd"));
-        }
-    };
+    private static List<SimpleDateFormat> dateFormats =
+            new ArrayList<SimpleDateFormat>()
+            {
+                private static final long serialVersionUID = 1L;
+                {
+                    add(new SimpleDateFormat("M/dd/yyyy"));
+                    add(new SimpleDateFormat("dd.M.yyyy"));
+                    add(new SimpleDateFormat("M/dd/yyyy hh:mm:ss a"));
+                    add(new SimpleDateFormat("dd.M.yyyy hh:mm:ss a"));
+                    add(new SimpleDateFormat("dd.MMM.yyyy"));
+                    add(new SimpleDateFormat("dd-MMM-yyyy"));
+                    add(new SimpleDateFormat("yyyy-mm-dd"));
+                }
+            };
 
     /**
      * Convert String with various formats into java.util.Date
@@ -691,7 +701,8 @@ public class DateUtil
 
 class TimeZones
 {
-    private static final InheritableThreadLocal<TimeZone> _thdTZone = new InheritableThreadLocal<TimeZone>();
+    private static final InheritableThreadLocal<TimeZone> _thdTZone =
+            new InheritableThreadLocal<TimeZone>();
 
     public static final TimeZone getCurrent()
     {

@@ -6,7 +6,8 @@ import java.sql.Timestamp;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "product")
+@XmlRootElement(
+        name = "product")
 public class Product implements Serializable
 {
     /**
@@ -232,13 +233,13 @@ public class Product implements Serializable
     @Override
     public String toString()
     {
-        return "Product [id=" + id + ", description=" + description + ", brand="
-                + brand + ", country=" + country + ", clusterNumber="
-                + clusterNumber + ", comment=" + comment + ", manufacturer="
-                + manufacturer + ", cnfCode=" + cnfCode + ", creationDate="
-                + creationDate + ", lastEditDate=" + lastEditDate
-                + ", editedBy=" + editedBy + ", restaurantType="
-                + restaurantType + ", type=" + type + "]";
+        return "Product [id="
+                + id + ", description=" + description + ", brand=" + brand
+                + ", country=" + country + ", clusterNumber=" + clusterNumber
+                + ", comment=" + comment + ", manufacturer=" + manufacturer
+                + ", cnfCode=" + cnfCode + ", creationDate=" + creationDate
+                + ", lastEditDate=" + lastEditDate + ", editedBy=" + editedBy
+                + ", restaurantType=" + restaurantType + ", type=" + type + "]";
     }
 
     @Override
@@ -247,27 +248,39 @@ public class Product implements Serializable
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((brand == null) ? 0 : brand.hashCode());
-        result = (prime * result)
-                + ((clusterNumber == null) ? 0 : clusterNumber.hashCode());
-        result = (prime * result)
-                + ((cnfCode == null) ? 0 : cnfCode.hashCode());
-        result = (prime * result)
-                + ((comment == null) ? 0 : comment.hashCode());
-        result = (prime * result)
-                + ((country == null) ? 0 : country.hashCode());
-        result = (prime * result)
-                + ((creationDate == null) ? 0 : creationDate.hashCode());
-        result = (prime * result)
-                + ((description == null) ? 0 : description.hashCode());
-        result = (prime * result)
-                + ((editedBy == null) ? 0 : editedBy.hashCode());
+        result =
+                (prime * result)
+                        + ((clusterNumber == null)
+                                ? 0 : clusterNumber.hashCode());
+        result =
+                (prime * result) + ((cnfCode == null) ? 0 : cnfCode.hashCode());
+        result =
+                (prime * result) + ((comment == null) ? 0 : comment.hashCode());
+        result =
+                (prime * result) + ((country == null) ? 0 : country.hashCode());
+        result =
+                (prime * result)
+                        + ((creationDate == null)
+                                ? 0 : creationDate.hashCode());
+        result =
+                (prime * result)
+                        + ((description == null) ? 0 : description.hashCode());
+        result =
+                (prime * result)
+                        + ((editedBy == null) ? 0 : editedBy.hashCode());
         result = (prime * result) + ((id == null) ? 0 : id.hashCode());
-        result = (prime * result)
-                + ((lastEditDate == null) ? 0 : lastEditDate.hashCode());
-        result = (prime * result)
-                + ((manufacturer == null) ? 0 : manufacturer.hashCode());
-        result = (prime * result)
-                + ((restaurantType == null) ? 0 : restaurantType.hashCode());
+        result =
+                (prime * result)
+                        + ((lastEditDate == null)
+                                ? 0 : lastEditDate.hashCode());
+        result =
+                (prime * result)
+                        + ((manufacturer == null)
+                                ? 0 : manufacturer.hashCode());
+        result =
+                (prime * result)
+                        + ((restaurantType == null)
+                                ? 0 : restaurantType.hashCode());
         result = (prime * result) + ((type == null) ? 0 : type.hashCode());
         return result;
     }

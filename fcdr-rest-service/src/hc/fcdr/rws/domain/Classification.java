@@ -5,7 +5,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "classification")
+@XmlRootElement(
+        name = "classification")
 public class Classification implements Serializable
 {
     /**
@@ -92,12 +93,18 @@ public class Classification implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((classificationName == null) ? 0
-                : classificationName.hashCode());
-        result = (prime * result) + ((classificationNumber == null) ? 0
-                : classificationNumber.hashCode());
-        result = (prime * result) + ((classificationType == null) ? 0
-                : classificationType.hashCode());
+        result =
+                (prime * result)
+                        + ((classificationName == null)
+                                ? 0 : classificationName.hashCode());
+        result =
+                (prime * result)
+                        + ((classificationNumber == null)
+                                ? 0 : classificationNumber.hashCode());
+        result =
+                (prime * result)
+                        + ((classificationType == null)
+                                ? 0 : classificationType.hashCode());
         result = (prime * result) + ((id == null) ? 0 : id.hashCode());
         return result;
     }
@@ -146,10 +153,10 @@ public class Classification implements Serializable
     @Override
     public String toString()
     {
-        return "Classification [id=" + id + ", classificationNumber="
-                + classificationNumber + ", classificationName="
-                + classificationName + ", classificationType="
-                + classificationType + "]";
+        return "Classification [id="
+                + id + ", classificationNumber=" + classificationNumber
+                + ", classificationName=" + classificationName
+                + ", classificationType=" + classificationType + "]";
     }
 
 }

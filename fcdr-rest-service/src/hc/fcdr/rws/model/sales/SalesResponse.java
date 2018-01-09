@@ -8,69 +8,99 @@ import hc.fcdr.rws.domain.Sales;
 
 public class SalesResponse
 {
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_upc;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_brand;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_manufacturer;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     dollar_rank;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     dollar_volume;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     dollar_share;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     dollar_volume_percentage_change;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     kilo_volume;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     kilo_share;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     kilo_volume_percentage_change;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     average_ac_dist;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     average_retail_price;
     private String     sales_source;
     private String     nielsen_category;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_year;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Boolean    control_label_flag;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     kilo_volume_total;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     kilo_volume_rank;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     dollar_volume_total;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     cluster_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     product_grouping;
 
     private String     sales_product_description;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Double     classification_number;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     classification_type;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_comment;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     sales_collection_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Integer    number_of_units;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private String     edited_by;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Timestamp  creation_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Timestamp  last_edit_date;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private Long       product_id;
-    @XmlElement(nillable = true)
+    @XmlElement(
+            nillable = true)
     private final Long sales_id;
 
     public SalesResponse()
@@ -122,7 +152,8 @@ public class SalesResponse
         dollar_rank = sales.getDollarRank();
         dollar_volume = sales.getDollarVolume();
         dollar_share = sales.getDollarShare();
-        dollar_volume_percentage_change = sales.getDollarVolumePercentageChange();
+        dollar_volume_percentage_change =
+                sales.getDollarVolumePercentageChange();
         kilo_volume = sales.getKiloVolume();
         kilo_share = sales.getKiloShare();
         kilo_volume_percentage_change = sales.getKiloVolumePercentageChange();
