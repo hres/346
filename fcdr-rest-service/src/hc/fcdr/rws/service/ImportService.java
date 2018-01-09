@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
-import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
 import hc.fcdr.rws.importer.ImportStatistics;
@@ -44,7 +44,7 @@ public class ImportService extends Application
     {
         if (loader == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 
             try

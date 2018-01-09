@@ -33,6 +33,9 @@ import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.util.DaoUtil;
 
+import java.sql.PreparedStatement;
+import hc.fcdr.rws.model.pkg.NftModel;
+
 public class PackageDao extends PgDao
 {
     private static final Logger logger       = Logger.getLogger(
@@ -112,7 +115,7 @@ public class PackageDao extends PgDao
         System.out.println(query);
         try
         {
-            resultSet = executeGetNft(query, packageId, flag);
+            resultSet = getNft(query, packageId, flag);
             resultSet.setStatus(200);
 
         }
@@ -142,6 +145,7 @@ public class PackageDao extends PgDao
         }
 
         System.out.println("The flag has the value of " + nftRequest.getFlag());
+        
         if (nftRequest.getFlag() == null)
             return new ResponseGeneric(0, "Invalid flag");
         else if (nftRequest.getFlag() == true)
@@ -150,14 +154,14 @@ public class PackageDao extends PgDao
             if (checkIfHasNft(nftRequest, schema, true) > 0)
                 return new ResponseGeneric(777, "Has an NFT as sold already");
             else
-                executeInsertNft(nftRequest, schema);
+                insertNft(nftRequest, schema);
         }
         else if (nftRequest.getFlag() == false)
         {
             if (checkIfHasNft(nftRequest, schema, false) > 0)
                 return new ResponseGeneric(778, "Has an NFT as sold prepared");
             else
-                executeInsertNft(nftRequest, schema);
+                insertNft(nftRequest, schema);
         }
         else
             return new ResponseGeneric(0, "Invalid flag");
@@ -214,8 +218,9 @@ public class PackageDao extends PgDao
                 }
                 executeUpdate(sql, new Object[]
                 { nftRequest.getPackage_id(), nftRequest.getFlag() });
-                executeUpdateNft(nftRequest, schema);
-
+                updateNft(nftRequest, schema);
+                
+                connection.commit();
             }
             catch (final SQLException e)
             {
@@ -225,7 +230,7 @@ public class PackageDao extends PgDao
 
                 // return false;
             }
-        connection.commit();
+        
         return new ResponseGeneric(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
 
@@ -308,6 +313,7 @@ public class PackageDao extends PgDao
         return insertPackageResponse;
 
     }
+    
     /// =======
 
     public InsertPackageResponse getPackageUpdateResponse(
@@ -446,8 +452,6 @@ public class PackageDao extends PgDao
     {
         ResultSet resultSet = null;
         PackageViewData packageResponse = null;
-
-        System.out.println("here 2");
         final PackageViewDataResponse data = new PackageViewDataResponse();
 
         final String query = "select * from " + schema + "."
@@ -460,10 +464,7 @@ public class PackageDao extends PgDao
 
             if (resultSet.next())
             {
-                System.out.println("here 3");
                 packageResponse = DaoUtil.getPackageResponseView(resultSet);
-                System.out.println("here 4" + packageResponse.toString());
-
                 data.add(packageResponse);
             }
         }
@@ -625,6 +626,7 @@ public class PackageDao extends PgDao
                     ResponseCodes.INTERNAL_SERVER_ERROR.getCode(), null,
                     ResponseCodes.INTERNAL_SERVER_ERROR.getMessage());
         }
+        
         data.setCount(number_of_records);
 
         if (data.getCount() == 0)
@@ -754,6 +756,173 @@ public class PackageDao extends PgDao
         }
         return genericList;
 
+    }
+    
+    private boolean insertNft(final NftRequest nftRequest,
+            final String schema) throws DaoException, SQLException
+    {
+
+        final String query = "insert into " + schema + "."
+                + "product_component(component_id, package_id, amount,"
+                + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+                + "select component_id, ?, ?, ?, ?, ? from " + schema
+                + ".component " + "where component_id = ("
+                + "select component_id from " + schema + "."
+                + "component where component_name= ?)";
+
+        try
+        {
+            connection.setAutoCommit(false);
+            
+            for (final NftModel element : nftRequest.getNft())
+            {
+                final PreparedStatement preparedStatement = connection.prepareStatement(
+                        query);
+                preparedStatement.setObject(1, nftRequest.getPackage_id());
+                preparedStatement.setObject(2, element.getAmount());
+                preparedStatement.setObject(3, element.getUnit_of_measure());
+                preparedStatement.setObject(4, element.getDaily_value());
+                preparedStatement.setObject(5, nftRequest.getFlag());
+                preparedStatement.setObject(6, element.getName());
+                preparedStatement.executeUpdate();
+            }
+            
+            connection.commit();
+        }
+        catch (final SQLException e)
+        {
+            // TODO Auto-generated catch block
+            connection.rollback();
+            e.printStackTrace();
+
+            return false;
+        }
+        
+        return true;
+
+    }
+
+    private boolean updateNft(final NftRequest nftRequest,
+            final String schema) throws DaoException, SQLException
+    {
+
+        final String query = "insert into " + schema + "."
+                + "product_component(component_id, package_id, amount,"
+                + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
+                + "select component_id, ?, ?, ?, ?, ? from " + schema
+                + ".component " + "where component_id = ("
+                + "select component_id from " + schema + "."
+                + "component where component_name= ?)";
+
+        try
+        {
+            for (final NftModel element : nftRequest.getNft())
+            {
+                // ecuteInsertNft(element, nftRequest.getPackage_id(), nftRequest.getFlag(), schema);
+
+                final PreparedStatement preparedStatement = connection.prepareStatement(
+                        query);
+                preparedStatement.setObject(1, nftRequest.getPackage_id());
+                preparedStatement.setObject(2, element.getAmount());
+                preparedStatement.setObject(3, element.getUnit_of_measure());
+                preparedStatement.setObject(4, element.getDaily_value());
+                preparedStatement.setObject(5, nftRequest.getFlag());
+                preparedStatement.setObject(6, element.getName());
+                preparedStatement.executeUpdate();
+            }
+        }
+        catch (final SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+            return false;
+        }
+        return true;
+
+    }
+
+    private NftView getNft(final String query,
+            final Integer package_id, final Boolean flag)
+            throws DaoException, SQLException
+    {
+        final NftView nftList = new NftView();
+        ResultSet resultSet = null;
+
+        try
+        {
+
+            final PreparedStatement preparedStatement = connection.prepareStatement(
+                    query);
+            preparedStatement.setObject(1, package_id);
+            preparedStatement.setObject(2, flag);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next())
+            {
+                String name = resultSet.getString("component_name");
+                name = resultSet.wasNull() ? null
+                        : resultSet.getString("component_name");
+
+                Double amount = resultSet.getDouble("amount");
+                amount = resultSet.wasNull() ? null
+                        : resultSet.getDouble("amount");
+                System.out.println(
+                        resultSet.getString("component_name") + ": " + amount);
+                String amount_unit_of_measure = resultSet.getString(
+                        "amount_unit_of_measure");
+                amount_unit_of_measure = resultSet.wasNull() ? null
+                        : resultSet.getString("amount_unit_of_measure");
+
+                Double percentage_daily_value = resultSet.getDouble(
+                        "percentage_daily_value");
+                percentage_daily_value = resultSet.wasNull() ? null
+                        : resultSet.getDouble("percentage_daily_value");
+                // String name, Double amount, String unit_of_measure, Double daily_value
+                nftList.getNft().add(new NftModel(name, amount,
+                        amount_unit_of_measure, percentage_daily_value));
+            }
+
+        }
+        catch (final SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+            return null;
+        }
+
+        return nftList;
+    }
+
+    private int checkIfHasNft(final NftRequest nftRequest, final String schema,
+            final Boolean flag) throws DaoException
+    {
+
+        ResultSet resultSetCount = null;
+        int number_of_records = 0;
+
+        final String query = "select count (*) AS COUNT from " + schema + "."
+                + "product_component where as_ppd_flag = ? and package_id = ?";
+
+        try
+        {
+            final PreparedStatement preparedStatement = connection.prepareStatement(
+                    query);
+            preparedStatement.setObject(1, flag);
+            preparedStatement.setObject(2, nftRequest.getPackage_id());
+            resultSetCount = preparedStatement.executeQuery();
+
+            resultSetCount.next();
+            number_of_records = resultSetCount.getInt("COUNT");
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return number_of_records;
     }
 
 }

@@ -147,7 +147,7 @@ public class SalesDao extends PgDao
     }
 
     public Integer insert(final List<Object> csvFieldList)
-            throws DaoException, SQLException
+            throws DaoException
     {
         csvFieldList.remove(0);
 
@@ -183,7 +183,7 @@ public class SalesDao extends PgDao
     public SalesInsertDataResponse getSalesInsertResponse(
 
             final SalesInsertRequest salesInsertRequest)
-            throws DaoException, SQLException
+            throws DaoException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesInsertRequest);
@@ -264,8 +264,7 @@ public class SalesDao extends PgDao
     // ===
 
     public SalesUpdateDataResponse getSalesUpdateResponse(
-            final SalesUpdateRequest salesUpdateRequest)
-            throws DaoException, SQLException
+            final SalesUpdateRequest salesUpdateRequest) throws DaoException
     {
         final Map<String, Object> queryMap = DaoUtil.getQueryMap(
                 salesUpdateRequest);
@@ -310,27 +309,42 @@ public class SalesDao extends PgDao
                 questionmarks.length() - 1);
 
         final String query = "update " + schema + "." + "sales set "
-                + "sales_description = ?," + "sales_upc = ?, "
-                + "sales_brand = ?, " + "sales_manufacturer = ?, "
-                + "dollar_rank = ?, " + "dollar_volume = ?, "
-                + "dollar_share = ?, " + "dollar_volume_percentage_change = ?,"
-                + "kilo_volume = ?, " + "kilo_share = ?, "
-                + "kilo_volume_percentage_change = ?," + "average_ac_dist = ?, "
-                + "average_retail_price = ?, " + "sales_source = ?, "
-                + "nielsen_category = ?," + "sales_year = ?,  "
-                + "control_label_flag = ?," + "kilo_volume_total = ?, "
-                + "kilo_volume_rank = ?," + "dollar_volume_total = ?,"
-                + "cluster_number = ?, " + "product_grouping = ?, "
-                + "sales_product_description = ?,"
-                + "classification_number = ?, " + "classification_type = ?, "
-                + "sales_comment = ?," + "sales_collection_date = ?, "
-                + "number_of_units = ?, " + "edited_by = ?, "
-                + "last_edit_date = ? " + "where sales_id= ? ";
+                + "sales_description = COALESCE(?, sales_description), "
+                + "sales_upc = COALESCE(?, sales_upc), "
+                + "sales_brand = COALESCE(?, sales_brand), "
+                + "sales_manufacturer = COALESCE(?, sales_manufacturer), "
+                + "dollar_rank = COALESCE(?, dollar_rank), "
+                + "dollar_volume = COALESCE(?, dollar_volume), "
+                + "dollar_share = COALESCE(?, dollar_share), "
+                + "dollar_volume_percentage_change = COALESCE(?, dollar_volume_percentage_change), "
+                + "kilo_volume = COALESCE(?, kilo_volume), "
+                + "kilo_share = COALESCE(?, kilo_share), "
+                + "kilo_volume_percentage_change = COALESCE(?, kilo_volume_percentage_change), "
+                + "average_ac_dist = COALESCE(?, average_ac_dist), "
+                + "average_retail_price = COALESCE(?, average_retail_price), "
+                + "sales_source = COALESCE(?, sales_source), "
+                + "nielsen_category = COALESCE(?, nielsen_category), "
+                + "sales_year = COALESCE(?, sales_year), "
+                + "control_label_flag = COALESCE(?, control_label_flag), "
+                + "kilo_volume_total = COALESCE(?, kilo_volume_total), "
+                + "kilo_volume_rank = COALESCE(?, kilo_volume_rank), "
+                + "dollar_volume_total = COALESCE(?, dollar_volume_total), "
+                + "cluster_number = COALESCE(?, cluster_number), "
+                + "product_grouping = COALESCE(?, product_grouping), "
+                + "sales_product_description = COALESCE(?, sales_product_description), "
+                + "classification_number = COALESCE(?, classification_number), "
+                + "classification_type = COALESCE(?, classification_type), "
+                + "sales_comment = COALESCE(?, sales_comment), "
+                + "sales_collection_date = COALESCE(?, sales_collection_date), "
+                + "number_of_units = COALESCE(?, number_of_units), "
+                + "edited_by = COALESCE(?, edited_by), "
+                + "last_edit_date = COALESCE(?, last_edit_date) "
+                + "where sales_id = ?";
 
         final List<Object> salesUpdateList = (List<Object>) queryMap.get(
                 "sales_update_list");
 
-        System.out.println(salesUpdateList.toArray()[27] + "OYESOOOO");
+        
 
         executeUpdate(query, salesUpdateList.toArray());
 
@@ -644,6 +658,7 @@ public class SalesDao extends PgDao
                 return new SalesDeleteDataResponse(
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
+            connection.commit();
         }
         catch (final Exception e)
         {
@@ -651,7 +666,7 @@ public class SalesDao extends PgDao
             connection.rollback();
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-        connection.commit();
+                
         return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }

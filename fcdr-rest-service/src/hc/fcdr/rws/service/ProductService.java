@@ -17,7 +17,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
@@ -44,7 +44,7 @@ public class ProductService extends Application
     {
         if (productDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 
             try

@@ -18,7 +18,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.SalesDao;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
@@ -43,7 +43,7 @@ public class SalesService extends Application
     {
         if (salesDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 
             try

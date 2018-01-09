@@ -719,12 +719,13 @@ public class ProductDao extends PgDao
             }
 
             /// ===
-            System.out.println(query);
+            ///System.out.println(query);
             resultSet = executeQuery(query, objectList.toArray());
             resultSetCount = executeQuery(query_count, objectList.toArray());
-            System.out.println("++++ " + query_count);
+            ///System.out.println("++++ " + query_count);
             resultSetCount.next();
             number_of_records = resultSetCount.getInt("COUNT");
+            
             while (resultSet.next())
             {
                 productSalesLabelResponse = DaoUtil.getProductSalesLabelResponse(
@@ -1077,9 +1078,6 @@ public class ProductDao extends PgDao
         String questionmarks = StringUtils.repeat("?,", columns.length);
         questionmarks = (String) questionmarks.subSequence(0,
                 questionmarks.length() - 1);
-
-        productUpdateRequest.cnf_code.isEmpty();
-        productUpdateRequest.cluster_number.isEmpty();
 
         final String query = "update " + schema + "." + "product set "
                 + "last_edit_date = COALESCE(?, last_edit_date), "

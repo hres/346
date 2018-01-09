@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.db.ClassificationDao;
-import hc.fcdr.rws.db.PgConnectionPool;
+import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
@@ -31,7 +31,7 @@ public class ClassificationService extends Application
     {
         if (classificationDao == null)
         {
-            final PgConnectionPool pgConnectionPool = new PgConnectionPool();
+            final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 
             try
