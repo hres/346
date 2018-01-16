@@ -19,7 +19,7 @@ public class ProductRequest
     @XmlElement
     public String  product_comment;
     @XmlElement
-    public Double  classification_number;
+    public String  classification_number;
     @XmlElement
     public String  classification_name;
     @XmlElement
