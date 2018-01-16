@@ -36,6 +36,7 @@ public class PgDao
         {
             preparedStatement =
                     prepareStatement(connection, query, false, values);
+            System.out.println(preparedStatement);
             resultSet = preparedStatement.executeQuery();
 
         }
@@ -58,12 +59,11 @@ public class PgDao
 
         try
         {
-            connection.setAutoCommit(false);
             preparedStatement =
                     prepareStatement(connection, query, true, values);
             final int affectedRows = preparedStatement.executeUpdate();
 
-            if (affectedRows == 0)
+            if (affectedRows == 0 && (query.startsWith("insert") || query.startsWith("update")))
                 throw new NoRowsAffectedDAOException(
                         "Execute update error: no rows affected.");
 
@@ -80,7 +80,7 @@ public class PgDao
             else if (query.startsWith("delete"))
                 return affectedRows;
 
-            connection.commit();
+            
         }
         catch (final SQLException e)
         {

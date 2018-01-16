@@ -33,6 +33,7 @@ import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
+import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.util.DaoUtil;
 
 public class PackageDao extends PgDao
@@ -659,10 +660,10 @@ public class PackageDao extends PgDao
 
     }
 
-    public Boolean checkClassification(final Double classificationNumber)
+    public Boolean checkClassification(final String classificationNumber)
             throws DaoException
     {
-        if ((classificationNumber == null) || (classificationNumber == 0.0))
+        if ((classificationNumber == null))
             return true;
 
         ResultSet resultSet = null;
@@ -958,6 +959,44 @@ public class PackageDao extends PgDao
         }
 
         return number_of_records;
+    }
+    
+    public ResponseGeneric getLabelDeleteResponse(final Integer id)
+            throws SQLException, IOException, Exception
+    {
+    	System.out.println("hjello");
+        final String  delete_components =
+                "delete from " + schema + "." + "product_component where package_id = ?";
+
+        final String sql =
+                "delete from " + schema + "." + "package where package_id = ?";     
+      
+        try
+        	{
+
+        	 final Integer deletedRowdelete_components = (Integer)  executeUpdate(delete_components, new Object[]{ id });
+        	 System.out.println("hjello + ");
+            final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]{ id });
+            
+
+            
+            if (deletedRow == 0){
+                return new ResponseGeneric(
+                        777,
+                        "Cannot delete record");
+            }
+          
+        }
+        catch (final Exception e)
+        {
+            logger.error(e);
+         
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+   
+        
+        return new ResponseGeneric(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
     }
 
 }

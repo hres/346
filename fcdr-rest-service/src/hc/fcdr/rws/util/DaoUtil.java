@@ -1107,18 +1107,9 @@ public final class DaoUtil
 
         if (request.classification_number != null)
         {
-            if (isType(request.classification_number.toString(), "double"))
-            {
-                if (request.classification_number > 0.0)
                     queryMap.put("classification_number",
                             request.classification_number);
-            }
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
         }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-
         if (!request.classification_name.isEmpty())
             queryMap.put("classification_name", request.classification_name);
         if (!request.classification_type.isEmpty())
@@ -1202,11 +1193,9 @@ public final class DaoUtil
         productInsertList.add(now);
 
         if (request.getClassification_number() != null)
-            if (request.getClassification_number() instanceof Number)
                 queryMap.put("classification_number",
                         request.getClassification_number());
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
+
 
         queryMap.put("product_insert_list", productInsertList);
 
@@ -1311,10 +1300,9 @@ public final class DaoUtil
         sales.setSalesProductDescription(
                 result.getString("sales_product_description"));
 
-        final Double classification_number = result.getDouble(
-                "classification_number");
-        sales.setClassificationNumber(
-                result.wasNull() ? null : classification_number);
+
+        sales.setClassificationNumber(result.getString(
+                "classification_number"));
 
         sales.setClassificationType(result.getString("classification_type"));
         sales.setSalesComment(result.getString("sales_comment"));
@@ -1685,14 +1673,9 @@ public final class DaoUtil
         salesInsertList.add(request.sales_product_description);
 
         if (request.classification_number != null)
-            if (request.classification_number instanceof Number)
                 queryMap.put("classification_number",
                         request.classification_number);
-            else
-            {
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-                return queryMap;
-            }
+         
         salesInsertList.add(request.classification_number);
 
         if (!request.classification_type.isEmpty())
@@ -2049,15 +2032,9 @@ public final class DaoUtil
         salesUpdateList.add(request.sales_product_description);
 
         if (request.classification_number != null)
-
-            if (request.classification_number instanceof Number)
                 queryMap.put("classification_number",
                         request.classification_number);
-            else
-            {
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-                return queryMap;
-            }
+
         salesUpdateList.add(request.classification_number);
 
         if (request.classification_type != null)
@@ -2299,10 +2276,10 @@ public final class DaoUtil
         final Boolean child_item = resultSet.getBoolean("child_item");
         packageResponse.setChild_item(resultSet.wasNull() ? null : child_item);
 
-        final Double package_classification_number = resultSet.getDouble(
-                "package_classification_number");
+
         packageResponse.setClassification_number(
-                resultSet.wasNull() ? null : package_classification_number);
+        		resultSet.getString(
+                        "package_classification_number"));
 
         packageResponse.setClassification_name(
                 resultSet.getString("package_classification_name"));
@@ -2538,14 +2515,10 @@ public final class DaoUtil
 
         if (request.classification_number != null)
         {
-            if (isType(request.classification_number.toString(), "double"))
-            {
-                if (request.classification_number > 0.0)
+
                     queryMap.put("classification_number",
                             request.classification_number);
-            }
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
@@ -2709,19 +2682,15 @@ public final class DaoUtil
                 && !request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
-        if (request.classification_number != null)
+        if (request.classification_number != null && !request.classification_number.isEmpty())
         {
-            if (isType(request.classification_number.toString(), "double"))
-            {
-                if (request.classification_number > 0.0)
+
                     queryMap.put("classification_number",
                             request.classification_number);
-            }
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+            
+            
         }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        
 
         if ((request.classification_name != null)
                 && !request.classification_name.isEmpty())

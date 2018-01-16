@@ -13,7 +13,7 @@ public class ProductSalesLabelRequest
     @XmlElement
     public String  product_manufacturer;
     @XmlElement
-    public Double  classification_number;
+    public String  classification_number;
     @XmlElement
     public String  classification_name;
     @XmlElement

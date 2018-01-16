@@ -101,7 +101,7 @@ public class PackageUpdateRequest
     private Boolean child_item;
     @XmlElement(
             nillable = true)
-    private Double  classification_number;
+    private String  classification_number;
     @XmlElement(
             nillable = true)
     private String  classification_name;
@@ -193,7 +193,7 @@ public class PackageUpdateRequest
             final String package_collection_date, final Integer number_of_units,
             final String edited_by, final Boolean informed_dining_program,
             final String nft_last_update_date, final Double product_grouping,
-            final Boolean child_item, final Double classification_number,
+            final Boolean child_item, final String classification_number,
             final String classification_name, final Double nielsen_item_rank,
             final String nutrient_claims, final String package_nielsen_category,
             final String common_household_measure, final String creation_date,
@@ -576,12 +576,12 @@ public class PackageUpdateRequest
         this.child_item = child_item;
     }
 
-    public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(final Double classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
@@ -33,6 +34,7 @@ import hc.fcdr.rws.model.pkg.PackageRequest;
 import hc.fcdr.rws.model.pkg.PackageUpdateRequest;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
+import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/PackageService")
@@ -352,5 +354,29 @@ public class PackageService extends Application
     {
         return "<operations>GET, PUT, POST, DELETE</operations>";
     }
+    
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") final Integer id)
+    {
+    	ResponseGeneric entity = new ResponseGeneric();
+
+        try
+        {
+            if (packageDao != null)
+                entity = packageDao.getLabelDeleteResponse(id);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+
+    // ===
+
 
 }

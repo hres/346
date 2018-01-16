@@ -21,6 +21,7 @@ import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductDataResponse;
 import hc.fcdr.rws.model.product.ProductInsertDataResponse;
@@ -49,14 +50,19 @@ public class ProductService extends Application
 
             try
             {
+            	System.out.println("schema is "+ContextManager.getJndiValue("SCHEMA"));
+            	
                 productDao =
                         new ProductDao(pgConnectionPool.getConnection(),
-                                ContextManager.getJndiValue("SCHEMA"));
+                        		ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
                 e.printStackTrace();
-            }
+            } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 
@@ -168,6 +174,51 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
+    
+    @GET
+    @Path("/restaurantTypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRestaurantTypes()
+    {
+        GenericList entity = new GenericList();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getRestaurantTypes();
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    //=====
+    
+    @GET
+    @Path("/types")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTypes()
+    {
+        GenericList entity = new GenericList();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getTypes();
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -221,6 +272,8 @@ public class ProductService extends Application
     }
 
     // ===========
+    
+    
 
     @POST
     @Path("/productsaleslabel")

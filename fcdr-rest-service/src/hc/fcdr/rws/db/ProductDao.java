@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.product.ProductClassificationData;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
@@ -37,6 +38,9 @@ import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.sales.SalesYearsData;
+import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
+import hc.fcdr.rws.model.sales.SalesYearsResponse;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
 
@@ -777,7 +781,7 @@ public class ProductDao extends PgDao
     // ===
 
     public Object update(final List<Object> list,
-            final Double classificationNumber, final String classificationType)
+            final String classificationNumber, final String classificationType)
             throws DaoException
     {
         final String[] columns =
@@ -835,7 +839,7 @@ public class ProductDao extends PgDao
     }
 
     public Integer insert(final List<Object> csvFieldList,
-            final Double classificationNumber, final String classificationType)
+            final String classificationNumber, final String classificationType)
             throws DaoException
     {
         final String[] columns =
@@ -1052,7 +1056,7 @@ public class ProductDao extends PgDao
         }
     }
 
-    public Integer checkClassification(final Double classificationNumber)
+    public Integer checkClassification(final String classificationNumber)
             throws DaoException
     {
         ResultSet resultSet = null;
@@ -1146,7 +1150,7 @@ public class ProductDao extends PgDao
 
         if (productUpdateRequest.product_id != null)
             if ((productUpdateRequest.classification_number != null)
-                    && (productUpdateRequest.classification_number != 0.0))
+                    && (!productUpdateRequest.classification_number.isEmpty()))
             {
                 final Integer classificationId =
                         checkClassification(
@@ -1353,4 +1357,67 @@ public class ProductDao extends PgDao
         return s;
     }
 
+	public GenericList getRestaurantTypes() 
+			throws SQLException, IOException, Exception{
+        ResultSet resultSet = null;
+        
+
+        final GenericList data = new GenericList();
+
+        final String query =
+                "select distinct name from "
+                        + schema + "." + "restaurant_types order by name asc";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+            	String name = null;
+                name = (resultSet.getString("name"));
+                System.out.println("name: "+name);
+                data.add(name);
+            }
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            return null;
+        }
+
+        return data;
+	}
+
+	public GenericList getTypes() 
+			throws SQLException, IOException, Exception{
+        ResultSet resultSet = null;
+        
+
+        final GenericList data = new GenericList();
+
+        final String query =
+                "select distinct name from "
+                        + schema + "." + "types order by name asc";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+            	String name = null;
+                name = (resultSet.getString("name"));
+                System.out.println("name: "+name);
+                data.add(name);
+            }
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            return null;
+        }
+
+        return data;
+	}
 }

@@ -684,10 +684,10 @@ public class SalesDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
-    public Boolean checkClassification(final Double classificationNumber)
+    public Boolean checkClassification(final String classificationNumber)
             throws DaoException
     {
-        if ((classificationNumber == null) || (classificationNumber == 0.0))
+        if ((classificationNumber == null))
             return true;
 
         ResultSet resultSet = null;

@@ -74,7 +74,7 @@ public class SalesResponse
     private String     sales_product_description;
     @XmlElement(
             nillable = true)
-    private Double     classification_number;
+    private String     classification_number;
     @XmlElement(
             nillable = true)
     private String     classification_type;
@@ -416,12 +416,12 @@ public class SalesResponse
         this.sales_product_description = sales_product_description;
     }
 
-    public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(final Double classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }
