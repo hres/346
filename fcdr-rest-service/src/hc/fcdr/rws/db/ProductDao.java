@@ -1,7 +1,10 @@
 package hc.fcdr.rws.db;
 
+import static hc.fcdr.rws.util.DaoUtil.prepareStatement;
+
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -16,7 +19,9 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.except.NoRowsAffectedDAOException;
 import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.product.ProductClassificationData;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
@@ -1420,4 +1425,72 @@ public class ProductDao extends PgDao
 
         return data;
 	}
+
+	public ResponseGeneric getProductDeleteResponse(Integer id) throws DaoException, SQLException {
+		
+		
+		
+		
+		final String query_sales =
+                "delete from " + schema + "." + "sales where sales_product_id_fkey = ?";
+        final String  query_component =
+                "delete from " + schema + "." + "product_component where package_id IN (select package_id from "
+                		+schema+".package where package_product_id_fkey = ?)";
+
+        final String query_package =
+                "delete from " + schema + "." + "package where package_product_id_fkey = ?";     
+        final String query_product_classification =
+                "delete from " + schema + "." + "product_classification where product_classification_product_id_fkey = ?";   
+		final String query_product =
+                "delete from " + schema + "." + "product where product_id = ?";
+        
+        connection.setAutoCommit(false);
+        try{
+        	
+        	
+            final Integer deletedSales = (Integer) executeUpdateProductDao(query_sales, new Object[]
+            { id });
+        	
+            final Integer deletedComponents = (Integer) executeUpdateProductDao(query_component, new Object[]
+            { id });    	
+  
+            final Integer deletedPackages = (Integer) executeUpdateProductDao(query_package, new Object[]
+            { id });  
+            
+            final Integer deletedClassification = (Integer) executeUpdateProductDao(query_product_classification, new Object[]
+            { id });  
+            
+            final Integer deletedProduct = (Integer) executeUpdateProductDao(query_product, new Object[]
+            { id });  
+        }catch (final Exception e){
+        	
+        	 logger.error(e);
+             connection.rollback();
+             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        
+        connection.commit();
+
+        return new ResponseGeneric(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
+	}
+	
+    protected int executeUpdateProductDao(final String query, final Object[] values)
+            throws DaoException, SQLException
+    {
+    	
+    	System.out.println("called");
+        PreparedStatement preparedStatement = null;
+         int affectedRows = 0;
+         
+
+       
+            preparedStatement =
+                    prepareStatement(connection, query, true, values);
+            System.out.println(preparedStatement);
+           affectedRows = preparedStatement.executeUpdate();
+            
+        
+        return affectedRows;
+    }
 }

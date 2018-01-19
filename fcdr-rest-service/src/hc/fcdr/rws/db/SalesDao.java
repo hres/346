@@ -666,17 +666,17 @@ public class SalesDao extends PgDao
             final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
             { id });
 
-            connection.setAutoCommit(false);
+           
             if (deletedRow == 0)
                 return new SalesDeleteDataResponse(
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
-            connection.commit();
+           
         }
         catch (final Exception e)
         {
             logger.error(e);
-            connection.rollback();
+         
             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
 

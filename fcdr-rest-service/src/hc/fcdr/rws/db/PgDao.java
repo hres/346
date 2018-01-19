@@ -59,6 +59,7 @@ public class PgDao
 
         try
         {
+        	
             preparedStatement =
                     prepareStatement(connection, query, true, values);
             final int affectedRows = preparedStatement.executeUpdate();
@@ -78,16 +79,19 @@ public class PgDao
                             "Creating object failed, no generated key obtained.");
             }
             else if (query.startsWith("delete"))
-                return affectedRows;
-
+            {
+            	connection.commit(); 
+            return affectedRows;
+            }
             
         }
         catch (final SQLException e)
         {
             logger.error(e);
+          
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-
+       
         return key;
     }
 

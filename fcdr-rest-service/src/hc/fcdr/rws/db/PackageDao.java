@@ -110,7 +110,7 @@ public class PackageDao extends PgDao
         NftView resultSet = null;
 
         final String query =
-                "select  amount, amount_unit_of_measure, percentage_daily_value, component_name  from "
+                "select  amount, amount_unit_of_measure, percentage_daily_value, component_name,amount_per100g  from "
                         + schema + "." + "product_component pc INNER JOIN "
                         + schema + "."
                         + "component c on pc.component_id = c.component_id where package_id = ? and as_ppd_flag = ? order by nft_order";
@@ -304,7 +304,7 @@ public class PackageDao extends PgDao
         questionmarks =
                 (String) questionmarks.subSequence(0,
                         questionmarks.length() - 1);
-
+         Object o =null;
         String query =
                 SQL_INSERT.replaceFirst(TABLE_REGEX, schema + "." + "package");
         query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
@@ -314,11 +314,22 @@ public class PackageDao extends PgDao
                 (List<Object>) queryMap.get("package_insert_list");
 
         // Returns the sales_id upon successful insert.
-        final Object o = executeUpdate(query, packageInsertList.toArray());
+        try{
+        	connection.setAutoCommit(false);
+         o = executeUpdate(query, packageInsertList.toArray());
+        } catch (final SQLException e)
+        {
+            logger.error(e);
+          connection.rollback();
+            throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        
         final InsertPackageResponse insertPackageResponse =
                 new InsertPackageResponse(ResponseCodes.OK.getCode(),
                         ResponseCodes.OK.getMessage());
         insertPackageResponse.setId(o);
+        
+        connection.commit();
         return insertPackageResponse;
 
     }
@@ -424,9 +435,17 @@ public class PackageDao extends PgDao
                 (List<Object>) queryMap.get("package_update_list");
 
         executeUpdate(query, packageUpdateList.toArray());
+        
+        
+        
         final InsertPackageResponse insertPackageResponse =
                 new InsertPackageResponse(ResponseCodes.OK.getCode(),
                         ResponseCodes.OK.getMessage());
+  
+        
+        getNftUpdateResponse(new NftRequest(true, getNft(packageUpdateRequest.getPackage_id(), true).getNft(), packageUpdateRequest.getPackage_id()));
+        getNftUpdateResponse(new NftRequest(false, getNft(packageUpdateRequest.getPackage_id(), false).getNft(), packageUpdateRequest.getPackage_id()));
+
         return insertPackageResponse;
 
     }
@@ -787,12 +806,43 @@ public class PackageDao extends PgDao
             throws DaoException, SQLException
     {
 
+    	String per_serving_amount_place_holder = null;
+    	String per_serving_amount_unit_of_measure_place_holder = null;
+    	String per_serving_amount_in_grams_place_holder= null;
+
+
+    	String sql = null;
+    	if(nftRequest.getFlag() ==true){
+    	 sql = "select as_sold_per_serving_amount, as_sold_unit_of_measure, as_sold_per_serving_amount_in_grams "
+    			+ " from "+schema+".package where package_id =?";
+    	 per_serving_amount_place_holder = "as_sold_per_serving_amount";
+    	 per_serving_amount_unit_of_measure_place_holder = "as_sold_unit_of_measure";
+    	 per_serving_amount_in_grams_place_holder = "as_sold_per_serving_amount_in_grams";
+    	
+    	}else{
+        	 sql = "select as_prepared_per_serving_amount, as_prepared_unit_of_measure, as_prepared_per_serving_amount_in_grams "
+        			+ " from "+schema+".package where package_id =?";
+        	 
+        	 per_serving_amount_place_holder = "as_prepared_per_serving_amount";
+        	 per_serving_amount_unit_of_measure_place_holder = "as_prepared_unit_of_measure";
+        	 per_serving_amount_in_grams_place_holder = "as_prepared_per_serving_amount_in_grams";
+    	
+    	}
+    	ResultSet resultSet = null;
+    	Double PerServingAmount = null;
+    	String PerServingUnit = null;
+    	Double PerServingInGrams = null;
+    	
+    	 
+    	 System.out.println("Amount "+PerServingAmount + " Unit: "+PerServingUnit + " Grams: "+PerServingInGrams);
+    	
         final String query =
+
                 "insert into "
                         + schema + "."
                         + "product_component(component_id, package_id, amount,"
-                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
-                        + "select component_id, ?, ?, ?, ?, ? from " + schema
+                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag, amount_per100g) "
+                        + "select component_id, ?, ?, ?, ?, ?, ? from " + schema
                         + ".component " + "where component_id = ("
                         + "select component_id from " + schema + "."
                         + "component where component_name= ?)";
@@ -800,9 +850,17 @@ public class PackageDao extends PgDao
         try
         {
             connection.setAutoCommit(false);
-
+       	 resultSet = executeQuery(sql, new Object[]
+                 { nftRequest.getPackage_id() });
+     	
+     	 resultSet.next();
+     	 PerServingAmount = resultSet.getDouble(per_serving_amount_place_holder);
+     	 PerServingUnit = resultSet.getString(per_serving_amount_unit_of_measure_place_holder);
+     	 PerServingInGrams = resultSet.getDouble(per_serving_amount_in_grams_place_holder); 
+     	
             for (final NftModel element : nftRequest.getNft())
             {
+            	Double value = null;
                 final PreparedStatement preparedStatement =
                         connection.prepareStatement(query);
                 preparedStatement.setObject(1, nftRequest.getPackage_id());
@@ -810,7 +868,28 @@ public class PackageDao extends PgDao
                 preparedStatement.setObject(3, element.getUnit_of_measure());
                 preparedStatement.setObject(4, element.getDaily_value());
                 preparedStatement.setObject(5, nftRequest.getFlag());
-                preparedStatement.setObject(6, element.getName());
+             
+                
+                if(element.getAmount() != null){
+                	System.out.println("yes there is an amount: "+element.getAmount());
+                	if(PerServingInGrams != null && PerServingInGrams != 0.0 && PerServingInGrams !=0){
+                		
+                    	System.out.println("yes there is an amount per 100g: "+PerServingInGrams);
+                    	 value = (element.getAmount()/PerServingInGrams)*100;
+                    	System.out.println("the value set is : "+value);
+
+                		
+
+                	}else if((PerServingAmount != null && PerServingAmount != 0 && PerServingAmount != 0.0) &&(PerServingUnit.equals("g"))){
+                		value = (element.getAmount()/PerServingAmount)*100;
+                		
+                		
+                	}
+                }
+                
+                preparedStatement.setObject(6, value);
+                preparedStatement.setObject(7, element.getName());
+                System.out.println(preparedStatement);
                 preparedStatement.executeUpdate();
             }
 
@@ -822,7 +901,7 @@ public class PackageDao extends PgDao
             connection.rollback();
             e.printStackTrace();
 
-            return false;
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
 
         return true;
@@ -832,23 +911,60 @@ public class PackageDao extends PgDao
     private boolean updateNft(final NftRequest nftRequest, final String schema)
             throws DaoException, SQLException
     {
+    	
+    	String per_serving_amount_place_holder = null;
+    	String per_serving_amount_unit_of_measure_place_holder = null;
+    	String per_serving_amount_in_grams_place_holder= null;
+
+
+    	String sql = null;
+    	if(nftRequest.getFlag() ==true){
+    	 sql = "select as_sold_per_serving_amount, as_sold_unit_of_measure, as_sold_per_serving_amount_in_grams "
+    			+ " from "+schema+".package where package_id =?";
+    	 per_serving_amount_place_holder = "as_sold_per_serving_amount";
+    	 per_serving_amount_unit_of_measure_place_holder = "as_sold_unit_of_measure";
+    	 per_serving_amount_in_grams_place_holder = "as_sold_per_serving_amount_in_grams";
+    	
+    	}else{
+        	 sql = "select as_prepared_per_serving_amount, as_prepared_unit_of_measure, as_prepared_per_serving_amount_in_grams "
+        			+ " from "+schema+".package where package_id =?";
+        	 
+        	 per_serving_amount_place_holder = "as_prepared_per_serving_amount";
+        	 per_serving_amount_unit_of_measure_place_holder = "as_prepared_unit_of_measure";
+        	 per_serving_amount_in_grams_place_holder = "as_prepared_per_serving_amount_in_grams";
+    	
+    	}
+    	ResultSet resultSet = null;
+    	Double PerServingAmount = null;
+    	String PerServingUnit = null;
+    	Double PerServingInGrams = null;
 
         final String query =
                 "insert into "
                         + schema + "."
                         + "product_component(component_id, package_id, amount,"
-                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag) "
-                        + "select component_id, ?, ?, ?, ?, ? from " + schema
+                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag, amount_per100g) "
+                        + "select component_id, ?, ?, ?, ?, ?, ? from " + schema
                         + ".component " + "where component_id = ("
                         + "select component_id from " + schema + "."
                         + "component where component_name= ?)";
 
         try
         {
+        	
+            connection.setAutoCommit(false);
+       	 resultSet = executeQuery(sql, new Object[]
+                 { nftRequest.getPackage_id() });
+     	
+     	 resultSet.next();
+     	 PerServingAmount = resultSet.getDouble(per_serving_amount_place_holder);
+     	 PerServingUnit = resultSet.getString(per_serving_amount_unit_of_measure_place_holder);
+     	 PerServingInGrams = resultSet.getDouble(per_serving_amount_in_grams_place_holder); 
+     	
             for (final NftModel element : nftRequest.getNft())
             {
                 // ecuteInsertNft(element, nftRequest.getPackage_id(), nftRequest.getFlag(), schema);
-
+            	Double value = null;
                 final PreparedStatement preparedStatement =
                         connection.prepareStatement(query);
                 preparedStatement.setObject(1, nftRequest.getPackage_id());
@@ -856,16 +972,42 @@ public class PackageDao extends PgDao
                 preparedStatement.setObject(3, element.getUnit_of_measure());
                 preparedStatement.setObject(4, element.getDaily_value());
                 preparedStatement.setObject(5, nftRequest.getFlag());
-                preparedStatement.setObject(6, element.getName());
+                
+                
+                
+                
+                if(element.getAmount() != null){
+                	System.out.println("yes there is an amount: "+element.getAmount());
+                	if(PerServingInGrams != null && PerServingInGrams != 0.0 && PerServingInGrams !=0){
+                		
+                    	System.out.println("yes there is an amount per 100g: "+PerServingInGrams);
+                    	 value = (element.getAmount()/PerServingInGrams)*100;
+                    	System.out.println("the value set is : "+value);
+
+                		
+
+                	}else if((PerServingAmount != null && PerServingAmount != 0 && PerServingAmount != 0.0) &&(PerServingUnit.equals("g"))){
+                		value = (element.getAmount()/PerServingAmount)*100;
+                		
+                		
+                	}
+                }
+                
+                
+                
+                preparedStatement.setObject(6, value);
+                preparedStatement.setObject(7, element.getName());
                 preparedStatement.executeUpdate();
             }
+            connection.commit();
         }
         catch (final SQLException e)
         {
             // TODO Auto-generated catch block
+        	connection.rollback();
             e.printStackTrace();
 
-            return false;
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
         }
         return true;
 
@@ -912,9 +1054,12 @@ public class PackageDao extends PgDao
                         resultSet.wasNull()
                                 ? null
                                 : resultSet.getDouble("percentage_daily_value");
+                
+                Double amount_per100g =  resultSet.getDouble("amount_per100g");
+                amount_per100g = resultSet.wasNull()? null: resultSet.getDouble("amount_per100g");
                 // String name, Double amount, String unit_of_measure, Double daily_value
                 nftList.getNft().add(new NftModel(name, amount,
-                        amount_unit_of_measure, percentage_daily_value));
+                        amount_unit_of_measure, percentage_daily_value, amount_per100g));
             }
 
         }
@@ -964,7 +1109,7 @@ public class PackageDao extends PgDao
     public ResponseGeneric getLabelDeleteResponse(final Integer id)
             throws SQLException, IOException, Exception
     {
-    	System.out.println("hjello");
+
         final String  delete_components =
                 "delete from " + schema + "." + "product_component where package_id = ?";
 
@@ -975,7 +1120,7 @@ public class PackageDao extends PgDao
         	{
 
         	 final Integer deletedRowdelete_components = (Integer)  executeUpdate(delete_components, new Object[]{ id });
-        	 System.out.println("hjello + ");
+
             final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]{ id });
             
 
