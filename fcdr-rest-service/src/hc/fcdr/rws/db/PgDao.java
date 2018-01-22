@@ -80,7 +80,7 @@ public class PgDao
             }
             else if (query.startsWith("delete"))
             {
-            	connection.commit(); 
+            	//connection.commit(); 
             return affectedRows;
             }
             
@@ -88,7 +88,7 @@ public class PgDao
         catch (final SQLException e)
         {
             logger.error(e);
-          
+            
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
         }
        

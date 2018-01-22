@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
@@ -22,6 +23,7 @@ import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductDataResponse;
 import hc.fcdr.rws.model.product.ProductInsertDataResponse;
@@ -33,6 +35,7 @@ import hc.fcdr.rws.model.product.ProductSalesLabelDataResponse;
 import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.product.RelinkRecord;
 import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ProductService")
@@ -413,4 +416,52 @@ public class ProductService extends Application
     {
         return "<operations>GET, PUT, POST, DELETE</operations>";
     }
+    
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") final Integer id)
+    {
+    	ResponseGeneric entity = new ResponseGeneric();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductDeleteResponse(id);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+
+    @POST
+    @Path("/relinkRecord")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response relink(final RelinkRecord relinkRecord)
+            throws SQLException, IOException, Exception
+    {
+    	ResponseGeneric entity = new ResponseGeneric();
+
+        try
+        {
+            if (productDao != null)
+                entity =
+                        productDao
+                                .relinkRecordResponse(relinkRecord);
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    
 }

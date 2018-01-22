@@ -5,6 +5,7 @@ public class ResponseGeneric
 
     private int    status;
     private String message;
+    private Integer record_id;
 
     public ResponseGeneric()
     {
@@ -18,8 +19,18 @@ public class ResponseGeneric
         this.status = status;
         this.message = message;
     }
+    
+    
 
-    public int getStatus()
+    public Integer getRecord_id() {
+		return record_id;
+	}
+
+	public void setRecord_id(Integer record_id) {
+		this.record_id = record_id;
+	}
+
+	public int getStatus()
     {
         return status;
     }

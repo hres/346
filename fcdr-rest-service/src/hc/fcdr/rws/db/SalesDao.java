@@ -661,8 +661,6 @@ public class SalesDao extends PgDao
         final String sql =
                 "delete from " + schema + "." + "sales where sales_id = ?";
 
-        try
-        {
             final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
             { id });
 
@@ -672,14 +670,7 @@ public class SalesDao extends PgDao
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
            
-        }
-        catch (final Exception e)
-        {
-            logger.error(e);
-         
-            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
-        }
-
+       
         return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }

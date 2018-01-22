@@ -43,6 +43,7 @@ import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.product.RelinkRecord;
 import hc.fcdr.rws.model.sales.SalesYearsData;
 import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
@@ -1493,4 +1494,48 @@ public class ProductDao extends PgDao
         
         return affectedRows;
     }
+
+	public ResponseGeneric relinkRecordResponse(RelinkRecord relinkRecord) throws DaoException, SQLException {
+		// TODO Auto-generated method stub
+		if(relinkRecord.getProduct_id() == null || relinkRecord.getRecord_id() == null || relinkRecord.getType() ==null){
+			
+			return new ResponseGeneric(ResponseCodes.BAD_REQUEST.getCode(), ResponseCodes.BAD_REQUEST.getMessage());
+		}
+		
+		Integer id;
+			if(relinkRecord.getType().equals("sales")){
+				
+				String getId = "select sales_product_id_fkey from "+schema+"."+"sales where sales_id = ?";
+				ResultSet resultSet = executeQuery(getId,new Object[] {relinkRecord.getRecord_id()} );
+				resultSet.next();
+	             id = resultSet.getInt("sales_product_id_fkey");
+	            
+				String sql = "update "+schema+"."+"sales set sales_product_id_fkey = ? where sales_id = ?";
+				executeUpdate(sql, new Object[] { relinkRecord.getProduct_id(), relinkRecord.getRecord_id()});
+				
+			           
+				
+			}else if(relinkRecord.getType().equals("package")){
+				String getId = "select package_product_id_fkey from "+schema+"."+"package where package_id = ?"; 
+				ResultSet resultSet =executeQuery(getId,new Object[] {relinkRecord.getRecord_id()} );
+				resultSet.next();
+	             id = resultSet.getInt("package_product_id_fkey");
+				String sql = "update "+schema+"."+"package set package_product_id_fkey = ? where package_id = ?";
+				executeUpdate(sql, new Object[] { relinkRecord.getProduct_id(), relinkRecord.getRecord_id() });
+				
+
+				
+			}else{
+				
+				return new ResponseGeneric(ResponseCodes.BAD_REQUEST.getCode(), ResponseCodes.BAD_REQUEST.getMessage());
+
+			}
+			
+		
+	 ResponseGeneric response = new ResponseGeneric(ResponseCodes.OK.getCode(),
+	                ResponseCodes.OK.getMessage());
+	 				response.setRecord_id(id);
+	 
+	 return response;
+	}
 }
