@@ -22,6 +22,9 @@ import javax.ws.rs.core.Response;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
+import hc.fcdr.rws.db.ImportMarketShareDao;
+import hc.fcdr.rws.db.ImportSalesDao;
+import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
 import hc.fcdr.rws.importer.ImportStatistics;
@@ -44,6 +47,9 @@ public class ImportService extends Application
     private final String REPORT_FILE           =
             REPORT_DIRECTORY_ROOT + "fcdrSalesImportReport.pdf";
 
+    static ImportMarketShareDao importSalesDao = null;
+
+
     @PostConstruct
     public static void initialize()
     {
@@ -57,6 +63,11 @@ public class ImportService extends Application
                 loader =
                         new CSVLoader(pgConnectionPool.getConnection(),
                                 ContextManager.getJndiValue("SCHEMA"));
+                
+
+                importSalesDao =
+                        new ImportMarketShareDao(pgConnectionPool.getConnection(),
+                        		ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -235,4 +246,17 @@ public class ImportService extends Application
         return true;
     }
 
+    
+    @POST
+    @Path("/importMarketShare")
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.CHARSET_PARAMETER)
+    public Response getImportMarketShare()
+            throws SQLException, IOException, Exception
+    {
+    	
+    	importSalesDao.testImport("/tmp/otherSales.csv");
+    	
+    	return null;
+    }
 }

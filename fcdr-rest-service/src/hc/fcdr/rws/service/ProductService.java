@@ -38,10 +38,18 @@ import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.product.RelinkRecord;
 import hc.fcdr.rws.util.ContextManager;
 
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import java.util.concurrent.Executor;
+import org.glassfish.jersey.server.ManagedAsync;
+
+
 @Path("/ProductService")
 public class ProductService extends Application
 {
     static ProductDao productDao = null;
+    private Executor executor;
+    
 
     @PostConstruct
     public static void initialize()
@@ -464,4 +472,34 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
     
+    
+    @GET
+    @ManagedAsync
+    @Path("/async/{id}")
+    public void asyncGet(@PathParam("id") final int id, @Suspended final AsyncResponse asyncResponse) {
+       
+        final Boolean RETURN_FIRST_RECORD_FOUND = false;
+
+
+        
+        
+        new Thread() {
+            public void run() {
+                ProductClassificationDataResponse entity =
+                        new ProductClassificationDataResponse();
+            	try{
+            	entity = productDao.getProductClassificationResponse(id,
+                        RETURN_FIRST_RECORD_FOUND);
+            	}catch(Exception ex){
+            		 asyncResponse.resume(ex);
+            		 return;
+            	}
+               Response response = Response.ok(entity,
+                                               MediaType.APPLICATION_JSON)
+                                           .build();
+               asyncResponse.resume(response);
+            }
+         }.start();
+      }
+
 }
