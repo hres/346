@@ -146,6 +146,10 @@ public class SalesInsertRequest
             final String classification_type, final String sales_comment,
             final String sales_collection_date, final Integer number_of_units,
             final String edited_by, final Integer product_id)
+    
+    
+    
+    
     {
         super();
         this.sales_description = sales_description;

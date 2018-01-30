@@ -7,6 +7,7 @@ public class UpdateProductFields {
 	private Integer cluster_number;
 	private String product_manufacturer;
 	private String classification_number;
+	private Integer product_id;
 	
 	
 	public UpdateProductFields() {
@@ -16,16 +17,28 @@ public class UpdateProductFields {
 		this.cluster_number = null;
 		this.product_manufacturer = null;
 		this.classification_number = null;
+		this.product_id = null;
 	} 
 	
 	public UpdateProductFields(String product_description, String product_brand, Integer cluster_number,
-			String product_manufacturer, String classification_number) {
+			String product_manufacturer, String classification_number, Integer product_id) {
 		super();
 		this.product_description = product_description;
 		this.product_brand = product_brand;
 		this.cluster_number = cluster_number;
 		this.product_manufacturer = product_manufacturer;
 		this.classification_number = classification_number;
+		this.product_id = product_id;
+	}
+
+	
+	
+	public Integer getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(Integer product_id) {
+		this.product_id = product_id;
 	}
 
 	public String getProduct_description() {
