@@ -733,7 +733,7 @@ public final class DaoUtil
 
         labelInsertList.add(request.getEdited_by());
 
-        if (request.getClassification_number() != null)
+        if (!request.getClassification_number().isEmpty())
             queryMap.put("package_classification_number",
                     request.getClassification_number());
 
@@ -1000,7 +1000,7 @@ public final class DaoUtil
 
         labelUpdateList.add(request.getEdited_by());
 
-        if (request.getClassification_number() != null)
+        if (!request.getClassification_number().isEmpty())
             queryMap.put("package_classification_number",
                     request.getClassification_number());
 
@@ -1089,10 +1089,10 @@ public final class DaoUtil
 
         if (request.cluster_number != null)
         {
-            if (isType(request.cluster_number.toString(), "double"))
+            if (isType(request.cluster_number.toString(), "double") || isType(request.cluster_number.toString(), "int"))
             {
-                if (request.cluster_number > 0.0)
-                    queryMap.put("cluster_number", request.cluster_number);
+                //if (request.cluster_number > 0.0)
+                    queryMap.put("cluster_number", request.cluster_number.intValue());
             }
             else
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
@@ -1105,7 +1105,7 @@ public final class DaoUtil
         if (!request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
-        if (request.classification_number != null)
+        if (!request.classification_number.isEmpty())
         {
                     queryMap.put("classification_number",
                             request.classification_number);
@@ -1192,7 +1192,7 @@ public final class DaoUtil
         productInsertList.add(now);
         productInsertList.add(now);
 
-        if (request.getClassification_number() != null)
+        if (!request.getClassification_number().isEmpty())
                 queryMap.put("classification_number",
                         request.getClassification_number());
 
@@ -1672,7 +1672,7 @@ public final class DaoUtil
                     request.sales_product_description);
         salesInsertList.add(request.sales_product_description);
 
-        if (request.classification_number != null)
+        if (!request.classification_number.isEmpty())
                 queryMap.put("classification_number",
                         request.classification_number);
          
@@ -2031,7 +2031,7 @@ public final class DaoUtil
                     request.sales_product_description);
         salesUpdateList.add(request.sales_product_description);
 
-        if (request.classification_number != null)
+        if (!request.classification_number.isEmpty())
                 queryMap.put("classification_number",
                         request.classification_number);
 
@@ -2513,7 +2513,7 @@ public final class DaoUtil
         if (!request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
-        if (request.classification_number != null)
+        if (!request.classification_number.isEmpty())
         {
 
                     queryMap.put("classification_number",

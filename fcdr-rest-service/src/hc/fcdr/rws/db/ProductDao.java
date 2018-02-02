@@ -341,7 +341,7 @@ public class ProductDao extends PgDao
 
             if (str0.equals("cluster_number")
                     || str0.equals("cnf_code")
-                    || str0.equals("classification_number"))
+                   )
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
             if (count == 0)

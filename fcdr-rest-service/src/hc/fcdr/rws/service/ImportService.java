@@ -255,7 +255,8 @@ public class ImportService extends Application
             throws SQLException, IOException, Exception
     {
     	
-    	importSalesDao.testImport("/tmp/otherSales.csv");
+    	//importSalesDao.testImport("/tmp/otherSales.csv");
+    	importSalesDao.testImport("/tmp/bigFile.csv");
     	
     	return null;
     }

@@ -350,7 +350,7 @@ public class ImportMarketShare {
                 && ((kilo_volume != null) && (kilo_volume > 0))
                 && ((sales_source != null) && !sales_source.isEmpty())
                 && ((sales_year != null) && (sales_year > 1900))
-                && (sales_collection_date != null));
+                && (sales_collection_date != null) && sales_collection_date.toString().length() > 0);
     }
 	
 	

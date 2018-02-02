@@ -37,6 +37,7 @@ public class PgDao
             preparedStatement =
                     prepareStatement(connection, query, false, values);
           
+            //System.out.println("the query is"+preparedStatement);
             resultSet = preparedStatement.executeQuery();
 
         }
@@ -57,14 +58,14 @@ public class PgDao
         PreparedStatement preparedStatement = null;
         ResultSet generatedKeys = null;
         if(values!= null){
-        System.out.println(values[1] + "est la date");
+      //  System.out.println(values[1] + "est la date");
         }
         try
         {
         	
             preparedStatement =
                     prepareStatement(connection, query, true, values);
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             final int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0 && (query.startsWith("insert") || query.startsWith("update") ||query.startsWith("COPY")))
