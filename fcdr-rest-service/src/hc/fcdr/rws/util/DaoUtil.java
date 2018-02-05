@@ -1089,13 +1089,9 @@ public final class DaoUtil
 
         if (request.cluster_number != null)
         {
-            if (isType(request.cluster_number.toString(), "double") || isType(request.cluster_number.toString(), "int"))
-            {
-                //if (request.cluster_number > 0.0)
+        			if (request.cluster_number > 0.0)
                     queryMap.put("cluster_number", request.cluster_number.intValue());
-            }
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
+        
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);

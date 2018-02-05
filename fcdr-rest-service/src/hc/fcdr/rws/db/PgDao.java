@@ -37,7 +37,7 @@ public class PgDao
             preparedStatement =
                     prepareStatement(connection, query, false, values);
           
-            //System.out.println("the query is"+preparedStatement);
+            System.out.println("the query is"+preparedStatement);
             resultSet = preparedStatement.executeQuery();
 
         }

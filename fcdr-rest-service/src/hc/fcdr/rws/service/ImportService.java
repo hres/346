@@ -8,17 +8,22 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.Principal;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
@@ -251,12 +256,18 @@ public class ImportService extends Application
     @Path("/importMarketShare")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.CHARSET_PARAMETER)
-    public Response getImportMarketShare()
+    public Response getImportMarketShare(@Context HttpServletRequest requestContext, @Context SecurityContext context)
             throws SQLException, IOException, Exception
     {
+    	   String ipAddressRequestCameFrom = requestContext.getRemoteAddr();
+    	   System.out.println("ip: "+ipAddressRequestCameFrom);
+    	   //Also if security is enabled
+//    	   Principal principal = context.getUserPrincipal();
+//    	   String userName = principal.getName();
     	
-    	//importSalesDao.testImport("/tmp/otherSales.csv");
+//    	importSalesDao.testImport("/tmp/otherSales.csv");
     	importSalesDao.testImport("/tmp/bigFile.csv");
+    	//importSalesDao.testImport("/tmp/sales16.csv");
     	
     	return null;
     }

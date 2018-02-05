@@ -66,7 +66,9 @@ public class ImportMarketShareDao extends PgDao {
 
 
 		final StopWatch stopWatch = new StopWatch();
+		
 		stopWatch.start();
+		System.out.println("Program has started");
 
 
 		start(csvFile);
@@ -93,21 +95,67 @@ public class ImportMarketShareDao extends PgDao {
 			resultSet = executeQuery(sql, null);
 
 			while (resultSet.next()) {
-
+				Double dollar_share = resultSet.getDouble("dollar_share");
+				dollar_share = resultSet.wasNull()?null:resultSet.getDouble("dollar_share");
+			    Double dollar_rank = resultSet.getDouble("dollar_rank");
+			    dollar_rank  = resultSet.wasNull()?null:resultSet.getDouble("dollar_rank");
+			    Double dollar_volume = resultSet.getDouble("dollar_volume");
+			    dollar_volume = resultSet.wasNull()?null:resultSet.getDouble("dollar_volume");
+			    Double dollar_volume_percentage_change = resultSet.getDouble(
+		                "dollar_volume_percentage_change");
+			    dollar_volume_percentage_change = resultSet.getDouble(
+		                "dollar_volume_percentage_change");
+			    
+			    Double kilo_volume = resultSet.getDouble("kilo_volume");
+			    kilo_volume = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume");
+			    
+			    Double kilo_share = resultSet.getDouble("kilo_share");
+			    kilo_share  = resultSet.wasNull()?null:resultSet.getDouble("kilo_share");
+		        Double kilo_volume_percentage_change = resultSet.getDouble(
+		                "kilo_volume_percentage_change");
+		        kilo_volume_percentage_change = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume_percentage_change");
+		        Double average_ac_dist = resultSet.getDouble("average_ac_dist");
+		        average_ac_dist = resultSet.wasNull()?null:resultSet.getDouble("average_ac_dist");
+		        Double average_retail_price = resultSet.getDouble(
+		                "average_retail_price");
+		        average_retail_price = resultSet.wasNull()?null:resultSet.getDouble("average_retail_price");
+		        
+		        
+		        Boolean control_label_flag = resultSet.getBoolean(
+		                "control_label_flag");
+		        control_label_flag = resultSet.wasNull()?null:resultSet.getBoolean("control_label_flag");
+		        Double kilo_volume_total = resultSet.getDouble("kilo_volume_total");
+		        kilo_volume_total = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume_total");
+		        Double kilo_rank = resultSet.getDouble("kilo_rank");
+		        kilo_rank = resultSet.wasNull()?null:resultSet.getDouble("kilo_rank");
+		        
+		        Double dollar_volume_total = resultSet.getDouble(
+		                "dollar_volume_total");
+		        
+		        
+		        dollar_volume_total = resultSet.getDouble("dollar_volume_total");
+		        dollar_volume_total = resultSet.wasNull()?null:resultSet.getDouble("dollar_volume_total");
+		        Integer cluster_number = resultSet.getInt("cluster_number");
+		        cluster_number = resultSet.wasNull()?null:resultSet.getInt("cluster_number");
+		        
+		        Double product_grouping = resultSet.getDouble("product_grouping");
+		        product_grouping = resultSet.wasNull()?null:resultSet.getDouble("product_grouping");
+		        
+		        Integer sales_year = resultSet.getInt("sales_year");
+		        sales_year = resultSet.wasNull()?null:resultSet.getInt("sales_year");
 				importMarketShare = new ImportMarketShare(
 
 						resultSet.getDouble("sales_product_id_fkey"), resultSet.getString("sales_upc"),
 						resultSet.getString("sales_description"), resultSet.getString("sales_brand"),
-						resultSet.getString("sales_manufacturer"), resultSet.getDouble("dollar_rank"),
-						resultSet.getDouble("dollar_volume"), resultSet.getDouble("dollar_share"),
-						resultSet.getDouble("dollar_volume_percentage_change"), resultSet.getDouble("kilo_volume"),
-						resultSet.getDouble("kilo_share"), resultSet.getDouble("kilo_volume_percentage_change"),
-						resultSet.getDouble("average_ac_dist"), resultSet.getDouble("average_retail_price"),
+						resultSet.getString("sales_manufacturer"), dollar_rank,
+						dollar_volume, dollar_share,dollar_volume_percentage_change, 
+						kilo_volume,kilo_share, kilo_volume_percentage_change,
+						average_ac_dist, average_retail_price,
 						resultSet.getString("sales_source"), resultSet.getString("nielsen_category"),
-						resultSet.getDate("sales_collection_date"), resultSet.getInt("sales_year"),
-						resultSet.getBoolean("control_label_flag"), resultSet.getDouble("kilo_volume_total"),
-						resultSet.getDouble("kilo_rank"), resultSet.getDouble("dollar_volume_total"),
-						resultSet.getInt("cluster_number"), resultSet.getDouble("product_grouping"),
+						resultSet.getDate("sales_collection_date"), sales_year,
+						control_label_flag, kilo_volume_total,
+						kilo_rank, dollar_volume_total,
+						cluster_number, product_grouping,
 						resultSet.getString("sales_product_description"), resultSet.getString("classification_number"),
 						resultSet.getString("classification_type"), resultSet.getString("sales_comment")
 
@@ -159,37 +207,86 @@ public class ImportMarketShareDao extends PgDao {
 		try {
 
 			resultSet = executeQuery(sql, null);
+			int count = 0;
 			while (resultSet.next()) {
-
+				Double dollar_share = resultSet.getDouble("dollar_share");
+				dollar_share = resultSet.wasNull()?null:resultSet.getDouble("dollar_share");
+			    Double dollar_rank = resultSet.getDouble("dollar_rank");
+			    dollar_rank  = resultSet.wasNull()?null:resultSet.getDouble("dollar_rank");
+			    Double dollar_volume = resultSet.getDouble("dollar_volume");
+			    dollar_volume = resultSet.wasNull()?null:resultSet.getDouble("dollar_volume");
+			    Double dollar_volume_percentage_change = resultSet.getDouble(
+		                "dollar_volume_percentage_change");
+			    
+			    
+			    dollar_volume_percentage_change = resultSet.wasNull()?null:resultSet.getDouble("dollar_volume_percentage_change");
+			    
+			    Double kilo_volume = resultSet.getDouble("kilo_volume");
+			    kilo_volume = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume");
+			    
+			    Double kilo_share = resultSet.getDouble("kilo_share");
+			    kilo_share  = resultSet.wasNull()?null:resultSet.getDouble("kilo_share");
+		        Double kilo_volume_percentage_change = resultSet.getDouble(
+		                "kilo_volume_percentage_change");
+		        kilo_volume_percentage_change = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume_percentage_change");
+		        Double average_ac_dist = resultSet.getDouble("average_ac_dist");
+		        average_ac_dist = resultSet.wasNull()?null:resultSet.getDouble("average_ac_dist");
+		        Double average_retail_price = resultSet.getDouble(
+		                "average_retail_price");
+		        average_retail_price = resultSet.wasNull()?null:resultSet.getDouble("average_retail_price");
+		        
+		        
+		        Boolean control_label_flag = resultSet.getBoolean(
+		                "control_label_flag");
+		        control_label_flag = resultSet.wasNull()?null:resultSet.getBoolean("control_label_flag");
+		        Double kilo_volume_total = resultSet.getDouble("kilo_volume_total");
+		        kilo_volume_total = resultSet.wasNull()?null:resultSet.getDouble("kilo_volume_total");
+		        Double kilo_rank = resultSet.getDouble("kilo_rank");
+		        kilo_rank = resultSet.wasNull()?null:resultSet.getDouble("kilo_rank");
+		        
+		        Double dollar_volume_total = resultSet.getDouble(
+		                "dollar_volume_total");
+		        
+		        
+		        dollar_volume_total = resultSet.getDouble("dollar_volume_total");
+		        dollar_volume_total = resultSet.wasNull()?null:resultSet.getDouble("dollar_volume_total");
+		        Integer cluster_number = resultSet.getInt("cluster_number");
+		        cluster_number = resultSet.wasNull()?null:resultSet.getInt("cluster_number");
+		        
+		        Double product_grouping = resultSet.getDouble("product_grouping");
+		        product_grouping = resultSet.wasNull()?null:resultSet.getDouble("product_grouping");
+		        
+		        Integer sales_year = resultSet.getInt("sales_year");
+		        sales_year = resultSet.wasNull()?null:resultSet.getInt("sales_year");
+		        
 				importMarketShare = new ImportMarketShare(
 
 						resultSet.getDouble("record_id"), resultSet.getString("sales_upc"),
 						resultSet.getString("sales_description"), resultSet.getString("sales_brand"),
-						resultSet.getString("sales_manufacturer"), resultSet.getDouble("dollar_rank"),
-						resultSet.getDouble("dollar_volume"), resultSet.getDouble("dollar_share"),
-						resultSet.getDouble("dollar_volume_percentage_change"), resultSet.getDouble("kilo_volume"),
-						resultSet.getDouble("kilo_share"), resultSet.getDouble("kilo_volume_percentage_change"),
-						resultSet.getDouble("average_ac_dist"), resultSet.getDouble("average_retail_price"),
+						resultSet.getString("sales_manufacturer"), dollar_rank,
+						dollar_volume, dollar_share,dollar_volume_percentage_change, 
+						kilo_volume,kilo_share, kilo_volume_percentage_change,
+						average_ac_dist, average_retail_price,
 						resultSet.getString("sales_source"), resultSet.getString("nielsen_category"),
-						resultSet.getDate("sales_collection_date"), resultSet.getInt("sales_year"),
-						resultSet.getBoolean("control_label_flag"), resultSet.getDouble("kilo_volume_total"),
-						resultSet.getDouble("kilo_rank"), resultSet.getDouble("dollar_volume_total"),
-						resultSet.getInt("cluster_number"), resultSet.getDouble("product_grouping"),
+						resultSet.getDate("sales_collection_date"), sales_year,
+						control_label_flag, kilo_volume_total,
+						kilo_rank, dollar_volume_total,
+						cluster_number, product_grouping,
 						resultSet.getString("sales_product_description"), resultSet.getString("classification_number"),
 						resultSet.getString("classification_type"), resultSet.getString("sales_comment")
 
 				);
 		
-				String sb = importMarketShare.getSales_upc() + importMarketShare.getKilo_volume() +importMarketShare.getSales_description()+resultSet.getDate("sales_collection_date").toString();
-
+				
 
 				if (importMarketShare.isValidRecord()) {
 					
+					String sb = importMarketShare.getSales_upc() + importMarketShare.getKilo_volume() +importMarketShare.getSales_description()+resultSet.getDate("sales_collection_date").toString();
 
 					if (data.containsKey(sb) || existingSales.containsKey(sb)) {
 					  duplicatesRecords.put(importMarketShare.getItem_id(), importMarketShare.getSales_description());
 					} else {
-
+						System.out.println("UPC: "+importMarketShare.getSales_upc() +" count "+(++count));
 						
 						List<ImportMarketShare> item = new ArrayList<>();
 						item.add(importMarketShare);
@@ -247,7 +344,7 @@ public class ImportMarketShareDao extends PgDao {
 
 			Entry<String, List<ImportMarketShare>> entry = it.next();
 
-
+			
 			List<SalesInsertRequest> list = new ArrayList<SalesInsertRequest>();
 
 
@@ -265,7 +362,7 @@ public class ImportMarketShareDao extends PgDao {
 							element.getAverage_ac_dist(), element.getAverage_retail_price(), element.getSales_source(),
 							element.getNielsen_category(), element.getsales_year(), element.getControl_label_flag(),
 							element.getKilo_volume_total(), element.getKilo_rank(), element.getDollar_volume_total(),
-							(double) element.getCluster_number(), element.getProduct_grouping(),
+							element.getCluster_number()!=null?(double) element.getCluster_number():null, element.getProduct_grouping(),
 							element.getProduct_description(),
 
 							element.getClassification_number(), element.getClassification_type(),
@@ -314,24 +411,24 @@ public class ImportMarketShareDao extends PgDao {
 				preparedStatement.setString(2, value.getSales_description());
 				preparedStatement.setString(3, value.getSales_brand());
 				preparedStatement.setString(4, value.getSales_manufacturer());
-				preparedStatement.setDouble(5, value.getDollar_rank());
-				preparedStatement.setDouble(6, value.getDollar_volume());
-				preparedStatement.setDouble(7, value.getDollar_share());
-				preparedStatement.setDouble(8, value.getDollar_volume_percentage_change());
-				preparedStatement.setDouble(9, value.getKilo_volume());
-				preparedStatement.setDouble(10, value.getKilo_share());
-				preparedStatement.setDouble(11, value.getKilo_volume_percentage_change());
-				preparedStatement.setDouble(12, value.getAverage_ac_dist());
-				preparedStatement.setDouble(13, value.getAverage_retail_price());
+				preparedStatement.setObject(5, value.getDollar_rank());
+				preparedStatement.setObject(6, value.getDollar_volume());
+				preparedStatement.setObject(7, value.getDollar_share());
+				preparedStatement.setObject(8, value.getDollar_volume_percentage_change());
+				preparedStatement.setObject(9, value.getKilo_volume());
+				preparedStatement.setObject(10, value.getKilo_share());
+				preparedStatement.setObject(11, value.getKilo_volume_percentage_change());
+				preparedStatement.setObject(12, value.getAverage_ac_dist());
+				preparedStatement.setObject(13, value.getAverage_retail_price());
 				preparedStatement.setString(14, value.getSales_source());
 				preparedStatement.setString(15, value.getNielsen_category());
-				preparedStatement.setInt(16, value.getSales_year());
+				preparedStatement.setObject(16, value.getSales_year());
 				preparedStatement.setBoolean(17, value.getControl_label_flag());
-				preparedStatement.setDouble(18, value.getKilo_volume_total());
-				preparedStatement.setDouble(19, value.getKilo_volume_rank());
-				preparedStatement.setDouble(20, value.getDollar_volume_total());
-				preparedStatement.setDouble(21, value.getCluster_number());
-				preparedStatement.setDouble(22, value.getProduct_grouping());
+				preparedStatement.setObject(18, value.getKilo_volume_total());
+				preparedStatement.setObject(19, value.getKilo_volume_rank());
+				preparedStatement.setObject(20, value.getDollar_volume_total());
+				preparedStatement.setObject(21, value.getCluster_number());
+				preparedStatement.setObject(22, value.getProduct_grouping());
 				preparedStatement.setString(23, value.getClassification_number());
 				preparedStatement.setString(24, value.getClassification_type());
 				preparedStatement.setString(25, value.getSales_comment());
@@ -605,13 +702,13 @@ public class ImportMarketShareDao extends PgDao {
 			if (entry.getValue().size() > 1) {
 				
 				//TODO need to implement this case 
-				
+				insertRecordByGrouping(v);
 				
 				
 				it.remove();
 
 			} else {
-				if (v.get(0).getProduct_grouping() > 0) {
+				if (v.get(0).getProduct_grouping() != null) {
 						if (salesWithGrouping.containsKey(v.get(0).getProduct_grouping())) {
 							// append to object
 							salesWithGrouping.get(v.get(0).getProduct_grouping()).add(v.get(0));
@@ -671,7 +768,7 @@ public class ImportMarketShareDao extends PgDao {
 				v.get(0).getProduct_description().length()>0?v.get(0).getProduct_description():v.get(0).getSales_description(),
 				null,
 				null,
-				v.get(0).getCluster_number().doubleValue(),
+				v.get(0).getCluster_number()!=null?v.get(0).getCluster_number().doubleValue():null,
 				null,
 				null, 
 				v.get(0).getClassification_number(),
@@ -706,7 +803,7 @@ public class ImportMarketShareDao extends PgDao {
 					element.getAverage_ac_dist(), element.getAverage_retail_price(), element.getSales_source(),
 					element.getNielsen_category(), element.getsales_year(), element.getControl_label_flag(),
 					element.getKilo_volume_total(), element.getKilo_rank(), element.getDollar_volume_total(),
-					(double) element.getCluster_number(), element.getProduct_grouping(),
+					element.getCluster_number() !=null?(double) element.getCluster_number():null, element.getProduct_grouping(),
 					element.getProduct_description(),
 
 					element.getClassification_number(), element.getClassification_type(),
@@ -748,7 +845,7 @@ public class ImportMarketShareDao extends PgDao {
 					v.get(0).getProduct_description().length()>0?v.get(0).getProduct_description():v.get(0).getSales_description(),
 					null,
 					null,
-					v.get(0).getCluster_number().doubleValue(),
+					v.get(0).getCluster_number() != null?v.get(0).getCluster_number().doubleValue():null,
 					null,
 					null, 
 					v.get(0).getClassification_number(),
@@ -800,9 +897,9 @@ public class ImportMarketShareDao extends PgDao {
 				element.getAverage_ac_dist(), element.getAverage_retail_price(), element.getSales_source(),
 				element.getNielsen_category(), element.getsales_year(), element.getControl_label_flag(),
 				element.getKilo_volume_total(), element.getKilo_rank(), element.getDollar_volume_total(),
-				(double) element.getCluster_number(), element.getProduct_grouping(),
-				element.getProduct_description(),
-
+				element.getCluster_number()!=null?(double) element.getCluster_number():null, 
+				element.getProduct_grouping(),element.getProduct_description(),
+			
 				element.getClassification_number(), element.getClassification_type(),
 				element.getSales_comment(), element.getSales_collection_date().toString(),
 				null, null, key)
@@ -858,30 +955,30 @@ public class ImportMarketShareDao extends PgDao {
 				preparedStatement.setString(2, value.getSales_description());
 				preparedStatement.setString(3, value.getSales_brand());
 				preparedStatement.setString(4, value.getSales_manufacturer());
-				preparedStatement.setDouble(5, value.getDollar_rank());
-				preparedStatement.setDouble(6, value.getDollar_volume());
-				preparedStatement.setDouble(7, value.getDollar_share());
-				preparedStatement.setDouble(8, value.getDollar_volume_percentage_change());
-				preparedStatement.setDouble(9, value.getKilo_volume());
-				preparedStatement.setDouble(10, value.getKilo_share());
-				preparedStatement.setDouble(11, value.getKilo_volume_percentage_change());
-				preparedStatement.setDouble(12, value.getAverage_ac_dist());
-				preparedStatement.setDouble(13, value.getAverage_retail_price());
+				preparedStatement.setObject(5, value.getDollar_rank());
+				preparedStatement.setObject(6, value.getDollar_volume());
+				preparedStatement.setObject(7, value.getDollar_share());
+				preparedStatement.setObject(8, value.getDollar_volume_percentage_change());
+				preparedStatement.setObject(9, value.getKilo_volume());
+				preparedStatement.setObject(10, value.getKilo_share());
+				preparedStatement.setObject(11, value.getKilo_volume_percentage_change());
+				preparedStatement.setObject(12, value.getAverage_ac_dist());
+				preparedStatement.setObject(13, value.getAverage_retail_price());
 				preparedStatement.setString(14, value.getSales_source());
 				preparedStatement.setString(15, value.getNielsen_category());
-				preparedStatement.setInt(16, value.getSales_year());
-				preparedStatement.setBoolean(17, value.getControl_label_flag());
-				preparedStatement.setDouble(18, value.getKilo_volume_total());
-				preparedStatement.setDouble(19, value.getKilo_volume_rank());
-				preparedStatement.setDouble(20, value.getDollar_volume_total());
-				preparedStatement.setDouble(21, value.getCluster_number());
-				preparedStatement.setDouble(22, value.getProduct_grouping());
+				preparedStatement.setObject(16, value.getSales_year());
+				preparedStatement.setObject(17, value.getControl_label_flag());
+				preparedStatement.setObject(18, value.getKilo_volume_total());
+				preparedStatement.setObject(19, value.getKilo_volume_rank());
+				preparedStatement.setObject(20, value.getDollar_volume_total());
+				preparedStatement.setObject(21, value.getCluster_number());
+				preparedStatement.setObject(22, value.getProduct_grouping());
 				preparedStatement.setString(23, value.getClassification_number());
 				preparedStatement.setString(24, value.getClassification_type());
 				preparedStatement.setString(25, value.getSales_comment());
 				preparedStatement.setString(26, value.getSales_collection_date());
 				preparedStatement.setString(27, value.getSales_product_description());
-				preparedStatement.setInt(28, java.sql.Types.INTEGER); // change
+				preparedStatement.setObject(28, java.sql.Types.INTEGER); // change
 																			// to
 																			// number
 																			// of
@@ -925,7 +1022,7 @@ public class ImportMarketShareDao extends PgDao {
 			emptyTempTable();
 			loadData(csvFile);
 		salesInFile =	getAllSalesInTemp(invalidRecords, salesInFileByUPC, recordInDbByUPC); 
-		
+		System.out.println("done splitting data");
 		buildQuesriesUpcMatch(salesInFileByUPC, recordInDbByUPC);
 		buildQuesriesUpcMatchWithinfile(salesInFileByUPC, salesWithGrouping);
 		buildQuesriesProductGroupingMatchWithinfile(salesInFileByUPC, salesWithGrouping);
