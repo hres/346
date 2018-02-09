@@ -265,7 +265,7 @@ public class ProductService extends Application
 
         /// String applicationEnvironment = ContextManager.getJndiValue(
         /// "APPLICATION_ENVIRONMENT");
-    	System.out.println("You are being called"+productRequest.cluster_number);;
+    	//System.out.println("You are being called"+productRequest.cluster_number);;
         ProductDataResponse entity = new ProductDataResponse();
 
         try

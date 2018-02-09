@@ -1,13 +1,21 @@
 package hc.fcdr.rws.service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -16,6 +24,8 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,7 +33,11 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
+
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
@@ -266,9 +280,99 @@ public class ImportService extends Application
 //    	   String userName = principal.getName();
     	
 //    	importSalesDao.testImport("/tmp/otherSales.csv");
-    	importSalesDao.testImport("/tmp/bigFile.csv");
+    	//importSalesDao.testImport("/tmp/bigFile.csv");
     	//importSalesDao.testImport("/tmp/sales16.csv");
     	
     	return null;
     }
+    @POST
+    @Path("/getFile")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("text/plain")
+    public Response getFile(@FormDataParam("csv_file") InputStream fileInputStream,
+    		@FormDataParam("csv_file") FormDataContentDisposition fileDetail){
+    	
+    	
+    	System.out.println("The file "+fileDetail.getFileName());
+		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+
+
+		writeToFile(fileInputStream, uploadedFileLocation);
+
+    	
+    	
+         BufferedWriter output = null;
+         File file = new File("report.txt");
+
+            
+             try {
+				output = new BufferedWriter(new FileWriter(file));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			 try {
+				importSalesDao.testImport(uploadedFileLocation, output);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				//deleteFolder(new File(uploadedFileLocation));
+				
+
+     	ResponseBuilder response = Response.ok((Object) file);
+		response.header("Content-Disposition",
+				"attachment; filename=importSalesReport.txt");
+		return response.build();
+    }
+    
+	private void writeToFile(InputStream uploadedInputStream,
+			String uploadedFileLocation) {
+
+			try {
+				OutputStream out = new FileOutputStream(new File(
+						uploadedFileLocation));
+				int read = 0;
+				byte[] bytes = new byte[1024];
+
+				out = new FileOutputStream(new File(uploadedFileLocation));
+				while ((read = uploadedInputStream.read(bytes)) != -1) {
+					out.write(bytes, 0, read);
+				}
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+	
+	public static void deleteFolder(File folder) {
+	    File[] files = folder.listFiles();
+	    if(files!=null) { //some JVMs return null for empty dirs
+	        for(File f: files) {
+	            if(f.isDirectory()) {
+	                deleteFolder(f);
+	            } else {
+	                f.delete();
+	            }
+	        }
+	    }
+	    folder.delete();
+	}
+    
+    
 }

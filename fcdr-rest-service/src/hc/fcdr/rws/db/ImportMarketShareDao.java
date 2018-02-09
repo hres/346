@@ -1,5 +1,6 @@
 package hc.fcdr.rws.db;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.product.ProductInsertRequest;
 import hc.fcdr.rws.model.sales.ImportMarketShare;
 import hc.fcdr.rws.model.sales.ImportSalesMadatoryFields;
+import hc.fcdr.rws.model.sales.ImportSalesReport;
 import hc.fcdr.rws.model.sales.ImportSalesSummary;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.UpdateProductFields;
@@ -60,7 +62,7 @@ public class ImportMarketShareDao extends PgDao {
 		importSalesSummary = new ImportSalesSummary();
 	}
 
-	public void testImport(String csvFile) throws IllegalStateException, FileNotFoundException,
+	public void testImport(String csvFile, BufferedWriter output) throws IllegalStateException, FileNotFoundException,
 			UnsupportedEncodingException, NoSuchAlgorithmException, SQLException {
 
 
@@ -71,7 +73,7 @@ public class ImportMarketShareDao extends PgDao {
 		System.out.println("Program has started");
 
 
-		start(csvFile);
+		start(csvFile,output);
 
 
 		
@@ -188,7 +190,8 @@ public class ImportMarketShareDao extends PgDao {
 		return data;
 	}
 
-	public Map<String, List<ImportMarketShare>> getAllSalesInTemp(Map<Double, String> invalidRecords,Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<String, Integer> recordInDbByUPC)
+	public Map<String, List<ImportMarketShare>> getAllSalesInTemp(Map<Double, String> invalidRecords,Map<String, 
+			List<ImportMarketShare>> salesInFileByUPC, Map<String, Integer> recordInDbByUPC, ImportSalesReport importSalesReport)
 			throws SQLException {
 
 		Map<String, List<ImportMarketShare>> existingSales  = getAllExistingSales( recordInDbByUPC);
@@ -199,7 +202,7 @@ public class ImportMarketShareDao extends PgDao {
 
 		
 		ImportMarketShare importMarketShare = null;
-		
+		int count = 0;
 		
 		
 		
@@ -207,7 +210,7 @@ public class ImportMarketShareDao extends PgDao {
 		try {
 
 			resultSet = executeQuery(sql, null);
-			int count = 0;
+			
 			while (resultSet.next()) {
 				Double dollar_share = resultSet.getDouble("dollar_share");
 				dollar_share = resultSet.wasNull()?null:resultSet.getDouble("dollar_share");
@@ -277,7 +280,7 @@ public class ImportMarketShareDao extends PgDao {
 
 				);
 		
-				
+				++count;
 
 				if (importMarketShare.isValidRecord()) {
 					
@@ -285,9 +288,17 @@ public class ImportMarketShareDao extends PgDao {
 
 					if (data.containsKey(sb) || existingSales.containsKey(sb)) {
 					  duplicatesRecords.put(importMarketShare.getItem_id(), importMarketShare.getSales_description());
+						importSalesReport.getList_of_duplicate_records().add("RecordID: "+importMarketShare.getItem_id()+" "+importMarketShare.getSales_description());
+
 					} else {
-						System.out.println("UPC: "+importMarketShare.getSales_upc() +" count "+(++count));
-						
+						//System.out.println("UPC: "+importMarketShare.getSales_upc() +" count "+(++count));
+//						try {
+//							output.write("UPC: "+importMarketShare.getSales_description());
+//							 output.newLine();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						List<ImportMarketShare> item = new ArrayList<>();
 						item.add(importMarketShare);
 						data.put(sb, item);
@@ -305,7 +316,8 @@ public class ImportMarketShareDao extends PgDao {
 					}
 				} else {
 					invalidRecords.put(importMarketShare.getItem_id(), importMarketShare.getSales_description());
-
+					
+					importSalesReport.getList_of_invalid_records().add("RecordID: "+importMarketShare.getItem_id()+" "+importMarketShare.getSales_description());
 				}
 
 			}
@@ -315,8 +327,9 @@ public class ImportMarketShareDao extends PgDao {
 			e.printStackTrace();
 		}
 		  importSalesSummary.setDuplicatesRecords(duplicatesRecords);
-
-		return data;
+		  importSalesReport.setNumber_of_records(count);
+		
+		  return data;
 	}
 
 	public void loadData(String csvFile) throws SQLException {
@@ -337,7 +350,7 @@ public class ImportMarketShareDao extends PgDao {
 
 	}
 
-	public void buildQuesriesUpcMatch(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<String, Integer> recordInDbByUPC) {
+	public void buildQuesriesUpcMatch(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<String, Integer> recordInDbByUPC,ImportSalesReport importSalesReport) {
 
 		for (final Iterator<Entry<String, List<ImportMarketShare>>> it = salesInFileByUPC.entrySet().iterator(); it
 				.hasNext();) {
@@ -370,7 +383,9 @@ public class ImportMarketShareDao extends PgDao {
 							null, null, recordInDbByUPC.get(entry.getKey())
 
 					));
+					importSalesReport.getList_of_records_linked_by_upc().add("RecordID: "+element.getItem_id()+" "+element.getSales_description());
 
+				
 				}
 				insertSales(list);
 
@@ -691,7 +706,7 @@ public class ImportMarketShareDao extends PgDao {
 
 	}
 
-	public void buildQuesriesUpcMatchWithinfile(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<Double, List<ImportMarketShare>> salesWithGrouping ) {
+	public void buildQuesriesUpcMatchWithinfile(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<Double, List<ImportMarketShare>> salesWithGrouping, ImportSalesReport importSalesReport ) {
 
 		for (final Iterator<Entry<String, List<ImportMarketShare>>> it = salesInFileByUPC.entrySet().iterator(); it
 				.hasNext();) {
@@ -701,8 +716,13 @@ public class ImportMarketShareDao extends PgDao {
 
 			if (entry.getValue().size() > 1) {
 				
-				//TODO need to implement this case 
 				insertRecordByGrouping(v);
+				
+				//ImportSalesReport importSalesReport
+				for (ImportMarketShare element: v){
+					importSalesReport.getList_of_records_linked_by_upc().add("RecordID: "+element.getItem_id()+" "+element.getSales_description());
+	
+				}
 				
 				
 				it.remove();
@@ -732,7 +752,7 @@ public class ImportMarketShareDao extends PgDao {
 		}
 	}
 	
-	public void buildQuesriesProductGroupingMatchWithinfile(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<Double, List<ImportMarketShare>> salesWithGrouping ){
+	public void buildQuesriesProductGroupingMatchWithinfile(Map<String, List<ImportMarketShare>> salesInFileByUPC, Map<Double, List<ImportMarketShare>> salesWithGrouping, ImportSalesReport importSalesReport  ){
 		
 		for (final Iterator<Entry<Double, List<ImportMarketShare>>> it = salesWithGrouping.entrySet().iterator(); it
 				.hasNext();) {
@@ -743,6 +763,12 @@ public class ImportMarketShareDao extends PgDao {
 			if (entry.getValue().size() > 1) {
 				
 				insertRecordByGrouping (v);
+				
+				for (ImportMarketShare element: v){
+					importSalesReport.getList_of_records_linked_by_grouping().add("RecordID: "+element.getItem_id()+" "+element.getSales_description());
+	
+				}
+
 				
 			}else{
 				
@@ -821,7 +847,7 @@ public class ImportMarketShareDao extends PgDao {
 		
 	}
 
-	public void QueriesNoMatch(Map<String, List<ImportMarketShare>> salesInFileByUPC ){
+	public void QueriesNoMatch(Map<String, List<ImportMarketShare>> salesInFileByUPC,ImportSalesReport importSalesReport ){
 		ProductInsertRequest products_with_classification = new ProductInsertRequest();
 	
 		List<SalesInsertRequest> list = new ArrayList<SalesInsertRequest>();
@@ -856,7 +882,7 @@ public class ImportMarketShareDao extends PgDao {
 				int key;
 				try {
 					key = insertProducts(products_with_classification);
-                    populateList(list, key,v.get(0));
+                    populateList(list, key,v.get(0), importSalesReport);
 					if(v.get(0).getClassification_number() != null && !v.get(0).getClassification_number().isEmpty()){
 					if(checkClassification(products_with_classification.getClassification_number())){
 					insertClassificationNumber(products_with_classification.getClassification_number(), key);
@@ -887,8 +913,10 @@ public class ImportMarketShareDao extends PgDao {
 			e.printStackTrace();
 		}
 	}
-	private void populateList(List<SalesInsertRequest> list, int key, ImportMarketShare element) {
+	private void populateList(List<SalesInsertRequest> list, int key, ImportMarketShare element, ImportSalesReport importSalesReport) {
 		
+		importSalesReport.getList_of_records_to_new_product().add("RecordID: "+element.getItem_id()+" "+element.getSales_description());
+
 		list.add(new SalesInsertRequest(element.getSales_description(), element.getSales_upc(),
 				element.getSales_brand(), element.getSales_manufacturer(), element.getDollar_rank(),
 				element.getDollar_volume(), element.getDollar_share(),
@@ -1007,7 +1035,7 @@ public class ImportMarketShareDao extends PgDao {
 
 	}
 	
-	public void start(String csvFile) throws SQLException{
+	public void start(String csvFile, BufferedWriter output) throws SQLException{
 		//emptyTempTable();
 		Map<String, Integer> recordInDbByUPC = new HashMap<String, Integer>();
 		Map<String, List<ImportMarketShare>> salesInFile= new HashMap<String, List<ImportMarketShare>>();
@@ -1015,25 +1043,95 @@ public class ImportMarketShareDao extends PgDao {
 		Map<Double, String> invalidRecords = new HashMap<Double, String>();
 		Map<String, List<ImportMarketShare>> salesInFileByUPC = new HashMap<String, List<ImportMarketShare>>();
 		Map<Double, List<ImportMarketShare>> salesWithGrouping = new HashMap<Double, List<ImportMarketShare>>();
-
+		ImportSalesReport importSalesReport = new ImportSalesReport();
 
 		try{
 			connection.setAutoCommit(false);
 			emptyTempTable();
 			loadData(csvFile);
-		salesInFile =	getAllSalesInTemp(invalidRecords, salesInFileByUPC, recordInDbByUPC); 
+		salesInFile =	getAllSalesInTemp(invalidRecords, salesInFileByUPC, recordInDbByUPC, importSalesReport); 
 		System.out.println("done splitting data");
-		buildQuesriesUpcMatch(salesInFileByUPC, recordInDbByUPC);
-		buildQuesriesUpcMatchWithinfile(salesInFileByUPC, salesWithGrouping);
-		buildQuesriesProductGroupingMatchWithinfile(salesInFileByUPC, salesWithGrouping);
-		QueriesNoMatch(salesInFileByUPC);
+		buildQuesriesUpcMatch(salesInFileByUPC, recordInDbByUPC, importSalesReport);
+		buildQuesriesUpcMatchWithinfile(salesInFileByUPC, salesWithGrouping, importSalesReport);
+		buildQuesriesProductGroupingMatchWithinfile(salesInFileByUPC, salesWithGrouping, importSalesReport);
+		QueriesNoMatch(salesInFileByUPC, importSalesReport);
 		connection.commit();
 		}catch (SQLException e){
 			logger.error(e);
 			connection.rollback();
 		}
 		
-		
+		try {
+			output.write("Number of records in the file: "+importSalesReport.getNumber_of_records());
+			output.newLine();
+			
+			output.write("Number of dupplicate records: "+importSalesReport.getList_of_duplicate_records().size());
+			output.newLine();
+			output.write("Number of skipped records: "+importSalesReport.getList_of_invalid_records().size());
+			output.newLine();
+			
+			output.write("Number of records linked by upc: "+importSalesReport.getList_of_records_linked_by_upc().size());
+			output.newLine();
+			
+			output.write("Number of records linked by product grouping: "+importSalesReport.getList_of_records_linked_by_grouping().size());
+			output.newLine();
+			output.write("Number of records attached to new products: "+importSalesReport.getList_of_records_to_new_product().size());
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of duplicate records");
+			output.newLine();
+			output.newLine();
+			for(String element: importSalesReport.getList_of_duplicate_records()){
+				output.write(element);
+				output.newLine();
+			}
+			output.newLine();
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of skipped records");
+			output.newLine();
+			output.newLine();
+			for(String element: importSalesReport.getList_of_invalid_records()){
+				output.write(element);
+				output.newLine();
+			}
+			output.newLine();
+			output.newLine();
+			output.newLine();
+			output.write("List of records linked by upc");
+			output.newLine();
+			output.newLine();
+			for(String element: importSalesReport.getList_of_records_linked_by_upc()){
+				output.write(element);
+				output.newLine();
+			}
+			output.newLine();
+			output.newLine();
+			output.newLine();
+			output.write("List of records linked by product grouping");
+			output.newLine();
+			output.newLine();
+			for(String element: importSalesReport.getList_of_records_linked_by_grouping()){
+				output.write(element);
+				output.newLine();
+			}
+			output.newLine();
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records attached to new products");
+			output.newLine();
+			output.newLine();
+			for(String element: importSalesReport.getList_of_records_to_new_product()){
+				output.write(element);
+				output.newLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(salesInFile.size());
 
 		System.out.println( importSalesSummary.getDuplicatesRecords().size()+ " is the number of duplicates");
