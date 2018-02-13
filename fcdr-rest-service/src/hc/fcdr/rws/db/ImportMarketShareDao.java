@@ -72,7 +72,7 @@ public class ImportMarketShareDao extends PgDao {
 		stopWatch.start();
 		System.out.println("Program has started");
 
-
+		
 		start(csvFile,output);
 
 
@@ -164,7 +164,11 @@ public class ImportMarketShareDao extends PgDao {
 				);
 
 
-				String sb = importMarketShare.getSales_upc() + importMarketShare.getKilo_volume() +importMarketShare.getSales_description()+resultSet.getDate("sales_collection_date").toString();
+				
+				String sb = importMarketShare.getSales_upc() 
+						+ importMarketShare.getKilo_volume() 
+						+importMarketShare.getSales_description()
+						+(resultSet.getDate("sales_collection_date")!= null? resultSet.getDate("sales_collection_date").toString():"null");
 
 				if (!data.containsKey(sb)) {
 
@@ -1133,6 +1137,14 @@ public class ImportMarketShareDao extends PgDao {
 			e.printStackTrace();
 		}
 		System.out.println(salesInFile.size());
+		if(salesInFile.size() < 1){
+			 try {
+				output.write("Failed uploading the file");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 
 		System.out.println( importSalesSummary.getDuplicatesRecords().size()+ " is the number of duplicates");
 

@@ -42,6 +42,8 @@ import hc.fcdr.rws.model.sales.SalesResponse;
 import hc.fcdr.rws.model.sales.SalesResponseShort;
 import hc.fcdr.rws.model.sales.SalesUpdateRequest;
 import hc.fcdr.rws.model.sales.SalesYearsResponse;
+//import java.sql.Timestamp;
+//import java.text.SimpleDateFormat;
 
 /**
  * Utility class for DAO's. This class contains commonly used DAO logic which is been refactored in single static
@@ -53,6 +55,7 @@ public final class DaoUtil
 
     // Constructors
     // -------------------------------------------------------------------------------
+//    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 
     private DaoUtil()
     {
@@ -1279,7 +1282,7 @@ public final class DaoUtil
         final Double kilo_volume_total = result.getDouble("kilo_volume_total");
         sales.setKiloVolumeTotal(result.wasNull() ? null : kilo_volume_total);
 
-        final Double kilo_volume_rank = result.getDouble("kilo_volume_rank");
+        final Double kilo_volume_rank = result.getDouble("kilo_rank");
         sales.setKiloVolumeRank(result.wasNull() ? null : kilo_volume_rank);
 
         final Double dollar_volume_total = result.getDouble(
@@ -1369,6 +1372,22 @@ public final class DaoUtil
         if (!request.salesComment.isEmpty())
             queryMap.put("sales_comment", request.salesComment);
 
+        
+//        if (DateUtil.validateDates(request.collectionDateFrom,
+//                request.collectionDateTo))
+//        {
+//            if (!request.collectionDateFrom.isEmpty()
+//                    && !request.collectionDateTo.isEmpty())
+//            {
+//                queryMap.put("collection_date_from",
+//                        request.collectionDateFrom);
+//                queryMap.put("collection_date_to", request.collectionDateTo);
+//            }
+//        }
+//        else
+//            queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+        
+        if(request.collectionDateFrom != null && request.collectionDateTo != null){
         if (DateUtil.validateDates(request.collectionDateFrom,
                 request.collectionDateTo))
         {
@@ -1382,6 +1401,13 @@ public final class DaoUtil
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+    }else if (request.collectionDateFrom != null && request.collectionDateTo == null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+
+    }else if (request.collectionDateFrom == null && request.collectionDateTo != null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+
+    }
 
         if (request.offset != null)
         {
@@ -1668,7 +1694,7 @@ public final class DaoUtil
                     request.sales_product_description);
         salesInsertList.add(request.sales_product_description);
 
-        if (!request.classification_number.isEmpty())
+        if (request.classification_number != null)
                 queryMap.put("classification_number",
                         request.classification_number);
          
@@ -1682,14 +1708,15 @@ public final class DaoUtil
             queryMap.put("sales_comment", request.sales_comment);
         salesInsertList.add(request.sales_comment);
 
-        if (!request.sales_collection_date.isEmpty())
+        if (request.sales_collection_date != null)
         {
             queryMap.put("sales_collection_date",
                     request.sales_collection_date);
             salesInsertList.add(Date.valueOf(request.sales_collection_date));
+        }else{
+        	salesInsertList.add(null);
         }
-        else
-            salesInsertList.add(null);
+        
 
         if (request.number_of_units != null)
             if (request.number_of_units instanceof Number)
@@ -2027,7 +2054,7 @@ public final class DaoUtil
                     request.sales_product_description);
         salesUpdateList.add(request.sales_product_description);
 
-        if (!request.classification_number.isEmpty())
+        if (request.classification_number != null)
                 queryMap.put("classification_number",
                         request.classification_number);
 
@@ -2046,9 +2073,11 @@ public final class DaoUtil
             queryMap.put("sales_collection_date",
                     request.sales_collection_date);
             salesUpdateList.add(Date.valueOf(request.sales_collection_date));
+        }else{
+        	 salesUpdateList.add(null);
         }
-        else
-            salesUpdateList.add(null);
+        
+
 
         if (request.number_of_units != null)
 
@@ -2065,6 +2094,7 @@ public final class DaoUtil
             queryMap.put("edited_by", request.edited_by);
         salesUpdateList.add(request.edited_by);
 
+        
         final Timestamp now = DateUtil.getCurrentTimeStamp();
         queryMap.put("last_edit_date", now);
         salesUpdateList.add(now);
@@ -2319,6 +2349,7 @@ public final class DaoUtil
         if (!request.labelIngredients.isEmpty())
             queryMap.put("ingredients", request.labelIngredients);
 
+        if(request.collectionDateFrom != null && request.collectionDateTo != null){
         if (DateUtil.validateDates(request.collectionDateFrom,
                 request.collectionDateTo))
         {
@@ -2332,6 +2363,13 @@ public final class DaoUtil
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+    }else if (request.collectionDateFrom != null && request.collectionDateTo == null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+
+    }else if (request.collectionDateFrom == null && request.collectionDateTo != null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+
+    }
 
         if (request.offset != null)
         {
@@ -2509,16 +2547,15 @@ public final class DaoUtil
         if (!request.product_comment.isEmpty())
             queryMap.put("product_comment", request.product_comment);
 
-        if (!request.classification_number.isEmpty())
+        if (!request.classification_number.isEmpty() && request.classification_number != "")
         {
 
                     queryMap.put("classification_number",
                             request.classification_number);
 
         }
-        else
-            queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
-
+       
+       
         if (!request.classification_name.isEmpty())
             queryMap.put("classification_name", request.classification_name);
         if (!request.classification_type.isEmpty())
@@ -2554,6 +2591,7 @@ public final class DaoUtil
         if (!request.sales_source.isEmpty())
             queryMap.put("sales_source", request.sales_source);
 
+        if(request.sales_collection_date_from != null && request.sales_collection_date_to != null){
         if (DateUtil.validateDates(request.sales_collection_date_from,
                 request.sales_collection_date_to))
         {
@@ -2568,6 +2606,11 @@ public final class DaoUtil
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+    }else if(request.sales_collection_date_from != null && request.sales_collection_date_to == null){
+    	 queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+    }else if(request.sales_collection_date_from == null && request.sales_collection_date_to != null){
+   	 queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+   }
 
         /// ===
 
@@ -2613,21 +2656,28 @@ public final class DaoUtil
         if (!request.label_ingredients.isEmpty())
             queryMap.put("package_ingredients", request.label_ingredients);
 
+
+        if(request.label_collection_date_from != null && request.label_collection_date_to != null){
         if (DateUtil.validateDates(request.label_collection_date_from,
                 request.label_collection_date_to))
         {
             if (!request.label_collection_date_from.isEmpty()
                     && !request.label_collection_date_to.isEmpty())
             {
-                queryMap.put("package_collection_date_from",
+                queryMap.put("collection_date_from",
                         request.label_collection_date_from);
-                queryMap.put("package_collection_date_to",
-                        request.label_collection_date_to);
+                queryMap.put("collection_date_to", request.label_collection_date_to);
             }
         }
         else
             queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+    }else if (request.label_collection_date_from != null && request.label_collection_date_to == null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
 
+    }else if (request.label_collection_date_from == null && request.label_collection_date_to != null){
+        queryMap.put("inputError", ResponseCodes.INVALID_DATE);
+
+    }
         // ===
 
         if (request.offset != null)

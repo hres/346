@@ -267,7 +267,7 @@ public class ImportService extends Application
 
     
     @POST
-    @Path("/importMarketShare")
+    @Path("/getFile")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.CHARSET_PARAMETER)
     public Response getImportMarketShare(@Context HttpServletRequest requestContext, @Context SecurityContext context)
@@ -286,7 +286,7 @@ public class ImportService extends Application
     	return null;
     }
     @POST
-    @Path("/getFile")
+    @Path("/importMarketShare")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     public Response getFile(@FormDataParam("csv_file") InputStream fileInputStream,
@@ -327,6 +327,7 @@ public class ImportService extends Application
 				e.printStackTrace();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+	
 				e.printStackTrace();
 			}
 				//deleteFolder(new File(uploadedFileLocation));

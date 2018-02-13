@@ -218,7 +218,7 @@ public class SalesService extends Application
             throws SQLException, IOException, Exception
     {
         SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
-
+//        System.out.println("Collection date "+salesUpdateRequest.sales_collection_date);
         try
         {
             if (salesDao != null)

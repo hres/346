@@ -65,7 +65,7 @@ public class PgDao
         	
             preparedStatement =
                     prepareStatement(connection, query, true, values);
-            //System.out.println(preparedStatement);
+            System.out.println(preparedStatement);
             final int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0 && (query.startsWith("insert") || query.startsWith("update") ||query.startsWith("COPY")))
