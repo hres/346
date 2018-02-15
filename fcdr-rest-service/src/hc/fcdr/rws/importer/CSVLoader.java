@@ -122,8 +122,8 @@ public class CSVLoader
                 final List<Object> fieldsForProductUpdateList =
                         importSalesData.getFieldsForProductUpdateList();
                 fieldsForProductUpdateList.add(productId);
-                productDao.update(fieldsForProductUpdateList,
-                        classificationNumber, classificationType);
+//                productDao.update(fieldsForProductUpdateList,
+//                        classificationNumber, classificationType);
             }
             else // process records with same sales_upc; attach them to a brand new product
             if (m1.containsKey(salesUpc))
@@ -237,18 +237,18 @@ public class CSVLoader
 
         Integer productId = null;
 
-        try
-        {
-            final Double classificationNumber = (Double) csvFieldList.get(25);
-            final String classificationType = (String) csvFieldList.get(26);
-            productId =
-                    productDao.insert(fieldsForProductInsertList,
-                            classificationNumber, classificationType);
-        }
-        catch (final DaoException e)
-        {
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            final Double classificationNumber = (Double) csvFieldList.get(25);
+//            final String classificationType = (String) csvFieldList.get(26);
+////            productId =
+////                    productDao.insert(fieldsForProductInsertList,
+////                            classificationNumber, classificationType);
+//        }
+//        catch (final DaoException e)
+//        {
+//            e.printStackTrace();
+//        }
 
         try
         {
