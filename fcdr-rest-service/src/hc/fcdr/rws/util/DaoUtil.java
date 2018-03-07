@@ -20,6 +20,9 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.model.classification.ClassificationResponse;
+import hc.fcdr.rws.model.importLabel.ImportLabelModel;
+import hc.fcdr.rws.model.importLabel.ImportLabelNft;
+import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
 import hc.fcdr.rws.model.pkg.PackageInsertRequest;
@@ -387,13 +390,14 @@ public final class DaoUtil
 
             }
             if (((element.getAmount() == null)
-                    && !element.getUnit_of_measure().isEmpty())
+                    && (element.getUnit_of_measure()!=null && !element.getUnit_of_measure().isEmpty()))
                     || ((element.getAmount() != null)
-                            && element.getUnit_of_measure().isEmpty()))
+                            && (element.getUnit_of_measure()==null) && element.getUnit_of_measure().isEmpty()))
             {
 
-                System.out.println("name of invalid " + element.getName()
-                        + " amount" + element.getAmount());
+//                System.out.println("name of invalid " + element.getName()
+//                        + " amount" + element.getAmount());
+                
                 queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
                 return queryMap;
 
@@ -736,7 +740,7 @@ public final class DaoUtil
 
         labelInsertList.add(request.getEdited_by());
 
-        if (!request.getClassification_number().isEmpty())
+        if (request.getClassification_number() != null)
             queryMap.put("package_classification_number",
                     request.getClassification_number());
 
@@ -802,6 +806,64 @@ public final class DaoUtil
     }
 
     ///
+    
+    public static List<Object> getQueryMap(
+            final ImportLabelRequest request, Integer product_id)
+    {
+    	  final List<Object> labelInsertList = new ArrayList<Object>();
+    	  
+    	  labelInsertList.add(request.getPackage_description());
+    	  labelInsertList.add(request.getPackage_upc());
+    	  labelInsertList.add(request.getPackage_brand())
+    	  ;
+    	  labelInsertList.add(request.getPackage_manufacturer());
+    	  labelInsertList.add(request.getPackage_country());
+    	  labelInsertList.add(request.getPackage_size());
+    	  
+    	  labelInsertList.add(request.getPackage_size_unit_of_measure());
+    	  labelInsertList.add(request.getStorage_type());
+    	  labelInsertList.add(request.getStorage_statements());
+    	  labelInsertList.add(request.getHealth_claims());
+    	  
+    	  
+    	  labelInsertList.add(request.getOther_package_statements());
+    	  labelInsertList.add(request.getSuggested_directions());
+    	  labelInsertList.add(request.getIngredients());
+    	  labelInsertList.add(request.getMulti_part_flag());
+    	  labelInsertList.add(request.getNutrition_fact_table());
+    	  labelInsertList.add(request.getAs_prepared_per_serving_amount());
+    	  labelInsertList.add(request.getAs_prepared_unit_of_measure());
+    	  labelInsertList.add(request.getAs_sold_per_serving_amount());
+    	  labelInsertList.add(request.getAs_sold_unit_of_measure());
+    	  labelInsertList.add(request.getAs_prepared_per_serving_amount_in_grams());
+    	  labelInsertList.add(request.getAs_sold_per_serving_amount_in_grams());
+    	  labelInsertList.add(request.getPackage_comment());
+    	  labelInsertList.add(request.getPackage_source());
+    	  labelInsertList.add(request.getPackage_product_description());
+    	  labelInsertList.add(request.getNumber_of_units());
+    	  labelInsertList.add(request.getInformed_dining_program());
+    	  labelInsertList.add(request.getProduct_grouping());
+    	  labelInsertList.add(request.getNielsen_item_rank());
+    	  labelInsertList.add(request.getNutrient_claims());
+    	  labelInsertList.add(request.getPackage_nielsen_category());
+    	  labelInsertList.add(request.getCommon_household_measure());
+    	  labelInsertList.add(request.getChild_item());
+    	  labelInsertList.add(request.getClassification_name());
+    	  labelInsertList.add(null); //edited by
+    	  labelInsertList.add(request.getClassification_number());
+    	  labelInsertList.add(product_id);
+    	  labelInsertList.add(Date.valueOf(request.getPackage_collection_date()));
+    	  labelInsertList.add(request.getNft_last_update_date());
+    	  final Timestamp now = DateUtil.getCurrentTimeStamp();
+    	  labelInsertList.add(now); //creation date
+    	  labelInsertList.add(now);//last edit  date
+    	  labelInsertList.add(request.getCalculated());
+    	  
+    	
+    	
+    	return labelInsertList;
+    	
+    }
 
     public static Map<String, Object> getQueryMap(
             final PackageUpdateRequest request)
@@ -1003,7 +1065,7 @@ public final class DaoUtil
 
         labelUpdateList.add(request.getEdited_by());
 
-        if (!request.getClassification_number().isEmpty())
+        if (request.getClassification_number() != null)
             queryMap.put("package_classification_number",
                     request.getClassification_number());
 
@@ -2310,7 +2372,7 @@ public final class DaoUtil
         packageResponse.setClassification_name(
                 resultSet.getString("package_classification_name"));
 
-        final Double nielsen_item_rank = resultSet.getDouble(
+        final String nielsen_item_rank = resultSet.getString(
                 "nielsen_item_rank");
         packageResponse.setNielsen_item_rank(
                 resultSet.wasNull() ? null : nielsen_item_rank);
@@ -2331,16 +2393,826 @@ public final class DaoUtil
 
         return packageResponse;
     }
+	public static ImportLabelModel populateLabelModel(ResultSet rs) throws SQLException {
+		
+		ImportLabelModel importLabelModel = new ImportLabelModel();
+		ImportLabelRequest packageInsertRequest = new ImportLabelRequest();
+		
+		Double record_id = rs.getDouble("record_id");
+		packageInsertRequest.setRecord_id(record_id);
+		
+		String label_upc = rs.getString("label_upc");
+		packageInsertRequest.setPackage_upc(label_upc);
+		
+		String nielsen_item_rank = rs.getString("nielsen_item_rank");
+		packageInsertRequest.setNielsen_item_rank(nielsen_item_rank);
+		
+		String nielsen_category = rs.getString("nielsen_category");
+		packageInsertRequest.setPackage_nielsen_category(nielsen_category);
+		
+		String label_description = rs.getString("label_description");
+		packageInsertRequest.setPackage_description(label_description);
+		
+		String label_brand = rs.getString("label_brand");
+		packageInsertRequest.setPackage_brand(label_brand);
+		
+		String label_manufacturer = rs.getString("label_manufacturer");
+		packageInsertRequest.setPackage_manufacturer(label_manufacturer);
+		
+		String label_country = rs.getString("label_country");
+		packageInsertRequest.setPackage_country(label_country);
+		
+		Double package_size = rs.getDouble("package_size");
+		package_size = rs.wasNull()?null: rs.getDouble("package_size");
+		packageInsertRequest.setPackage_size(package_size);
+		
+		String package_size_unit_of_measure = rs.getString("package_size_unit_of_measure");
+		packageInsertRequest.setPackage_size_unit_of_measure(package_size_unit_of_measure);
+		
+		Integer number_of_units = rs.getInt("number_of_units");	
+		number_of_units = rs.wasNull()?null: rs.getInt("number_of_units");
+		packageInsertRequest.setNumber_of_units(number_of_units);
+		
+		
+		Double product_grouping = rs.getDouble("product_grouping");
+		product_grouping = rs.wasNull()?null: rs.getDouble("product_grouping");
+		packageInsertRequest.setProduct_grouping(product_grouping);
+		
+		
+		String storage_type = rs.getString("storage_type");
+		packageInsertRequest.setStorage_type(storage_type);
+		
+		String storage_statement = rs.getString("storage_statement");
+		packageInsertRequest.setStorage_statements(storage_statement);
+		
+		Date label_collection_date = rs.getDate("collection_date");
+		packageInsertRequest.setPackage_collection_date(label_collection_date.toString());
+		
+		String health_claims = rs.getString("health_claims");
+		packageInsertRequest.setHealth_claims(health_claims);
+		
+		String other_package_statements = rs.getString("other_package_statements");
+		packageInsertRequest.setOther_package_statements(other_package_statements);
+		
+		String suggested_directions = rs.getString("suggested_directions");
+		packageInsertRequest.setSuggested_directions(suggested_directions);
+		
+		String ingredients = rs.getString("ingredients");
+		packageInsertRequest.setIngredients(ingredients);
+		
+		Boolean multipart = rs.getBoolean("multipart");
+		multipart = rs.wasNull()?null: rs.getBoolean("multipart");
+		packageInsertRequest.setMulti_part_flag(multipart);
+		
+		String nutrition_fact_table = rs.getString("nutrition_fact_table");
+		packageInsertRequest.setNutrition_fact_table(nutrition_fact_table);
+		
+		String common_household_measure = rs.getString("common_household_measure");
+		packageInsertRequest.setCommon_household_measure(common_household_measure);
+		
+		Double per_serving_amount_as_sold = rs.getDouble("per_serving_amount_as_sold");
+		per_serving_amount_as_sold = rs.wasNull()?null: rs.getDouble("per_serving_amount_as_sold");
+		packageInsertRequest.setAs_sold_per_serving_amount(per_serving_amount_as_sold);
+		
+		String per_serving_amount_as_sold_unit_of_measure = rs.getString("per_serving_amount_unit_of_measure_as_sold");
+		packageInsertRequest.setAs_sold_unit_of_measure(per_serving_amount_as_sold_unit_of_measure);
+		
+		Double per_serving_amount_as_prepared = rs.getDouble("per_serving_amount_as_prepared");
+		per_serving_amount_as_prepared = rs.wasNull()?null: rs.getDouble("per_serving_amount_as_prepared");
+		packageInsertRequest.setAs_prepared_per_serving_amount(per_serving_amount_as_prepared);
+		
+		String as_prepared_unit_of_measure = rs.getString("per_serving_amount_unit_of_measure_as_prepared");
+		packageInsertRequest.setAs_prepared_unit_of_measure(as_prepared_unit_of_measure);
+		
+		
+		String label_comment = rs.getString("label_comment");
+		
+		packageInsertRequest.setPackage_comment(label_comment);
+		
+		String classification_number = rs.getString("classification_number");
+		packageInsertRequest.setClassification_number(classification_number);
+		
+		String label_source = rs.getString("label_source");
+		packageInsertRequest.setPackage_source(label_source);
+		
+		String package_product_description = rs.getString("product_description");
+		packageInsertRequest.setPackage_product_description(package_product_description);
+		
+		String type = rs.getString("type");
+		packageInsertRequest.setType(type);
+		
+		String type_of_restaurant = rs.getString("type_of_restaurant");
+		packageInsertRequest.setType_of_restaurant(type_of_restaurant);
+		
+		Boolean informed_dining_program = rs.getBoolean("informed_dining_program");
+		informed_dining_program = rs.wasNull()?null: rs.getBoolean("informed_dining_program");
+		packageInsertRequest.setInformed_dining_program(informed_dining_program);
+		
+		Date nft_last_update_date = rs.getDate("nft_last_update_date");
+		packageInsertRequest.setNft_last_update_date(nft_last_update_date);
+		
+		Boolean child_item = rs.getBoolean("child_item");
+		child_item = rs.wasNull()?null:rs.getBoolean("child_item");
+		packageInsertRequest.setChild_item(child_item);
+
+		
+		Double per_serving_amount_in_grams_as_sold = rs.getDouble("per_serving_amount_in_grams_as_sold");
+		per_serving_amount_in_grams_as_sold = rs.wasNull()?null: rs.getDouble("per_serving_amount_in_grams_as_prepared");
+		packageInsertRequest.setAs_sold_per_serving_amount_in_grams(per_serving_amount_in_grams_as_sold);
+		
+		Double per_serving_amount_in_grams_as_prepared = rs.getDouble("per_serving_amount_in_grams_as_prepared");
+		per_serving_amount_in_grams_as_prepared = rs.wasNull()?null: rs.getDouble("per_serving_amount_in_grams_as_prepared");
+		packageInsertRequest.setAs_prepared_per_serving_amount_in_grams(per_serving_amount_in_grams_as_prepared);
+		
+		importLabelModel.setImportLabelRequest(packageInsertRequest);
+		
+		Double energy_kcal_as_sold = rs.getDouble("energy_kcal_as_sold");
+		energy_kcal_as_sold = rs.wasNull()?null: rs.getDouble("energy_kcal_as_sold");		
+		//Energy KCAL
+		importLabelModel.getNftList().add(new ImportLabelNft("Energy", energy_kcal_as_sold,(energy_kcal_as_sold!= null ? "kcal":null), null,null, true));
+		
+		
+		Double energy_kj_as_sold = rs.getDouble("energy_kj_as_sold");
+		energy_kj_as_sold = rs.wasNull()?null: rs.getDouble("energy_kj_as_sold");		
+		
+		//Energy KJ as sold
+		importLabelModel.getNftList().add(new ImportLabelNft("Energy KJ", energy_kj_as_sold,(energy_kj_as_sold!=null? "KJ":null), null,null, true));
+
+		
+		Double energy_kj_as_prepared = rs.getDouble("energy_kj_as_prepared");
+		energy_kj_as_sold = rs.wasNull()?null: rs.getDouble("energy_kj_as_prepared");		
+		//Energy KJ as prepared
+		if(energy_kj_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Energy KJ", energy_kj_as_prepared, (energy_kj_as_prepared!=null?"KJ":null), null,null, false));
+		}
+		
+		//Fat
+		Double fat_as_sold = rs.getDouble("fat_as_sold");
+		fat_as_sold = rs.wasNull()?null: rs.getDouble("fat_as_sold");
+		Double fat_daily_value_as_sold = rs.getDouble("fat_daily_value_as_sold");
+		fat_daily_value_as_sold = rs.wasNull()?null:rs.getDouble("fat_daily_value_as_sold");
+		
+		Double fat_daily_value_as_prepared = rs.getDouble("fat_daily_value_as_prepared");
+		fat_daily_value_as_prepared = rs.wasNull()?null:rs.getDouble("fat_daily_value_as_prepared");		
+		
+	
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Fat", fat_as_sold,(fat_as_sold!=null? "g":null), fat_daily_value_as_sold,null, true));
+		
+		if(fat_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Fat", null,null, fat_daily_value_as_prepared,null, false));
+		}
+		
+		//Saturated Fat
+		Double saturated_fat_as_sold = rs.getDouble("saturated_fat_as_sold");
+		saturated_fat_as_sold = rs.wasNull()?null: rs.getDouble("saturated_fat_as_sold");
+		importLabelModel.getNftList().add(new ImportLabelNft("Saturated Fat", saturated_fat_as_sold,(saturated_fat_as_sold!=null? "g":null), null,null, true));
+
+	
+		//Trans Fat
+
+		Double saturated_plus_trans_daily_value_as_sold = rs.getDouble("saturated_plus_trans_daily_value_as_sold");
+		saturated_plus_trans_daily_value_as_sold = rs.wasNull()?null: rs.getDouble("saturated_plus_trans_daily_value_as_sold");
+		importLabelModel.getNftList().add(new ImportLabelNft("Saturated + Trans Fat", null,null, saturated_plus_trans_daily_value_as_sold,null, true));
+
+	
+		Double saturated_plus_trans_daily_value_as_prepared = rs.getDouble("saturated_plus_trans_daily_value_as_prepared");
+		saturated_plus_trans_daily_value_as_prepared = rs.wasNull()?null: rs.getDouble("saturated_plus_trans_daily_value_as_prepared");
+		if(saturated_plus_trans_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Saturated + Trans Fat", null,null, saturated_plus_trans_daily_value_as_prepared,null, false));
+		}
+		//Fat polyunsaturated
+		Double fat_polyunsatured_as_sold = rs.getDouble("fat_polyunsatured_as_sold");
+		fat_polyunsatured_as_sold = rs.wasNull()?null:fat_polyunsatured_as_sold;
+
+		
+		if(fat_polyunsatured_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Fat Polyunsatyrated", fat_polyunsatured_as_sold,(fat_polyunsatured_as_sold!=null? "g":null), null,null, true));
+		}
+		
+		Double fat_polyunsaturated_omega_6_as_sold = rs.getDouble("fat_polyunsaturated_omega_6_as_sold");
+		fat_polyunsaturated_omega_6_as_sold = rs.wasNull()?null: fat_polyunsaturated_omega_6_as_sold;
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Omega-6 Polyunsaturated Fat", fat_polyunsaturated_omega_6_as_sold,(fat_polyunsaturated_omega_6_as_sold!=null? "g":null), null,null, true));
+
+		
+		Double fat_polyunsaturated_omega_3_as_sold = rs.getDouble("fat_polyunsaturated_omega_3_as_sold");
+		fat_polyunsaturated_omega_3_as_sold = rs.wasNull()?null: fat_polyunsaturated_omega_3_as_sold;
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Omega-3 Polyunsaturated Fat", fat_polyunsaturated_omega_3_as_sold,(fat_polyunsaturated_omega_3_as_sold!=null? "g":null), null,null, true));
+
+		//Fat Mono unsaturared
+		
+		Double fat_mono_unsaturated = rs.getDouble("fat_monounsaturated_as_sold");
+		fat_mono_unsaturated = rs.wasNull()?null:fat_mono_unsaturated;
+
+		
+		if(fat_mono_unsaturated!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Fat Monounsatyrated", fat_mono_unsaturated,(fat_mono_unsaturated!=null? "g":null), null,null, true));
+		}
+		//Carbohydrates
+		Double carbohydrates_as_sold = rs.getDouble("carbohydrates_as_sold");
+		carbohydrates_as_sold = rs.wasNull()?null: rs.getDouble("carbohydrates_as_sold");
+		Double carbohydrates_daily_value_as_sold = rs.getDouble("carbohydrates_daily_value_as_sold");
+		carbohydrates_daily_value_as_sold = rs.wasNull()?null:rs.getDouble("carbohydrates_daily_value_as_sold");
+		
+		Double carbohydrates_daily_value_as_prepared = rs.getDouble("carbohydrates_daily_value_as_prepared");
+		carbohydrates_daily_value_as_prepared = rs.wasNull()?null:rs.getDouble("carbohydrates_daily_value_as_prepared");		
+		
+
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Carbohydrates", carbohydrates_as_sold,(carbohydrates_as_sold!=null? "g":null), carbohydrates_daily_value_as_sold,null, true));
+		
+		if(carbohydrates_daily_value_as_prepared!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Carbohydrates", null,null, carbohydrates_daily_value_as_prepared,null, false));
+		
+		}
+		
+		//Fibre
+		
+		Double fibre_as_sold = rs.getDouble("fibre_as_sold");
+		fibre_as_sold = rs.wasNull()?null: rs.getDouble("fibre_as_sold");
+		Double fibre_daily_value_sold = rs.getDouble("fibre_daily_value_sold");
+		fibre_daily_value_sold = rs.wasNull()?null:rs.getDouble("fibre_daily_value_sold");
+		
+		
+		Double fibre_daily_value_as_prepared = rs.getDouble("fibre_daily_value_as_prepared");
+		fibre_daily_value_as_prepared = rs.wasNull()?null:rs.getDouble("fibre_daily_value_as_prepared");		
+		
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Fibre", fibre_as_sold,(fibre_as_sold!=null? "g":null), fibre_daily_value_sold,null, true));
+		
+		if(fibre_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Fibre", null,null, fibre_daily_value_as_prepared,null, false));
+		}
+		//Soluble fibre
+		
+		Double soluble_fibre_as_sold = rs.getDouble("soluble_fibre_as_sold");
+		soluble_fibre_as_sold = rs.wasNull()?null: rs.getDouble("soluble_fibre_as_sold");
+		importLabelModel.getNftList().add(new ImportLabelNft("Soluble Fibre", soluble_fibre_as_sold,(soluble_fibre_as_sold!=null? "g":null), null,null, true));
+	
+		
+		//Insoluble fibre
+		
+		Double insoluble_fibre_as_sold = rs.getDouble("insoluble_fibre_as_sold");
+		insoluble_fibre_as_sold = rs.wasNull()?null: rs.getDouble("insoluble_fibre_as_sold");
+		importLabelModel.getNftList().add(new ImportLabelNft("Insoluble Fibre", insoluble_fibre_as_sold,(insoluble_fibre_as_sold!=null? "g":null), null,null, true));
+	
+		
+		//Sugar total 
+		
+		Double sugar_total_sold = rs.getDouble("sugar_total_sold");
+		sugar_total_sold = rs.wasNull()?null: sugar_total_sold;
+		
+		Double sugar_total_daily_value_as_sold = rs.getDouble("sugar_total_daily_value_as_sold");
+		sugar_total_daily_value_as_sold = rs.wasNull()? null: sugar_total_daily_value_as_sold;
+		
+		Double sugar_total_daily_value_as_prepared = rs.getDouble("sugar_total_daily_value_as_prepared");
+		sugar_total_daily_value_as_prepared = rs.wasNull()?null: sugar_total_daily_value_as_prepared;
+		
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Sugar", sugar_total_sold,(sugar_total_sold!=null? "g":null), sugar_total_daily_value_as_sold,null, true));
+		
+		if(sugar_total_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Sugar", null,null, sugar_total_daily_value_as_prepared,null, false));
+		}
+		
+		//Sugar alcohols 
+		Double sugar_alcohols_as_sold = rs.getDouble("sugar_alcohols_as_sold");
+		sugar_alcohols_as_sold = rs.wasNull()?null: sugar_alcohols_as_sold; 
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Sugar Acohols", sugar_alcohols_as_sold,(sugar_alcohols_as_sold!=null? "g":null), null,null, true));
+
+		//Starch 
+		Double starch_as_sold = rs.getDouble("starch_as_sold");
+		starch_as_sold = rs.wasNull()?null: starch_as_sold; 
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Starch", starch_as_sold,(starch_as_sold!=null? "g":null), null,null, true));
+
+		
+		//Proteins 
+		
+		Double protein_as_sold = rs.getDouble("protein_as_sold");
+		protein_as_sold = rs.wasNull()?null: protein_as_sold; 
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Protein", protein_as_sold,(protein_as_sold!=null? "g":null), null,null, true));
+
+		//Cholesterol
+		Double cholesterol_as_sold = rs.getDouble("cholesterol_as_sold");
+		cholesterol_as_sold = rs.wasNull()?null: cholesterol_as_sold;
+		
+		Double cholesterol_daily_value_as_sold = rs.getDouble("cholesterol_daily_value_as_sold");
+		cholesterol_daily_value_as_sold = rs.wasNull()? null: cholesterol_daily_value_as_sold;
+		
+		Double cholesterol_daily_value_as_prepared= rs.getDouble("cholesterol_daily_value_as_prepared");
+		cholesterol_daily_value_as_prepared = rs.wasNull()?null: cholesterol_daily_value_as_prepared;
+		
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Cholesterol", cholesterol_as_sold,(cholesterol_as_sold!=null? "g":null), cholesterol_daily_value_as_sold,null, true));
+	
+		if(cholesterol_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Cholesterol", null,null, cholesterol_daily_value_as_prepared,null, false));
+		}
+		//Sodium 
+		Double sodium_as_sold = rs.getDouble("sodium_as_sold");
+		sodium_as_sold = rs.wasNull()?null: sodium_as_sold;
+		
+		Double sodium_daily_value_as_sold = rs.getDouble("sodium_daily_value_as_sold");
+		sodium_daily_value_as_sold = rs.wasNull()? null: sodium_daily_value_as_sold;
+		
+		Double sodium_daily_value_as_prepared= rs.getDouble("sodium_daily_value_as_prepared");
+		sodium_daily_value_as_prepared = rs.wasNull()?null: sodium_daily_value_as_prepared;
+		
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Sodium", sodium_as_sold,(sodium_as_sold!=null? "g":null), sodium_daily_value_as_sold,null, true));
+		
+		if(sodium_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Sodium", null,null, sodium_daily_value_as_prepared,null, false));
+		}
+		//Potassium 
+		Double potassium_as_sold = rs.getDouble("potassium_as_sold");
+		potassium_as_sold = rs.wasNull()?null: potassium_as_sold;
+		
+		Double potassium_daily_value_as_sold = rs.getDouble("potassium_daily_value_as_sold");
+		potassium_daily_value_as_sold = rs.wasNull()? null: potassium_daily_value_as_sold;
+		
+		Double potassium_daily_value_as_prepared= rs.getDouble("potassium_daily_value_as_prepared");
+		potassium_daily_value_as_prepared = rs.wasNull()?null: potassium_daily_value_as_prepared;
+		
+		
+		importLabelModel.getNftList().add(new ImportLabelNft("Potassium", potassium_as_sold,(potassium_as_sold!=null? "g":null), potassium_daily_value_as_sold,null, true));
+		
+		if(potassium_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Potassium", null,null, potassium_daily_value_as_prepared,null, false));
+		}
+	
+		//Calcium 
+		Double calcium_as_sold = rs.getDouble("calcium_as_sold");
+		calcium_as_sold = rs.wasNull()?null: calcium_as_sold;
+		
+		Double calcium_daily_value_as_sold = rs.getDouble("calcium_daily_value_as_sold");
+		calcium_daily_value_as_sold = rs.wasNull()? null: calcium_daily_value_as_sold;
+		
+		Double calcium_daily_value_as_prepared= rs.getDouble("calcium_daily_value_as_prepared");
+		calcium_daily_value_as_prepared = rs.wasNull()?null: calcium_daily_value_as_prepared;
+		
+		if(calcium_as_sold!=null || calcium_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Calcium", calcium_as_sold,(calcium_as_sold!=null? "g":null), calcium_daily_value_as_sold,null, true));
+		}
+		
+		if(calcium_daily_value_as_prepared!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Calcium", null,null, calcium_daily_value_as_prepared,null, false));
+		}
+		//Iron 
+		Double iron_as_sold = rs.getDouble("iron_as_sold");
+		iron_as_sold = rs.wasNull()?null: iron_as_sold;
+		
+		Double iron_daily_value_as_sold = rs.getDouble("iron_daily_value_as_sold");
+		iron_daily_value_as_sold = rs.wasNull()? null: iron_daily_value_as_sold;
+		
+		Double iron_daily_value_as_prepared= rs.getDouble("iron_daily_value_as_prepared");
+		iron_daily_value_as_prepared = rs.wasNull()?null: iron_daily_value_as_prepared;
+		
+		
+		if(iron_as_sold!=null || iron_daily_value_as_sold !=null ){
+		importLabelModel.getNftList().add(new ImportLabelNft("Iron", iron_as_sold,(iron_as_sold!=null? "g":null), iron_daily_value_as_sold,null, true));
+		}
+		
+		if(iron_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Iron", null,null, iron_daily_value_as_prepared,null, false));
+		}
+		
+		//Vitamin A 
+		Double vitamin_a_as_sold = rs.getDouble("vitamin_a_as_sold");
+		vitamin_a_as_sold = rs.wasNull()?null: vitamin_a_as_sold;
+		
+		Double vitamin_a_daily_value_as_sold = rs.getDouble("vitamin_a_daily_value_as_sold");
+		vitamin_a_daily_value_as_sold = rs.wasNull()? null: vitamin_a_daily_value_as_sold;
+		
+		Double vitamin_a_daily_value_as_prepared= rs.getDouble("vitamin_a_daily_value_as_prepared");
+		vitamin_a_daily_value_as_prepared = rs.wasNull()?null: vitamin_a_daily_value_as_prepared;
+		
+		
+		if(vitamin_a_as_sold!= null || vitamin_a_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin A", vitamin_a_as_sold,(vitamin_a_as_sold!=null? "g":null), vitamin_a_daily_value_as_sold,null, true));
+		}
+		
+		if(vitamin_a_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin A", null,null, vitamin_a_daily_value_as_prepared,null, false));
+		}
+		//Vitamin C
+		Double vitamin_c_as_sold = rs.getDouble("vitamin_c_as_sold");
+		vitamin_c_as_sold = rs.wasNull()?null: vitamin_c_as_sold;
+		
+		Double vitamin_c_daily_value_as_sold = rs.getDouble("vitamin_c_daily_value_as_sold");
+		vitamin_c_daily_value_as_sold = rs.wasNull()? null: vitamin_c_daily_value_as_sold;
+		
+		Double vitamin_c_daily_value_as_prepared= rs.getDouble("vitamin_c_daily_value_as_prepared");
+		vitamin_c_daily_value_as_prepared = rs.wasNull()?null: vitamin_c_daily_value_as_prepared;
+		
+		if(vitamin_c_as_sold!=null || vitamin_c_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin C", vitamin_c_as_sold,(vitamin_c_as_sold!=null? "g":null), vitamin_c_daily_value_as_sold,null, true));
+		
+		}
+		if(vitamin_c_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin C", null,null, vitamin_c_daily_value_as_prepared,null, false));
+	
+		}
+		//Vitamin D
+		Double vitamin_d_as_sold = rs.getDouble("vitamin_d_as_sold");
+		vitamin_d_as_sold = rs.wasNull()?null: vitamin_d_as_sold;
+		
+		Double vitamin_d_daily_value_as_sold = rs.getDouble("vitamin_d_daily_value_as_sold");
+		vitamin_d_daily_value_as_sold = rs.wasNull()? null: vitamin_d_daily_value_as_sold;
+		
+		Double vitamin_d_daily_value_as_prepared= rs.getDouble("vitamin_d_daily_value_as_prepared");
+		vitamin_d_daily_value_as_prepared = rs.wasNull()?null: vitamin_d_daily_value_as_prepared;
+		
+		
+		if(vitamin_d_as_sold!= null || vitamin_d_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin D", vitamin_d_as_sold,(vitamin_d_as_sold!=null? "g":null), vitamin_d_daily_value_as_sold,null, true));		
+		}
+		
+		if(vitamin_d_daily_value_as_prepared!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin D", null,null, vitamin_d_daily_value_as_prepared,null, false));
+		}
+		
+		//Vitamin E
+		Double vitamin_e_as_sold = rs.getDouble("vitamin_e_as_sold");
+		vitamin_e_as_sold = rs.wasNull()?null: vitamin_e_as_sold;
+		
+		Double vitamin_e_daily_value_as_sold = rs.getDouble("vitamin_e_daily_value_as_sold");
+		vitamin_e_daily_value_as_sold = rs.wasNull()? null: vitamin_e_daily_value_as_sold;
+		
+		Double vitamin_e_daily_value_as_prepared= rs.getDouble("vitamin_e_daily_value_as_prepared");
+		vitamin_e_daily_value_as_prepared = rs.wasNull()?null: vitamin_e_daily_value_as_prepared;
+		
+		
+		if(vitamin_e_as_sold!= null || vitamin_e_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin E", vitamin_e_as_sold,(vitamin_e_as_sold!=null? "g":null), vitamin_e_daily_value_as_sold,null, true));
+		}
+		
+		if(vitamin_e_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin E", null,null, vitamin_e_daily_value_as_prepared,null, false));
+		}
+		
+		//Vitamin K
+		Double vitamin_k_as_sold = rs.getDouble("vitamin_k_as_sold");
+		vitamin_k_as_sold = rs.wasNull()?null: vitamin_e_as_sold;
+		
+		Double vitamin_k_daily_value_as_sold = rs.getDouble("vitamin_k_daily_value_as_sold");
+		vitamin_e_daily_value_as_sold = rs.wasNull()? null: vitamin_e_daily_value_as_sold;
+		
+		Double vitamin_k_daily_value_as_prepared= rs.getDouble("vitamin_k_daily_value_as_prepared");
+		vitamin_k_daily_value_as_prepared = rs.wasNull()?null: vitamin_k_daily_value_as_prepared;
+		
+		
+		if(vitamin_k_as_sold!= null || vitamin_k_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin K", vitamin_k_as_sold,(vitamin_k_as_sold!=null? "g":null), vitamin_k_daily_value_as_sold,null, true));
+		}
+		
+		if(vitamin_k_daily_value_as_prepared!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin K", null,null, vitamin_k_daily_value_as_prepared,null, false));
+		}
+		//Vitamin B6
+		Double vitamin_b6_as_sold = rs.getDouble("vitamin_b6_as_sold");
+		vitamin_b6_as_sold = rs.wasNull()?null: vitamin_b6_as_sold;
+		
+		Double vitamin_b6_daily_value_as_sold = rs.getDouble("vitamin_b6_daily_value_as_sold");
+		vitamin_b6_daily_value_as_sold = rs.wasNull()? null: vitamin_b6_daily_value_as_sold;
+		
+		Double vitamin_b6_daily_value_as_prepared= rs.getDouble("vitamin_b6_daily_value_as_prepared");
+		vitamin_b6_daily_value_as_prepared = rs.wasNull()?null: vitamin_b6_daily_value_as_prepared;
+		
+		
+		if(vitamin_b6_as_sold!=null || vitamin_b6_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin B6", vitamin_b6_as_sold,(vitamin_b6_as_sold!=null? "g":null), vitamin_b6_daily_value_as_sold,null, true));
+		
+		}
+		if(vitamin_b6_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin B6", null,null, vitamin_b6_daily_value_as_prepared,null, false));
+		}
+		
+		//Vitamin B12
+		Double vitamin_b12_as_sold = rs.getDouble("vitamin_b12_as_sold");
+		vitamin_b12_as_sold = rs.wasNull()?null: vitamin_b12_as_sold;
+		
+		Double vitamin_b12_daily_value_as_sold = rs.getDouble("vitamin_b12_daily_value_as_sold");
+		vitamin_b12_daily_value_as_sold = rs.wasNull()? null: vitamin_b12_daily_value_as_sold;
+		
+		Double vitamin_b12_daily_value_as_prepared= rs.getDouble("vitamin_b12_daily_value_as_prepared");
+		vitamin_b12_daily_value_as_prepared = rs.wasNull()?null: vitamin_b12_daily_value_as_prepared;
+		
+		
+		if(vitamin_b12_as_sold!=null || vitamin_b12_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin B12", vitamin_b12_as_sold,(vitamin_b12_as_sold!=null? "g":null), vitamin_b12_daily_value_as_sold,null, true));
+		}
+		if(vitamin_b12_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Vitamin B12", null,null, vitamin_b12_daily_value_as_prepared,null, false));
+		}
+		//Thiamine
+		Double thiamine_as_sold = rs.getDouble("thiamine_as_sold");
+		thiamine_as_sold = rs.wasNull()?null: thiamine_as_sold;
+		
+		Double thiamine_daily_value_as_sold = rs.getDouble("thiamine_daily_value_as_sold");
+		thiamine_daily_value_as_sold = rs.wasNull()? null: thiamine_daily_value_as_sold;
+		
+		Double thiamine_daily_value_as_prepared= rs.getDouble("thiamine_daily_value_as_prepared");
+		thiamine_daily_value_as_prepared = rs.wasNull()?null: thiamine_daily_value_as_prepared;
+		
+		
+		if(thiamine_as_sold!=null || thiamine_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Thiamine", thiamine_as_sold,(thiamine_as_sold!=null? "g":null), thiamine_daily_value_as_sold,null, true));
+		}
+		if(thiamine_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Thiamine", null,null, thiamine_daily_value_as_prepared,null, false));
+		}
+		
+		//Riboflavin
+		Double riboflavin_as_sold = rs.getDouble("riboflavin_as_sold");
+		riboflavin_as_sold = rs.wasNull()?null: riboflavin_as_sold;
+		
+		Double riboflavin_daily_value_as_sold = rs.getDouble("riboflavin_daily_value_as_sold");
+		riboflavin_daily_value_as_sold = rs.wasNull()? null: riboflavin_daily_value_as_sold;
+		
+		Double riboflavin_daily_value_as_prepared= rs.getDouble("riboflavin_daily_value_as_prepared");
+		riboflavin_daily_value_as_prepared = rs.wasNull()?null: riboflavin_daily_value_as_prepared;
+		
+		
+		if(riboflavin_as_sold!=null || riboflavin_daily_value_as_sold != null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Riboflavin", riboflavin_as_sold,(riboflavin_as_sold!=null? "g":null), riboflavin_daily_value_as_sold,null, true));
+		}
+		if(riboflavin_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Riboflavin", null,null, riboflavin_daily_value_as_prepared,null, false));
+		}
+		
+		//Niacin
+		Double niacin_as_sold = rs.getDouble("niacin_as_sold");
+		niacin_as_sold = rs.wasNull()?null: niacin_as_sold;
+		
+		Double niacin_daily_value_as_sold = rs.getDouble("niacin_daily_value_as_sold");
+		niacin_daily_value_as_sold = rs.wasNull()? null: niacin_daily_value_as_sold;
+		
+		Double niacin_daily_value_as_prepared= rs.getDouble("niacin_daily_value_as_prepared");
+		niacin_daily_value_as_prepared = rs.wasNull()?null: niacin_daily_value_as_prepared;
+		
+		
+		if(niacin_as_sold!=null || niacin_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Niacin", niacin_as_sold,(niacin_as_sold!=null? "g":null), niacin_daily_value_as_sold,null, true));
+		}
+		if(niacin_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Niacin", null,null, niacin_daily_value_as_prepared,null, false));
+		}
+		
+		//Folate
+		Double folate_as_sold = rs.getDouble("folate_as_sold");
+		folate_as_sold = rs.wasNull()?null: folate_as_sold;
+		
+		Double folate_daily_value_as_sold = rs.getDouble("folate_daily_value_as_sold");
+		folate_daily_value_as_sold = rs.wasNull()? null: folate_daily_value_as_sold;
+		
+		Double folate_daily_value_as_prepared= rs.getDouble("folate_daily_value_as_prepared");
+		folate_daily_value_as_prepared = rs.wasNull()?null: folate_daily_value_as_prepared;
+		
+		
+		if(folate_as_sold!= null || folate_daily_value_as_sold !=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Folate", folate_as_sold,(folate_as_sold!=null? "g":null), folate_daily_value_as_sold,null, true));
+		}
+		
+		if(folate_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Folate", null,null, folate_daily_value_as_prepared,null, false));
+		}
+		//Biotin
+		Double biotin_as_sold = rs.getDouble("biotin_as_sold");
+		biotin_as_sold = rs.wasNull()?null: biotin_as_sold;
+		
+		Double biotin_daily_value_as_sold = rs.getDouble("biotin_daily_value_as_sold");
+		biotin_daily_value_as_sold = rs.wasNull()? null: biotin_daily_value_as_sold;
+		
+		Double biotin_daily_value_as_prepared= rs.getDouble("biotin_daily_value_as_prepared");
+		biotin_daily_value_as_prepared = rs.wasNull()?null: biotin_daily_value_as_prepared;
+				
+		if(biotin_as_sold!=null || biotin_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Biotin", biotin_as_sold,(biotin_as_sold!=null? "g":null), biotin_daily_value_as_sold,null, true));
+		}
+		if(biotin_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Biotin", null,null, biotin_daily_value_as_prepared,null, false));
+		}
+		
+		//Choline
+		Double choline_as_sold = rs.getDouble("choline_as_sold");
+		choline_as_sold = rs.wasNull()?null: choline_as_sold;
+		
+		Double choline_daily_value_as_sold = rs.getDouble("choline_daily_value_as_sold");
+		choline_daily_value_as_sold = rs.wasNull()? null: choline_daily_value_as_sold;
+		
+		Double choline_daily_value_as_prepared= rs.getDouble("choline_daily_value_as_prepared");
+		choline_daily_value_as_prepared = rs.wasNull()?null: choline_daily_value_as_prepared;
+		
+		Integer choline_id = getComponentId("Choline");
+		
+		if(choline_as_sold!=null || choline_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Choline", choline_as_sold,(choline_as_sold!=null? "g":null), choline_daily_value_as_sold,null, true));
+		}
+		if(choline_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Choline", null,null, choline_daily_value_as_prepared,null, false));
+		}
+		
+		//Pantothenate
+		Double pantothenate_as_sold = rs.getDouble("pantothenate_as_sold");
+		pantothenate_as_sold = rs.wasNull()?null: pantothenate_as_sold;
+		
+		Double pantothenate_daily_value_as_sold = rs.getDouble("pantothenate_daily_value_as_sold");
+		pantothenate_daily_value_as_sold = rs.wasNull()? null: pantothenate_daily_value_as_sold;
+		
+		Double pantothenate_daily_value_as_prepared= rs.getDouble("pantothenate_daily_value_as_prepared");
+		pantothenate_daily_value_as_prepared = rs.wasNull()?null: pantothenate_daily_value_as_prepared;
+		
+		Integer pantothenate_id = getComponentId("Pantothenate");
+		
+		if(pantothenate_as_sold!=null || pantothenate_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Pantothenate", pantothenate_as_sold,(pantothenate_as_sold!=null? "g":null), pantothenate_daily_value_as_sold,null, true));
+		}
+		if(pantothenate_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Pantothenate", null,null, pantothenate_daily_value_as_prepared,null, false));
+		}
+		
+		//Phosphorus
+		Double phosphorus_as_sold = rs.getDouble("phosphorus_as_sold");
+		phosphorus_as_sold = rs.wasNull()?null: phosphorus_as_sold;
+		
+		Double phosphorus_daily_value_as_sold = rs.getDouble("phosphorus_daily_value_as_sold");
+		phosphorus_daily_value_as_sold = rs.wasNull()? null: phosphorus_daily_value_as_sold;
+		
+		Double phosphorus_daily_value_as_prepared= rs.getDouble("phosphorus_daily_value_as_prepared");
+		phosphorus_daily_value_as_prepared = rs.wasNull()?null: phosphorus_daily_value_as_prepared;
+		
+		Integer phosphorus_id = getComponentId("Phosphorus");
+		
+		if(phosphorus_as_sold!=null || phosphorus_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Phosphorus", phosphorus_as_sold,(phosphorus_as_sold!=null? "g":null), phosphorus_daily_value_as_sold,null, true));
+		}
+		if(phosphorus_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Phosphorus", null,null, phosphorus_daily_value_as_prepared,null, false));
+		}
+		
+		//magnesium
+		Double magnesium_as_sold = rs.getDouble("magnesium_as_sold");
+		magnesium_as_sold = rs.wasNull()?null: magnesium_as_sold;
+		
+		Double magnesium_daily_value_as_sold = rs.getDouble("magnesium_daily_value_as_sold");
+		magnesium_daily_value_as_sold = rs.wasNull()? null: magnesium_daily_value_as_sold;
+		
+		Double magnesium_daily_value_as_prepared= rs.getDouble("magnesium_daily_value_as_prepared");
+		magnesium_daily_value_as_prepared = rs.wasNull()?null: magnesium_daily_value_as_prepared;
+		
+		Integer magnesium_id = getComponentId("Magnesium");
+		
+		if(magnesium_as_sold!= null || magnesium_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Magnesium", magnesium_as_sold,(magnesium_as_sold!=null? "g":null), magnesium_daily_value_as_sold,null, true));
+		}
+		if(magnesium_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Magnesium", null,null, magnesium_daily_value_as_prepared,null, false));
+		}
+
+		//Zinc
+		Double zinc_as_sold = rs.getDouble("zinc_as_sold");
+		zinc_as_sold = rs.wasNull()?null: zinc_as_sold;
+		
+		Double zinc_daily_value_as_sold = rs.getDouble("zinc_daily_value_as_sold");
+		zinc_daily_value_as_sold = rs.wasNull()? null: zinc_daily_value_as_sold;
+		
+		Double zinc_daily_value_as_prepared= rs.getDouble("zinc_daily_value_as_prepared");
+		zinc_daily_value_as_prepared = rs.wasNull()?null: zinc_daily_value_as_prepared;
+		
+		if(zinc_as_sold!=null || zinc_daily_value_as_sold!= null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Zinc", zinc_as_sold,(zinc_as_sold!=null? "g":null), zinc_daily_value_as_sold,null, true));
+		}
+		if(zinc_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Zinc", null,null, zinc_daily_value_as_prepared,null, false));
+		}
+		//Selenium
+		Double selenium_as_sold = rs.getDouble("selenium_as_sold");
+		selenium_as_sold = rs.wasNull()?null: selenium_as_sold;
+		
+		Double selenium_daily_value_as_sold = rs.getDouble("selenium_daily_value_as_sold");
+		selenium_daily_value_as_sold = rs.wasNull()? null: selenium_daily_value_as_sold;
+		
+		Double selenium_daily_value_as_prepared= rs.getDouble("selenium_daily_value_as_prepared");
+		selenium_daily_value_as_prepared = rs.wasNull()?null: selenium_daily_value_as_prepared;
+		
+		
+		if(selenium_as_sold!=null || selenium_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Selenium", selenium_as_sold,(selenium_as_sold!=null? "g":null), selenium_daily_value_as_sold,null, true));
+		}
+		if(selenium_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Selenium", null,null, selenium_daily_value_as_prepared,null, false));
+		}
+
+
+		//Copper
+		Double copper_as_sold = rs.getDouble("copper_as_sold");
+		copper_as_sold = rs.wasNull()?null: copper_as_sold;
+		
+		Double copper_daily_value_as_sold = rs.getDouble("copper_daily_value_as_sold");
+		copper_daily_value_as_sold = rs.wasNull()? null: copper_daily_value_as_sold;
+		
+		Double copper_daily_value_as_prepared= rs.getDouble("copper_daily_value_as_prepared");
+		copper_daily_value_as_prepared = rs.wasNull()?null: copper_daily_value_as_prepared;
+		
+		
+		if(copper_as_sold!= null || copper_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Copper", copper_as_sold,(copper_as_sold!=null? "g":null), copper_daily_value_as_sold,null, true));
+		}
+		if(copper_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Copper", null,null, copper_daily_value_as_prepared,null, false));
+		}
+		
+		//Manganese
+		Double manganese_as_sold = rs.getDouble("manganese_as_sold");
+		manganese_as_sold = rs.wasNull()?null: manganese_as_sold;
+		
+		Double manganese_daily_value_as_sold = rs.getDouble("manganese_daily_value_as_sold");
+		manganese_daily_value_as_sold = rs.wasNull()? null: manganese_daily_value_as_sold;
+		
+		Double manganese_daily_value_as_prepared= rs.getDouble("manganese_daily_value_as_prepared");
+		manganese_daily_value_as_prepared = rs.wasNull()?null: manganese_daily_value_as_prepared;
+		
+		
+		if(manganese_as_sold!=null || manganese_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Manganese", manganese_as_sold,(manganese_as_sold!=null? "g":null), manganese_daily_value_as_sold,null, true));
+		}
+		if(manganese_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Manganese", null,null, manganese_daily_value_as_prepared,null, false));
+		}
+
+		//Chromium
+		Double chromium_as_sold = rs.getDouble("chromium_as_sold");
+		chromium_as_sold = rs.wasNull()?null: chromium_as_sold;
+		
+		Double chromium_daily_value_as_sold = rs.getDouble("chromium_daily_value_as_sold");
+		chromium_daily_value_as_sold = rs.wasNull()? null: chromium_daily_value_as_sold;
+		
+		Double chromium_daily_value_as_prepared= rs.getDouble("chromium_daily_value_as_prepared");
+		chromium_daily_value_as_prepared = rs.wasNull()?null: chromium_daily_value_as_prepared;
+		
+		
+		if(chromium_as_sold!=null || chromium_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Chromium", chromium_as_sold,(chromium_as_sold!=null? "g":null), chromium_daily_value_as_sold,null, true));
+		}
+		if(chromium_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Chromium", null,null, chromium_daily_value_as_prepared,null, false));
+		}
+
+		//Molybdenum
+		Double molybdenum_as_sold = rs.getDouble("molybdenum_as_sold");
+		molybdenum_as_sold = rs.wasNull()?null: molybdenum_as_sold;
+		
+		Double molybdenum_daily_value_as_sold = rs.getDouble("molybdenum_daily_value_as_sold");
+		molybdenum_daily_value_as_sold = rs.wasNull()? null: molybdenum_daily_value_as_sold;
+		
+		Double molybdenum_daily_value_as_prepared= rs.getDouble("molybdenum_daily_value_as_prepared");
+		molybdenum_daily_value_as_prepared = rs.wasNull()?null: molybdenum_daily_value_as_prepared;
+		
+		
+		if(molybdenum_as_sold!=null || molybdenum_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Molybdenum", molybdenum_as_sold,(molybdenum_as_sold!=null? "g":null), molybdenum_daily_value_as_sold,null, true));
+		}
+		if(molybdenum_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("Molybdenum", null,null, molybdenum_daily_value_as_prepared,null, false));
+		}
+		//Molybdenum
+		Double chloride_as_sold = rs.getDouble("chloride_as_sold");
+		chloride_as_sold = rs.wasNull()?null: chloride_as_sold;
+		
+		Double chloride_daily_value_as_sold = rs.getDouble("chloride_daily_value_as_sold");
+		chloride_daily_value_as_sold = rs.wasNull()? null: chloride_daily_value_as_sold;
+		
+		Double chloride_daily_value_as_prepared= rs.getDouble("chloride_daily_value_as_prepared");
+		chloride_daily_value_as_prepared = rs.wasNull()?null: chloride_daily_value_as_prepared;
+		
+		
+		if(chloride_as_sold!=null || chloride_daily_value_as_sold!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("chloride", chloride_as_sold,(chloride_as_sold!=null? "g":null), chloride_daily_value_as_sold,null, true));
+		}
+		if(chloride_daily_value_as_prepared!=null){
+		importLabelModel.getNftList().add(new ImportLabelNft("chloride", null,null, chloride_daily_value_as_prepared,null, false));
+		}
+
+
+
+
+
+		return importLabelModel;
+	}
 
     public static Map<String, Object> getQueryMap(final PackageRequest request)
     {
         final Map<String, Object> queryMap = new HashMap<String, Object>();
 
         if (!request.labelUpc.isEmpty())
-            if (StringUtilities.isNumeric(request.labelUpc))
                 queryMap.put("package_upc", request.labelUpc);
-            else
-                queryMap.put("inputError", ResponseCodes.INVALID_UPC);
+       
 
         if (!request.labelDescription.isEmpty())
             queryMap.put("package_description", request.labelDescription);
@@ -2779,5 +3651,9 @@ public final class DaoUtil
         }
 
     }
+	private static Integer getComponentId(String string) {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
 }

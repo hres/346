@@ -9,6 +9,8 @@ public class NftModel
     @XmlElement(
             nillable = true)
     private Double amount;
+    @XmlElement(
+            nillable = true)
     private String unit_of_measure;
     @XmlElement(
             nillable = true)

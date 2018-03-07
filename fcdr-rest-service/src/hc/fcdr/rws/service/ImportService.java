@@ -43,6 +43,7 @@ import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ImportMarketShareDao;
 import hc.fcdr.rws.db.ImportSalesDao;
+import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.except.MailProcessorException;
 import hc.fcdr.rws.importer.CSVLoader;
@@ -67,6 +68,7 @@ public class ImportService extends Application
             REPORT_DIRECTORY_ROOT + "fcdrSalesImportReport.pdf";
 
     static ImportMarketShareDao importSalesDao = null;
+    static PackageDao packageDao = null;
 
 
     @PostConstruct
@@ -87,6 +89,9 @@ public class ImportService extends Application
                 importSalesDao =
                         new ImportMarketShareDao(pgConnectionPool.getConnection(),
                         		ContextManager.getJndiValue("SCHEMA"));
+                packageDao =
+                        new PackageDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
             {
@@ -267,14 +272,14 @@ public class ImportService extends Application
 
     
     @POST
-    @Path("/getFile")
+    @Path("/importLabel")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.CHARSET_PARAMETER)
-    public Response getImportMarketShare(@Context HttpServletRequest requestContext, @Context SecurityContext context)
+    public Response getImportLabele( )
             throws SQLException, IOException, Exception
     {
-    	   String ipAddressRequestCameFrom = requestContext.getRemoteAddr();
-    	   System.out.println("ip: "+ipAddressRequestCameFrom);
+//    	   String ipAddressRequestCameFrom = requestContext.getRemoteAddr();
+//    	   System.out.println("ip: "+ipAddressRequestCameFrom);
     	   //Also if security is enabled
 //    	   Principal principal = context.getUserPrincipal();
 //    	   String userName = principal.getName();
@@ -283,6 +288,9 @@ public class ImportService extends Application
     	//importSalesDao.testImport("/tmp/bigFile.csv");
     	//importSalesDao.testImport("/tmp/sales16.csv");
     	
+    	//.importLabel("/tmp/labelData.csv");
+    	
+    	packageDao.importLabel("/tmp/labelData.csv");
     	return null;
     }
     @POST

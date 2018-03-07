@@ -107,7 +107,7 @@ public class PackageInsertRequest
     private String  classification_name;
     @XmlElement(
             nillable = true)
-    private Double  nielsen_item_rank;
+    private String  nielsen_item_rank;
     @XmlElement(
             nillable = true)
     private String  nutrient_claims;
@@ -194,7 +194,7 @@ public class PackageInsertRequest
             final String edited_by, final Boolean informed_dining_program,
             final String nft_last_update_date, final Double product_grouping,
             final Boolean child_item, final String classification_number,
-            final String classification_name, final Double nielsen_item_rank,
+            final String classification_name, final String nielsen_item_rank,
             final String nutrient_claims, final String package_nielsen_category,
             final String common_household_measure, final String creation_date,
             final String last_edit_date, final Boolean calculated)
@@ -626,12 +626,12 @@ public class PackageInsertRequest
         this.classification_name = classification_name;
     }
 
-    public Double getNielsen_item_rank()
+    public String getNielsen_item_rank()
     {
         return nielsen_item_rank;
     }
 
-    public void setNielsen_item_rank(final Double nielsen_item_rank)
+    public void setNielsen_item_rank(final String nielsen_item_rank)
     {
         this.nielsen_item_rank = nielsen_item_rank;
     }

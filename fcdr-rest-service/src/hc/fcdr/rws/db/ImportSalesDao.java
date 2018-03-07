@@ -1,41 +1,32 @@
 package hc.fcdr.rws.db;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
 
-import com.opencsv.bean.CsvToBeanBuilder;
+
+
 
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.importer.ImportSalesData;
-import hc.fcdr.rws.model.pkg.NftModel;
+
 import hc.fcdr.rws.model.sales.ImportMarketShare;
 import hc.fcdr.rws.model.sales.ImportSalesMadatoryFields;
-import hc.fcdr.rws.util.DaoUtil;
 public class ImportSalesDao extends PgDao {
 
 	
-    private static final Logger logger       =
-            Logger.getLogger(ImportSalesDao.class.getName());
+
     private final String        schema;
-    private static final String SQL_INSERT   =
-            "insert into ${table}(${keys}) values(${values})";
-    private static final String TABLE_REGEX  = "\\$\\{table\\}";
-    private static final String KEYS_REGEX   = "\\$\\{keys\\}";
-    private static final String VALUES_REGEX = "\\$\\{values\\}";
+
 
     public ImportSalesDao(final Connection connection, final String schema)
     {
@@ -49,7 +40,6 @@ public class ImportSalesDao extends PgDao {
     	
     	System.out.println("yes here "+csvFile);
     	
-    	List<ImportMarketShare> list = new ArrayList<ImportMarketShare>();
     	Map<Double, String> queryMap = new HashMap<Double, String> ();
     	
     	List<ImportMarketShare> upcMatchInDB= new ArrayList<ImportMarketShare>();
@@ -76,7 +66,7 @@ public class ImportSalesDao extends PgDao {
             System.out.println("Loading of sales data started...");
          Statement stmt = connection.createStatement();
     	
-         boolean result = stmt.execute(sql);
+         stmt.execute(sql);
 
         	 try {
 				queryMap = getMissingMandatoryFields();

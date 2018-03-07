@@ -2,11 +2,11 @@ package hc.fcdr.rws.db;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,22 +22,18 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
-import com.opencsv.bean.CsvToBeanBuilder;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.importer.ImportSalesData;
-import hc.fcdr.rws.model.pkg.NftModel;
+
 import hc.fcdr.rws.model.product.ProductInsertRequest;
 import hc.fcdr.rws.model.sales.ImportMarketShare;
-import hc.fcdr.rws.model.sales.ImportSalesMadatoryFields;
 import hc.fcdr.rws.model.sales.ImportSalesReport;
 import hc.fcdr.rws.model.sales.ImportSalesSummary;
 import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.model.sales.UpdateProductFields;
-import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
-import hc.fcdr.rws.util.KeyValue;
+
 
 import java.security.*;
 
@@ -45,10 +41,7 @@ public class ImportMarketShareDao extends PgDao {
 
 	private static final Logger logger = Logger.getLogger(ImportSalesDao.class.getName());
 	private final String schema;
-	private static final String SQL_INSERT = "insert into ${table}(${keys}) values(${values})";
-	private static final String TABLE_REGEX = "\\$\\{table\\}";
-	private static final String KEYS_REGEX = "\\$\\{keys\\}";
-	private static final String VALUES_REGEX = "\\$\\{values\\}";
+
 
 //	Map<Double, String> duplicatesRecords = new HashMap<Double, String>();
 
@@ -87,7 +80,6 @@ public class ImportMarketShareDao extends PgDao {
 	public Map<String, List<ImportMarketShare>> getAllExistingSales(Map<String, Integer> recordInDbByUPC) throws SQLException {
 
 		String sql = "select * from " + schema + ".sales";
-		List<ImportMarketShare> list = new ArrayList<ImportMarketShare>();
 		ResultSet resultSet = null;
 		Map<String, List<ImportMarketShare>> data = new HashMap<String, List<ImportMarketShare>>();
 		ImportMarketShare importMarketShare = null;
@@ -387,8 +379,9 @@ public class ImportMarketShareDao extends PgDao {
 							null, null, recordInDbByUPC.get(entry.getKey())
 
 					));
+					
 					importSalesReport.getList_of_records_linked_by_upc().add("RecordID: "+element.getItem_id()+" "+element.getSales_description());
-
+					
 				
 				}
 				insertSales(list);
@@ -941,7 +934,6 @@ public class ImportMarketShareDao extends PgDao {
 	}
 
 	public int  insertProducts(ProductInsertRequest item) throws DaoException, SQLException{
-		   ResultSet generatedKeys = null;
 		final Timestamp now = DateUtil.getCurrentTimeStamp();
 		
 		String sql = "insert into "+schema+".product (product_manufacturer, product_description, "
@@ -1157,7 +1149,7 @@ public class ImportMarketShareDao extends PgDao {
 		Statement statement = connection.createStatement();
 		
 		String sql = "truncate "+schema+".sales_temp";
-		  int result = statement.executeUpdate(sql);
+		  statement.executeUpdate(sql);
 	
 	}
 }

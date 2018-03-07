@@ -2,20 +2,30 @@ package hc.fcdr.rws.db;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.importLabel.ExistingLabels;
+import hc.fcdr.rws.model.importLabel.ImportLabelModel;
+import hc.fcdr.rws.model.importLabel.ImportLabelNft;
+import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
@@ -33,8 +43,12 @@ import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
+import hc.fcdr.rws.model.product.ProductInsertRequest;
+import hc.fcdr.rws.model.sales.ImportMarketShare;
 import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
+import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
+import hc.fcdr.rws.util.DateUtil;
 
 public class PackageDao extends PgDao
 {
@@ -682,8 +696,8 @@ public class PackageDao extends PgDao
     public Boolean checkClassification(final String classificationNumber)
             throws DaoException
     {
-        if ((classificationNumber == null))
-            return true;
+//        if ((classificationNumber == null))
+//            return true;
 
         ResultSet resultSet = null;
 
@@ -1041,6 +1055,7 @@ public class PackageDao extends PgDao
                                 ? null : resultSet.getDouble("amount");
                 System.out.println(
                         resultSet.getString("component_name") + ": " + amount);
+               
                 String amount_unit_of_measure =
                         resultSet.getString("amount_unit_of_measure");
                 amount_unit_of_measure =
@@ -1058,6 +1073,7 @@ public class PackageDao extends PgDao
                 Double amount_per100g =  resultSet.getDouble("amount_per100g");
                 amount_per100g = resultSet.wasNull()? null: resultSet.getDouble("amount_per100g");
                 // String name, Double amount, String unit_of_measure, Double daily_value
+             
                 nftList.getNft().add(new NftModel(name, amount,
                         amount_unit_of_measure, percentage_daily_value, amount_per100g));
             }
@@ -1144,4 +1160,843 @@ public class PackageDao extends PgDao
                 ResponseCodes.OK.getMessage());
     }
 
+	public void importLabel(String filePath) {
+		final StopWatch stopWatch = new StopWatch();
+		
+		stopWatch.start();
+		System.out.println("Program has started");
+
+		
+		start(filePath);
+
+		stopWatch.split();
+		System.out.println(
+				"Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
+
+		
+	}
+
+	private void start(String file) {
+		
+		Map<String, List<ExistingLabels>> existingLabels = new HashMap<String,List<ExistingLabels>>();
+		Map<String, List<ImportLabelModel>> dataFromTempByUpc = new HashMap<String,List<ImportLabelModel>>();
+		Map<String, List<ExistingLabels>> existingLabelStoredByUPC = new HashMap<String,List<ExistingLabels>>();
+		Map<String, Integer> mapUpcImRank = new HashMap<String, Integer>();
+		List<ImportLabelModel> uniqueLabels = new ArrayList<ImportLabelModel>();
+		Map<Double, List<ImportLabelModel>> labelSortedByGrouping = new HashMap<Double, List<ImportLabelModel>>();
+		int total = 0;
+		try {
+			emptyTempTable();
+			loadData( file);
+			existingLabelStoredByUPC = getExistingLabels(existingLabels);
+			getDataFromTemp(existingLabels,dataFromTempByUpc);
+			for(Map.Entry<String, List<ImportLabelModel>> entry : dataFromTempByUpc.entrySet()){
+				
+				total+=entry.getValue().size();
+			}
+			
+			labelUpcMatch(dataFromTempByUpc,existingLabelStoredByUPC);
+			mapUpcImRank = getUpcRank();
+			try {
+				labelSortedByGrouping = labelByUpcWithinFile(uniqueLabels, dataFromTempByUpc, mapUpcImRank);
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			buildByGrouping(labelSortedByGrouping,uniqueLabels);
+			buildQueryUniqueLabel(uniqueLabels);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Number of existing label "+existingLabels.size());
+
+		
+		
+		
+//		for (List<ImportLabelModel> list : dataFromTempByUpc.values()) {
+//		    total += list.size();
+//		}
+		
+		
+
+		
+		System.out.println("Number of valid records in the file "+total);
+
+		
+	}
+
+	private Map<String, List<ExistingLabels>> getExistingLabels(Map<String, List<ExistingLabels>> data) {
+		
+		Map<String, List<ExistingLabels>> existingLabelStoredByUPC = new HashMap<String,List<ExistingLabels>>();
+
+		
+		
+		ResultSet resultSet = null;
+		String sql = "select package_id, package_upc, "
+				+ " package_description, product_grouping,  package_source, package_collection_date from " + schema + ".package";
+		
+		try {
+			ExistingLabels existingLabel;
+			resultSet = executeQuery(sql, null);
+			try {
+				while (resultSet.next()) {
+					
+					Integer package_id = resultSet.getInt("package_id");
+					String label_description = resultSet.getString("package_description");
+					String label_source  = resultSet.getString("package_source");
+					Date label_collection_date = resultSet.getDate("package_collection_date");
+					String label_upc = resultSet.getString("package_upc");
+					Double product_grouping = resultSet.getDouble("product_grouping");
+					
+					existingLabel = new ExistingLabels(package_id,label_upc, label_description, label_source,label_collection_date,product_grouping );
+					
+					String sb = existingLabel.getLabel_description()
+								+existingLabel.getLabel_upc()
+								+existingLabel.getLabel_source()
+								+(existingLabel.getLabel_collection_date()!=null?existingLabel.getLabel_collection_date().toString():"null");
+					
+								//System.out.println("**"+sb);
+								
+								if (!data.containsKey(sb)) {
+									List<ExistingLabels> item = new ArrayList<>();
+									item.add(existingLabel);
+									data.put(sb, item);
+									if(!existingLabelStoredByUPC.containsKey(existingLabel.getLabel_upc())){
+										existingLabelStoredByUPC.put(existingLabel.getLabel_upc(), item);
+									}
+								
+								}
+								
+								
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return existingLabelStoredByUPC;
+	}
+	public void loadData(String csvFile) throws SQLException{
+		
+		String sql = "COPY "+schema+".label_temp "+
+		"	( "+
+			 " record_id , "+
+			 " label_upc, "+
+			 " nielsen_item_rank, "+
+			"  nielsen_category, "+
+			 " label_description, "+
+			 " label_brand, "+
+			 " label_manufacturer, "+
+			 " label_country, "+
+			 " package_size, "+
+			 " package_size_unit_of_measure, "+
+			"  number_of_units, "+
+			 " storage_type, "+
+			 " storage_statement, "+
+			 " collection_date, "+
+			 " health_claims, "+
+			 " nutrient_claims, "+
+			 " other_package_statements, "+
+			 " suggested_directions, "+
+			 " ingredients, "+
+			 " multipart, " +
+			 " nutrition_fact_table, "+
+			 " common_household_measure, "+
+			 " per_serving_amount_as_sold, "+
+			 " per_serving_amount_unit_of_measure_as_sold, "+
+			 " per_serving_amount_as_prepared, "+
+			 " per_serving_amount_unit_of_measure_as_prepared, "+
+			 " energy_kcal_as_sold, "+
+			 " energy_kcal_as_prepared, "+
+			 " energy_kj_as_sold, "+
+			 " energy_kj_as_prepared, "+
+			 " fat_as_sold, "+
+			 " fat_daily_value_as_sold, "+
+			 " fat_daily_value_as_prepared, "+
+			 "  saturated_fat_as_sold, "+
+			 " trans_fat_as_sold, "+
+			 " saturated_plus_trans_daily_value_as_sold,  "+
+			 " saturated_plus_trans_daily_value_as_prepared, "+
+			 " fat_polyunsatured_as_sold, "+
+			 " fat_polyunsaturated_omega_6_as_sold, "+
+			 " fat_polyunsaturated_omega_3_as_sold, "+
+			 " fat_monounsaturated_as_sold, "+
+			 " carbohydrates_as_sold, "+
+			 " carbohydrates_daily_value_as_sold, "+
+			 " carbohydrates_daily_value_as_prepared, "+
+			 " fibre_as_sold, "+
+			 " fibre_daily_value_sold, "+
+			 "  fibre_daily_value_as_prepared, "+
+			 " soluble_fibre_as_sold, "+
+			 " insoluble_fibre_as_sold, "+
+			 " sugar_total_sold, "+
+			 " sugar_total_daily_value_as_sold, "+
+			 " sugar_total_daily_value_as_prepared, "+
+			 " sugar_alcohols_as_sold, "+
+			 " starch_as_sold, "+
+			 " protein_as_sold, "+
+			 " cholesterol_as_sold, "+
+			 " cholesterol_daily_value_as_sold, "+
+			 " cholesterol_daily_value_as_prepared, "+
+			 " sodium_as_sold, "+
+			 " sodium_daily_value_as_sold, "+
+			 " sodium_daily_value_as_prepared, "+
+			 " potassium_as_sold, "+
+			 " potassium_daily_value_as_sold, "+
+			 " potassium_daily_value_as_prepared, "+
+			 " calcium_as_sold, "+
+			 " calcium_daily_value_as_sold, "+
+			 " calcium_daily_value_as_prepared, "+
+			 " iron_as_sold, "+
+			 " iron_daily_value_as_sold, "+
+			 " iron_daily_value_as_prepared, "+
+			 " vitamin_a_as_sold, "+
+			 " vitamin_a_daily_value_as_sold, "+
+			 " vitamin_a_daily_value_as_prepared, "+
+			 " vitamin_c_as_sold, "+
+			 " vitamin_c_daily_value_as_sold, "+
+			 " vitamin_c_daily_value_as_prepared, "+
+			 " vitamin_d_as_sold, "+
+			 " vitamin_d_daily_value_as_sold, "+
+			 " vitamin_d_daily_value_as_prepared, "+
+			 " vitamin_e_as_sold, "+
+			 " vitamin_e_daily_value_as_sold, "+
+			 " vitamin_e_daily_value_as_prepared,  	 "+
+			 " vitamin_k_as_sold, "+
+			 " vitamin_k_daily_value_as_sold, "+
+			 " vitamin_k_daily_value_as_prepared, "+  
+			 " thiamine_as_sold, "+
+			 " thiamine_daily_value_as_sold, "+
+			 " thiamine_daily_value_as_prepared,  "+
+			 " riboflavin_as_sold, "+
+			 " riboflavin_daily_value_as_sold, "+
+			 " riboflavin_daily_value_as_prepared,   "+
+			 " niacin_as_sold, "+
+			 " niacin_daily_value_as_sold, "+
+			 " niacin_daily_value_as_prepared,   "+
+			 " vitamin_b6_as_sold, "+
+			 " vitamin_b6_daily_value_as_sold, "+
+			 " vitamin_b6_daily_value_as_prepared,   "+
+			 " folate_as_sold, "+
+			 " folate_daily_value_as_sold, "+
+			 " folate_daily_value_as_prepared,   "+
+			 " vitamin_b12_as_sold, "+
+			 " vitamin_b12_daily_value_as_sold, "+
+			 " vitamin_b12_daily_value_as_prepared,  "+
+			 " biotin_as_sold, "+
+			 " biotin_daily_value_as_sold, "+
+			 " biotin_daily_value_as_prepared, "+  
+			 " choline_as_sold, "+
+			 " choline_daily_value_as_sold, "+
+			 " choline_daily_value_as_prepared,    "+  
+			 " pantothenate_as_sold, "+
+			 " pantothenate_daily_value_as_sold, "+
+			 " pantothenate_daily_value_as_prepared, "+   
+			 " phosphorus_as_sold, "+
+			 " phosphorus_daily_value_as_sold, "+
+			 " phosphorus_daily_value_as_prepared,   "+
+			 
+			 " iodide_as_sold, "+
+			 " iodide_daily_value_as_sold, "+
+			 " iodide_daily_value_as_prepared,   "+
+			 
+			 " magnesium_as_sold, "+
+			 " magnesium_daily_value_as_sold, "+
+			 " magnesium_daily_value_as_prepared,   "+ 
+			 " zinc_as_sold, "+
+			 " zinc_daily_value_as_sold, "+
+			 " zinc_daily_value_as_prepared,    "+
+			 " selenium_as_sold, "+
+			 " selenium_daily_value_as_sold, "+
+			 "  selenium_daily_value_as_prepared,   "+
+			 " copper_as_sold, "+
+			 " copper_daily_value_as_sold, "+
+			 " copper_daily_value_as_prepared,    "+
+			 "  manganese_as_sold, "+
+			 " manganese_daily_value_as_sold, "+
+			 " manganese_daily_value_as_prepared,   "+
+			 " chromium_as_sold, "+
+			 " chromium_daily_value_as_sold, "+
+			 " chromium_daily_value_as_prepared,  "+
+			 " molybdenum_as_sold, "+
+			 " molybdenum_daily_value_as_sold, "+
+			 " molybdenum_daily_value_as_prepared,  "+
+			 " chloride_as_sold, "+
+			 " chloride_daily_value_as_sold, "+
+			 " chloride_daily_value_as_prepared,  "+
+			 " per_serving_amount_in_grams_as_sold, "+
+			 " per_serving_amount_in_grams_as_prepared, "+
+			 " label_comment, "+
+			 " label_source, "+
+			 " product_description, "+
+			 " type, "+
+			 " type_of_restaurant, "+
+			 " informed_dining_program, "+
+			 " nft_last_update_date, "+
+			 " child_item, "+
+			 " product_grouping, "+
+			 " classification_number ) "+
+			  "FROM '" + csvFile + "'  CSV HEADER DELIMITER ','";
+		
+		Statement stmt = connection.createStatement();
+
+		try {
+			stmt.execute(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
+	public void emptyTempTable() throws SQLException{
+		
+		Statement statement = connection.createStatement();
+		
+		String sql = "truncate "+schema+".label_temp";
+		
+		 
+		statement.executeUpdate(sql);
+	
+	}
+	
+	public void getDataFromTemp(Map<String, List<ExistingLabels>> labelInDb, Map<String, List<ImportLabelModel>> dataFromTempByUpc) throws SQLException{
+		
+		Map<String, ImportLabelModel> data = new HashMap<String,ImportLabelModel>();
+		Map<Double, String> invalidLabels = new HashMap<Double, String>();
+		Map<Double, String> duplicatesLabels = new HashMap<Double, String>();
+		
+		//Map<String, List<ImportLabelModel>> dataFromTempByUpc = new HashMap<String,List<ImportLabelModel>>();
+
+		int count = 0;
+		String sql = "select * from " + schema + ".label_temp";
+		ResultSet resultSet = null;
+		ImportLabelModel importLabelModel;
+		
+		try {
+			resultSet = executeQuery(sql, null);
+			
+			while(resultSet.next()){
+				++count;
+				importLabelModel = DaoUtil.populateLabelModel( resultSet);
+				String sb = importLabelModel.getImportLabelRequest().getPackage_description()+ 
+							importLabelModel.getImportLabelRequest().getPackage_upc() +
+							importLabelModel.getImportLabelRequest().getPackage_source() +
+							importLabelModel.getImportLabelRequest().getPackage_collection_date();
+				
+				
+				if(importLabelModel.isValid()){
+					
+					if(labelInDb.containsKey(sb) || data.containsKey(sb)){
+						//System.out.println("Yes dup");
+
+						duplicatesLabels.put(importLabelModel.getImportLabelRequest().getRecord_id(), importLabelModel.getImportLabelRequest().getPackage_description());
+						
+
+					}else{			
+						
+
+						data.put(sb, importLabelModel);
+						if(dataFromTempByUpc.containsKey(importLabelModel.getImportLabelRequest().getPackage_upc())){
+							//append
+							dataFromTempByUpc.get(importLabelModel.getImportLabelRequest().getPackage_upc()).add(importLabelModel);
+						
+						}else{
+							//new element in List
+							 List<ImportLabelModel> item = new ArrayList<>();
+							 item.add(importLabelModel);
+							 dataFromTempByUpc.put(importLabelModel.getImportLabelRequest().getPackage_upc(), item);
+								//System.out.println("Neew key");
+		
+						}
+						
+					}
+					
+					
+				}else{
+
+					invalidLabels.put(importLabelModel.getImportLabelRequest().getRecord_id(), importLabelModel.getImportLabelRequest().getPackage_description());
+					
+				}
+			}
+			
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	System.out.println("Number of invalid records: "+invalidLabels.size());
+	
+	}
+
+
+public void labelUpcMatch(Map<String, List<ImportLabelModel>> dataFromTempByUpc,Map<String, List<ExistingLabels>> existingLabelsByUpc ){
+		
+	Map<Integer, List<ImportLabelModel>> insertLabelUpcMatch =new  HashMap<Integer, List<ImportLabelModel>>();
+		
+	for (final Iterator<Entry<String, List<ImportLabelModel>>> it = dataFromTempByUpc.entrySet().iterator(); it
+			.hasNext();) {
+
+		Entry<String, List<ImportLabelModel>> entry = it.next();		
+		List<ImportLabelModel> list = new ArrayList<ImportLabelModel>();// entry.getValue();
+		if(existingLabelsByUpc.containsKey(entry.getKey())){
+			
+			//Validate same UPC different product grouping
+			
+			final List<ImportLabelModel> v = entry.getValue();
+
+			for (final ImportLabelModel element : v) {
+				
+				if(element.getImportLabelRequest().getProduct_grouping() !=existingLabelsByUpc.get(entry.getKey()).get(0).getProduct_grouping()){
+					//Report
+				}else{
+					list.add(element);
+				}
+			}
+			
+			
+			insertLabelUpcMatch.put(existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id(), list);
+			it.remove();
+		}
+		
+		
+		
+		
+	}
+		buildQueryUpcMatchInDB(insertLabelUpcMatch);
+	
+	}
+
+
+private void buildQueryUpcMatchInDB(Map<Integer, List<ImportLabelModel>> insertLabelUpcMatch) {
+	
+	for(final Iterator<Entry<Integer, List<ImportLabelModel>>> it = insertLabelUpcMatch.entrySet().iterator(); it.hasNext(); ){
+		
+	
+				Entry<Integer, List<ImportLabelModel>> entry = it.next();
+				final List<ImportLabelModel> v = entry.getValue();
+
+				
+					
+					try {
+						for (final ImportLabelModel element : v) {
+							
+						int  package_id = createLabel(entry.getKey(),element.getImportLabelRequest());
+						try {
+							insertNftImport(element, package_id);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+						
+					} catch (DaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+	}
+	
+
+	
 }
+
+public Map<Double, List<ImportLabelModel>>  labelByUpcWithinFile(List<ImportLabelModel> uniqueLabels , Map<String, List<ImportLabelModel>> dataFromTempByUpc, Map<String, Integer> mapUpcImRank) throws DaoException{
+	
+	
+	Map<Double, List<ImportLabelModel>> labelSortedByGrouping =new  HashMap<Double, List<ImportLabelModel>>();
+
+	for (final Iterator<Entry<String, List<ImportLabelModel>>> it = dataFromTempByUpc.entrySet().iterator(); it
+			.hasNext();) {
+
+		Entry<String, List<ImportLabelModel>> entry = it.next();	
+		
+		if(entry.getValue().size()>1){
+			
+			insertLabelGroupedyUpcWithinWhile(entry.getValue());
+			
+			
+		}else{
+			
+			final List<ImportLabelModel> v = entry.getValue();
+
+			for (final ImportLabelModel element : v) {
+				
+				if(element.getImportLabelRequest().getProduct_grouping()!= null){
+					
+					if(labelSortedByGrouping.containsKey(element.getImportLabelRequest().getProduct_grouping())){
+						
+						labelSortedByGrouping.get(element.getImportLabelRequest().getProduct_grouping()).add(element);
+						
+						
+					}else{
+						
+						List<ImportLabelModel> item = new ArrayList<>();
+						item.add(element);
+						labelSortedByGrouping.put(element.getImportLabelRequest().getProduct_grouping(), item);	
+						
+					}
+
+					
+				}else if(element.getImportLabelRequest().getNielsen_item_rank()!= null && mapUpcImRank.containsKey(element.getImportLabelRequest().getNielsen_item_rank())){
+					//If Nielsen Item rank exists in db remove it from the map 
+					
+					try {
+						Map<String, Integer> upcItem = getUpcRank();
+						
+						int package_id = createLabel(upcItem.get(element.getImportLabelRequest().getNielsen_item_rank()), element.getImportLabelRequest());
+						insertNftImport(element, package_id);	
+						
+						
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				
+				}else{
+					
+					uniqueLabels.add(element);
+				}
+				
+			}
+			
+		}
+		it.remove();
+	}
+	
+	return labelSortedByGrouping;
+	
+}
+
+private void insertLabelGroupedyUpcWithinWhile(List<ImportLabelModel> value) {
+	// TODO Auto-generated method stub
+	try {
+		int product_id =	insertProducts(value.get(0).getImportLabelRequest());
+		//TODO add classification number, check consistency between product description, manufacturer, class, etc...
+		if(value.get(0).getImportLabelRequest().getClassification_number() !=null && !value.get(0).getImportLabelRequest().getClassification_number().isEmpty()){
+			if(checkClassification(value.get(0).getImportLabelRequest().getClassification_number())){
+				//System.out.println("oui called 2"+element.getImportLabelRequest().getClassification_number());
+				insertClassificationNumber(value.get(0).getImportLabelRequest().getClassification_number(), product_id);
+			}
+		}
+		for(ImportLabelModel importLabelModel: value){
+			
+			int package_id = createLabel(product_id,importLabelModel.getImportLabelRequest());
+			insertNftImport(importLabelModel, package_id);
+		}
+	} catch (DaoException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+
+public void buildByGrouping(Map<Double, List<ImportLabelModel>> labelSortedByGrouping, List<ImportLabelModel> uniqueLabels){
+	
+	for (final Iterator<Entry<Double, List<ImportLabelModel>>> it = labelSortedByGrouping.entrySet().iterator(); it
+			.hasNext();) {
+
+		Entry<Double, List<ImportLabelModel>> entry = it.next();	
+		
+		if(entry.getValue().size()>1){
+			
+
+			try {
+			int product_id =	insertProducts(entry.getValue().get(0).getImportLabelRequest());
+			
+			if(entry.getValue().get(0).getImportLabelRequest().getClassification_number() !=null && !entry.getValue().get(0).getImportLabelRequest().getClassification_number().isEmpty()){
+				if(checkClassification(entry.getValue().get(0).getImportLabelRequest().getClassification_number())){
+					System.out.println("oui called 2"+entry.getValue().get(0).getImportLabelRequest().getClassification_number());
+					insertClassificationNumber(entry.getValue().get(0).getImportLabelRequest().getClassification_number(), product_id);
+				}
+			}
+			//TODO add classification number, check consistency between product description, manufacturer, class, etc...
+			
+			for(ImportLabelModel importLabelModel: entry.getValue()){
+				
+				int package_id = createLabel(product_id,importLabelModel.getImportLabelRequest());
+				insertNftImport(importLabelModel, package_id);
+				
+			}
+			
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			
+			uniqueLabels.add(entry.getValue().get(0));
+		}
+	
+	}
+	}
+	
+
+
+	public Map<String, Integer> getUpcRank() throws SQLException{
+		ResultSet resultSet = null;
+		Map<String, Integer> upcItem = new HashMap<String, Integer>();
+		String sql = "select distinct sales_product_id_fkey, sales_upc from "+schema+".sales";
+		
+		try {
+			resultSet = executeQuery(sql, null);
+			while(resultSet.next()){
+				Integer product_id = resultSet.getInt("sales_product_id_fkey");
+				String sales_upc = resultSet.getString("sales_upc");
+				
+				if(!upcItem.containsKey(product_id)){
+					upcItem.put(sales_upc, product_id);
+				}
+			}
+			
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return upcItem;
+	
+	}
+	
+	public void buildQueryUniqueLabel(List<ImportLabelModel> uniqueLabels){
+		
+		Map<Integer, List<ImportLabelNft>> nft = new HashMap<Integer, List<ImportLabelNft>>();
+		
+		for(ImportLabelModel element: uniqueLabels){
+			
+			try {
+				int id = insertProducts(element.getImportLabelRequest());
+
+				if(element.getImportLabelRequest().getClassification_number() !=null && !element.getImportLabelRequest().getClassification_number().isEmpty()){
+					if(checkClassification(element.getImportLabelRequest().getClassification_number())){
+						//System.out.println("oui called 2"+element.getImportLabelRequest().getClassification_number());
+						insertClassificationNumber(element.getImportLabelRequest().getClassification_number(), id);
+					}
+				}
+				int label_id = createLabel(id,element.getImportLabelRequest());
+				nft.put(label_id, element.getNftList());
+				insertNftImport(element,label_id);
+				
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+
+	private int createLabel(int product_id, ImportLabelRequest importLabelRequest) throws DaoException {
+		
+//		String query = "insert into "+schema+".package (package_product_id_fkey,package_description,package_upc,"
+//				+ " package_brand, package_manufacturer,package_country,package_size,package_size_unit_of_measure, "
+//				+ "storage_type,storage_statements,health_claims,other_package_statements,suggested_directions, "
+//				+ "ingredients , multi_part_flag, nutrition_fact_table,  as_prepared_per_serving_amount,  as_prepared_unit_of_measure, "
+//				+ "as_sold_per_serving_amount,as_sold_unit_of_measure,as_prepared_per_serving_amount_in_grams, "
+//				+ "as_sold_per_serving_amount_in_grams, package_comment, package_source, package_product_description, "
+//				+ "package_collection_date, number_of_units,edited_by,informed_dining_program,nft_last_update_date, "
+//				+ "product_grouping, child_item,classification_number,classification_name, nielsen_item_rank, "
+//				+ " nutrient_claims,package_nielsen_category, common_household_measure,creation_date, "
+//				+ " last_edit_date,calculated ) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
+//				+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
+
+	      final String[] columns =
+	          {
+	                  "package_description", "package_upc", "package_brand",
+	                  "package_manufacturer", "package_country", "package_size",
+	                  "package_size_unit_of_measure", "storage_type",
+	                  "storage_statements", "health_claims",
+	                  "other_package_statements", "suggested_directions",
+	                  "ingredients", "multi_part_flag", "nutrition_fact_table",
+	                  "as_prepared_per_serving_amount", "as_prepared_unit_of_measure",
+	                  "as_sold_per_serving_amount", "as_sold_unit_of_measure",
+	                  "as_prepared_per_serving_amount_in_grams",
+	                  "as_sold_per_serving_amount_in_grams", "package_comment",
+	                  "package_source", "package_product_description",
+	                  "number_of_units", "informed_dining_program",
+	                  "product_grouping", "nielsen_item_rank", "nutrient_claims",
+	                  "package_nielsen_category", "common_household_measure",
+	                  "child_item", "package_classification_name", "edited_by",
+	                  "package_classification_number", "package_product_id_fkey",
+	                  "package_collection_date", "nft_last_update_date",
+	                  "creation_date", "last_edit_date", "calculated" };
+	      
+		
+		
+		
+        String questionmarks = StringUtils.repeat("?,", columns.length);
+        questionmarks =
+                (String) questionmarks.subSequence(0,
+                        questionmarks.length() - 1);
+         //int package_id = 0;
+        String query =
+                SQL_INSERT.replaceFirst(TABLE_REGEX, schema + "." + "package");
+        query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
+        query = query.replaceFirst(VALUES_REGEX, questionmarks);
+
+        final List<Object> packageInsertList =DaoUtil.getQueryMap(importLabelRequest,product_id );
+      
+        	int package_id = (int) executeUpdate(query, packageInsertList.toArray());
+        	
+        	
+        	
+        	
+		
+		
+		return package_id;
+	}
+	
+	public int  insertProducts(ImportLabelRequest item) throws DaoException, SQLException{
+		
+		final Timestamp now = DateUtil.getCurrentTimeStamp();
+		
+		String sql = "insert into "+schema+".product (product_manufacturer, product_description, "
+				+ "cluster_number, product_brand, creation_date, last_edit_date, type, restaurant_type) values (?, ?, ?, ?, ?, ?, ?, ?) ";
+
+	
+			String description = item.getPackage_product_description()!=null?item.getPackage_product_description(): item.getPackage_description();
+				 int obj = (int) executeUpdate(sql, new Object[]{item.getPackage_manufacturer(),description,null,
+						 item.getPackage_brand(), now, now, item.getType(), item.getType_of_restaurant()});
+	            
+
+		
+		return obj;
+
+		
+	}
+	
+	
+	public Boolean insertClassificationNumber(String classification_number, Integer product_id) {
+
+		final String query1 = "insert into " + schema + "."
+				+ "product_classification (product_classification_classification_id_fkey, product_classification_product_id_fkey) "
+				+ " select classification_id, ? from " + schema + ".classification where " + "classification_number = ?";
+
+		try {
+			executeUpdate(query1, new Object[] { product_id, classification_number });
+			return true;
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+	
+    private boolean insertNftImport(ImportLabelModel importLabelModel, Integer package_id)
+            throws DaoException, SQLException
+    {
+
+
+    	
+    	Double PerServingAmount = null;
+    	String PerServingUnit = null;
+    	Double PerServingInGrams = null;
+    	
+    	 
+    	
+        final String query =
+
+                "insert into "
+                        + schema + "."
+                        + "product_component(component_id, package_id, amount,"
+                        + " amount_unit_of_measure, percentage_daily_value, as_ppd_flag, amount_per100g) "
+                        + "select component_id, ?, ?, ?, ?, ?, ? from " + schema
+                        + ".component " + "where component_id = ("
+                        + "select component_id from " + schema + "."
+                        + "component where component_name= ?)";
+
+        try
+        {
+            connection.setAutoCommit(false);
+//       	 resultSet = executeQuery(sql, new Object[]
+//                 { nftRequest.getPackage_id() });
+//     	
+//     	 resultSet.next();
+//     	 PerServingAmount = resultSet.getDouble(per_serving_amount_place_holder);
+//     	 PerServingUnit = resultSet.getString(per_serving_amount_unit_of_measure_place_holder);
+//     	 PerServingInGrams = resultSet.getDouble(per_serving_amount_in_grams_place_holder); 
+     	
+            for (final ImportLabelNft element :importLabelModel.getNftList())
+            {
+            	
+            	
+            	if(element.getFlag()){
+                	 PerServingAmount = importLabelModel.getImportLabelRequest().getAs_sold_per_serving_amount();
+                 	 PerServingUnit = importLabelModel.getImportLabelRequest().getAs_sold_unit_of_measure();
+                 	 PerServingInGrams = importLabelModel.getImportLabelRequest().getAs_sold_per_serving_amount_in_grams(); 
+            		
+            	}else{
+               	 PerServingAmount = importLabelModel.getImportLabelRequest().getAs_prepared_per_serving_amount();
+             	 PerServingUnit = importLabelModel.getImportLabelRequest().getAs_prepared_unit_of_measure();
+            	PerServingInGrams = importLabelModel.getImportLabelRequest().getAs_prepared_per_serving_amount_in_grams(); 
+
+            	}
+            	
+            	
+            	
+            	Double value = null;
+                final PreparedStatement preparedStatement =
+                        connection.prepareStatement(query);
+                preparedStatement.setObject(1, package_id);
+                preparedStatement.setObject(2, element.getAmount());
+                preparedStatement.setObject(3, element.getUnit_of_measure());
+                preparedStatement.setObject(4, element.getDaily_value());
+                preparedStatement.setObject(5, element.getFlag());
+             
+                
+                if(element.getAmount() != null){
+                	if(PerServingInGrams != null && PerServingInGrams != 0.0 && PerServingInGrams !=0){
+                		
+                    	 value = (element.getAmount()/PerServingInGrams)*100;
+                    	
+
+                		
+
+                	}else if((PerServingAmount != null && PerServingAmount != 0 && PerServingAmount != 0.0) &&(PerServingUnit.equals("g"))){
+                		value = (element.getAmount()/PerServingAmount)*100;
+                		
+                		
+                	}
+                }
+                
+                preparedStatement.setObject(6, value);
+                preparedStatement.setObject(7, element.getcomponent_name());
+                preparedStatement.executeUpdate();
+            }
+
+            connection.commit();
+        }
+        catch (final SQLException e)
+        {
+            // TODO Auto-generated catch block
+            connection.rollback();
+            e.printStackTrace();
+
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return true;
+
+    }
+}
+
+
+
