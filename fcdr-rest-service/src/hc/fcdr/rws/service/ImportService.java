@@ -41,6 +41,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
+import hc.fcdr.rws.db.ImportLabelDao;
 import hc.fcdr.rws.db.ImportMarketShareDao;
 import hc.fcdr.rws.db.ImportSalesDao;
 import hc.fcdr.rws.db.PackageDao;
@@ -68,6 +69,7 @@ public class ImportService extends Application
             REPORT_DIRECTORY_ROOT + "fcdrSalesImportReport.pdf";
 
     static ImportMarketShareDao importSalesDao = null;
+    static ImportLabelDao importLabelDao = null;
     static PackageDao packageDao = null;
 
 
@@ -91,6 +93,10 @@ public class ImportService extends Application
                         		ContextManager.getJndiValue("SCHEMA"));
                 packageDao =
                         new PackageDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
+                
+                importLabelDao =
+                        new ImportLabelDao(pgConnectionPool.getConnection(),
                                 ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
@@ -290,7 +296,7 @@ public class ImportService extends Application
     	
     	//.importLabel("/tmp/labelData.csv");
     	
-    	packageDao.importLabel("/tmp/labelData.csv");
+    	importLabelDao.importLabel("/tmp/labelData.csv");
     	return null;
     }
     @POST
