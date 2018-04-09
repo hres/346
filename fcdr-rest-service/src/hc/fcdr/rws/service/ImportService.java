@@ -18,6 +18,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -36,7 +37,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import hc.fcdr.rws.config.ResponseCodes;
@@ -288,6 +291,9 @@ public class ImportService extends Application
     	
     	System.out.println("The file "+fileDetail.getFileName());
 		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+		fileDetail.getSize();
+		
+		
 		
 		writeToFile(fileInputStream, uploadedFileLocation);
 
@@ -298,17 +304,15 @@ public class ImportService extends Application
          
          try {
 			output = new BufferedWriter(new FileWriter(file));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		 try {
 			importLabelDao.importLabel(uploadedFileLocation, output);
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			output.write("oyesso");
+		} catch ( IOException e ) {
+            e.printStackTrace();
+        } finally {
+          if ( output != null ) {
+            output.close();
+          }
+        }
+			
 
  	ResponseBuilder response = Response.ok((Object) file);
 	response.header("Content-Disposition",
@@ -339,31 +343,32 @@ public class ImportService extends Application
             
              try {
 				output = new BufferedWriter(new FileWriter(file));
+				try {
+					importSalesDao.testImport(uploadedFileLocation, output);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-			 try {
-				importSalesDao.testImport(uploadedFileLocation, output);
-				
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-	
-				e.printStackTrace();
-			}
-				//deleteFolder(new File(uploadedFileLocation));
+			}finally {
+	             if ( output != null ) {
+	                 try {
+						output.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	               }
+	             }
+			//deleteFolder(new File(uploadedFileLocation));
 		
 
      	ResponseBuilder response = Response.ok((Object) file);
@@ -407,6 +412,85 @@ public class ImportService extends Application
 	    }
 	    folder.delete();
 	}
+	
+    @GET
+    @Path("/importFile")
+    @Produces("text/plain")
+    public Response testFile()
+            throws SQLException, IOException, Exception
+    {
+    	
+
+    	File file = new File("example.txt");
+    	   String text = "Hello world";
+           BufferedWriter output = null;
+           try {
+               
+               output = new BufferedWriter(new FileWriter(file));
+               output.write("oyesso");
+               output.write(text);
+           } catch ( IOException e ) {
+               e.printStackTrace();
+           } finally {
+             if ( output != null ) {
+               output.close();
+             }
+           }
+			
+
+ 	ResponseBuilder response = Response.ok((Object) file);
+	response.header("Content-Disposition",
+			"attachment; filename=importReport.txt");
+	return response.build();
+    }
+    
+    @POST
+    @Path("/importImage")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("text/plain")
+    public Response getImportImages(FormDataMultiPart fileInputStream,
+    		@FormDataParam("image") FormDataContentDisposition fileDetail)
+            throws SQLException, IOException, Exception
+    {
+    	
+    	//System.out.println("The file "+fileDetail.getFileName());
+		//String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+		//fileDetail.getSize();
+    	//System.out.println("The size is:  "+fileInputStream.size());
+    	List<FormDataBodyPart> bodyParts = fileInputStream.getFields("image");
+    	    	System.out.println("The size is:  "+bodyParts.size());
+
+//		for(FormDataContentDisposition itemDetail: fileDetail) {
+//			System.out.println("The file "+itemDetail.getFileName());
+//			
+//		}
+		
+		
+		//writeToFile(fileInputStream, uploadedFileLocation);
+
+         BufferedWriter output = null;
+         File file = new File("report.txt");
+		
+    	
+         
+         try {
+			output = new BufferedWriter(new FileWriter(file));
+			//importLabelDao.importLabel(uploadedFileLocation, output);
+		} catch ( IOException e ) {
+            e.printStackTrace();
+        } finally {
+          if ( output != null ) {
+            output.close();
+          }
+        }
+			
+
+ 	ResponseBuilder response = Response.ok((Object) file);
+	response.header("Content-Disposition",
+			"attachment; filename=importReport.txt");
+	return response.build();
+    }
+    
     
     
 }

@@ -131,7 +131,6 @@ public class ImportLabelDao extends PgDao{
 			
 			output.write("Number of records in the file: "+importLabelReport.numberOfRecords);
 			output.newLine();
-			output.write("just writing some text");
 			
 			output.write("Number of dupplicate records: "+importLabelReport.getDuplicatesLabels().size());
 			output.newLine();
@@ -139,23 +138,103 @@ public class ImportLabelDao extends PgDao{
 			output.write("Number of skipped records: "+importLabelReport.getSkippedRecords().size());
 			output.newLine();
 			
-			output.write("Number of records linked by labek upc: "+importLabelReport.getLabelsLinkedByLabelUpc());
+			output.write("Number of records linked by labek upc: "+importLabelReport.getLabelsLinkedByLabelUpc().size());
 			output.newLine();
 
-			output.write("Number of records linked by nielsen item rank: "+importLabelReport.getLabelsLinkedByNielsenItemRank());
+			output.write("Number of records linked by nielsen item rank: "+importLabelReport.getLabelsLinkedByNielsenItemRank().size());
 			output.newLine();
 			
-			output.write("Number of records linked by product grouping: "+importLabelReport.getLabelSharingSameGrouping());
+			output.write("Number of records linked by product grouping: "+importLabelReport.getLabelSharingSameGrouping().size());
 			output.newLine();
 			
-			output.write("Number of records with invalid product grouping/brand/manufacturer/restaurant type "+importLabelReport.getProductGroupingAndLabelUpcNoMatch());
+			output.write("Number of records with invalid product grouping/brand/manufacturer/restaurant type: "+importLabelReport.getProductGroupingAndLabelUpcNoMatch().size());
 			output.newLine();
 			
-			output.write("Number of records attached to new products: "+importLabelReport.getLabelsLinkedToNewProducts());
+			output.write("Number of records attached to new products: "+importLabelReport.getLabelsLinkedToNewProducts().size());
 			output.newLine();
 			output.newLine();
 			
+			output.write("List of duplicate records");
+			output.newLine();
+			output.newLine();
 			
+			for(String element: importLabelReport.getDuplicatesLabels()) {
+				output.write(element);
+				output.newLine();		
+			}
+			output.newLine();
+			output.newLine();
+			output.write("List of skipped records");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getSkippedRecords()) {
+				output.write(element);
+				output.newLine();		
+			}
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records linked by label upc");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getLabelsLinkedByLabelUpc()) {
+				output.write(element);
+				output.newLine();		
+			}
+			
+			
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records linked nielsen item rank");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getLabelsLinkedByNielsenItemRank()) {
+				output.write(element);
+				output.newLine();		
+			}
+		
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records with same grouping");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getLabelSharingSameGrouping()) {
+				output.write(element);
+				output.newLine();		
+			}
+			
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records with invalid combination of grouping/brand/manufacturer/restaurant type");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getProductGroupingAndLabelUpcNoMatch()) {
+				output.write(element);
+				output.newLine();		
+			}
+			
+			output.newLine();
+			output.newLine();
+			
+			output.write("List of records attached to new products");
+			output.newLine();
+			output.newLine();
+			
+			for(String element: importLabelReport.getLabelsLinkedToNewProducts()) {
+				output.write(element);
+				output.newLine();		
+			}
+			output.newLine();
+			output.newLine();
+			output.write("done.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -163,18 +242,18 @@ public class ImportLabelDao extends PgDao{
 	
 		
 
-		System.out.println("Number of invalid records in the file " + importLabelReport.getSkippedRecords().size());
-		System.out.println("Number of duplicate records in the file " + importLabelReport.getDuplicatesLabels().size());
-		System.out.println("Number of records sharing product grouping in the file " + importLabelReport.getLabelSharingSameGrouping().size());
-		System.out.println("Number of records linked by label upc in the file " + importLabelReport.getLabelsLinkedByLabelUpc().size());
-		System.out.println("Number of records linked by nielsen item rank in the file " + importLabelReport.getLabelsLinkedByNielsenItemRank().size());
-		System.out.println("Number of records linked to new products in the file " + importLabelReport.getLabelsLinkedToNewProducts().size());
-		System.out.println("Number of records with wrong product grouping/label upc " + importLabelReport.getProductGroupingAndLabelUpcNoMatch().size());
+//		System.out.println("Number of invalid records in the file " + importLabelReport.getSkippedRecords().size());
+//		System.out.println("Number of duplicate records in the file " + importLabelReport.getDuplicatesLabels().size());
+//		System.out.println("Number of records sharing product grouping in the file " + importLabelReport.getLabelSharingSameGrouping().size());
+//		System.out.println("Number of records linked by label upc in the file " + importLabelReport.getLabelsLinkedByLabelUpc().size());
+//		System.out.println("Number of records linked by nielsen item rank in the file " + importLabelReport.getLabelsLinkedByNielsenItemRank().size());
+//		System.out.println("Number of records linked to new products in the file " + importLabelReport.getLabelsLinkedToNewProducts().size());
+//		System.out.println("Number of records with wrong product grouping/label upc " + importLabelReport.getProductGroupingAndLabelUpcNoMatch().size());
 
 		
 	}
 	
-	// empty the staging table
+
 	public void emptyTempTable() throws SQLException {
 
 		Statement statement = connection.createStatement();
@@ -363,7 +442,6 @@ public class ImportLabelDao extends PgDao{
 							
 						}else if(dups.containsKey(sb) &&!data.containsKey(sb)) {
 							dups.get(sb).add(importLabelModel);
-							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
 							importLabelReport.getDuplicatesLabels().add(str);
 							
 						}else if(!dups.containsKey(sb) && data.containsKey(sb)) {
@@ -377,27 +455,21 @@ public class ImportLabelDao extends PgDao{
 							importLabelReport.getDuplicatesLabels().add(str);
 							importLabelReport.getDuplicatesLabels().add(str1);
 							
-							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
-
 						}
 												
 					}else {
-						//Duplicate
 						if(dups.containsKey(sb)) {
 							dups.get(sb).add(importLabelModel);
 							importLabelReport.getDuplicatesLabels().add(str);
 
-							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
 
 						}else {
 							
 							List<ImportLabelModel> item = new ArrayList<>();
 							item.add(importLabelModel);
-							//item.add(data.remove(sb));
 							dups.put(sb, item);
 							importLabelReport.getDuplicatesLabels().add(str);
 
-							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
 
 
 						}
@@ -412,7 +484,6 @@ public class ImportLabelDao extends PgDao{
 					String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
 					importLabelReport.getSkippedRecords().add(str);
 					
-					//System.out.println("Invalid records: "+str);
 
 				}
 			}
@@ -454,7 +525,6 @@ public class ImportLabelDao extends PgDao{
 				List<ImportLabelModel> item = new ArrayList<>();
 				item.add(importLabelModel);
 				dataFromTempByUpc.put(importLabelModel.getImportLabelRequest().getPackage_upc(), item);
-				// System.out.println("Neew key");
 
 			}
 			
@@ -480,10 +550,7 @@ public class ImportLabelDao extends PgDao{
 			if (existingLabelsByUpc.containsKey(entry.getKey())) {
 				System.out.println("yes contains");
 
-				list = entry.getValue();
-
-//				System.out.println("id: "+existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id());
-				
+				list = entry.getValue();				
 				insertLabelUpcMatch.put(existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id(), list);
 				it.remove();
 			}
@@ -504,10 +571,6 @@ public class ImportLabelDao extends PgDao{
 				for (final ImportLabelModel element : v) {
 					String str = ""+element.getImportLabelRequest().getRecord_id()+" "+element.getImportLabelRequest().getPackage_description();
 					
-				
-					
-					System.out.println("found iun db: "+element.getImportLabelRequest().getPackage_upc() +"product id: "+entry.getKey());
-
 					int package_id = createLabel(entry.getKey(), element.getImportLabelRequest());
 					
 					if (element.getImportLabelRequest().getPackage_product_description() != null
@@ -568,13 +631,8 @@ public class ImportLabelDao extends PgDao{
 			Entry<String, List<ImportLabelModel>> entry = it.next();
 
 			if (entry.getValue().size() > 1) {
-				
-				//boolean flag = validateRecordsWithSameUpcHasSameProductGrouping
-				
+								
 				insertLabelGroupedyUpcWithinWhile(entry.getValue());
-				
-				//TODO the client should confirm whether or not they want to insert those records or 
-				//kicking them out
 
 			} else {
 
@@ -668,8 +726,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 			if (value.get(0).getImportLabelRequest().getClassification_number() != null
 					&& !value.get(0).getImportLabelRequest().getClassification_number().isEmpty()) {
 				if (checkClassification(value.get(0).getImportLabelRequest().getClassification_number())) {
-					// System.out.println("oui called
-					// 2"+element.getImportLabelRequest().getClassification_number());
+
 					insertClassificationNumber(value.get(0).getImportLabelRequest().getClassification_number(),
 							product_id);
 				}
@@ -858,32 +915,6 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 
 	private int createLabel(int product_id, ImportLabelRequest importLabelRequest) throws DaoException {
 
-		// String query = "insert into "+schema+".package
-		// (package_product_id_fkey,package_description,package_upc,"
-		// + " package_brand,
-		// package_manufacturer,package_country,package_size,package_size_unit_of_measure,
-		// "
-		// +
-		// "storage_type,storage_statements,health_claims,other_package_statements,suggested_directions,
-		// "
-		// + "ingredients , multi_part_flag, nutrition_fact_table,
-		// as_prepared_per_serving_amount, as_prepared_unit_of_measure, "
-		// +
-		// "as_sold_per_serving_amount,as_sold_unit_of_measure,as_prepared_per_serving_amount_in_grams,
-		// "
-		// + "as_sold_per_serving_amount_in_grams, package_comment,
-		// package_source, package_product_description, "
-		// + "package_collection_date,
-		// number_of_units,edited_by,informed_dining_program,nft_last_update_date,
-		// "
-		// + "product_grouping,
-		// child_item,classification_number,classification_name,
-		// nielsen_item_rank, "
-		// + " nutrient_claims,package_nielsen_category,
-		// common_household_measure,creation_date, "
-		// + " last_edit_date,calculated ) values(?, ?, ?, ?, ?, ?, ?, ?, ?,
-		// ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-		// + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
 
 		final String[] columns = { "package_description", "package_upc", "package_brand", "package_manufacturer",
 				"package_country", "package_size", "package_size_unit_of_measure", "storage_type", "storage_statements",
@@ -899,7 +930,6 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 
 		String questionmarks = StringUtils.repeat("?,", columns.length);
 		questionmarks = (String) questionmarks.subSequence(0, questionmarks.length() - 1);
-		// int package_id = 0;
 		String query = SQL_INSERT.replaceFirst(TABLE_REGEX, schema + "." + "package");
 		query = query.replaceFirst(KEYS_REGEX, StringUtils.join(columns, ","));
 		query = query.replaceFirst(VALUES_REGEX, questionmarks);
@@ -944,16 +974,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 
 		try {
 			connection.setAutoCommit(false);
-			// resultSet = executeQuery(sql, new Object[]
-			// { nftRequest.getPackage_id() });
-			//
-			// resultSet.next();
-			// PerServingAmount =
-			// resultSet.getDouble(per_serving_amount_place_holder);
-			// PerServingUnit =
-			// resultSet.getString(per_serving_amount_unit_of_measure_place_holder);
-			// PerServingInGrams =
-			// resultSet.getDouble(per_serving_amount_in_grams_place_holder);
+
 
 			for (final ImportLabelNft element : importLabelModel.getNftList()) {
 
@@ -1157,8 +1178,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 
 	}
 	public Boolean checkClassification(final String classificationNumber) throws DaoException {
-		// if ((classificationNumber == null))
-		// return true;
+
 
 		ResultSet resultSet = null;
 
