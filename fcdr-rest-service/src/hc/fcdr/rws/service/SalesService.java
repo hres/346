@@ -39,7 +39,7 @@ public class SalesService extends Application
     static SalesDao salesDao = null;
 
     @PostConstruct
-    public static void initialize()
+    public static void initialize() throws IOException, Exception
     {
         if (salesDao == null)
         {

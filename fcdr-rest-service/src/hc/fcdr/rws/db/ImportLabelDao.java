@@ -1,5 +1,10 @@
 package hc.fcdr.rws.db;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,6 +32,7 @@ import hc.fcdr.rws.model.importLabel.ImportLabelReport;
 import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
+import hc.fcdr.rws.util.LabelGrouping;
 
 public class ImportLabelDao extends PgDao{
 	private static final String SQL_INSERT = "insert into ${table}(${keys}) values(${values})";
@@ -47,7 +53,8 @@ public class ImportLabelDao extends PgDao{
 		importLabelReport = new ImportLabelReport();
 	}
 	
-	public void importLabel(String filePath) {
+	public void importLabel(String filePath, BufferedWriter output)throws IllegalStateException, FileNotFoundException,
+	UnsupportedEncodingException, NoSuchAlgorithmException, SQLException {
 		final StopWatch stopWatch = new StopWatch();
 		
 
@@ -55,7 +62,7 @@ public class ImportLabelDao extends PgDao{
 		System.out.println("Program has started");
 
 		try {
-			start(filePath);
+			start(filePath,output);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +73,7 @@ public class ImportLabelDao extends PgDao{
 				"Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
 
 	}
-	private void start(String file) throws SQLException {
+	private void start(String file, BufferedWriter output) throws SQLException {
 		importLabelReport = new ImportLabelReport();
 		// Will hold all distinct existing labels
 		// used to check for duplicates
@@ -87,8 +94,9 @@ public class ImportLabelDao extends PgDao{
 		// Will contain all records in in the CSV file which have a product
 		// grouping value
 		Map<Double, List<ImportLabelModel>> labelSortedByGrouping = new HashMap<Double, List<ImportLabelModel>>();
+		
+		Map<String, List<ImportLabelModel>>  dups = null;// =  new HashMap<String, List<ImportLabelModel>>();
 
-		int total = 0;
 		try {
 			connection.setAutoCommit(false);
 			emptyTempTable();
@@ -97,11 +105,7 @@ public class ImportLabelDao extends PgDao{
 
 			existingLabelStoredByUPC = getExistingLabels(existingLabels);
 
-			getDataFromTemp(existingLabels, dataFromTempByUpc);
-//			for (Map.Entry<String, List<ImportLabelModel>> entry : dataFromTempByUpc.entrySet()) {
-//
-//				total += entry.getValue().size();
-//			}
+			dups = getDataFromTemp(existingLabels, dataFromTempByUpc);
 
 			labelUpcMatch(dataFromTempByUpc, existingLabelStoredByUPC);
 			mapUpcImRank = getUpcRank();
@@ -123,9 +127,41 @@ public class ImportLabelDao extends PgDao{
 
 		System.out.println("Number of existing label " + existingLabels.size());
 
-		// for (List<ImportLabelModel> list : dataFromTempByUpc.values()) {
-		// total += list.size();
-		// }
+		try {
+			
+			output.write("Number of records in the file: "+importLabelReport.numberOfRecords);
+			output.newLine();
+			output.write("just writing some text");
+			
+			output.write("Number of dupplicate records: "+importLabelReport.getDuplicatesLabels().size());
+			output.newLine();
+			
+			output.write("Number of skipped records: "+importLabelReport.getSkippedRecords().size());
+			output.newLine();
+			
+			output.write("Number of records linked by labek upc: "+importLabelReport.getLabelsLinkedByLabelUpc());
+			output.newLine();
+
+			output.write("Number of records linked by nielsen item rank: "+importLabelReport.getLabelsLinkedByNielsenItemRank());
+			output.newLine();
+			
+			output.write("Number of records linked by product grouping: "+importLabelReport.getLabelSharingSameGrouping());
+			output.newLine();
+			
+			output.write("Number of records with invalid product grouping/brand/manufacturer/restaurant type "+importLabelReport.getProductGroupingAndLabelUpcNoMatch());
+			output.newLine();
+			
+			output.write("Number of records attached to new products: "+importLabelReport.getLabelsLinkedToNewProducts());
+			output.newLine();
+			output.newLine();
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
 
 		System.out.println("Number of invalid records in the file " + importLabelReport.getSkippedRecords().size());
 		System.out.println("Number of duplicate records in the file " + importLabelReport.getDuplicatesLabels().size());
@@ -135,6 +171,7 @@ public class ImportLabelDao extends PgDao{
 		System.out.println("Number of records linked to new products in the file " + importLabelReport.getLabelsLinkedToNewProducts().size());
 		System.out.println("Number of records with wrong product grouping/label upc " + importLabelReport.getProductGroupingAndLabelUpcNoMatch().size());
 
+		
 	}
 	
 	// empty the staging table
@@ -277,77 +314,105 @@ public class ImportLabelDao extends PgDao{
 		return existingLabelStoredByUPC;
 	}
 
+
+
+
+	
 	// This methods get data from the staging table, check if valid, build a key
 	// sb and check if it exists in the DB
 	// it stores all invalid records in invalidsLabels
 	// stores all duplicates in duplicatesLabels
 	// stores non invalids and non duplicates records in dataFromTempByUpc
-
-	public void getDataFromTemp(Map<String, List<ExistingLabels>> labelInDb,
-			Map<String, List<ImportLabelModel>> dataFromTempByUpc) throws SQLException {
-
+	
+	public Map<String, List<ImportLabelModel>> getDataFromTemp(Map<String, List<ExistingLabels>> labelInDb,Map<String, List<ImportLabelModel>> dataFromTempByUpc) throws SQLException {
+		
+		//Map<Double, String> duplicatesLabels = new HashMap<Double, String>();
+		
+		Map<String, List<ImportLabelModel>> dups = new HashMap<String, List<ImportLabelModel>>();
 		Map<String, ImportLabelModel> data = new HashMap<String, ImportLabelModel>();
-		Map<Double, String> invalidLabels = new HashMap<Double, String>();
-		Map<Double, String> duplicatesLabels = new HashMap<Double, String>();
-
-		// Map<String, List<ImportLabelModel>> dataFromTempByUpc = new
-		// HashMap<String,List<ImportLabelModel>>();
-
 		int count = 0;
 		String sql = "select * from " + schema + ".label_temp";
 		ResultSet resultSet = null;
 		ImportLabelModel importLabelModel;
 
+		
 		try {
 			resultSet = executeQuery(sql, null);
 
 			while (resultSet.next()) {
 				++count;
 				importLabelModel = DaoUtil.populateLabelModel(resultSet);
+				
 				String sb = importLabelModel.getImportLabelRequest().getPackage_description()
 						+ importLabelModel.getImportLabelRequest().getPackage_upc()
 						+ importLabelModel.getImportLabelRequest().getPackage_source()
 						+ importLabelModel.getImportLabelRequest().getPackage_collection_date();
 
 				if (importLabelModel.isValid()) {
+					String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
 
-					if (labelInDb.containsKey(sb) || data.containsKey(sb)) {
-						// System.out.println("Yes dup");
-						String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
+					if(!labelInDb.containsKey(sb)) {
 						
-						importLabelReport.getDuplicatesLabels().add(str);
 						
-						duplicatesLabels.put(importLabelModel.getImportLabelRequest().getRecord_id(),
-								importLabelModel.getImportLabelRequest().getPackage_description());
-
-					} else {
-
-						data.put(sb, importLabelModel);
-						if (dataFromTempByUpc.containsKey(importLabelModel.getImportLabelRequest().getPackage_upc())) {
-							// append
-							dataFromTempByUpc.get(importLabelModel.getImportLabelRequest().getPackage_upc())
-									.add(importLabelModel);
-
-						} else {
-							// new element in List
+						
+						if(!dups.containsKey(sb) &&!data.containsKey(sb)) {
+							//clean data
+							data.put(sb, importLabelModel);
+							
+																				
+							
+						}else if(dups.containsKey(sb) &&!data.containsKey(sb)) {
+							dups.get(sb).add(importLabelModel);
+							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
+							importLabelReport.getDuplicatesLabels().add(str);
+							
+						}else if(!dups.containsKey(sb) && data.containsKey(sb)) {
 							List<ImportLabelModel> item = new ArrayList<>();
+							ImportLabelModel labelRemoved = data.remove(sb);
+							item.add(labelRemoved);
 							item.add(importLabelModel);
-							dataFromTempByUpc.put(importLabelModel.getImportLabelRequest().getPackage_upc(), item);
-							// System.out.println("Neew key");
+							dups.put(sb, item);
+							String str1 = ""+labelRemoved.getImportLabelRequest().getRecord_id()+" "+labelRemoved.getImportLabelRequest().getPackage_description();
+							
+							importLabelReport.getDuplicatesLabels().add(str);
+							importLabelReport.getDuplicatesLabels().add(str1);
+							
+							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
 
 						}
+												
+					}else {
+						//Duplicate
+						if(dups.containsKey(sb)) {
+							dups.get(sb).add(importLabelModel);
+							importLabelReport.getDuplicatesLabels().add(str);
 
+							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
+
+						}else {
+							
+							List<ImportLabelModel> item = new ArrayList<>();
+							item.add(importLabelModel);
+							//item.add(data.remove(sb));
+							dups.put(sb, item);
+							importLabelReport.getDuplicatesLabels().add(str);
+
+							//System.out.println("Upc: "+importLabelModel.getImportLabelRequest().getPackage_upc());
+
+
+						}
+						
 					}
+					
+
+
 
 				} else {
 					
 					String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
 					importLabelReport.getSkippedRecords().add(str);
-
-//					invalidLabels.put(importLabelModel.getImportLabelRequest().getRecord_id(),
-//							importLabelModel.getImportLabelRequest().getPackage_description());
 					
-					System.out.println("Invalid records: "+str);
+					//System.out.println("Invalid records: "+str);
 
 				}
 			}
@@ -356,15 +421,50 @@ public class ImportLabelDao extends PgDao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		importLabelReport.numberOfRecords = count;
+		buildMapByUPC(data,dataFromTempByUpc);
 		System.out.println("Total number of records in the file " + count);
-
+		return dups;
+		
 	}
+	
 	
 	// Extract data from dataFromTempByUpc that has a label upc which exists in
 	// existingLabelsByUpc
 	// insert the extracted data in appropriate tables
 	// TODO check if records with same label upc also have the same product grouping 
+
+	private void buildMapByUPC(Map<String, ImportLabelModel> data,
+			Map<String, List<ImportLabelModel>> dataFromTempByUpc) {
+		// TODO Auto-generated method stub
+		
+		for (final Iterator<Entry<String, ImportLabelModel>> it = data.entrySet().iterator(); it
+				.hasNext();) {
+			
+			Entry<String, ImportLabelModel> entry = it.next();
+			final ImportLabelModel importLabelModel = entry.getValue();
+			if (dataFromTempByUpc.containsKey(importLabelModel.getImportLabelRequest().getPackage_upc())) {
+				
+				// append
+				dataFromTempByUpc.get(importLabelModel.getImportLabelRequest().getPackage_upc())
+						.add(importLabelModel);
+
+			} else {
+				// new element in List
+				List<ImportLabelModel> item = new ArrayList<>();
+				item.add(importLabelModel);
+				dataFromTempByUpc.put(importLabelModel.getImportLabelRequest().getPackage_upc(), item);
+				// System.out.println("Neew key");
+
+			}
+			
+			
+			
+		}
+		
+		
+		
+	}
 
 	public void labelUpcMatch(Map<String, List<ImportLabelModel>> dataFromTempByUpc,
 			Map<String, List<ExistingLabels>> existingLabelsByUpc) {
@@ -379,27 +479,10 @@ public class ImportLabelDao extends PgDao{
 
 			if (existingLabelsByUpc.containsKey(entry.getKey())) {
 				System.out.println("yes contains");
-				// Validate same UPC different product grouping
 
-				//final List<ImportLabelModel> v = entry.getValue();
 				list = entry.getValue();
-//
-				//for (final ImportLabelModel element : list) {
-					
-					//String str = ""+element.getImportLabelRequest().getRecord_id()+" "+element.getImportLabelRequest().getPackage_description();
-					//.getLabelsLinkedByLabelUpc().add(str);
 
-//					if (element.getImportLabelRequest().getProduct_grouping() != existingLabelsByUpc.get(entry.getKey())
-//							.get(0).getProduct_grouping()) {
-//						// Report
-//						System.out.println(str+" LABEL GROUPING NO MATCH");
-//						importLabelReport.getProductGroupingAndLabelUpcNoMatch().add(str);
-//					} else {
-//						list.add(element);
-//						importLabelReport.getLabelsLinkedByLabelUpc().add(str);
-//			/		}
-			//	}
-				System.out.println("id: "+existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id());
+//				System.out.println("id: "+existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id());
 				
 				insertLabelUpcMatch.put(existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id(), list);
 				it.remove();
@@ -420,7 +503,9 @@ public class ImportLabelDao extends PgDao{
 			try {
 				for (final ImportLabelModel element : v) {
 					String str = ""+element.getImportLabelRequest().getRecord_id()+" "+element.getImportLabelRequest().getPackage_description();
-					importLabelReport.getLabelsLinkedByLabelUpc().add(str);
+					
+				
+					
 					System.out.println("found iun db: "+element.getImportLabelRequest().getPackage_upc() +"product id: "+entry.getKey());
 
 					int package_id = createLabel(entry.getKey(), element.getImportLabelRequest());
@@ -451,6 +536,8 @@ public class ImportLabelDao extends PgDao{
 						e.printStackTrace();
 					}
 
+					//Add to report
+					importLabelReport.getLabelsLinkedByLabelUpc().add(str);
 				}
 
 			} catch (DaoException e) {
@@ -485,6 +572,9 @@ public class ImportLabelDao extends PgDao{
 				//boolean flag = validateRecordsWithSameUpcHasSameProductGrouping
 				
 				insertLabelGroupedyUpcWithinWhile(entry.getValue());
+				
+				//TODO the client should confirm whether or not they want to insert those records or 
+				//kicking them out
 
 			} else {
 
@@ -647,14 +737,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 					}
 
 				} else {
-					//importLabelReport.get
-//					String str = ""+element.getImportLabelRequest().getRecord_id()+" "+element.getImportLabelRequest().getPackage_description();
-//					String str = ""+element.getImportLabelRequest().getRecord_id()+" "+element.getImportLabelRequest().getPackage_description();
-//
-//					if (element.getImportLabelRequest().getProduct_grouping() != existingLabelsByUpc.get(entry.getKey())
-//							.get(0).getProduct_grouping()) {
-//						// Report
-//						System.out.println(str+" LABEL GROUPING NO MATCH");
+
 					for (ImportLabelModel importLabelModel : entry.getValue()) {
 						String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
 						importLabelReport.getProductGroupingAndLabelUpcNoMatch().add(str);
@@ -671,7 +754,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 					createLabelLinkedByNielsenItemRank(entry.getValue().get(0), mapUpcImRank);
 					
 				} catch (DaoException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}else{
@@ -684,51 +767,36 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 
 	private boolean validateRecordsWithSameGrouping(List<ImportLabelModel> values) {
 
-		ImportLabelRequest item = values.get(0).getImportLabelRequest();
 		boolean flag = true;
-		//String sb = buildString(item.getImportLabelRequest());
-		//System.out.println("first sb: \n"+sb+" size of: "+values.size());
-//		for (ImportLabelModel value : values) {
-//			
-//			if( (!item.getClassification_number().equals(value.getImportLabelRequest().getClassification_number()))
-//				|| (!item.getType_of_restaurant().equals(value.getImportLabelRequest().getType_of_restaurant()))	
-//				|| (!item.getPackage_manufacturer().equals(value.getImportLabelRequest().getPackage_manufacturer()))
-//				|| (!item.getPackage_brand().equals(value.getImportLabelRequest().getPackage_brand()))
-//					
-//					)
-//			{
-//				return false;
-//			}
-//			
-			
-			
-			
-			
-//			
-//			if()
-//			String key = buildString(value.getImportLabelRequest());
-//			//System.out.println("**: "+key);
-//			if (!key.equals(sb)) {
-//				System.out.println(sb);
-//				return false;
-//			}
+		
+		LabelGrouping firstItem = new LabelGrouping(
+				values.get(0).getImportLabelRequest().getPackage_brand(),
+				values.get(0).getImportLabelRequest().getPackage_manufacturer(), 
+				values.get(0).getImportLabelRequest().getClassification_number(),
+				values.get(0).getImportLabelRequest().getType_of_restaurant()			
+				);
+		
 
-//		/}
+		for (ImportLabelModel value : values) {
+			
+			LabelGrouping otherItems = new LabelGrouping(
+					value.getImportLabelRequest().getPackage_brand(),
+					value.getImportLabelRequest().getPackage_manufacturer(), 
+					value.getImportLabelRequest().getClassification_number(),
+					value.getImportLabelRequest().getType_of_restaurant()			
+					);
 
-		// check if same classification number, restaurant type, manufacturer,
-		// brand;
+		if(!firstItem.equals(otherItems)) {
+			return false;
+		}
+
+		}
+
 
 		return flag;
 	}
 
-	private String buildString(ImportLabelRequest item) {
-		String sb = (item.getClassification_number() != null ? item.getClassification_number() : "")+
-		(item.getPackage_brand() != null ? item.getPackage_brand() : "")+
-		(item.getPackage_manufacturer() != null ? item.getPackage_manufacturer() : "")+
-		(item.getType_of_restaurant() != null ? item.getType_of_restaurant() : "");
 
-		return sb;
-	}
 
 	public Map<String, Integer> getUpcRank() throws SQLException {
 		ResultSet resultSet = null;

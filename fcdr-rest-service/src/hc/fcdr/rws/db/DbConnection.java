@@ -13,9 +13,9 @@ public class DbConnection
 {
     // Temp solution.
     static final String URL      =
-            "jdbc:postgresql://localhost:5432/basedebonnee";
+            "jdbc:postgresql://localhost:5432/postgres";
     static final String USER     = "postgres";
-    static final String PASSWORD = "romario";
+    static final String PASSWORD = "postgres";
 
     private DataSource  source;
 
@@ -44,6 +44,7 @@ public class DbConnection
         try
         {
             return source.getConnection();
+        	//return   DriverManager.getConnection(URL, USER, PASSWORD);
         }
         catch (final Exception e)
         {

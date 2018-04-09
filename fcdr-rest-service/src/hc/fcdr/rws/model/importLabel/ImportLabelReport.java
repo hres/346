@@ -5,13 +5,14 @@ import java.util.List;
 
 public class ImportLabelReport {
 
-	List<String> skippedRecords;
-	List<String> productGroupingAndLabelUpcNoMatch;
-	List<String> labelsLinkedByNielsenItemRank;
-	List<String> labelsLinkedByLabelUpc;
-	List<String> labelsLinkedToNewProducts;
-	List<String> labelSharingSameGrouping;
-	List<String> duplicatesLabels;
+	private List<String> skippedRecords;
+	private List<String> productGroupingAndLabelUpcNoMatch;
+	private List<String> labelsLinkedByNielsenItemRank;
+	private List<String> labelsLinkedByLabelUpc;
+	private List<String> labelsLinkedToNewProducts;
+	private List<String> labelSharingSameGrouping;
+	private List<String> duplicatesLabels;
+	public int numberOfRecords;
 	
 	
 		public ImportLabelReport(){

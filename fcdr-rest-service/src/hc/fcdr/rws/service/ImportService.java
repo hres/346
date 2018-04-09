@@ -279,26 +279,44 @@ public class ImportService extends Application
     
     @POST
     @Path("/importLabel")
-    @Produces(MediaType.APPLICATION_JSON)
-    //@Consumes(MediaType.CHARSET_PARAMETER)
-    public Response getImportLabele( )
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("text/plain")
+    public Response getImportLabele(@FormDataParam("csv_file") InputStream fileInputStream,
+    		@FormDataParam("csv_file") FormDataContentDisposition fileDetail)
             throws SQLException, IOException, Exception
     {
-//    	   String ipAddressRequestCameFrom = requestContext.getRemoteAddr();
-//    	   System.out.println("ip: "+ipAddressRequestCameFrom);
-    	   //Also if security is enabled
-//    	   Principal principal = context.getUserPrincipal();
-//    	   String userName = principal.getName();
     	
-//    	importSalesDao.testImport("/tmp/otherSales.csv");
-    	//importSalesDao.testImport("/tmp/bigFile.csv");
-    	//importSalesDao.testImport("/tmp/sales16.csv");
+    	System.out.println("The file "+fileDetail.getFileName());
+		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+		
+		writeToFile(fileInputStream, uploadedFileLocation);
+
+         BufferedWriter output = null;
+         File file = new File("report.txt");
+		
     	
-    	//.importLabel("/tmp/labelData.csv");
-    	
-    	importLabelDao.importLabel("/tmp/labelData.csv");
-    	return null;
+         
+         try {
+			output = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 try {
+			importLabelDao.importLabel(uploadedFileLocation, output);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			output.write("oyesso");
+
+ 	ResponseBuilder response = Response.ok((Object) file);
+	response.header("Content-Disposition",
+			"attachment; filename=importReport.txt");
+	return response.build();
     }
+    
+    
     @POST
     @Path("/importMarketShare")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -327,6 +345,7 @@ public class ImportService extends Application
 			}
 			 try {
 				importSalesDao.testImport(uploadedFileLocation, output);
+				
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -345,7 +364,7 @@ public class ImportService extends Application
 				e.printStackTrace();
 			}
 				//deleteFolder(new File(uploadedFileLocation));
-				
+		
 
      	ResponseBuilder response = Response.ok((Object) file);
 		response.header("Content-Disposition",

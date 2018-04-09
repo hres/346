@@ -15,8 +15,8 @@
     
     <Resource name="jdbc/fcdrrest" auth="Container"
           type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
-          url="jdbc:postgresql://localhost:5432/basedebonnee"
-          username="postgres" password="romario" maxActive="30" maxIdle="10"
+          url="jdbc:postgresql://localhost:5432/postgres"
+          username="postgres" password="postgres" maxActive="30" maxIdle="10"
           maxWait="-1"/>
     
 </Context>
