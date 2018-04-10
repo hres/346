@@ -37,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 
+import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -44,6 +45,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.db.DbConnection;
+import hc.fcdr.rws.db.ImportImageDao;
 import hc.fcdr.rws.db.ImportLabelDao;
 import hc.fcdr.rws.db.ImportMarketShareDao;
 import hc.fcdr.rws.db.ImportSalesDao;
@@ -73,6 +75,7 @@ public class ImportService extends Application
 
     static ImportMarketShareDao importSalesDao = null;
     static ImportLabelDao importLabelDao = null;
+    static ImportImageDao importImageDao = null;
     static PackageDao packageDao = null;
 
 
@@ -101,6 +104,11 @@ public class ImportService extends Application
                 importLabelDao =
                         new ImportLabelDao(pgConnectionPool.getConnection(),
                                 ContextManager.getJndiValue("SCHEMA"));
+                
+                importImageDao =
+                        new ImportImageDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
+                //importImageDao
             }
             catch (final SQLException e)
             {
@@ -453,19 +461,21 @@ public class ImportService extends Application
             throws SQLException, IOException, Exception
     {
     	
-    	//System.out.println("The file "+fileDetail.getFileName());
-		//String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
-		//fileDetail.getSize();
-    	//System.out.println("The size is:  "+fileInputStream.size());
+    	
+    	
     	List<FormDataBodyPart> bodyParts = fileInputStream.getFields("image");
-    	    	System.out.println("The size is:  "+bodyParts.size());
+    	for(int i = 0; i < bodyParts.size(); i++) {
+    		BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(i).getEntity();
+    		String fileName = bodyParts.get(i).getContentDisposition().getFileName();
+    		
+    		System.out.println(fileName);
+    		
+    	}
+    	   
 
-//		for(FormDataContentDisposition itemDetail: fileDetail) {
-//			System.out.println("The file "+itemDetail.getFileName());
-//			
-//		}
-		
-		
+		//String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+
+
 		//writeToFile(fileInputStream, uploadedFileLocation);
 
          BufferedWriter output = null;
@@ -475,6 +485,8 @@ public class ImportService extends Application
          
          try {
 			output = new BufferedWriter(new FileWriter(file));
+			importImageDao.importImage(bodyParts, output);
+			//importImage
 			//importLabelDao.importLabel(uploadedFileLocation, output);
 		} catch ( IOException e ) {
             e.printStackTrace();
