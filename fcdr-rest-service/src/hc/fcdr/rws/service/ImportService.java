@@ -468,7 +468,7 @@ public class ImportService extends Application
     		BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(i).getEntity();
     		String fileName = bodyParts.get(i).getContentDisposition().getFileName();
     		
-    		System.out.println(fileName);
+    		System.out.println("file name "+ fileName);
     		
     	}
     	   
@@ -503,6 +503,23 @@ public class ImportService extends Application
 	return response.build();
     }
     
+	@GET
+	@Path("/getImage")
+	@Produces("image/*")
+	public Response getImage() {
+		
+		String filePath = "/home/romario/Documents/images/images/041757680381.jpeg";
+		File file = new File(filePath);
+		
+		ResponseBuilder response = Response.ok((Object) file);
+		 
+		response.header("Content-Disposition", "attachment; filename=041757680381.jpeg");
+		
+		return response.build();
+		
+		
+		
+	}
     
     
 }

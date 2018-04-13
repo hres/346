@@ -1,5 +1,6 @@
 package hc.fcdr.rws.db;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -21,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Package;
+import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.importLabel.ExistingLabels;
 import hc.fcdr.rws.model.importLabel.ImportLabelModel;
@@ -29,6 +31,7 @@ import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ImagesList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
@@ -1018,6 +1021,40 @@ public class PackageDao extends PgDao {
 		}
 
 	}
+	
+    public ImagesList getListOfImages(int package_id) throws DaoException
+    {
+        ResultSet resultSet = null;
+//        final List<Sales> salesList = new ArrayList<Sales>();
+        ImagesList imageList = new ImagesList();
 
+        final String query = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+
+        try
+        {
+            resultSet = executeQuery(query, new Object[] {package_id});
+
+            while (resultSet.next())
+            	imageList.getDataList().add(resultSet.getString("image_path"));
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        imageList.setStatus(200);
+        return imageList;
+    }
+
+    public File getImage(String image_path) {
+    	
+		String filePath = "/home/romario/Documents/imagesLabel/"+image_path;
+		
+		return new File(filePath);
+		
+    	
+    	
+    	
+    }
 
 }

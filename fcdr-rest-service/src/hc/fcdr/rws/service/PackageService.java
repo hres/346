@@ -1,5 +1,6 @@
 package hc.fcdr.rws.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.PackageDao;
@@ -24,6 +26,7 @@ import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ImagesList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftGetModel;
 import hc.fcdr.rws.model.pkg.NftRequest;
@@ -379,5 +382,50 @@ public class PackageService extends Application
 
     // ===
 
+    @GET
+    @Path("/getLabelImages/{image_path}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response labelImages(@PathParam("image_path") final String image_path)
+    {
+    	File file = null;
+
+        try
+        {
+            if (packageDao != null)
+            	file = packageDao.getImage(image_path);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+		ResponseBuilder response = Response.ok((Object) file);
+		 
+		response.header("Content-Disposition", "attachment; filename=label_image.jpeg");
+		
+		return response.build();
+    }
+
+    @GET
+    @Path("/getListOfImages/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response labelImages(@PathParam("id") final Integer package_id)
+    {
+    	ImagesList entity = null;
+
+        try
+        {
+            if (packageDao != null)
+            	entity = packageDao.getListOfImages(package_id);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
 
 }
