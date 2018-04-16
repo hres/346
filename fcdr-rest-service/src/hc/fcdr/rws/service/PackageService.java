@@ -20,7 +20,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
 import hc.fcdr.rws.db.DbConnection;
+import hc.fcdr.rws.db.ImportImageDao;
 import hc.fcdr.rws.db.PackageDao;
 import hc.fcdr.rws.domain.Package;
 import hc.fcdr.rws.except.DaoException;
@@ -45,6 +51,8 @@ import hc.fcdr.rws.util.ContextManager;
 public class PackageService extends Application
 {
     static PackageDao packageDao = null;
+    static ImportImageDao importImageDao = null;
+
 
     @PostConstruct
     public static void initialize()
@@ -58,6 +66,9 @@ public class PackageService extends Application
             {
                 packageDao =
                         new PackageDao(pgConnectionPool.getConnection(),
+                                ContextManager.getJndiValue("SCHEMA"));
+                importImageDao =
+                        new ImportImageDao(pgConnectionPool.getConnection(),
                                 ContextManager.getJndiValue("SCHEMA"));
             }
             catch (final SQLException e)
@@ -427,5 +438,34 @@ public class PackageService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
+    
+    @POST
+    @Path("/addImage/{id}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addImage(@PathParam("id") final Integer package_id, 
+    		FormDataMultiPart fileInputStream,
+    		@FormDataParam("image") FormDataContentDisposition fileDetail)
+    {
+    	List<FormDataBodyPart> bodyParts = fileInputStream.getFields("image");
+    	
+    	ImagesList entity = null;
+
+        try
+        {
+            if (packageDao != null)
+//            	entity = packageDao.getListOfImages(package_id);
+            	entity = packageDao.addImage(bodyParts, package_id, importImageDao);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    
 
 }

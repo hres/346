@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.BodyPartEntity;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Package;
@@ -1055,6 +1057,39 @@ public class PackageDao extends PgDao {
     	
     	
     	
+    }
+    public ImagesList addImage(List<FormDataBodyPart> bodyParts, Integer id, ImportImageDao importImageDao) {
+    	
+    	BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(0).getEntity();
+		String fileName = bodyParts.get(0).getContentDisposition().getFileName();
+		
+		if(fileName.contains(".")) {
+			
+			String secondaryFileName = ""+id+"-"+fileName;
+			String extension = fileName.substring(fileName.indexOf(".")+1);
+
+			String uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+secondaryFileName;
+			importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
+			
+			try {
+				
+				importImageDao.insertImage(secondaryFileName,fileName, id, extension);
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		ImagesList imagesList = null;
+		try {
+			imagesList = getListOfImages(id);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return imagesList;
     }
 
 }

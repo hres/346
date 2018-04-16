@@ -69,7 +69,7 @@ public class ImportImageDao extends PgDao{
         				
         				//TODO update folder path
         				String uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+secondaryFileName;
-
+        				
         				writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 						insertImage(secondaryFileName,fileName, id, extension);
 						
@@ -111,7 +111,7 @@ public class ImportImageDao extends PgDao{
 	}
 	
 	
-	private void insertImage(String image_location, String fileName, Integer package_id, String extension) throws SQLException {
+	public void insertImage(String image_location, String fileName, Integer package_id, String extension) throws SQLException {
 		// TODO Auto-generated method stub
 		final String query = "insert into "+schema+".image (image_name, image_path, package_id_fkey, extension) "
 				+ "values(?, ?, ?, ?)";
@@ -187,7 +187,7 @@ public class ImportImageDao extends PgDao{
 			return labels;
 		}
 		
-		private void writeToFile(InputStream uploadedInputStream,
+		public void writeToFile(InputStream uploadedInputStream,
 				String uploadedFileLocation) {
 
 				try {
