@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesList {
-    private List<String> dataList;
+    private List<Image> dataList;
     int status;
     
     public ImagesList() {
     	
-        this(new ArrayList<String>(),0);
+        this(new ArrayList<Image>(),0);
 
     }
     
-	public ImagesList(List<String> dataList, int status) {
+	public ImagesList(List<Image> dataList, int status) {
 		super();
 		this.dataList = dataList;
 		this.status = status;
 	}
-	public List<String> getDataList() {
+	public List<Image> getDataList() {
 		return dataList;
 	}
-	public void setDataList(List<String> dataList) {
+	public void setDataList(List<Image> dataList) {
 		this.dataList = dataList;
 	}
 	public int getStatus() {

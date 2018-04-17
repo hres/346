@@ -33,6 +33,7 @@ import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.Image;
 import hc.fcdr.rws.model.pkg.ImagesList;
 import hc.fcdr.rws.model.pkg.InsertPackageResponse;
 import hc.fcdr.rws.model.pkg.NftModel;
@@ -1030,14 +1031,14 @@ public class PackageDao extends PgDao {
 //        final List<Sales> salesList = new ArrayList<Sales>();
         ImagesList imageList = new ImagesList();
 
-        final String query = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+        final String query = "select image_path, image_id from " + schema + "." + "image where package_id_fkey = ?";
 
         try
         {
             resultSet = executeQuery(query, new Object[] {package_id});
 
             while (resultSet.next())
-            	imageList.getDataList().add(resultSet.getString("image_path"));
+            	imageList.getDataList().add(new Image(resultSet.getString("image_path"), resultSet.getInt("image_id")));
         }
         catch (final SQLException e)
         {
@@ -1059,15 +1060,22 @@ public class PackageDao extends PgDao {
     	
     }
     public ImagesList addImage(List<FormDataBodyPart> bodyParts, Integer id, ImportImageDao importImageDao) {
-    	
+    	ImagesList imagesList = new ImagesList();
     	BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(0).getEntity();
 		String fileName = bodyParts.get(0).getContentDisposition().getFileName();
 		
+		
+		if(checkForDuplicateImageNames(id, fileName)) {
+			imagesList.setStatus(222);
+			return imagesList;
+		}
 		if(fileName.contains(".")) {
 			
 			String secondaryFileName = ""+id+"-"+fileName;
 			String extension = fileName.substring(fileName.indexOf(".")+1);
-
+			
+			//Make sure image with that name doesn't already exit
+			System.out.println("name of the file: "+secondaryFileName);
 			String uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+secondaryFileName;
 			importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 			
@@ -1081,7 +1089,7 @@ public class PackageDao extends PgDao {
 			}
 			
 		}
-		ImagesList imagesList = null;
+		
 		try {
 			imagesList = getListOfImages(id);
 		} catch (DaoException e) {
@@ -1091,5 +1099,131 @@ public class PackageDao extends PgDao {
 		
 		return imagesList;
     }
+    
+	public ImagesList deleteImage(final Integer id) throws SQLException, IOException, Exception {
+		Integer id_b = id;
+		String uploadedFileLocation = null;
 
+		String imagePath = null; 
+		final String sql = "delete from " + schema + "." + "image where image_id = ?";
+		ImagesList imagesList  = new ImagesList();
+		try {
+			id_b = getPackageId(id_b);
+			imagePath = imagePath(id); 
+			uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+imagePath;
+			File file = new File(uploadedFileLocation);
+			
+			if(deleteFile(file)) {
+		 executeUpdate(sql, new Object[] { id });
+			
+			
+			}else {
+				imagesList.setStatus(0);
+				return imagesList;
+			}
+
+
+
+		} catch (final Exception e) {
+			logger.error(e);
+
+			throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+		}
+
+		
+		try {
+			
+			System.out.println("package id: "+id_b);
+			imagesList = getListOfImages(id_b);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		imagesList.setStatus(200);
+		return imagesList;
+	}
+	
+	public boolean deleteFile(File file) {
+		if(file.delete()) {
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	public String imagePath(Integer id) {
+		String imagePath = null;
+		ResultSet resultSet = null;
+		final String sql = "select image_path from " + schema + "." + "image where image_id = ?";
+		
+        try {
+			resultSet = executeQuery(sql, new Object[] {id});
+			try {
+				while(resultSet.next()) {
+					imagePath = resultSet.getString("image_path");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return imagePath;
+	}
+
+	public boolean checkForDuplicateImageNames(Integer id, String image_path) {
+		ResultSet resultSet = null;
+		final String sql = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+
+		try {
+			resultSet = executeQuery(sql, new Object[] { id });
+			try {
+
+				while(resultSet.next()) {
+					
+					String current = resultSet.getString("image_path");
+					if(current.endsWith(image_path)) {
+						System.out.println("oui dup");
+						return true;
+					}
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		return false;
+	}
+	
+	public Integer getPackageId(Integer id) {
+		Integer package_id = null;
+		ResultSet resultSet = null;
+		final String sql = "select distinct package_id_fkey from " + schema + "." + "image where image_id = ?";
+		
+        try {
+			resultSet = executeQuery(sql, new Object[] {id});
+			try {
+				while(resultSet.next()) {
+					package_id = resultSet.getInt("package_id_fkey");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return package_id;
+	}
 }

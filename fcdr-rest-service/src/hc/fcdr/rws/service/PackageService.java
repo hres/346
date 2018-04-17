@@ -465,7 +465,36 @@ public class PackageService extends Application
 
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
+        
     }
     
+    
+
+    @DELETE
+    @Path("/deleteImage/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteImage(@PathParam("id") final Integer image_id
+    		)
+    {
+    	
+    	ImagesList entity = null;
+
+        try
+        {
+            if (packageDao != null)
+//            	entity = packageDao.getListOfImages(package_id);
+            	entity = packageDao.deleteImage(image_id);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+
 
 }
+
