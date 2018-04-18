@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,6 @@ import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.util.DateUtil;
 
 @Singleton
 public class ImportImageDao extends PgDao{
@@ -31,6 +28,8 @@ public class ImportImageDao extends PgDao{
 	
 	private final String schema;
 	private int imageCounter = 0;
+	
+	private static final String UPLOADED_FILE_LOCATION = "/home/romario/Documents/imagesLabel/";
 	
 	public ImportImageDao(Connection connection, final String schema) {
 		
@@ -41,11 +40,9 @@ public class ImportImageDao extends PgDao{
 	
 	public void importImage(List<FormDataBodyPart> bodyParts, BufferedWriter output) {
 		
-		//String filesLocation = "/tmp/images";
-		//String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+
 		Map<String, List<Integer>> labels = getLabelUpc();
 		List<String> invalidImages = new ArrayList<String>();
-        final Timestamp now = DateUtil.getCurrentTimeStamp();
 
 		
     	for(int i = 0; i < bodyParts.size(); i++) {
@@ -68,7 +65,7 @@ public class ImportImageDao extends PgDao{
         				String secondaryFileName = ""+(++imageCounter)+"-"+fileName;
         				
         				//TODO update folder path
-        				String uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+secondaryFileName;
+        				String uploadedFileLocation = UPLOADED_FILE_LOCATION+secondaryFileName;
         				
         				writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 						insertImage(secondaryFileName,fileName, id, extension);
@@ -125,26 +122,8 @@ public class ImportImageDao extends PgDao{
 			preparedStatement.setString(4, extension);
 			preparedStatement.executeUpdate();
 			
-			
-		
-		
-		
-		
 	}
 
-	public static void deleteFolder(File folder) {
-	    File[] files = folder.listFiles();
-	    if(files!=null) { //some JVMs return null for empty dirs
-	        for(File f: files) {
-	            if(f.isDirectory()) {
-	                deleteFolder(f);
-	            } else {
-	                f.delete();
-	            }
-	        }
-	    }
-	    folder.delete();
-	}
 
 		public Map<String, List<Integer>> getLabelUpc() {
 			

@@ -38,7 +38,6 @@ public class PgDao
                     prepareStatement(connection, query, false, values);
           
             resultSet = preparedStatement.executeQuery();
-            System.out.println(preparedStatement+" is the query");
 
         }
         catch (final SQLException e)
