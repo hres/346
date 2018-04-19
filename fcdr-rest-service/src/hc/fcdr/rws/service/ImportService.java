@@ -54,12 +54,9 @@ public class ImportService extends Application
             try
             {
 
-                
-
                 importSalesDao =
                         new ImportMarketShareDao(pgConnectionPool.getConnection(),
                         		ContextManager.getJndiValue("SCHEMA"));
-
                 
                 importLabelDao =
                         new ImportLabelDao(pgConnectionPool.getConnection(),
@@ -68,7 +65,6 @@ public class ImportService extends Application
                 importImageDao =
                         new ImportImageDao(pgConnectionPool.getConnection(),
                                 ContextManager.getJndiValue("SCHEMA"));
-                //importImageDao
             }
             catch (final SQLException e)
             {
@@ -87,8 +83,7 @@ public class ImportService extends Application
     		@FormDataParam("csv_file") FormDataContentDisposition fileDetail)
             throws SQLException, IOException, Exception
     {
-    	
-    	System.out.println("The file "+fileDetail.getFileName());
+    	//TODO will update the folder path
 		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
 		fileDetail.getSize();
 		
@@ -127,7 +122,7 @@ public class ImportService extends Application
     public Response getFile(@FormDataParam("csv_file") InputStream fileInputStream,
     		@FormDataParam("csv_file") FormDataContentDisposition fileDetail){
     	
-    	//TODO change the directory
+    	//TODO will update the folder path
 		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
 
 

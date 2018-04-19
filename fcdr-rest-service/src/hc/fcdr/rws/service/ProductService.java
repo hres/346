@@ -49,7 +49,6 @@ import org.glassfish.jersey.server.ManagedAsync;
 public class ProductService extends Application
 {
     static ProductDao productDao = null;
-    private Executor executor;
     
 
     @PostConstruct
@@ -62,7 +61,6 @@ public class ProductService extends Application
 
             try
             {
-            	System.out.println("schema is "+ContextManager.getJndiValue("SCHEMA"));
             	
                 productDao =
                         new ProductDao(pgConnectionPool.getConnection(),
@@ -78,66 +76,7 @@ public class ProductService extends Application
         }
     }
 
-    @GET
-    @Path("/productsraw")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Product> getProductsRawAll()
-    {
-        try
-        {
-            if (productDao != null)
-                return productDao.getProducts();
-        }
-        catch (final DaoException e)
-        {
-            e.printStackTrace();
-        }
 
-        return new ArrayList<Product>();
-    }
-
-    @GET
-    @Path("/productsraw/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductsRaw(@PathParam("id") final int id)
-    {
-        try
-        {
-            if (productDao != null)
-                return productDao.getProduct(id);
-        }
-        catch (final DaoException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return new Product();
-    }
-
-    // ==============================
-
-    @GET
-    @Path("/products")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts()
-    {
-        ProductDataResponse entity = new ProductDataResponse();
-
-        try
-        {
-            if (productDao != null)
-                entity = productDao.getProductResponse();
-        }
-        catch (final Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return Response.status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON).entity(entity).build();
-    }
 
     @GET
     @Path("/products/{id}")
@@ -260,7 +199,7 @@ public class ProductService extends Application
     @Path("/productsfiltered")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getProducts(final ProductRequest productRequest)
+    public Response searchProducts(final ProductRequest productRequest)
             throws SQLException, IOException, Exception
     {
 
@@ -291,7 +230,7 @@ public class ProductService extends Application
     @Path("/productsaleslabel")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getProductSalesLabel(
+    public Response searchProductsSalesLabels(
             final ProductSalesLabelRequest productSalesLabelRequest)
             throws SQLException, IOException, Exception
     {
@@ -418,13 +357,6 @@ public class ProductService extends Application
 
     // ===========
 
-    @OPTIONS
-    @Path("/products")
-    @Produces(MediaType.APPLICATION_XML)
-    public String getSupportedOperations()
-    {
-        return "<operations>GET, PUT, POST, DELETE</operations>";
-    }
     
     @DELETE
     @Path("/delete/{id}")
@@ -474,33 +406,5 @@ public class ProductService extends Application
     }
     
     
-    @GET
-    @ManagedAsync
-    @Path("/async/{id}")
-    public void asyncGet(@PathParam("id") final int id, @Suspended final AsyncResponse asyncResponse) {
-       
-        final Boolean RETURN_FIRST_RECORD_FOUND = false;
-
-
-        
-        
-        new Thread() {
-            public void run() {
-                ProductClassificationDataResponse entity =
-                        new ProductClassificationDataResponse();
-            	try{
-            	entity = productDao.getProductClassificationResponse(id,
-                        RETURN_FIRST_RECORD_FOUND);
-            	}catch(Exception ex){
-            		 asyncResponse.resume(ex);
-            		 return;
-            	}
-               Response response = Response.ok(entity,
-                                               MediaType.APPLICATION_JSON)
-                                           .build();
-               asyncResponse.resume(response);
-            }
-         }.start();
-      }
 
 }

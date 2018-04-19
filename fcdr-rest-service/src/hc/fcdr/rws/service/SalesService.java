@@ -11,6 +11,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -59,41 +60,8 @@ public class SalesService extends Application
         }
     }
 
-    @GET
-    @Path("/salesraw")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Sales> getSalesRawAll()
-    {
-        try
-        {
-            if (salesDao != null)
-                return salesDao.getSales();
-        }
-        catch (final DaoException e)
-        {
-            e.printStackTrace();
-        }
 
-        return new ArrayList<Sales>();
-    }
 
-    @GET
-    @Path("/salesraw/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Sales getSalesRaw(@PathParam("id") final long id)
-    {
-        try
-        {
-            if (salesDao != null)
-                return salesDao.getSales(id);
-        }
-        catch (final DaoException e)
-        {
-            e.printStackTrace();
-        }
-
-        return new Sales();
-    }
 
     // ==============================
 
@@ -118,26 +86,7 @@ public class SalesService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-    @GET
-    @Path("/sales")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSales()
-    {
-        SalesDataResponse entity = new SalesDataResponse();
 
-        try
-        {
-            if (salesDao != null)
-                entity = salesDao.getSalesResponse();
-        }
-        catch (final Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return Response.status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON).entity(entity).build();
-    }
 
     @GET
     @Path("/sales/{id}")
@@ -164,7 +113,7 @@ public class SalesService extends Application
     @Path("/salesfiltered")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getSales(final SalesRequest salesRequest)
+    public Response searchSales(final SalesRequest salesRequest)
             throws SQLException, IOException, Exception
     {
         SalesDataResponseShort entity = new SalesDataResponseShort();
@@ -210,7 +159,7 @@ public class SalesService extends Application
 
     // ===
 
-    @POST
+    @PUT
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -218,7 +167,6 @@ public class SalesService extends Application
             throws SQLException, IOException, Exception
     {
         SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
-//        System.out.println("Collection date "+salesUpdateRequest.sales_collection_date);
         try
         {
             if (salesDao != null)
@@ -256,13 +204,6 @@ public class SalesService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-    // ===
 
-    @OPTIONS
-    @Path("/sales")
-    @Produces(MediaType.APPLICATION_XML)
-    public String getSupportedOperations()
-    {
-        return "<operations>GET, PUT, POST, DELETE</operations>";
-    }
+
 }
