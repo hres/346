@@ -637,7 +637,10 @@ public class ProductDao extends PgDao
                         + "package l on p.product_id = l.package_product_id_fkey ";
         // ===
 
-        final String orderBy = label2Package(productSalesLabelRequest.orderby);
+         String orderBy = label2Package(productSalesLabelRequest.orderby);
+        if(orderBy.equals("package_ingredients")) {
+        orderBy = "ingredients";
+        }
         Integer offSet = productSalesLabelRequest.offset;
         final boolean sortOrder = productSalesLabelRequest.flag;
 

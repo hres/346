@@ -1253,7 +1253,7 @@ public final class DaoUtil
         productInsertList.add(now);
         productInsertList.add(now);
 
-        if (!request.getClassification_number().isEmpty())
+        if (request.getClassification_number() != null)
                 queryMap.put("classification_number",
                         request.getClassification_number());
 
@@ -3526,7 +3526,7 @@ public final class DaoUtil
         if (!request.label_source.isEmpty())
             queryMap.put("package_source", request.label_source);
         if (!request.label_ingredients.isEmpty())
-            queryMap.put("package_ingredients", request.label_ingredients);
+            queryMap.put("ingredients", request.label_ingredients);
 
 
         if(request.label_collection_date_from != null && request.label_collection_date_to != null){
