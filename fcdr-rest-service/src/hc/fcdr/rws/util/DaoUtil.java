@@ -1344,7 +1344,7 @@ public final class DaoUtil
         final Double kilo_volume_total = result.getDouble("kilo_volume_total");
         sales.setKiloVolumeTotal(result.wasNull() ? null : kilo_volume_total);
 
-        final Double kilo_volume_rank = result.getDouble("kilo_rank");
+        final Double kilo_volume_rank = result.getDouble("kilo_volume_rank");
         sales.setKiloVolumeRank(result.wasNull() ? null : kilo_volume_rank);
 
         final Double dollar_volume_total = result.getDouble(
@@ -1702,7 +1702,7 @@ public final class DaoUtil
         }
         salesInsertList.add(request.kilo_volume_total);
 
-        if (request.kilo_volume_rank != null)
+        if (request.kilo_volume_rank != null) {
             if (request.kilo_volume_rank instanceof Number)
                 queryMap.put("kilo_volume_rank", request.kilo_volume_rank);
             else
@@ -1710,6 +1710,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
+        }
+        System.out.println("Kilo rank = "+request.kilo_volume_rank);
         salesInsertList.add(request.kilo_volume_rank);
 
         if (request.dollar_volume_total != null)
@@ -2058,7 +2060,7 @@ public final class DaoUtil
         }
         salesUpdateList.add(request.kilo_volume_total);
 
-        if (request.kilo_volume_rank != null)
+        if (request.kilo_volume_rank != null) {
 
             if (request.kilo_volume_rank instanceof Number)
                 queryMap.put("kilo_volume_rank", request.kilo_volume_rank);
@@ -2067,6 +2069,8 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
                 return queryMap;
             }
+        }
+        
         salesUpdateList.add(request.kilo_volume_rank);
 
         if (request.dollar_volume_total != null)

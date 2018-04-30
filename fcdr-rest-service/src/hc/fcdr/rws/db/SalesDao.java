@@ -207,10 +207,12 @@ public class SalesDao extends PgDao
         }
 
         // Check for valid classification_number.
+        if(salesInsertRequest.classification_number != null & salesInsertRequest.classification_number != "") {
         if (!checkClassification(salesInsertRequest.classification_number))
             return new SalesInsertDataResponse(
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+        }
 
         if (!checkForSameSalesUpcProductId(salesInsertRequest.sales_upc,
                 salesInsertRequest.product_id))

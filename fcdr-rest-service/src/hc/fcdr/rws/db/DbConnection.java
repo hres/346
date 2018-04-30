@@ -12,6 +12,11 @@ import javax.sql.DataSource;
 public class DbConnection
 {
     // Temp solution.
+//    static final String URL      =
+//            "jdbc:postgresql://172.17.0.2:5432/sodium";
+//    static final String USER     = "postgres";
+//    static final String PASSWORD = "secret";
+    
     static final String URL      =
             "jdbc:postgresql://localhost:5432/postgres";
     static final String USER     = "postgres";
@@ -42,8 +47,11 @@ public class DbConnection
     public synchronized Connection getConnection() throws SQLException
     {
         try
+        
         {
             return source.getConnection();
+
+          //  return getConnections();
         	//return   DriverManager.getConnection(URL, USER, PASSWORD);
         }
         catch (final Exception e)

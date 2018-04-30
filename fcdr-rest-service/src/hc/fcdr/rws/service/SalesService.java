@@ -166,6 +166,8 @@ public class SalesService extends Application
     public Response update(final SalesUpdateRequest salesUpdateRequest)
             throws SQLException, IOException, Exception
     {
+    	
+    	System.out.println("kilo share is: "+salesUpdateRequest.kilo_share);
         SalesUpdateDataResponse entity = new SalesUpdateDataResponse();
         try
         {
