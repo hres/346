@@ -171,7 +171,7 @@ public class PackageDao extends PgDao {
 					ResponseCodes.INVALID_INPUT_FIELDS.getMessage());
 		final String sql = "delete from " + schema + "." + "product_component where package_id = ? and as_ppd_flag = ?";
 
-		if (nftRequest.getNft().size() < 1)
+		if (nftRequest.getNft().size() < 1) {
 			try {
 				final Integer deletedRow = (Integer) executeUpdate(sql,
 						new Object[] { nftRequest.getPackage_id(), nftRequest.getFlag() });
@@ -183,6 +183,7 @@ public class PackageDao extends PgDao {
 				logger.error(e);
 				throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
 			}
+		}
 		else
 			try {
 				connection.setAutoCommit(false);
@@ -227,7 +228,7 @@ public class PackageDao extends PgDao {
 		}
 
 		// Check for valid classification_number.
-		if (packageInsertRequest.getClassification_number() != null)
+		if (packageInsertRequest.getClassification_number() != null && packageInsertRequest.getClassification_number() != "")
 			if (!checkClassification(packageInsertRequest.getClassification_number()))
 				return new InsertPackageResponse(ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
 						ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());

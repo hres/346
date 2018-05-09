@@ -84,9 +84,9 @@ public class ImportService extends Application
             throws SQLException, IOException, Exception
     {
     	//TODO will update the folder path
+    	
 		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
 		fileDetail.getSize();
-		
 		
 		
 		writeToFile(fileInputStream, uploadedFileLocation);

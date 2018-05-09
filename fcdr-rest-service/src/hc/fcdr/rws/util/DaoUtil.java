@@ -409,13 +409,14 @@ public final class DaoUtil
         {
             if (!queryMap.containsKey("Fat"))
             {
-
+            	System.out.println("this is whats missing: 1");
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
                 return queryMap;
             }
             if (!queryMap.containsKey("Energy"))
             {
+            	System.out.println("this is whats missing: 2");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -423,6 +424,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Energy KJ"))
             {
+            	System.out.println("this is whats missing: 3");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -430,6 +432,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Saturated Fat"))
             {
+            	System.out.println("this is whats missing: 4");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -437,6 +440,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Trans Fat"))
             {
+            	System.out.println("this is whats missing: 5");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -444,6 +448,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Omega-6 Polyunsaturated Fat"))
             {
+            	System.out.println("this is whats missing: 6");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -451,6 +456,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Omega-3 Polyunsaturated Fat"))
             {
+            	System.out.println("this is whats missing: 7");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -458,6 +464,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Carbohydrates"))
             {
+            	System.out.println("this is whats missing: 8");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -465,6 +472,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Fibre"))
             {
+            	System.out.println("this is whats missing: 9");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -472,6 +480,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Insoluble Fibre"))
             {
+            	System.out.println("this is whats missing: 10");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -479,6 +488,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sugar"))
             {
+            	System.out.println("this is whats missing: 11");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -486,6 +496,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sugar Alcohols"))
             {
+            	System.out.println("this is whats missing: 12");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -493,6 +504,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Starch"))
             {
+            	System.out.println("this is whats missing: 13");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -500,6 +512,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Protein"))
             {
+            	System.out.println("this is whats missing: 14");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -507,6 +520,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Cholesterol"))
             {
+            	System.out.println("this is whats missing: 15");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -514,6 +528,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sodium"))
             {
+            	System.out.println("this is whats missing: 16");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -521,6 +536,7 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Saturated + Trans Fat"))
             {
+            	System.out.println("this is whats missing: 17");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -2573,7 +2589,12 @@ public final class DaoUtil
 		importLabelModel.getNftList().add(new ImportLabelNft("Saturated Fat", saturated_fat_as_sold,(saturated_fat_as_sold!=null? "g":null), null,null, true));
 
 	
-		//Trans Fat
+		//Trans Fat 
+
+		Double trans_fat_as_sold = rs.getDouble("trans_fat_as_sold");
+		importLabelModel.getNftList().add(new ImportLabelNft("Trans Fat", trans_fat_as_sold,(trans_fat_as_sold!=null? "g":null), null,null, true));
+
+		//Trans Fat + Saturated 
 
 		Double saturated_plus_trans_daily_value_as_sold = rs.getDouble("saturated_plus_trans_daily_value_as_sold");
 		saturated_plus_trans_daily_value_as_sold = rs.wasNull()?null: rs.getDouble("saturated_plus_trans_daily_value_as_sold");
@@ -2680,12 +2701,11 @@ public final class DaoUtil
 		if(sugar_total_daily_value_as_prepared!=null){
 		importLabelModel.getNftList().add(new ImportLabelNft("Sugar", null,null, sugar_total_daily_value_as_prepared,null, false));
 		}
-		
 		//Sugar alcohols 
 		Double sugar_alcohols_as_sold = rs.getDouble("sugar_alcohols_as_sold");
 		sugar_alcohols_as_sold = rs.wasNull()?null: sugar_alcohols_as_sold; 
 		
-		importLabelModel.getNftList().add(new ImportLabelNft("Sugar Acohols", sugar_alcohols_as_sold,(sugar_alcohols_as_sold!=null? "g":null), null,null, true));
+		importLabelModel.getNftList().add(new ImportLabelNft("Sugar Alcohols", sugar_alcohols_as_sold,(sugar_alcohols_as_sold!=null? "g":null), null,null, true));
 
 		//Starch 
 		Double starch_as_sold = rs.getDouble("starch_as_sold");
