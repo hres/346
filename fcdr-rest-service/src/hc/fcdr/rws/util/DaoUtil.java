@@ -382,8 +382,7 @@ public final class DaoUtil
             if (element.getName().isEmpty())
             {
 
-                System.out.println("name of invalid " + element.getName()
-                        + " amount" + element.getAmount());
+              
 
                 queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
                 return queryMap;
@@ -395,8 +394,7 @@ public final class DaoUtil
                             && (element.getUnit_of_measure()==null) && element.getUnit_of_measure().isEmpty()))
             {
 
-//                System.out.println("name of invalid " + element.getName()
-//                        + " amount" + element.getAmount());
+
                 
                 queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
                 return queryMap;
@@ -409,14 +407,12 @@ public final class DaoUtil
         {
             if (!queryMap.containsKey("Fat"))
             {
-            	System.out.println("this is whats missing: 1");
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
                 return queryMap;
             }
             if (!queryMap.containsKey("Energy"))
             {
-            	System.out.println("this is whats missing: 2");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -424,7 +420,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Energy KJ"))
             {
-            	System.out.println("this is whats missing: 3");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -432,7 +427,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Saturated Fat"))
             {
-            	System.out.println("this is whats missing: 4");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -440,7 +434,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Trans Fat"))
             {
-            	System.out.println("this is whats missing: 5");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -448,7 +441,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Omega-6 Polyunsaturated Fat"))
             {
-            	System.out.println("this is whats missing: 6");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -456,7 +448,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Omega-3 Polyunsaturated Fat"))
             {
-            	System.out.println("this is whats missing: 7");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -464,7 +455,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Carbohydrates"))
             {
-            	System.out.println("this is whats missing: 8");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -472,7 +462,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Fibre"))
             {
-            	System.out.println("this is whats missing: 9");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -480,7 +469,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Insoluble Fibre"))
             {
-            	System.out.println("this is whats missing: 10");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -488,7 +476,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sugar"))
             {
-            	System.out.println("this is whats missing: 11");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -496,7 +483,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sugar Alcohols"))
             {
-            	System.out.println("this is whats missing: 12");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -504,7 +490,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Starch"))
             {
-            	System.out.println("this is whats missing: 13");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -512,7 +497,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Protein"))
             {
-            	System.out.println("this is whats missing: 14");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -520,7 +504,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Cholesterol"))
             {
-            	System.out.println("this is whats missing: 15");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -528,7 +511,6 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Sodium"))
             {
-            	System.out.println("this is whats missing: 16");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
@@ -536,14 +518,13 @@ public final class DaoUtil
             }
             if (!queryMap.containsKey("Saturated + Trans Fat"))
             {
-            	System.out.println("this is whats missing: 17");
 
                 queryMap.put("inputError",
                         ResponseCodes.MISSING_MANDATORY_FIELDS);
                 return queryMap;
             }
         }
-        // queryMap.key
+
         return queryMap;
 
     }
@@ -888,7 +869,6 @@ public final class DaoUtil
         final Map<String, Object> queryMap = new HashMap<String, Object>();
         final List<Object> labelUpdateList = new ArrayList<Object>();
 
-        System.out.println(request.toString());
         if (!request.getPackage_description().isEmpty())
             queryMap.put("package_description",
                     request.getPackage_description());
@@ -1727,7 +1707,6 @@ public final class DaoUtil
                 return queryMap;
             }
         }
-        System.out.println("Kilo rank = "+request.kilo_volume_rank);
         salesInsertList.add(request.kilo_volume_rank);
 
         if (request.dollar_volume_total != null)
@@ -1818,7 +1797,6 @@ public final class DaoUtil
         queryMap.put("last_edit_date", now);
         salesInsertList.add(now);
 
-        System.out.println(request.sales_description + "IS THE ID");
         if (request.product_id != null)
         {
             if (isType(request.product_id.toString(), "int"))
@@ -2171,7 +2149,6 @@ public final class DaoUtil
                 return queryMap;
             }
         salesUpdateList.add(request.number_of_units);
-        System.out.print("in the daoUtil" + request.number_of_units);
         if (request.edited_by != null)
             queryMap.put("edited_by", request.edited_by);
         salesUpdateList.add(request.edited_by);
@@ -2181,7 +2158,6 @@ public final class DaoUtil
         queryMap.put("last_edit_date", now);
         salesUpdateList.add(now);
 
-        System.out.println("that sales id is omg" + request.sales_id);
         if (request.sales_id != null)
         {
             if (request.sales_id instanceof Number)
@@ -2306,7 +2282,6 @@ public final class DaoUtil
         packageResponse.setPackage_size_unit_of_measure(
                 resultSet.getString("package_size_unit_of_measure"));
         packageResponse.setStorage_type(resultSet.getString("storage_type"));
-        System.out.println("we are here 5");
 
         packageResponse.setStorage_statements(
                 resultSet.getString("storage_statements"));
@@ -2366,7 +2341,6 @@ public final class DaoUtil
                 resultSet.wasNull() ? null : number_of_units);
 
         packageResponse.setEdited_by(resultSet.getString("edited_by"));
-        System.out.println("we are here 6");
 
         final Boolean informed_dining_program = resultSet.getBoolean(
                 "informed_dining_program");
@@ -2375,7 +2349,6 @@ public final class DaoUtil
 
         packageResponse.setNft_last_update_date(
                 resultSet.getString("nft_last_update_date"));
-        System.out.println("we are here 7");
 
         final Double product_grouping = resultSet.getDouble("product_grouping");
         packageResponse.setProduct_grouping(
