@@ -85,9 +85,7 @@ public class ImportService extends Application
     {
     	//TODO will update the folder path
     	
-		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
-		fileDetail.getSize();
-		
+		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();		
 		
 		writeToFile(fileInputStream, uploadedFileLocation);
 

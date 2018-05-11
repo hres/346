@@ -888,6 +888,7 @@ public class PackageDao extends PgDao {
 
 			final Integer deletedRowdelete_components = (Integer) executeUpdate(delete_components, new Object[] { id });
 
+			deletePackageImages(id);
 			final Integer deletedRow = (Integer) executeUpdate(sql, new Object[] { id });
 
 			if (deletedRow == 0) {
@@ -1151,6 +1152,64 @@ public class PackageDao extends PgDao {
 			return false;
 		}
 		
+	}
+	
+	public boolean deletePackageImages( Integer id) {
+		
+		ResultSet resultSet = null;
+
+		List<String> listOfImages = new ArrayList<>();
+		
+		final String sql = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+	      try {
+				resultSet = executeQuery(sql, new Object[] {id});
+				try {
+					while(resultSet.next()) {
+						listOfImages.add(resultSet.getString("image_path"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 if(cleanImages(listOfImages)){
+			 return true;
+		 }else {
+			 return false;
+		 }
+	}
+	
+	public boolean cleanImages(List<String> listOfImages) {
+		boolean valid = true;
+		String uploadedFileLocation = null;
+		if(listOfImages.size() > 0) {
+			
+			for (String item: listOfImages) {
+				
+				uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+item;
+				File file = new File(uploadedFileLocation);
+				
+				if(deleteFile(file)) {
+					final String sql = "delete from " + schema + "." + "image where image_path = ?";
+					 try {
+						executeUpdate(sql, new Object[] { item });
+					} catch (DaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else {
+					valid = false;
+				}
+			}
+		}else {
+			return true;
+		}
+		return valid;
 	}
 	
 	public String imagePath(Integer id) {
