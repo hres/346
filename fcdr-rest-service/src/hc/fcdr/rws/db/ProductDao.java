@@ -2,6 +2,7 @@ package hc.fcdr.rws.db;
 
 import static hc.fcdr.rws.util.DaoUtil.prepareStatement;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -1457,7 +1458,17 @@ public class ProductDao extends PgDao
         	
             final Integer deletedComponents = (Integer) executeUpdateProductDao(query_component, new Object[]
             { id });    	
-  
+            
+            
+            List<Integer> listOfIds = getAllPackageIds(id);
+            if(listOfIds.size() > 0) {
+            	System.out.println("en effet");
+            for(Integer package_id : listOfIds) {
+            
+            	deletePackageImages(package_id);
+
+            }
+            }
             final Integer deletedPackages = (Integer) executeUpdateProductDao(query_package, new Object[]
             { id });  
             
@@ -1479,11 +1490,105 @@ public class ProductDao extends PgDao
                 ResponseCodes.OK.getMessage());
 	}
 	
+	public boolean deletePackageImages( Integer id) {
+		
+		ResultSet resultSet = null;
+
+		List<String> listOfImages = new ArrayList<>();
+		
+		final String sql = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+	      try {
+				resultSet = executeQuery(sql, new Object[] {id});
+				try {
+					while(resultSet.next()) {
+						listOfImages.add(resultSet.getString("image_path"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 if(cleanImages(listOfImages)){
+			 return true;
+		 }else {
+			 return false;
+		 }
+	}
+	
+	public boolean cleanImages(List<String> listOfImages) {
+		boolean valid = true;
+		String uploadedFileLocation = null;
+		if(listOfImages.size() > 0) {
+			
+			for (String item: listOfImages) {
+				
+				uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+item;
+				File file = new File(uploadedFileLocation);
+				
+				if(deleteFile(file)) {
+					final String sql = "delete from " + schema + "." + "image where image_path = ?";
+					 try {
+						executeUpdate(sql, new Object[] { item });
+					} catch (DaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else {
+					valid = false;
+				}
+			}
+		}else {
+			return true;
+		}
+		return valid;
+	}
+	public boolean deleteFile(File file) {
+		if(file.delete()) {
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	public List<Integer> getAllPackageIds(Integer id) throws DaoException {
+    	System.out.println("called");
+
+		
+		List<Integer> listOfIds = new ArrayList<Integer>();
+		
+		final String query = "select package_id from " + schema + ".package where package_product_id_fkey = ?";
+		;
+		ResultSet resultSet = null;
+		try {
+	    	System.out.println("called");
+
+			resultSet = executeQuery(query, new Object[] {id});
+	    	System.out.println("called");
+
+
+			while (resultSet.next()) {
+				listOfIds.add(resultSet.getInt("package_id"));
+			}
+
+		} catch (final SQLException e) {
+			logger.error(e);
+			throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+		}
+		System.out.println("size: "+listOfIds.size());
+		return listOfIds;
+	}
+	
+	
     protected int executeUpdateProductDao(final String query, final Object[] values)
             throws DaoException, SQLException
     {
     	
-    	System.out.println("called");
         PreparedStatement preparedStatement = null;
          int affectedRows = 0;
          

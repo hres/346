@@ -36,6 +36,7 @@ public class PgDao
         {
             preparedStatement =
                     prepareStatement(connection, query, false, values);
+            System.out.println(preparedStatement);
             resultSet = preparedStatement.executeQuery();
 
         }
