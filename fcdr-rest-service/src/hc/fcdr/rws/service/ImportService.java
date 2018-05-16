@@ -43,6 +43,7 @@ public class ImportService extends Application
     static ImportLabelDao importLabelDao = null;
     static ImportImageDao importImageDao = null;
 
+	private static final String UPLOADED_FILE_LOCATION = "/home/romario/Documents/importFiles/";
 
     @PostConstruct
     public static void initialize()
@@ -55,18 +56,18 @@ public class ImportService extends Application
             {
 
                 importSalesDao =
-                        new ImportMarketShareDao(pgConnectionPool.getConnection(),
+                        new ImportMarketShareDao(pgConnectionPool.getConnections(),
                         		ContextManager.getJndiValue("SCHEMA"));
                 
                 importLabelDao =
-                        new ImportLabelDao(pgConnectionPool.getConnection(),
+                        new ImportLabelDao(pgConnectionPool.getConnections(),
                                 ContextManager.getJndiValue("SCHEMA"));
                 
                 importImageDao =
-                        new ImportImageDao(pgConnectionPool.getConnection(),
+                        new ImportImageDao(pgConnectionPool.getConnections(),
                                 ContextManager.getJndiValue("SCHEMA"));
             }
-            catch (final SQLException e)
+            catch (final Exception e)
             {
                 e.printStackTrace();
             }
@@ -85,7 +86,7 @@ public class ImportService extends Application
     {
     	//TODO will update the folder path
     	
-		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();		
+		String uploadedFileLocation = UPLOADED_FILE_LOCATION + fileDetail.getFileName();		
 		
 		writeToFile(fileInputStream, uploadedFileLocation);
 
@@ -104,7 +105,8 @@ public class ImportService extends Application
             output.close();
           }
         }
-			
+			deleteFolder(new File(uploadedFileLocation));
+
 
  	ResponseBuilder response = Response.ok((Object) file);
 	response.header("Content-Disposition",
@@ -121,7 +123,7 @@ public class ImportService extends Application
     		@FormDataParam("csv_file") FormDataContentDisposition fileDetail){
     	
     	//TODO will update the folder path
-		String uploadedFileLocation = "/tmp/" + fileDetail.getFileName();
+		String uploadedFileLocation = UPLOADED_FILE_LOCATION + fileDetail.getFileName();
 
 
 		writeToFile(fileInputStream, uploadedFileLocation);
@@ -159,7 +161,7 @@ public class ImportService extends Application
 					}
 	               }
 	             }
-			//deleteFolder(new File(uploadedFileLocation));
+			deleteFolder(new File(uploadedFileLocation));
 		
 
      	ResponseBuilder response = Response.ok((Object) file);

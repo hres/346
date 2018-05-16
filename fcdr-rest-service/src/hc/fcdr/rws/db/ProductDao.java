@@ -1596,7 +1596,6 @@ public class ProductDao extends PgDao
        
             preparedStatement =
                     prepareStatement(connection, query, true, values);
-            System.out.println(preparedStatement);
            affectedRows = preparedStatement.executeUpdate();
             
         
