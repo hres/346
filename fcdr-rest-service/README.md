@@ -1,9 +1,11 @@
 # Sodium Monitoring Task Service
----
+
 This project provides the sodium monitoring task REST services
 
-## Components and Features
 ---
+
+## Components and Features
+
 Tis project uses the following components and features
 
 * Java 8
@@ -18,7 +20,7 @@ The availability of the above tools is assumed throughout the instructions on th
 ---
 
 ## How to build fcdr-rest-service-0.0.1-SNAPSHOT.war 
----
+
 To deploy the war file, do the following:
 
 1. cd ~/repositories
