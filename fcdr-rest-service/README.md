@@ -6,7 +6,7 @@ This project provides the sodium monitoring task REST services
 
 ## Components and Features
 
-Tis project uses the following components and features
+This project uses the following components and features
 
 * Java 8
 * Maven 3.5.2
@@ -19,7 +19,7 @@ The availability of the above tools is assumed throughout the instructions on th
 
 ---
 
-## How to build fcdr-rest-service-0.0.1-SNAPSHOT.war 
+## How to build fcdr-rest-service-0.0.1-SNAPSHOT.war file
 
 To deploy the war file, do the following:
 
@@ -28,3 +28,4 @@ To deploy the war file, do the following:
 3. cd fcdr-rest-service
 4. mvn clean intall
 5. copy target/fcdr-rest-service-0.0.1-SNAPSHOT.war  to webapps directory of Tomcat 8.0 on HRE
+
