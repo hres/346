@@ -63,13 +63,10 @@ public class ProductService extends Application
             {
             	
                 productDao =
-                        new ProductDao(pgConnectionPool.getConnection(),
-                        		ContextManager.getJndiValue("SCHEMA"));
+                        new ProductDao(pgConnectionPool.getConnections(),
+                        		pgConnectionPool.getSchema());
             }
-            catch (final SQLException e)
-            {
-                e.printStackTrace();
-            } catch (Exception e) {
+            catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

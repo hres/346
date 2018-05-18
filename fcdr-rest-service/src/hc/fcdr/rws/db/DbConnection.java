@@ -13,24 +13,22 @@ import javax.sql.DataSource;
 
 public class DbConnection
 {
-    // Temp solution.
-//    static final String URL      =
-//            "jdbc:postgresql://172.17.0.2:5432/sodium";
-//    static final String USER     = "postgres";
-//    static final String PASSWORD = "secret";
-    
-    static final String URL      =
-            "jdbc:postgresql://localhost:5432/postgres";
-    static final String USER     = "postgres";
-    static final String PASSWORD = "postgres";
-    static final String SCHEMA_NAME = "fcdrschema";
-	Properties prop = new Properties();
+
+	
+    Properties prop = new Properties();
 	InputStream input = null;
 
     private DataSource  source;
 
     public DbConnection()
     {
+    	try {
+			this.input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+			prop.load(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     }
 
@@ -48,7 +46,6 @@ public class DbConnection
         }
     }
 
-    // Uses context.xml
     public synchronized Connection getConnection() throws SQLException
     {
         try
@@ -56,8 +53,7 @@ public class DbConnection
         {
             return source.getConnection();
 
-          //  return getConnections();
-        	//return   DriverManager.getConnection(URL, USER, PASSWORD);
+
         }
         catch (final Exception e)
         {
@@ -65,7 +61,6 @@ public class DbConnection
         }
     }
 
-    // Uses non context.xml mechanism, if needed.
     public  Connection getConnections()
            
     {
@@ -73,10 +68,8 @@ public class DbConnection
   
 
 		try {
-			input = new FileInputStream("/home/romario/Documents/config.properties");
-			prop.load(input);
+		
 			Class.forName("org.postgresql.Driver");
-//			connection = DriverManager.getConnection(URL, USER, PASSWORD);
 			connection = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("user"), prop.getProperty("password"));
 
 		} catch (Exception e) {
@@ -89,5 +82,9 @@ public class DbConnection
         else
             return null;
 
+    }
+    public String getSchema() {
+    	
+    	return prop.getProperty("schema");
     }
 }

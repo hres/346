@@ -55,13 +55,10 @@ public class PackageService extends Application {
 			final DbConnection pgConnectionPool = new DbConnection();
 			pgConnectionPool.initialize();
 
-			try {
-				packageDao = new PackageDao(pgConnectionPool.getConnection(), ContextManager.getJndiValue("SCHEMA"));
-				importImageDao = new ImportImageDao(pgConnectionPool.getConnection(),
-						ContextManager.getJndiValue("SCHEMA"));
-			} catch (final SQLException e) {
-				e.printStackTrace();
-			}
+			packageDao = new PackageDao(pgConnectionPool.getConnections(),
+					pgConnectionPool.getSchema());
+			importImageDao = new ImportImageDao(pgConnectionPool.getConnections(),
+					pgConnectionPool.getSchema());
 		}
 	}
 

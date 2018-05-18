@@ -54,18 +54,17 @@ public class ImportService extends Application
 
             try
             {
-
                 importSalesDao =
                         new ImportMarketShareDao(pgConnectionPool.getConnections(),
-                        		ContextManager.getJndiValue("SCHEMA"));
+                        		pgConnectionPool.getSchema());
                 
                 importLabelDao =
                         new ImportLabelDao(pgConnectionPool.getConnections(),
-                                ContextManager.getJndiValue("SCHEMA"));
+                        		pgConnectionPool.getSchema());
                 
                 importImageDao =
                         new ImportImageDao(pgConnectionPool.getConnections(),
-                                ContextManager.getJndiValue("SCHEMA"));
+                        		pgConnectionPool.getSchema());
             }
             catch (final Exception e)
             {
