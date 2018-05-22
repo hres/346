@@ -33,11 +33,14 @@ To deploy the war file, do the following:
 ## Install PostgreSQL 9.6 and create a database for the sodium monitoring
 
 1. On the command-line run `sudo apt-get install postgresql-9.6` to install PostgreSQL 
-2. On the command-line from the project src/scripts directory, run <br/><br/>
+2. 2. Modify the file `/etc/postgresql/9.6/main/pg_hba.conf`.  Change the entries under "Database administrative login by Unix domain socket" to: <br><br>
+`local`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`all`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`postgres`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`md5` 
+3. On the command-line from the project src/scripts directory, run <br/><br/>
 	`psql postgres postgres` to login as postgres user <br/><br/>
 	`DROP DATABASE sodium_db_dev;` (if its already there, use `\l` to check) <br/><br/>
 	`CREATE DATABASE sodium_db_dev;` <br/><br/>
-	`\c sodium_db_dev` <br/><br/>
+	`CREATE USER sodium_user_dev PASSWORD 'secure_password';` <br/><br/>
+	`\c sodium_db_dev sodium_user_dev` <br/><br/>
 	`\i sodium_refactoring.sql` <br/><br/>
 	`\i lkp_data.sql` <br/><br/>
 	
@@ -51,3 +54,4 @@ insigle config.properties set the following variables: <br><br>
 `user= database's user`<br>
 `password= database's password`<br>
 `schema= database's schema`<br>
+
