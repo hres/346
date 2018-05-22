@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fcdr-rest-service</groupId>
 	<artifactId>fcdr-rest-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1</version>
 	<packaging>war</packaging>
 
 	<build>
@@ -134,22 +134,7 @@
 		
 		
 		
-		<!-- Spring security -->
-<dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-core</artifactId>
-	<version>5.0.1.RELEASE</version>
-</dependency>
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-web</artifactId>
-    <version>5.0.1.RELEASE</version>
-</dependency>
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-config</artifactId>
-    <version>5.0.1.RELEASE</version>
-</dependency>
+
 
 	</dependencies>
 
