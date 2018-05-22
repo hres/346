@@ -432,7 +432,6 @@ SELECT pg_catalog.setval('fcdrschema.restaurant_types_restaurant_type_id_seq', 1
 COPY fcdrschema.types (type_id, name) FROM stdin;
 1	Retail
 2	Food Service
-3	TEst Food Service
 \.
 
 

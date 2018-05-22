@@ -30,6 +30,14 @@ To deploy the war file, do the following:
 5. ```copy target/fcdr-rest-service-0.0.1-SNAPSHOT.war```  to ```webapps``` directory of Tomcat 8.0 on HRE
 
 ---
-## How to install PostgreSQL and create a database for the sodium monitoring
+## Install PostgreSQL 9.6 and create a database for the sodium monitoring
 
-1.On the command-line run ```sudo apt-get install postgresql-9.6``` to install PostgreSQL 
+1. On the command-line run ```sudo apt-get install postgresql-9.6``` to install PostgreSQL 
+2. On the command-line from the project src/scripts directory, run
+	```psql postgres postgres``` to login as postgres user
+	```DROP DATABASE sodium_db_dev;``` (if its already there, use \l to check)
+	```CREATE DATABASE sodium_db_dev;```
+	```\c sodium_db_dev```
+	```\i sodium_refactoring.sql```
+	```\i lkp_data.sql```
+	

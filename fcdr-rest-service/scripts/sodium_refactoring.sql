@@ -16,6 +16,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
 -- Name: fcdrschema; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -23,6 +30,20 @@ CREATE SCHEMA fcdrschema;
 
 
 ALTER SCHEMA fcdrschema OWNER TO postgres;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET default_tablespace = '';
 
@@ -299,6 +320,20 @@ CREATE TABLE fcdrschema.label_temp (
 
 
 ALTER TABLE fcdrschema.label_temp OWNER TO postgres;
+
+--
+-- Name: foo_a_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.foo_a_seq
+    START WITH 12345
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.foo_a_seq OWNER TO postgres;
 
 --
 -- Name: package; Type: TABLE; Schema: fcdrschema; Owner: postgres
@@ -650,6 +685,72 @@ ALTER SEQUENCE fcdrschema.unit_of_measure_unit_of_measure_id_seq OWNED BY fcdrsc
 
 
 --
+-- Name: restaurant_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.restaurant_types (
+    restaurant_type_id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.restaurant_types OWNER TO postgres;
+
+--
+-- Name: restaurant_types_restaurant_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.restaurant_types_restaurant_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.restaurant_types_restaurant_type_id_seq OWNER TO postgres;
+
+--
+-- Name: restaurant_types_restaurant_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.restaurant_types_restaurant_type_id_seq OWNED BY public.restaurant_types.restaurant_type_id;
+
+
+--
+-- Name: types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.types (
+    type_id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.types OWNER TO postgres;
+
+--
+-- Name: types_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.types_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.types_type_id_seq OWNER TO postgres;
+
+--
+-- Name: types_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.types_type_id_seq OWNED BY public.types.type_id;
+
+
+--
 -- Name: classification classification_id; Type: DEFAULT; Schema: fcdrschema; Owner: postgres
 --
 
@@ -703,6 +804,20 @@ ALTER TABLE ONLY fcdrschema.types ALTER COLUMN type_id SET DEFAULT nextval('fcdr
 --
 
 ALTER TABLE ONLY fcdrschema.unit_of_measure ALTER COLUMN unit_of_measure_id SET DEFAULT nextval('fcdrschema.unit_of_measure_unit_of_measure_id_seq'::regclass);
+
+
+--
+-- Name: restaurant_types restaurant_type_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.restaurant_types ALTER COLUMN restaurant_type_id SET DEFAULT nextval('public.restaurant_types_restaurant_type_id_seq'::regclass);
+
+
+--
+-- Name: types type_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.types ALTER COLUMN type_id SET DEFAULT nextval('public.types_type_id_seq'::regclass);
 
 
 --
