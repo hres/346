@@ -26,7 +26,7 @@ To deploy the war file, do the following:
 1. ```cd ~/repositories```
 2. ```git clone https://github.com/hres/346R1.git```
 3. ```cd fcdr-rest-service```
-4.``` mvn clean intall```
+4. ``` mvn clean intall```
 5. ```copy target/fcdr-rest-service-0.0.1-SNAPSHOT.war```  to ```webapps``` directory of Tomcat 8.0 on HRE
 
 ---
