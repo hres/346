@@ -23,9 +23,13 @@ The availability of the above tools is assumed throughout the instructions on th
 
 To deploy the war file, do the following:
 
-1. cd ~/repositories
-2. git clone https://github.com/hres/346R1.git
-3. cd fcdr-rest-service
-4. mvn clean intall
+1. ```cd ~/repositories```
+2. ```git clone https://github.com/hres/346R1.git```
+3. ```cd fcdr-rest-service```
+4.``` mvn clean intall```
 5. copy target/fcdr-rest-service-0.0.1-SNAPSHOT.war  to webapps directory of Tomcat 8.0 on HRE
 
+---
+## How to install PostgreSQL and create a database for the sodium monitoring
+
+1.On the command-line run ```sudo apt-get install postgresql-9.6``` to install PostgreSQL 
