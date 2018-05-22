@@ -33,11 +33,11 @@ To deploy the war file, do the following:
 ## Install PostgreSQL 9.6 and create a database for the sodium monitoring
 
 1. On the command-line run ```sudo apt-get install postgresql-9.6``` to install PostgreSQL 
-2. On the command-line from the project src/scripts directory, run <br/>
-	`psql postgres postgres` to login as postgres user <br/>
-	`DROP DATABASE sodium_db_dev;` (if its already there, use `\l` to check) <br/>
-	`CREATE DATABASE sodium_db_dev;` <br/>
-	`\c sodium_db_dev` <br/>
-	`\i sodium_refactoring.sql` <br/>
-	`\i lkp_data.sql` <br/>
+2. On the command-line from the project src/scripts directory, run <br/><br/>
+	`psql postgres postgres` to login as postgres user <br/><br/>
+	`DROP DATABASE sodium_db_dev;` (if its already there, use `\l` to check) <br/><br/>
+	`CREATE DATABASE sodium_db_dev;` <br/><br/>
+	`\c sodium_db_dev` <br/><br/>
+	`\i sodium_refactoring.sql` <br/><br/>
+	`\i lkp_data.sql` <br/><br/>
 	
