@@ -44,10 +44,10 @@ To deploy the war file, do the following:
 ---
 ## Database credentials 	
 
-create a file on a root accessible folder <br/>
-`/etc/sodium-monitoring/config.properties ` <br/>
+create a file on a root accessible folder called
+`/etc/sodium-monitoring/config.properties ` <br/><br>
 insigle config.properties set the following variables: <br><br>
-`url=url of the database`<br>
-`user= user of the database`<br>
+`url=database's url`<br>
+`user= database's user`<br>
 `password= database's password`<br>
 `schema= database's schema`<br>
