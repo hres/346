@@ -17,7 +17,7 @@ public class NftRequest
 
     }
 
-    public NftRequest(final Boolean flag, final ArrayList<NftModel> nft,
+    public NftRequest(final Boolean flag, final List<NftModel> nft,
             final Integer package_id)
     {
         super();

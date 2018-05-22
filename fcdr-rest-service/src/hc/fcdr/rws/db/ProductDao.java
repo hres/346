@@ -1,7 +1,11 @@
 package hc.fcdr.rws.db;
 
+import static hc.fcdr.rws.util.DaoUtil.prepareStatement;
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -16,6 +20,9 @@ import org.apache.log4j.Logger;
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.except.NoRowsAffectedDAOException;
+import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.product.ProductClassificationData;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductClassificationResponse;
@@ -37,6 +44,10 @@ import hc.fcdr.rws.model.product.ProductSalesLabelResponse;
 import hc.fcdr.rws.model.product.ProductSalesResponse;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.product.RelinkRecord;
+import hc.fcdr.rws.model.sales.SalesYearsData;
+import hc.fcdr.rws.model.sales.SalesYearsDataResponse;
+import hc.fcdr.rws.model.sales.SalesYearsResponse;
 import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
 
@@ -331,7 +342,7 @@ public class ProductDao extends PgDao
 
             if (str0.equals("cluster_number")
                     || str0.equals("cnf_code")
-                    || str0.equals("classification_number"))
+                   )
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
             if (count == 0)
@@ -627,7 +638,10 @@ public class ProductDao extends PgDao
                         + "package l on p.product_id = l.package_product_id_fkey ";
         // ===
 
-        final String orderBy = label2Package(productSalesLabelRequest.orderby);
+         String orderBy = label2Package(productSalesLabelRequest.orderby);
+        if(orderBy.equals("package_ingredients")) {
+        orderBy = "ingredients";
+        }
         Integer offSet = productSalesLabelRequest.offset;
         final boolean sortOrder = productSalesLabelRequest.flag;
 
@@ -648,7 +662,7 @@ public class ProductDao extends PgDao
 
             if (str0.equals("cluster_number")
                     || str0.equals("cnf_code") || str0.equals("sales_year")
-                    || str0.equals("classification_number"))
+                    )
                 str1 = "CAST (" + str1 + " AS TEXT)";
 
             if (count == 0)
@@ -777,7 +791,7 @@ public class ProductDao extends PgDao
     // ===
 
     public Object update(final List<Object> list,
-            final Double classificationNumber, final String classificationType)
+            final String classificationNumber, final String classificationType)
             throws DaoException
     {
         final String[] columns =
@@ -835,7 +849,7 @@ public class ProductDao extends PgDao
     }
 
     public Integer insert(final List<Object> csvFieldList,
-            final Double classificationNumber, final String classificationType)
+            final String classificationNumber, final String classificationType)
             throws DaoException
     {
         final String[] columns =
@@ -1052,7 +1066,7 @@ public class ProductDao extends PgDao
         }
     }
 
-    public Integer checkClassification(final Double classificationNumber)
+    public Integer checkClassification(final String classificationNumber)
             throws DaoException
     {
         ResultSet resultSet = null;
@@ -1146,7 +1160,7 @@ public class ProductDao extends PgDao
 
         if (productUpdateRequest.product_id != null)
             if ((productUpdateRequest.classification_number != null)
-                    && (productUpdateRequest.classification_number != 0.0))
+                    && (!productUpdateRequest.classification_number.isEmpty()))
             {
                 final Integer classificationId =
                         checkClassification(
@@ -1353,4 +1367,282 @@ public class ProductDao extends PgDao
         return s;
     }
 
+	public GenericList getRestaurantTypes() 
+			throws SQLException, IOException, Exception{
+        ResultSet resultSet = null;
+        
+
+        final GenericList data = new GenericList();
+
+        final String query =
+                "select distinct name from "
+                        + schema + "." + "restaurant_types order by name asc";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+            	String name = null;
+                name = (resultSet.getString("name"));
+                System.out.println("name: "+name);
+                data.add(name);
+            }
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            return null;
+        }
+
+        return data;
+	}
+
+	public GenericList getTypes() 
+			throws SQLException, IOException, Exception{
+        ResultSet resultSet = null;
+        
+
+        final GenericList data = new GenericList();
+
+        final String query =
+                "select distinct name from "
+                        + schema + "." + "types order by name asc";
+
+        try
+        {
+            resultSet = executeQuery(query, null);
+
+            while (resultSet.next())
+            {
+            	String name = null;
+                name = (resultSet.getString("name"));
+                System.out.println("name: "+name);
+                data.add(name);
+            }
+        }
+        catch (final SQLException e)
+        {
+            logger.error(e);
+            return null;
+        }
+
+        return data;
+	}
+
+	public ResponseGeneric getProductDeleteResponse(Integer id) throws DaoException, SQLException {
+		
+		
+		
+		
+		final String query_sales =
+                "delete from " + schema + "." + "sales where sales_product_id_fkey = ?";
+        final String  query_component =
+                "delete from " + schema + "." + "product_component where package_id IN (select package_id from "
+                		+schema+".package where package_product_id_fkey = ?)";
+
+        final String query_package =
+                "delete from " + schema + "." + "package where package_product_id_fkey = ?";     
+        final String query_product_classification =
+                "delete from " + schema + "." + "product_classification where product_classification_product_id_fkey = ?";   
+		final String query_product =
+                "delete from " + schema + "." + "product where product_id = ?";
+        
+        connection.setAutoCommit(false);
+        try{
+        	
+        	
+            final Integer deletedSales = (Integer) executeUpdateProductDao(query_sales, new Object[]
+            { id });
+        	
+            final Integer deletedComponents = (Integer) executeUpdateProductDao(query_component, new Object[]
+            { id });    	
+            
+            
+            List<Integer> listOfIds = getAllPackageIds(id);
+            if(listOfIds.size() > 0) {
+            	System.out.println("en effet");
+            for(Integer package_id : listOfIds) {
+            
+            	deletePackageImages(package_id);
+
+            }
+            }
+            final Integer deletedPackages = (Integer) executeUpdateProductDao(query_package, new Object[]
+            { id });  
+            
+            final Integer deletedClassification = (Integer) executeUpdateProductDao(query_product_classification, new Object[]
+            { id });  
+            
+            final Integer deletedProduct = (Integer) executeUpdateProductDao(query_product, new Object[]
+            { id });  
+        }catch (final Exception e){
+        	
+        	 logger.error(e);
+             connection.rollback();
+             throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+        }
+        
+        connection.commit();
+
+        return new ResponseGeneric(ResponseCodes.OK.getCode(),
+                ResponseCodes.OK.getMessage());
+	}
+	
+	public boolean deletePackageImages( Integer id) {
+		
+		ResultSet resultSet = null;
+
+		List<String> listOfImages = new ArrayList<>();
+		
+		final String sql = "select image_path from " + schema + "." + "image where package_id_fkey = ?";
+	      try {
+				resultSet = executeQuery(sql, new Object[] {id});
+				try {
+					while(resultSet.next()) {
+						listOfImages.add(resultSet.getString("image_path"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (DaoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 if(cleanImages(listOfImages)){
+			 return true;
+		 }else {
+			 return false;
+		 }
+	}
+	
+	public boolean cleanImages(List<String> listOfImages) {
+		boolean valid = true;
+		String uploadedFileLocation = null;
+		if(listOfImages.size() > 0) {
+			
+			for (String item: listOfImages) {
+				
+				uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+item;
+				File file = new File(uploadedFileLocation);
+				
+				if(deleteFile(file)) {
+					final String sql = "delete from " + schema + "." + "image where image_path = ?";
+					 try {
+						executeUpdate(sql, new Object[] { item });
+					} catch (DaoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else {
+					valid = false;
+				}
+			}
+		}else {
+			return true;
+		}
+		return valid;
+	}
+	public boolean deleteFile(File file) {
+		if(file.delete()) {
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	public List<Integer> getAllPackageIds(Integer id) throws DaoException {
+    	System.out.println("called");
+
+		
+		List<Integer> listOfIds = new ArrayList<Integer>();
+		
+		final String query = "select package_id from " + schema + ".package where package_product_id_fkey = ?";
+		;
+		ResultSet resultSet = null;
+		try {
+	    	System.out.println("called");
+
+			resultSet = executeQuery(query, new Object[] {id});
+	    	System.out.println("called");
+
+
+			while (resultSet.next()) {
+				listOfIds.add(resultSet.getInt("package_id"));
+			}
+
+		} catch (final SQLException e) {
+			logger.error(e);
+			throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
+		}
+		System.out.println("size: "+listOfIds.size());
+		return listOfIds;
+	}
+	
+	
+    protected int executeUpdateProductDao(final String query, final Object[] values)
+            throws DaoException, SQLException
+    {
+    	
+        PreparedStatement preparedStatement = null;
+         int affectedRows = 0;
+         
+
+       
+            preparedStatement =
+                    prepareStatement(connection, query, true, values);
+           affectedRows = preparedStatement.executeUpdate();
+            
+        
+        return affectedRows;
+    }
+
+	public ResponseGeneric relinkRecordResponse(RelinkRecord relinkRecord) throws DaoException, SQLException {
+		// TODO Auto-generated method stub
+		if(relinkRecord.getProduct_id() == null || relinkRecord.getRecord_id() == null || relinkRecord.getType() ==null){
+			
+			return new ResponseGeneric(ResponseCodes.BAD_REQUEST.getCode(), ResponseCodes.BAD_REQUEST.getMessage());
+		}
+		
+		Integer id;
+			if(relinkRecord.getType().equals("sales")){
+				
+				String getId = "select sales_product_id_fkey from "+schema+"."+"sales where sales_id = ?";
+				ResultSet resultSet = executeQuery(getId,new Object[] {relinkRecord.getRecord_id()} );
+				resultSet.next();
+	             id = resultSet.getInt("sales_product_id_fkey");
+	            
+				String sql = "update "+schema+"."+"sales set sales_product_id_fkey = ? where sales_id = ?";
+				executeUpdate(sql, new Object[] { relinkRecord.getProduct_id(), relinkRecord.getRecord_id()});
+				
+			           
+				
+			}else if(relinkRecord.getType().equals("package")){
+				String getId = "select package_product_id_fkey from "+schema+"."+"package where package_id = ?"; 
+				ResultSet resultSet =executeQuery(getId,new Object[] {relinkRecord.getRecord_id()} );
+				resultSet.next();
+	             id = resultSet.getInt("package_product_id_fkey");
+				String sql = "update "+schema+"."+"package set package_product_id_fkey = ? where package_id = ?";
+				executeUpdate(sql, new Object[] { relinkRecord.getProduct_id(), relinkRecord.getRecord_id() });
+				
+
+				
+			}else{
+				
+				return new ResponseGeneric(ResponseCodes.BAD_REQUEST.getCode(), ResponseCodes.BAD_REQUEST.getMessage());
+
+			}
+			
+		
+	 ResponseGeneric response = new ResponseGeneric(ResponseCodes.OK.getCode(),
+	                ResponseCodes.OK.getMessage());
+	 				response.setRecord_id(id);
+	 
+	 return response;
+	}
 }

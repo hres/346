@@ -75,7 +75,7 @@ public class SalesUpdateRequest
     public String  sales_product_description;
     @XmlElement(
             nillable = true)
-    public Double  classification_number;
+    public String  classification_number;
     @XmlElement(
             nillable = true)
     public String  classification_type;
@@ -141,7 +141,7 @@ public class SalesUpdateRequest
             final Double dollar_volume_total, final Double cluster_number,
             final Double product_grouping,
             final String sales_product_description,
-            final Double classification_number,
+            final String classification_number,
             final String classification_type, final String sales_comment,
             final String sales_collection_date, final Integer number_of_units,
             final String edited_by, final Long sales_id)

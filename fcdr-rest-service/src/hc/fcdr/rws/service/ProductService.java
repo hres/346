@@ -7,9 +7,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -21,6 +23,8 @@ import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ProductDao;
 import hc.fcdr.rws.domain.Product;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.model.pkg.GenericList;
+import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
 import hc.fcdr.rws.model.product.ProductDataResponse;
 import hc.fcdr.rws.model.product.ProductInsertDataResponse;
@@ -32,12 +36,20 @@ import hc.fcdr.rws.model.product.ProductSalesLabelDataResponse;
 import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
+import hc.fcdr.rws.model.product.RelinkRecord;
 import hc.fcdr.rws.util.ContextManager;
+
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import java.util.concurrent.Executor;
+import org.glassfish.jersey.server.ManagedAsync;
+
 
 @Path("/ProductService")
 public class ProductService extends Application
 {
     static ProductDao productDao = null;
+    
 
     @PostConstruct
     public static void initialize()
@@ -49,77 +61,19 @@ public class ProductService extends Application
 
             try
             {
+            	
                 productDao =
-                        new ProductDao(pgConnectionPool.getConnection(),
-                                ContextManager.getJndiValue("SCHEMA"));
+                        new ProductDao(pgConnectionPool.getConnections(),
+                        		pgConnectionPool.getSchema());
             }
-            catch (final SQLException e)
-            {
-                e.printStackTrace();
-            }
+            catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 
-    @GET
-    @Path("/productsraw")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Product> getProductsRawAll()
-    {
-        try
-        {
-            if (productDao != null)
-                return productDao.getProducts();
-        }
-        catch (final DaoException e)
-        {
-            e.printStackTrace();
-        }
 
-        return new ArrayList<Product>();
-    }
-
-    @GET
-    @Path("/productsraw/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductsRaw(@PathParam("id") final int id)
-    {
-        try
-        {
-            if (productDao != null)
-                return productDao.getProduct(id);
-        }
-        catch (final DaoException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return new Product();
-    }
-
-    // ==============================
-
-    @GET
-    @Path("/products")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts()
-    {
-        ProductDataResponse entity = new ProductDataResponse();
-
-        try
-        {
-            if (productDao != null)
-                entity = productDao.getProductResponse();
-        }
-        catch (final Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return Response.status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON).entity(entity).build();
-    }
 
     @GET
     @Path("/products/{id}")
@@ -168,6 +122,51 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
+    
+    @GET
+    @Path("/restaurantTypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRestaurantTypes()
+    {
+        GenericList entity = new GenericList();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getRestaurantTypes();
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    //=====
+    
+    @GET
+    @Path("/types")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTypes()
+    {
+        GenericList entity = new GenericList();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getTypes();
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -192,18 +191,18 @@ public class ProductService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
-
+    
     @POST
     @Path("/productsfiltered")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getProducts(final ProductRequest productRequest)
+    public Response searchProducts(final ProductRequest productRequest)
             throws SQLException, IOException, Exception
     {
 
         /// String applicationEnvironment = ContextManager.getJndiValue(
         /// "APPLICATION_ENVIRONMENT");
-
+    	//System.out.println("You are being called"+productRequest.cluster_number);;
         ProductDataResponse entity = new ProductDataResponse();
 
         try
@@ -221,12 +220,14 @@ public class ProductService extends Application
     }
 
     // ===========
+    
+    
 
     @POST
     @Path("/productsaleslabel")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getProductSalesLabel(
+    public Response searchProductsSalesLabels(
             final ProductSalesLabelRequest productSalesLabelRequest)
             throws SQLException, IOException, Exception
     {
@@ -297,7 +298,7 @@ public class ProductService extends Application
 
     // ===========
 
-    @POST
+    @PUT
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -353,11 +354,54 @@ public class ProductService extends Application
 
     // ===========
 
-    @OPTIONS
-    @Path("/products")
-    @Produces(MediaType.APPLICATION_XML)
-    public String getSupportedOperations()
+    
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") final Integer id)
     {
-        return "<operations>GET, PUT, POST, DELETE</operations>";
+    	ResponseGeneric entity = new ResponseGeneric();
+
+        try
+        {
+            if (productDao != null)
+                entity = productDao.getProductDeleteResponse(id);
+        }
+        catch (final Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
+
+    @POST
+    @Path("/relinkRecord")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response relink(final RelinkRecord relinkRecord)
+            throws SQLException, IOException, Exception
+    {
+    	ResponseGeneric entity = new ResponseGeneric();
+
+        try
+        {
+            if (productDao != null)
+                entity =
+                        productDao
+                                .relinkRecordResponse(relinkRecord);
+        }
+        catch (final Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON).entity(entity).build();
+    }
+    
+    
+
 }

@@ -207,10 +207,12 @@ public class SalesDao extends PgDao
         }
 
         // Check for valid classification_number.
+        if(salesInsertRequest.classification_number != null & salesInsertRequest.classification_number != "") {
         if (!checkClassification(salesInsertRequest.classification_number))
             return new SalesInsertDataResponse(
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getCode(),
                     ResponseCodes.INVALID_CLASSIFICATION_NUMBER.getMessage());
+        }
 
         if (!checkForSameSalesUpcProductId(salesInsertRequest.sales_upc,
                 salesInsertRequest.product_id))
@@ -320,36 +322,36 @@ public class SalesDao extends PgDao
         final String query =
                 "update "
                         + schema + "." + "sales set "
-                        + "sales_description = COALESCE(?, sales_description), "
-                        + "sales_upc = COALESCE(?, sales_upc), "
-                        + "sales_brand = COALESCE(?, sales_brand), "
-                        + "sales_manufacturer = COALESCE(?, sales_manufacturer), "
-                        + "dollar_rank = COALESCE(?, dollar_rank), "
-                        + "dollar_volume = COALESCE(?, dollar_volume), "
-                        + "dollar_share = COALESCE(?, dollar_share), "
-                        + "dollar_volume_percentage_change = COALESCE(?, dollar_volume_percentage_change), "
-                        + "kilo_volume = COALESCE(?, kilo_volume), "
-                        + "kilo_share = COALESCE(?, kilo_share), "
-                        + "kilo_volume_percentage_change = COALESCE(?, kilo_volume_percentage_change), "
-                        + "average_ac_dist = COALESCE(?, average_ac_dist), "
-                        + "average_retail_price = COALESCE(?, average_retail_price), "
-                        + "sales_source = COALESCE(?, sales_source), "
-                        + "nielsen_category = COALESCE(?, nielsen_category), "
-                        + "sales_year = COALESCE(?, sales_year), "
-                        + "control_label_flag = COALESCE(?, control_label_flag), "
-                        + "kilo_volume_total = COALESCE(?, kilo_volume_total), "
-                        + "kilo_volume_rank = COALESCE(?, kilo_volume_rank), "
-                        + "dollar_volume_total = COALESCE(?, dollar_volume_total), "
-                        + "cluster_number = COALESCE(?, cluster_number), "
-                        + "product_grouping = COALESCE(?, product_grouping), "
-                        + "sales_product_description = COALESCE(?, sales_product_description), "
-                        + "classification_number = COALESCE(?, classification_number), "
-                        + "classification_type = COALESCE(?, classification_type), "
-                        + "sales_comment = COALESCE(?, sales_comment), "
-                        + "sales_collection_date = COALESCE(?, sales_collection_date), "
-                        + "number_of_units = COALESCE(?, number_of_units), "
-                        + "edited_by = COALESCE(?, edited_by), "
-                        + "last_edit_date = COALESCE(?, last_edit_date) "
+                        + "sales_description = ?,  "
+                        + "sales_upc = ?, "
+                        + "sales_brand = ?, "
+                        + "sales_manufacturer = ?, "
+                        + "dollar_rank = ?, "
+                        + "dollar_volume = ?, "
+                        + "dollar_share = ?, "
+                        + "dollar_volume_percentage_change = ?, "
+                        + "kilo_volume = ?,  "
+                        + "kilo_share = ?, "
+                        + "kilo_volume_percentage_change = ?, "
+                        + "average_ac_dist = ?,  "
+                        + "average_retail_price = ?,  "
+                        + "sales_source = ?,  "
+                        + "nielsen_category = ?,  "
+                        + "sales_year = ?,  "
+                        + "control_label_flag = ?, "
+                        + "kilo_volume_total = ?, "
+                        + "kilo_volume_rank = ?, "
+                        + "dollar_volume_total = ?,  "
+                        + "cluster_number = ?, "
+                        + "product_grouping = ?, "
+                        + "sales_product_description = ?, "
+                        + "classification_number = ?, "
+                        + "classification_type = ?, "
+                        + "sales_comment = ?, "
+                        + "sales_collection_date = ?, "
+                        + "number_of_units = ?, "
+                        + "edited_by = ?, "
+                        + "last_edit_date = ? "
                         + "where sales_id = ?";
 
         final List<Object> salesUpdateList =
@@ -661,33 +663,24 @@ public class SalesDao extends PgDao
         final String sql =
                 "delete from " + schema + "." + "sales where sales_id = ?";
 
-        try
-        {
             final Integer deletedRow = (Integer) executeUpdate(sql, new Object[]
             { id });
 
-            connection.setAutoCommit(false);
+           
             if (deletedRow == 0)
                 return new SalesDeleteDataResponse(
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getCode(),
                         ResponseCodes.CANNOT_DELETE_SALES_RECORD.getMessage());
-            connection.commit();
-        }
-        catch (final Exception e)
-        {
-            logger.error(e);
-            connection.rollback();
-            throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
-        }
-
+           
+       
         return new SalesDeleteDataResponse(ResponseCodes.OK.getCode(),
                 ResponseCodes.OK.getMessage());
     }
 
-    public Boolean checkClassification(final Double classificationNumber)
+    public Boolean checkClassification(final String classificationNumber)
             throws DaoException
     {
-        if ((classificationNumber == null) || (classificationNumber == 0.0))
+        if ((classificationNumber == null))
             return true;
 
         ResultSet resultSet = null;

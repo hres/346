@@ -30,7 +30,7 @@ public class ProductUpdateRequest
     @XmlElement
     public Integer product_id;
     @XmlElement
-    public Double  classification_number;
+    public String  classification_number;
     @XmlElement
     public String  classification_name;
     @XmlElement

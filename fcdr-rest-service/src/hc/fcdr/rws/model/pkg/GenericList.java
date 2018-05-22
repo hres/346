@@ -27,5 +27,8 @@ public class GenericList
     {
         this.dataList = dataList;
     }
+    public void add(String name){
+    	this.dataList.add(name);
+    }
 
 }

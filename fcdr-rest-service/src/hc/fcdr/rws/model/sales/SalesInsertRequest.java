@@ -75,7 +75,7 @@ public class SalesInsertRequest
     public String  sales_product_description;
     @XmlElement(
             nillable = true)
-    public Double  classification_number           = null;
+    public String  classification_number           = null;
     @XmlElement(
             nillable = true)
     public String  classification_type             = null;
@@ -142,10 +142,14 @@ public class SalesInsertRequest
             final Double dollar_volume_total, final Double cluster_number,
             final Double product_grouping,
             final String sales_product_description,
-            final Double classification_number,
+            final String classification_number,
             final String classification_type, final String sales_comment,
             final String sales_collection_date, final Integer number_of_units,
             final String edited_by, final Integer product_id)
+    
+    
+    
+    
     {
         super();
         this.sales_description = sales_description;
@@ -413,12 +417,12 @@ public class SalesInsertRequest
         this.sales_product_description = sales_product_description;
     }
 
-    public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(final Double classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }

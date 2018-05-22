@@ -1,6 +1,5 @@
 package hc.fcdr.rws.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.domain.Classification;
 import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.classification.ClassificationDataResponse;
-import hc.fcdr.rws.util.ContextManager;
 
 @Path("/ClassificationService")
 public class ClassificationService extends Application
@@ -34,16 +32,9 @@ public class ClassificationService extends Application
             final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 
-            try
-            {
-                classificationDao =
-                        new ClassificationDao(pgConnectionPool.getConnection(),
-                                ContextManager.getJndiValue("SCHEMA"));
-            }
-            catch (final SQLException e)
-            {
-                e.printStackTrace();
-            }
+            classificationDao =
+			        new ClassificationDao(pgConnectionPool.getConnections(),
+			        		pgConnectionPool.getSchema());
         }
     }
 

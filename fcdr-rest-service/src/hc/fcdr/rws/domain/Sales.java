@@ -33,7 +33,7 @@ public class Sales implements Serializable
     private Double            clusterNumber;
     private Double            productGrouping;
     private String            salesProductDescription;
-    private Double            classificationNumber;
+    private String            classificationNumber;
     private String            classificationType;
     private String            salesComment;
     // @XmlElement(nillable=true)
@@ -94,7 +94,7 @@ public class Sales implements Serializable
             final Double kiloVolumeRank, final Double dollarVolumeTotal,
             final Double clusterNumber, final Double productGrouping,
             final String salesProductDescription,
-            final Double classificationNumber, final String classificationType,
+            final String classificationNumber, final String classificationType,
             final String salesComment, final String salesCollectionDate,
             final Integer numberOfUnits, final Timestamp creationDate,
             final Timestamp lastEditDate, final String editedBy,
@@ -416,12 +416,12 @@ public class Sales implements Serializable
         this.salesProductDescription = salesProductDescription;
     }
 
-    public Double getClassificationNumber()
+    public String getClassificationNumber()
     {
         return classificationNumber;
     }
 
-    public void setClassificationNumber(final Double classificationNumber)
+    public void setClassificationNumber(final String classificationNumber)
     {
         this.classificationNumber = classificationNumber;
     }

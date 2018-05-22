@@ -101,13 +101,13 @@ public class PackageViewData
     private Boolean child_item;
     @XmlElement(
             nillable = true)
-    private Double  classification_number;
+    private String  classification_number;
     @XmlElement(
             nillable = true)
     private String  classification_name;
     @XmlElement(
             nillable = true)
-    private Double  nielsen_item_rank;
+    private String  nielsen_item_rank;
     @XmlElement(
             nillable = true)
     private String  nutrient_claims;
@@ -194,8 +194,8 @@ public class PackageViewData
             final String package_collection_date, final Integer number_of_units,
             final String edited_by, final Boolean informed_dining_program,
             final String nft_last_update_date, final Double product_grouping,
-            final Boolean child_item, final Double classification_number,
-            final String classification_name, final Double nielsen_item_rank,
+            final Boolean child_item, final String classification_number,
+            final String classification_name, final String nielsen_item_rank,
             final String nutrient_claims, final String package_nielsen_category,
             final String common_household_measure, final String creation_date,
             final String last_edit_date, final Boolean calculated)
@@ -588,12 +588,12 @@ public class PackageViewData
         this.child_item = child_item;
     }
 
-    public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(final Double classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }
@@ -608,12 +608,12 @@ public class PackageViewData
         this.classification_name = classification_name;
     }
 
-    public Double getNielsen_item_rank()
+    public String getNielsen_item_rank()
     {
         return nielsen_item_rank;
     }
 
-    public void setNielsen_item_rank(final Double nielsen_item_rank)
+    public void setNielsen_item_rank(final String nielsen_item_rank)
     {
         this.nielsen_item_rank = nielsen_item_rank;
     }

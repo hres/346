@@ -31,7 +31,7 @@ public class ProductInsertRequest
     private String  type;
     @XmlElement(
             nillable = true)
-    private Double  classification_number;
+    private String  classification_number;
     @XmlElement(
             nillable = true)
     private String  classification_name;
@@ -60,7 +60,7 @@ public class ProductInsertRequest
             final String product_brand, final String product_description,
             final String product_comment, final Integer cnf_code,
             final Double cluster_number, final String restaurant_type,
-            final String type, final Double classification_number,
+            final String type, final String classification_number,
             final String classification_name, final String classification_type)
     {
         super();
@@ -157,12 +157,12 @@ public class ProductInsertRequest
         this.type = type;
     }
 
-    public Double getClassification_number()
+    public String getClassification_number()
     {
         return classification_number;
     }
 
-    public void setClassification_number(final Double classification_number)
+    public void setClassification_number(final String classification_number)
     {
         this.classification_number = classification_number;
     }

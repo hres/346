@@ -55,15 +55,18 @@ public class PgDao
         Object key = null;
         PreparedStatement preparedStatement = null;
         ResultSet generatedKeys = null;
-
+        if(values!= null){
+      //  System.out.println(values[1] + "est la date");
+        }
         try
         {
-            connection.setAutoCommit(false);
+        	
             preparedStatement =
                     prepareStatement(connection, query, true, values);
+            System.out.println(preparedStatement);
             final int affectedRows = preparedStatement.executeUpdate();
 
-            if (affectedRows == 0)
+            if (affectedRows == 0 && (query.startsWith("insert") || query.startsWith("update") ||query.startsWith("COPY")))
                 throw new NoRowsAffectedDAOException(
                         "Execute update error: no rows affected.");
 
@@ -78,16 +81,19 @@ public class PgDao
                             "Creating object failed, no generated key obtained.");
             }
             else if (query.startsWith("delete"))
-                return affectedRows;
-
-            connection.commit();
+            {
+            	//connection.commit(); 
+            return affectedRows;
+            }
+            
         }
         catch (final SQLException e)
         {
             logger.error(e);
+            
             throw new DaoException(e, ResponseCodes.INTERNAL_SERVER_ERROR);
         }
-
+       
         return key;
     }
 
