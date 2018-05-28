@@ -31,6 +31,7 @@ import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ImportImageDao;
 import hc.fcdr.rws.db.ImportLabelDao;
 import hc.fcdr.rws.db.ImportMarketShareDao;
+import java.util.Properties;
 
 import hc.fcdr.rws.util.ContextManager;
 
@@ -42,6 +43,8 @@ public class ImportService extends Application
     static ImportMarketShareDao importSalesDao = null;
     static ImportLabelDao importLabelDao = null;
     static ImportImageDao importImageDao = null;
+    Properties prop = new Properties();
+	InputStream input = null;
 
 	private static final String UPLOADED_FILE_LOCATION = "/home/romario/Documents/importFiles/";
 
@@ -49,6 +52,8 @@ public class ImportService extends Application
     public static void initialize()
     {
      
+    	
+    	
             final DbConnection pgConnectionPool = new DbConnection();
             pgConnectionPool.initialize();
 

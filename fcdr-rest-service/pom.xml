@@ -4,9 +4,11 @@
 	<groupId>fcdr-rest-service</groupId>
 	<artifactId>fcdr-rest-service</artifactId>
 	<version>1</version>
+	<name>fcdr-rest-service</name>
 	<packaging>war</packaging>
 
 	<build>
+	<finalName>fcdr-rest-service</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
