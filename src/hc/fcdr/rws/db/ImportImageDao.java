@@ -29,7 +29,7 @@ public class ImportImageDao extends PgDao{
 	private final String schema;
 	private int imageCounter = 0;
 	
-	private static final String UPLOADED_FILE_LOCATION = "/home/romario/Documents/imagesLabel/";
+	private static final String UPLOADED_FILE_LOCATION = "/home/rchuela/Documents/imagesLabel/";
 	
 	public ImportImageDao(Connection connection, final String schema) {
 		

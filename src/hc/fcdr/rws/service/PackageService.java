@@ -242,7 +242,7 @@ public class PackageService extends Application {
 
 	@GET
 	@Path("/getLabelImages/{image_path}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({"image/jpeg","image/png"})
 	public Response labelImages(@PathParam("image_path") final String image_path) {
 		File file = null;
 
@@ -255,7 +255,7 @@ public class PackageService extends Application {
 
 		ResponseBuilder response = Response.ok((Object) file);
 
-		response.header("Content-Disposition", "attachment; filename=label_image.jpeg");
+		response.header("Content-Disposition", "inline; filename=label_image.jpeg");
 
 		return response.build();
 	}

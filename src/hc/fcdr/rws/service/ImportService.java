@@ -46,7 +46,7 @@ public class ImportService extends Application
     Properties prop = new Properties();
 	InputStream input = null;
 
-	private static final String UPLOADED_FILE_LOCATION = "/home/romario/Documents/importFiles/";
+	private static final String UPLOADED_FILE_LOCATION = "/home/rchuela/Documents/importFiles/";
 
     @PostConstruct
     public static void initialize()

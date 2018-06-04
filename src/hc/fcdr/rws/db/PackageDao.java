@@ -1053,7 +1053,7 @@ public class PackageDao extends PgDao {
 
     public File getImage(String image_path) {
     	
-		String filePath = "/home/romario/Documents/imagesLabel/"+image_path;
+		String filePath = "/home/rchuela/Documents/imagesLabel/"+image_path;
 		
 		return new File(filePath);
 		
@@ -1063,6 +1063,7 @@ public class PackageDao extends PgDao {
     }
     public ImagesList addImage(List<FormDataBodyPart> bodyParts, Integer id, ImportImageDao importImageDao) {
     	ImagesList imagesList = new ImagesList();
+    	
     	BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(0).getEntity();
 		String fileName = bodyParts.get(0).getContentDisposition().getFileName();
 		
@@ -1077,8 +1078,7 @@ public class PackageDao extends PgDao {
 			String extension = fileName.substring(fileName.indexOf(".")+1);
 			
 			//Make sure image with that name doesn't already exit
-			System.out.println("name of the file: "+secondaryFileName);
-			String uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+secondaryFileName;
+			String uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+secondaryFileName;
 			importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 			
 			try {
@@ -1094,11 +1094,18 @@ public class PackageDao extends PgDao {
 		
 		try {
 			imagesList = getListOfImages(id);
+			
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
+			imagesList.setStatus(500);
 			e.printStackTrace();
 		}
 		
+		if(imagesList.getDataList().size() > 0) {
+			imagesList.setStatus(200);
+		}else {
+			imagesList.setStatus(500);
+		}
 		return imagesList;
     }
     
@@ -1112,7 +1119,7 @@ public class PackageDao extends PgDao {
 		try {
 			id_b = getPackageId(id_b);
 			imagePath = imagePath(id); 
-			uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+imagePath;
+			uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+imagePath;
 			File file = new File(uploadedFileLocation);
 			
 			if(deleteFile(file)) {
@@ -1135,13 +1142,13 @@ public class PackageDao extends PgDao {
 		
 		try {
 			
-			System.out.println("package id: "+id_b);
 			imagesList = getListOfImages(id_b);
+			imagesList.setStatus(200);
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		imagesList.setStatus(200);
+		
 		return imagesList;
 	}
 	
@@ -1190,7 +1197,7 @@ public class PackageDao extends PgDao {
 			
 			for (String item: listOfImages) {
 				
-				uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+item;
+				uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+item;
 				File file = new File(uploadedFileLocation);
 				
 				if(deleteFile(file)) {
