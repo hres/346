@@ -414,7 +414,6 @@ COPY fcdrschema.restaurant_types (restaurant_type_id, name) FROM stdin;
 13	Food Service Manufacturer
 14	Home Meal Replacement
 15	Institutional Service
-16	QUICK SERVICE
 \.
 
 
