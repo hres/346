@@ -34,7 +34,7 @@ To deploy the war file, do the following:
 
 1. On the command line run `sudo apt-get update`
 2. Then run `sudo apt-get install postgresql` to install PostgreSQL
-3  Modify the file `/etc/postgresql/9.5/main/pg_hba.conf`.  Change the entries under "Database administrative login by Unix domain socket" to: <br><br>
+3. Modify the file `/etc/postgresql/9.5/main/pg_hba.conf`.  Change the entries under "Database administrative login by Unix domain socket" to: <br><br>
 `local`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sodium_db_dev `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sodium_user_dev`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`md5` 
 4 On the command-line from the project src/scripts directory, run <br/><br/>
 	`psql postgres postgres` to login as postgres user <br/><br/>
