@@ -11,7 +11,7 @@ This project uses the following components and features
 * Java 8
 * Maven 3.3.9
 * Tomcat 8.0.52
-* PostgreSQL 9.6
+* PostgreSQL 9.5
 * Git
 
 
@@ -30,15 +30,13 @@ To deploy the war file, do the following:
 5. `copy target/fcdr-rest-service.war`  to `webapps` directory of Tomcat 8.0 on HRE
 
 ---
-## Install PostgreSQL 9.6 and create a database for the sodium monitoring
+## Install PostgreSQL 9.5 nd create a database for the sodium monitoring
 
-1. On the command line run `sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main"` 
-2. Run `wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`
-3. Run `sudo apt-get update`
-4. On the command-line run `sudo apt-get install postgresql-9.6` to install PostgreSQL 
-5.  Modify the file `/etc/postgresql/9.6/main/pg_hba.conf`.  Change the entries under "Database administrative login by Unix domain socket" to: <br><br>
+1. On the command line run `sudo apt-get update`
+2. Then run `sudo apt-get install postgresql` to install PostgreSQL
+3  Modify the file `/etc/postgresql/9.5/main/pg_hba.conf`.  Change the entries under "Database administrative login by Unix domain socket" to: <br><br>
 `local`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sodium_db_dev `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sodium_user_dev`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`md5` 
-3. On the command-line from the project src/scripts directory, run <br/><br/>
+4 On the command-line from the project src/scripts directory, run <br/><br/>
 	`psql postgres postgres` to login as postgres user <br/><br/>
 	`DROP DATABASE sodium_db_dev;` (if its already there, use `\l` to check) <br/><br/>
 	`CREATE DATABASE sodium_db_dev;` <br/><br/>
