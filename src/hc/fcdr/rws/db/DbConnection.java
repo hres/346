@@ -65,22 +65,27 @@ public class DbConnection
            
     {
         Connection connection = null;
-  
+  System.out.println("Initiating DB Conenction");
 
 		try {
 		
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("user"), prop.getProperty("password"));
+			  System.out.println("Successfully connectted");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			  System.out.println("Connection Failed");
+
 			e.printStackTrace();
 		}
 
         if (connection != null)
             return connection;
-        else
+        else {
+        	  System.out.println("Connection Failed");
             return null;
+        }
 
     }
     public String getSchema() {
