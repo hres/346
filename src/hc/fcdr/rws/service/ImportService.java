@@ -2,6 +2,7 @@ package hc.fcdr.rws.service;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,8 +34,6 @@ import hc.fcdr.rws.db.ImportLabelDao;
 import hc.fcdr.rws.db.ImportMarketShareDao;
 import java.util.Properties;
 
-import hc.fcdr.rws.util.ContextManager;
-
 @Path("/ImportService")
 public class ImportService extends Application
 {
@@ -43,10 +42,9 @@ public class ImportService extends Application
     static ImportMarketShareDao importSalesDao = null;
     static ImportLabelDao importLabelDao = null;
     static ImportImageDao importImageDao = null;
-    Properties prop = new Properties();
-	InputStream input = null;
+    static Properties prop = new Properties();
+	static InputStream input = null;
 
-	private static final String UPLOADED_FILE_LOCATION = "/home/rchuela/Documents/importFiles/";
 
     @PostConstruct
     public static void initialize()
@@ -75,6 +73,13 @@ public class ImportService extends Application
             {
                 e.printStackTrace();
             }
+        	try {
+    			input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+    			prop.load(input);
+    		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
         
     }
 
@@ -90,7 +95,7 @@ public class ImportService extends Application
     {
     	//TODO will update the folder path
     	
-		String uploadedFileLocation = UPLOADED_FILE_LOCATION + fileDetail.getFileName();		
+		String uploadedFileLocation = prop.getProperty("csvfiles") + fileDetail.getFileName();		
 		
 		writeToFile(fileInputStream, uploadedFileLocation);
 
@@ -127,7 +132,7 @@ public class ImportService extends Application
     		@FormDataParam("csv_file") FormDataContentDisposition fileDetail){
     	
     	//TODO will update the folder path
-		String uploadedFileLocation = UPLOADED_FILE_LOCATION + fileDetail.getFileName();
+		String uploadedFileLocation = prop.getProperty("csvfiles") + fileDetail.getFileName();
 
 
 		writeToFile(fileInputStream, uploadedFileLocation);

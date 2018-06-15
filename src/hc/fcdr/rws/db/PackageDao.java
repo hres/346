@@ -1,20 +1,18 @@
 package hc.fcdr.rws.db;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -24,12 +22,7 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.domain.Package;
-import hc.fcdr.rws.domain.Sales;
 import hc.fcdr.rws.except.DaoException;
-import hc.fcdr.rws.model.importLabel.ExistingLabels;
-import hc.fcdr.rws.model.importLabel.ImportLabelModel;
-import hc.fcdr.rws.model.importLabel.ImportLabelNft;
-import hc.fcdr.rws.model.importLabel.ImportLabelRequest;
 import hc.fcdr.rws.model.pkg.ComponentName;
 import hc.fcdr.rws.model.pkg.ComponentNameResponse;
 import hc.fcdr.rws.model.pkg.GenericList;
@@ -49,12 +42,7 @@ import hc.fcdr.rws.model.pkg.PackageViewData;
 import hc.fcdr.rws.model.pkg.PackageViewDataResponse;
 import hc.fcdr.rws.model.pkg.PackageViewResponse;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
-import hc.fcdr.rws.model.product.ProductInsertRequest;
-import hc.fcdr.rws.model.sales.ImportMarketShare;
-import hc.fcdr.rws.model.sales.SalesDeleteDataResponse;
-import hc.fcdr.rws.model.sales.SalesInsertRequest;
 import hc.fcdr.rws.util.DaoUtil;
-import hc.fcdr.rws.util.DateUtil;
 
 public class PackageDao extends PgDao {
 	private static final Logger logger = Logger.getLogger(PackageDao.class.getName());
@@ -63,10 +51,20 @@ public class PackageDao extends PgDao {
 	private static final String TABLE_REGEX = "\\$\\{table\\}";
 	private static final String KEYS_REGEX = "\\$\\{keys\\}";
 	private static final String VALUES_REGEX = "\\$\\{values\\}";
+	
+    static Properties prop = new Properties();
+	static InputStream input = null;
 
 	public PackageDao(final Connection connection, final String schema) {
 		super(connection);
 		this.schema = schema;
+    	try {
+			input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+			prop.load(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Package> getPackage() throws DaoException {
@@ -1053,7 +1051,7 @@ public class PackageDao extends PgDao {
 
     public File getImage(String image_path) {
     	
-		String filePath = "/home/rchuela/Documents/imagesLabel/"+image_path;
+		String filePath = prop.getProperty("images")+image_path;
 		
 		return new File(filePath);
 		
@@ -1078,7 +1076,7 @@ public class PackageDao extends PgDao {
 			String extension = fileName.substring(fileName.indexOf(".")+1);
 			
 			//Make sure image with that name doesn't already exit
-			String uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+secondaryFileName;
+			String uploadedFileLocation = prop.getProperty("images")+secondaryFileName;
 			importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 			
 			try {
@@ -1119,7 +1117,7 @@ public class PackageDao extends PgDao {
 		try {
 			id_b = getPackageId(id_b);
 			imagePath = imagePath(id); 
-			uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+imagePath;
+			uploadedFileLocation = prop.getProperty("images")+imagePath;
 			File file = new File(uploadedFileLocation);
 			
 			if(deleteFile(file)) {
@@ -1197,7 +1195,7 @@ public class PackageDao extends PgDao {
 			
 			for (String item: listOfImages) {
 				
-				uploadedFileLocation = "/home/rchuela/Documents/imagesLabel/"+item;
+				uploadedFileLocation = prop.getProperty("images")+item;
 				File file = new File(uploadedFileLocation);
 				
 				if(deleteFile(file)) {
