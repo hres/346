@@ -29,8 +29,9 @@
 		jersey.config.server.provider.packages
 	</param-name>
 	<param-value>
-		hc.fcdr.rws.service
+		hc.fcdr.rws.service;hc.fcdr.rws.except
 	</param-value>
+
 	</init-param>
 <init-param>
     <param-name>jersey.config.server.provider.classnames</param-name>
