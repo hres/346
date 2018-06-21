@@ -879,6 +879,9 @@ ALTER TABLE ONLY fcdrschema.product_component
 ALTER TABLE ONLY fcdrschema.sales
     ADD CONSTRAINT sales_sales_product_id_fkey_fkey FOREIGN KEY (sales_product_id_fkey) REFERENCES fcdrschema.product(product_id);
 
+ALTER TABLE ONLY fcdrschema.package
+    ADD CONSTRAINT package_package_product_id_fkey_fkey FOREIGN KEY (package_product_id_fkey) REFERENCES fcdrschema.product(product_id);
+
 
 --
 -- PostgreSQL database dump complete
