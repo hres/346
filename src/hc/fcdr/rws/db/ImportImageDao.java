@@ -2,6 +2,7 @@ package hc.fcdr.rws.db;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,23 +61,25 @@ public class ImportImageDao extends PgDao{
     			for (Integer id: labels.get(upc)) {
     				
     			
-    				try {
+    				
     					
         				String secondaryFileName = ""+(++imageCounter)+"-"+fileName;
         				
         				//TODO update folder path
         				String uploadedFileLocation = UPLOADED_FILE_LOCATION+secondaryFileName;
         				
-        				writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
-						insertImage(secondaryFileName,fileName, id, extension);
-						
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-				
-					}
-    			
-    			
+        				try {
+							writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
+							try {
+								insertImage(secondaryFileName,fileName, id, extension);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
     			}
     			
     			
@@ -167,9 +170,9 @@ public class ImportImageDao extends PgDao{
 		}
 		
 		public void writeToFile(InputStream uploadedInputStream,
-				String uploadedFileLocation) {
+				String uploadedFileLocation) throws IOException {
 
-				try {
+			
 					OutputStream out = new FileOutputStream(new File(
 							uploadedFileLocation));
 					int read = 0;
@@ -181,10 +184,7 @@ public class ImportImageDao extends PgDao{
 					}
 					out.flush();
 					out.close();
-				} catch (IOException e) {
-
-					e.printStackTrace();
-				}
+			
 
 			}
 	

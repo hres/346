@@ -1077,33 +1077,40 @@ public class PackageDao extends PgDao {
 			
 			//Make sure image with that name doesn't already exit
 			String uploadedFileLocation = prop.getProperty("images")+secondaryFileName;
-			importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
-			
 			try {
-				
-				importImageDao.insertImage(secondaryFileName,fileName, id, extension);
-				
-			} catch (SQLException e) {
+				importImageDao.writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
+				try {
+					
+					importImageDao.insertImage(secondaryFileName,fileName, id, extension);
+					try {
+						imagesList = getListOfImages(id);
+						imagesList.setStatus(200);
+						
+					} catch (DaoException e) {
+						// TODO Auto-generated catch block
+						imagesList.setStatus(500);
+						e.printStackTrace();
+					}
+					
+				} catch (SQLException e) {
+					imagesList.setStatus(500);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (IOException e1) {
+				imagesList.setStatus(500);
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 			
-		}
-		
-		try {
-			imagesList = getListOfImages(id);
+
 			
-		} catch (DaoException e) {
-			// TODO Auto-generated catch block
-			imagesList.setStatus(500);
-			e.printStackTrace();
 		}
-		
-		if(imagesList.getDataList().size() > 0) {
-			imagesList.setStatus(200);
-		}else {
-			imagesList.setStatus(500);
-		}
+//		if(imagesList.getDataList().size() > 0) {
+//			imagesList.setStatus(200);
+//		}else {
+//			imagesList.setStatus(500);
+//		}
 		return imagesList;
     }
     
