@@ -2,8 +2,10 @@ package hc.fcdr.rws.db;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.inject.Singleton;
 
@@ -29,18 +32,38 @@ public class ImportImageDao extends PgDao{
 	
 	private final String schema;
 	private int imageCounter = 0;
+    static Properties prop = new Properties();
+	static InputStream input = null;
+
 	
-	private static final String UPLOADED_FILE_LOCATION = "/home/rchuela/Documents/imagesLabel/";
+	private  String UPLOADED_FILE_LOCATION = null;
 	
 	public ImportImageDao(Connection connection, final String schema) {
 		
 		super(connection);
 		this.schema = schema;
 		
+    	try {
+			input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+			prop.load(input);
+			this.UPLOADED_FILE_LOCATION = prop.getProperty("images");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
-	public void importImage(List<FormDataBodyPart> bodyParts, BufferedWriter output) {
-		
+	public File importImage(List<FormDataBodyPart> bodyParts) {
+        BufferedWriter output = null;
+		String reportFile = prop.getProperty("reports") + "report.txt";
+		      File file = new File(reportFile);
+		      try {
+				output = new BufferedWriter(new FileWriter(file));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		Map<String, List<Integer>> labels = getLabelUpc();
 		List<String> invalidImages = new ArrayList<String>();
@@ -69,13 +92,14 @@ public class ImportImageDao extends PgDao{
         				String uploadedFileLocation = UPLOADED_FILE_LOCATION+secondaryFileName;
         				
         				try {
-							writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
 							try {
 								insertImage(secondaryFileName,fileName, id, extension);
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							writeToFile(bodyPartEntity.getInputStream(), uploadedFileLocation);
+
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -108,6 +132,16 @@ public class ImportImageDao extends PgDao{
     	
     	
 		System.out.println("Number of invalid records: "+invalidImages.size());
+        if ( output != null ) {
+            try {
+				output.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+          }
+		
+		return file;
 	}
 	
 	

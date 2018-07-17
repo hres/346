@@ -88,36 +88,19 @@ public class ImportService extends Application
     @POST
     @Path("/importLabel")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces("text/plain")
+    @Produces({"text/plain"})
     public Response getImportLabel(@FormDataParam("csv_file") InputStream fileInputStream,
     		@FormDataParam("csv_file") FormDataContentDisposition fileDetail)
             throws SQLException, IOException, Exception
     {
-    	//TODO will update the folder path
+    	 File file = null;
     	
-		String uploadedFileLocation = prop.getProperty("csvfiles") + fileDetail.getFileName();		
-		
-		writeToFile(fileInputStream, uploadedFileLocation);
 
-         BufferedWriter output = null;
-         File file = new File("report.txt");
-		
-    	
-         
-         try {
-			output = new BufferedWriter(new FileWriter(file));
-			importLabelDao.importLabel(uploadedFileLocation, output);
-		} catch ( IOException e ) {
-            e.printStackTrace();
-        } finally {
-          if ( output != null ) {
-            output.close();
-          }
-        }
-			deleteFolder(new File(uploadedFileLocation));
+    	 file = importLabelDao.importLabel(fileInputStream, fileDetail);
 
 
  	ResponseBuilder response = Response.ok((Object) file);
+
 	response.header("Content-Disposition",
 			"attachment; filename=importReport.txt");
 	return response.build();
@@ -129,18 +112,20 @@ public class ImportService extends Application
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     public Response getFile(@FormDataParam("csv_file") InputStream fileInputStream,
-    		@FormDataParam("csv_file") FormDataContentDisposition fileDetail){
+    		@FormDataParam("csv_file") FormDataContentDisposition fileDetail) throws IOException{
     	
     	//TODO will update the folder path
 		String uploadedFileLocation = prop.getProperty("csvfiles") + fileDetail.getFileName();
 
-
+		String reportFile = prop.getProperty("reports") + "report.txt";
+		
 		writeToFile(fileInputStream, uploadedFileLocation);
 
-    	
-    	
+
          BufferedWriter output = null;
-         File file = new File("report.txt");
+         File file = new File(reportFile);
+         file.createNewFile();
+
 
             
              try {
@@ -220,32 +205,16 @@ public class ImportService extends Application
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     public Response getImportImages(FormDataMultiPart fileInputStream,
-    		@FormDataParam("image") FormDataContentDisposition fileDetail)
+    		@FormDataParam("image") FormDataContentDisposition fileDetail) throws IOException
            
     {
     	
     	
     	List<FormDataBodyPart> bodyParts = fileInputStream.getFields("image");
-    	
-         BufferedWriter output = null;
-         File file = new File("report.txt");
-		    
-         try {
-			output = new BufferedWriter(new FileWriter(file));
-			importImageDao.importImage(bodyParts, output);
+         File file = null;
+        	 file = 	importImageDao.importImage(bodyParts);
 
-		} catch ( IOException e ) {
-            e.printStackTrace();
-        } finally {
-          if ( output != null ) {
-            try {
-				output.close();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-          }
-        }
+	
 			
  	ResponseBuilder response = Response.ok((Object) file);
 	response.header("Content-Disposition",

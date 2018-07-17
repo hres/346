@@ -1,8 +1,19 @@
 package hc.fcdr.rws.db;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -17,14 +28,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.postgresql.copy.CopyManager;
+import org.postgresql.core.BaseConnection;
 
 import hc.fcdr.rws.config.ResponseCodes;
 import hc.fcdr.rws.except.DaoException;
+import hc.fcdr.rws.except.LoadFileException;
+import hc.fcdr.rws.except.WriteFileException;
 import hc.fcdr.rws.model.importLabel.ExistingLabels;
 import hc.fcdr.rws.model.importLabel.ImportLabelModel;
 import hc.fcdr.rws.model.importLabel.ImportLabelNft;
@@ -34,6 +52,7 @@ import hc.fcdr.rws.util.DaoUtil;
 import hc.fcdr.rws.util.DateUtil;
 import hc.fcdr.rws.util.LabelGrouping;
 
+
 public class ImportLabelDao extends PgDao{
 	private static final String SQL_INSERT = "insert into ${table}(${keys}) values(${values})";
 	private static final String TABLE_REGEX = "\\$\\{table\\}";
@@ -42,7 +61,8 @@ public class ImportLabelDao extends PgDao{
 	private static final Logger logger = Logger.getLogger(ImportLabelDao.class.getName());
 	private final String schema;
 	ImportLabelReport importLabelReport;
-	
+    static Properties prop = new Properties();
+	static InputStream input = null;
 	
 	
 		
@@ -51,10 +71,39 @@ public class ImportLabelDao extends PgDao{
 		super(connection);
 		this.schema = schema;
 		importLabelReport = new ImportLabelReport();
+		
+    	try {
+			input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+			prop.load(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    
 	}
 	
-	public void importLabel(String filePath, BufferedWriter output)throws IllegalStateException, FileNotFoundException,
+	public File importLabel(InputStream fileInputStream,
+    		FormDataContentDisposition fileDetail)throws IllegalStateException, FileNotFoundException,
 	UnsupportedEncodingException, NoSuchAlgorithmException, SQLException {
+		
+		
+		BufferedWriter output = null;
+		String uploadedFileLocation = prop.getProperty("csvFiles") + fileDetail.getFileName();
+		writeToFile(fileInputStream, uploadedFileLocation);
+		
+		String reportFile = prop.getProperty("reports") + "report.txt";
+        File file = new File(reportFile);
+
+		
+
+
+		try {
+			output = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		final StopWatch stopWatch = new StopWatch();
 		
 
@@ -62,7 +111,7 @@ public class ImportLabelDao extends PgDao{
 		System.out.println("Program has started");
 
 		try {
-			start(filePath,output);
+			start(uploadedFileLocation,output);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,9 +120,21 @@ public class ImportLabelDao extends PgDao{
 		stopWatch.split();
 		System.out.println(
 				"Total time spent on loading the sales data: " + (stopWatch.getSplitTime() / 1000) + " seconds.");
+		
+        if ( output != null ) {
+            try {
+				output.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+          }
+		deleteFolder(new File(uploadedFileLocation));
+
+		return file;
 
 	}
-	private void start(String file, BufferedWriter output) throws SQLException {
+	private void start(String csvFile, BufferedWriter output) throws SQLException {
 		importLabelReport = new ImportLabelReport();
 		// Will hold all distinct existing labels
 		// used to check for duplicates
@@ -101,7 +162,7 @@ public class ImportLabelDao extends PgDao{
 			connection.setAutoCommit(false);
 			emptyTempTable();
 
-			loadData(file);
+			loadData(csvFile );
 
 			existingLabelStoredByUPC = getExistingLabels(existingLabels);
 
@@ -241,16 +302,6 @@ public class ImportLabelDao extends PgDao{
 		}
 	
 		
-
-//		System.out.println("Number of invalid records in the file " + importLabelReport.getSkippedRecords().size());
-//		System.out.println("Number of duplicate records in the file " + importLabelReport.getDuplicatesLabels().size());
-//		System.out.println("Number of records sharing product grouping in the file " + importLabelReport.getLabelSharingSameGrouping().size());
-//		System.out.println("Number of records linked by label upc in the file " + importLabelReport.getLabelsLinkedByLabelUpc().size());
-//		System.out.println("Number of records linked by nielsen item rank in the file " + importLabelReport.getLabelsLinkedByNielsenItemRank().size());
-//		System.out.println("Number of records linked to new products in the file " + importLabelReport.getLabelsLinkedToNewProducts().size());
-//		System.out.println("Number of records with wrong product grouping/label upc " + importLabelReport.getProductGroupingAndLabelUpcNoMatch().size());
-
-		
 	}
 	
 
@@ -264,8 +315,20 @@ public class ImportLabelDao extends PgDao{
 
 	}
 	
-	// load the file in the staging table
-	public void loadData(String csvFile) throws SQLException {
+	public void loadData(String csvFile)  {
+		FileReader fb =  null;
+		try {
+	 fb = new FileReader(new File(csvFile));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    BaseConnection pgcon = (BaseConnection)connection;
+        
+
+	    CopyManager mgr = null;
+
+
 
 		String sql = "COPY " + schema + ".label_temp " + "	( " + " record_id , " + " label_upc, "
 				+ " nielsen_item_rank, " + "  nielsen_category, " + " label_description, " + " label_brand, "
@@ -323,16 +386,24 @@ public class ImportLabelDao extends PgDao{
 				+ " per_serving_amount_in_grams_as_prepared, " + " label_comment, " + " label_source, "
 				+ " product_description, " + " type, " + " type_of_restaurant, " + " informed_dining_program, "
 				+ " nft_last_update_date, " + " child_item, " + " product_grouping, " + " classification_number ) "
-				+ "FROM '" + csvFile + "'  CSV HEADER DELIMITER ','";
+				+ "FROM STDIN  CSV HEADER DELIMITER ','";
 
-		Statement stmt = connection.createStatement();
 
-		try {
-			stmt.execute(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		
+		
+
+			
+			try {
+				mgr = new CopyManager(pgcon);
+				 mgr.copyIn(sql,fb);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw new LoadFileException("Could not load the file");
+			}
+
+	
 	}
 
 
@@ -368,7 +439,6 @@ public class ImportLabelDao extends PgDao{
 							+ existingLabel.getLabel_source() + (existingLabel.getLabel_collection_date() != null
 									? existingLabel.getLabel_collection_date().toString() : "null");
 
-					// System.out.println("**"+sb);
 
 					if (!data.containsKey(sb)) {
 						List<ExistingLabels> item = new ArrayList<>();
@@ -494,7 +564,6 @@ public class ImportLabelDao extends PgDao{
 		}
 		importLabelReport.numberOfRecords = count;
 		buildMapByUPC(data,dataFromTempByUpc);
-		System.out.println("Total number of records in the file " + count);
 		return dups;
 		
 	}
@@ -548,7 +617,6 @@ public class ImportLabelDao extends PgDao{
 			List<ImportLabelModel> list = new ArrayList<ImportLabelModel>();// entry.getValue();
 
 			if (existingLabelsByUpc.containsKey(entry.getKey())) {
-				System.out.println("yes contains");
 
 				list = entry.getValue();				
 				insertLabelUpcMatch.put(existingLabelsByUpc.get(entry.getKey()).get(0).getproduct_id(), list);
@@ -798,7 +866,6 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 					for (ImportLabelModel importLabelModel : entry.getValue()) {
 						String str = ""+importLabelModel.getImportLabelRequest().getRecord_id()+" "+importLabelModel.getImportLabelRequest().getPackage_description();
 						importLabelReport.getProductGroupingAndLabelUpcNoMatch().add(str);
-						System.out.println(str+" LABEL GROUPING NO MATCH");
 
 
 					}
@@ -865,7 +932,6 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 			while (resultSet.next()) {
 				Integer product_id = resultSet.getInt("sales_product_id_fkey");
 				String sales_upc = resultSet.getString("sales_upc");
-				//System.out.println("upc: "+sales_upc);
 				if (!upcItem.containsKey(product_id)) {
 					upcItem.put(sales_upc, product_id);
 				}
@@ -1196,6 +1262,41 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 		}
 
 		return false;
+	}
+	private void writeToFile(InputStream uploadedInputStream,
+			String uploadedFileLocation) {
+
+			try {
+				OutputStream out = new FileOutputStream(new File(
+						uploadedFileLocation));
+				int read = 0;
+				byte[] bytes = new byte[1024];
+
+				out = new FileOutputStream(new File(uploadedFileLocation));
+				while ((read = uploadedInputStream.read(bytes)) != -1) {
+					out.write(bytes, 0, read);
+				}
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+
+				throw new WriteFileException("could not write the file");
+			}
+
+		}
+	
+	public static void deleteFolder(File folder) {
+	    File[] files = folder.listFiles();
+	    if(files!=null) { 
+	        for(File f: files) {
+	            if(f.isDirectory()) {
+	                deleteFolder(f);
+	            } else {
+	                f.delete();
+	            }
+	        }
+	    }
+	    folder.delete();
 	}
 	
 }
