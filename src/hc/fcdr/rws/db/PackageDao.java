@@ -1073,7 +1073,7 @@ public class PackageDao extends PgDao {
 		if(fileName.contains(".")) {
 			
 			String secondaryFileName = ""+id+"-"+fileName;
-			String extension = fileName.substring(fileName.indexOf(".")+1);
+			String extension = fileName.substring(fileName.lastIndexOf(".")+1);
 			
 			//Make sure image with that name doesn't already exit
 			String uploadedFileLocation = prop.getProperty("images")+secondaryFileName;

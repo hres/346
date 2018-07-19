@@ -57,6 +57,8 @@ public class ImportImageDao extends PgDao{
 	public File importImage(List<FormDataBodyPart> bodyParts) {
         BufferedWriter output = null;
 		String reportFile = prop.getProperty("reports") + "report.txt";
+		int counter = 0;
+		int totalNumberOfImages = bodyParts.size();
 		      File file = new File(reportFile);
 		      try {
 				output = new BufferedWriter(new FileWriter(file));
@@ -77,23 +79,25 @@ public class ImportImageDao extends PgDao{
     		if(fileName.contains(".")) {
     			
     		String upc = fileName.substring(0, fileName.lastIndexOf('.'));
-    		
+    		System.out.println("here "+upc);
     		if(labels.containsKey(upc)) {
     			
-    			String extension = fileName.substring(fileName.indexOf(".")+1);
+    			String extension = fileName.substring(fileName.lastIndexOf(".")+1);
+	
     			for (Integer id: labels.get(upc)) {
     				
     			
     				
     					
         				String secondaryFileName = ""+(++imageCounter)+"-"+fileName;
-        				
+
         				//TODO update folder path
         				String uploadedFileLocation = UPLOADED_FILE_LOCATION+secondaryFileName;
         				
         				try {
 							try {
 								insertImage(secondaryFileName,fileName, id, extension);
+								++counter;
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -115,7 +119,25 @@ public class ImportImageDao extends PgDao{
     		}
     		
     	}
-    	   
+    	try {
+			output.write("Total number of images: "+totalNumberOfImages);
+			output.newLine();
+			output.newLine();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	try {
+			output.write("Total number of imported images: "+imageCounter);
+			output.newLine();
+			output.newLine();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	try {
 			output.write("Number of skipped images: "+invalidImages.size());
 			output.newLine();
