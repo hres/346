@@ -1,7 +1,6 @@
 package hc.fcdr.rws.db;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,19 +31,19 @@ public class DbConnection
 
     }
 
-    public void initialize()
-    {
-        try
-        {
-            final InitialContext ic = new InitialContext();
-            final String dsName = "java:comp/env/jdbc/fcdrrest";
-            source = (javax.sql.DataSource) ic.lookup(dsName);
-        }
-        catch (final NamingException e)
-        {
-            e.printStackTrace();
-        }
-    }
+//    public void initialize()
+//    {
+//        try
+//        {
+//            final InitialContext ic = new InitialContext();
+//            final String dsName = "java:comp/env/jdbc/fcdrrest";
+//            source = (javax.sql.DataSource) ic.lookup(dsName);
+//        }
+//        catch (final NamingException e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 
     public synchronized Connection getConnection() throws SQLException
     {

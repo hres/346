@@ -1,24 +1,3 @@
-<Context>
-
-
-
-    <Environment name="fcdr/application_environment" value="DEV" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/schema" value="fcdrschema" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailSmtp" value="smta00.hc-sc.gc.ca" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailSenderName" value="FCDR Sodium Service" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailSenderAddress" value="DoNotReply.FCDR@hc-sc.gc.ca" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailReceiverAddress" value="Zoltan.Hernadi@bell.net,Zoltan.Hernadi@canada.ca" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailId" value="noreply" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailPasswd" value="" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailSubject" value="FCDR Sodium Service Import Report" type="java.lang.String" override="false"/>
-    <Environment name="fcdr/mailText" value="The sales data import has been successful" type="java.lang.String" override="false"/>
-    
-    <Resource name="jdbc/fcdrrest" auth="Container"
-          type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
-           url="jdbc:postgresql://localhost:5432/postgres"
-          username="postgres" password="postgres" maxActive="30" maxIdle="10"
-          maxWait="-1"/>
-    
-    
+<Context path="/fcdr-rest-service">
+    <Valve className="org.keycloak.adapters.tomcat.KeycloakAuthenticatorValve"/>
 </Context>
-<!--           url="${jdbc.url}" -->

@@ -536,7 +536,7 @@ public final class DaoUtil
         final Map<String, Object> queryMap = new HashMap<String, Object>();
         final List<Object> labelInsertList = new ArrayList<Object>();
 
-        if (!request.getPackage_description().isEmpty())
+        if (request.getPackage_description() != null  && request.getPackage_description().length() > 0)
             queryMap.put("package_description",
                     request.getPackage_description());
         else
@@ -667,7 +667,7 @@ public final class DaoUtil
 
         labelInsertList.add(request.getPackage_comment());
 
-        if (!request.getPackage_source().isEmpty())
+        if (request.getPackage_source()!= null && request.getPackage_source().length()>0)
             queryMap.put("package_source", request.getPackage_source());
         else
         {
@@ -869,7 +869,7 @@ public final class DaoUtil
         final Map<String, Object> queryMap = new HashMap<String, Object>();
         final List<Object> labelUpdateList = new ArrayList<Object>();
 
-        if (!request.getPackage_description().isEmpty())
+        if (request.getPackage_description()!= null && request.getPackage_description().length()>0)
             queryMap.put("package_description",
                     request.getPackage_description());
         else
@@ -991,7 +991,7 @@ public final class DaoUtil
 
         labelUpdateList.add(request.getPackage_comment());
 
-        if (request.getPackage_source() != null)
+        if (request.getPackage_source() != null && request.getPackage_source().length() >0)
             queryMap.put("package_source", request.getPackage_source());
         else
         {
@@ -1221,7 +1221,7 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_INPUT_FIELDS);
         productInsertList.add(request.getCluster_number());
 
-        if (request.getProduct_description() != null)
+        if (request.getProduct_description() != null && request.getProduct_description().length() > 0)
             queryMap.put("product_description",
                     request.getProduct_description());
         else
@@ -3587,7 +3587,7 @@ public final class DaoUtil
                 queryMap.put("inputError", ResponseCodes.INVALID_DOUBLE);
 
         if ((request.product_description != null)
-                && !request.product_description.isEmpty())
+                && request.product_description.length() > 0)
             queryMap.put("product_description", request.product_description);
         else
             queryMap.put("inputError",

@@ -30,7 +30,7 @@ public class ReportService extends Application
         if (productDao == null)
         {
             final DbConnection pgConnectionPool = new DbConnection();
-            pgConnectionPool.initialize();
+//            pgConnectionPool.initialize();
 
             try
             {

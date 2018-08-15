@@ -53,7 +53,7 @@ public class ImportService extends Application
     	
     	
             final DbConnection pgConnectionPool = new DbConnection();
-            pgConnectionPool.initialize();
+//            pgConnectionPool.initialize();
 
             try
             {

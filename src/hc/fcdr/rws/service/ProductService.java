@@ -16,13 +16,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import hc.fcdr.rws.db.DbConnection;
 import hc.fcdr.rws.db.ProductDao;
-import hc.fcdr.rws.domain.Product;
-import hc.fcdr.rws.except.DaoException;
 import hc.fcdr.rws.model.pkg.GenericList;
 import hc.fcdr.rws.model.pkg.ResponseGeneric;
 import hc.fcdr.rws.model.product.ProductClassificationDataResponse;
@@ -37,12 +37,9 @@ import hc.fcdr.rws.model.product.ProductSalesLabelRequest;
 import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.product.RelinkRecord;
-import hc.fcdr.rws.util.ContextManager;
 
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import java.util.concurrent.Executor;
-import org.glassfish.jersey.server.ManagedAsync;
+//import org.keycloak.KeycloakSecurityContext;
+//import org.keycloak.KeycloakPrincipal;
 
 
 @Path("/ProductService")
@@ -57,7 +54,7 @@ public class ProductService extends Application
         if (productDao == null)
         {
             final DbConnection pgConnectionPool = new DbConnection();
-            pgConnectionPool.initialize();
+//            pgConnectionPool.initialize();
 
             try
             {
@@ -122,14 +119,29 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-    
+//    @Context
+//    SecurityContext sc;
     @GET
     @Path("/restaurantTypes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurantTypes()
     {
         GenericList entity = new GenericList();
+//        String userName = null;
 
+//        if (sc.getUserPrincipal() instanceof KeycloakPrincipal) {
+//          
+//          @SuppressWarnings("unchecked")
+//          KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>)  sc.getUserPrincipal();
+//
+//          // this is how to get the real userName (or rather the login name)
+//          userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+//          System.out.println("The name is "+userName);
+//
+//        }else {
+//            System.out.println("Not an instance ");
+//
+//        }
         try
         {
             if (productDao != null)

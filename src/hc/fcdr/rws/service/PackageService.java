@@ -53,7 +53,7 @@ public class PackageService extends Application {
 	public static void initialize() {
 		if (packageDao == null) {
 			final DbConnection pgConnectionPool = new DbConnection();
-			pgConnectionPool.initialize();
+//			pgConnectionPool.initialize();
 
 			packageDao = new PackageDao(pgConnectionPool.getConnections(),
 					pgConnectionPool.getSchema());

@@ -38,7 +38,7 @@ public class SalesService extends Application {
 	public static void initialize() throws IOException, Exception {
 		if (salesDao == null) {
 			final DbConnection pgConnectionPool = new DbConnection();
-			pgConnectionPool.initialize();
+//			pgConnectionPool.initialize();
 
 			salesDao = new SalesDao(pgConnectionPool.getConnections(), pgConnectionPool.getSchema());
 		}

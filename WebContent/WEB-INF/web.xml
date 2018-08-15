@@ -46,15 +46,22 @@
 <url-pattern>/rest/*</url-pattern>
 </servlet-mapping>
 
-<!--
-<filter>
-	<filter-name>springSecurityFilterChain</filter-name>
-	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-</filter>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/dd/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
 
-<filter-mapping>
-  <filter-name>springSecurityFilterChain</filter-name>
-  <url-pattern>/rest/*</url-pattern>
-</filter-mapping>
-  -->
+    <login-config>
+        <auth-method>KEYCLOAK</auth-method>
+        <realm-name>sodium-monitoring</realm-name>
+    </login-config>
+
+    <security-role>
+        <role-name>sodium-user</role-name>
+    </security-role>
 </web-app>

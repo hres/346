@@ -400,6 +400,7 @@ public class ImportLabelDao extends PgDao{
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
+				System.out.println(e);
 				throw new LoadFileException("Could not load the file");
 			}
 
@@ -833,7 +834,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 								.getValue().get(0).getImportLabelRequest().getClassification_number().isEmpty()) {
 							if (checkClassification(
 									entry.getValue().get(0).getImportLabelRequest().getClassification_number())) {
-								System.out.println("oui called 2"
+		System.out.println("oui called 2"
 										+ entry.getValue().get(0).getImportLabelRequest().getClassification_number());
 								insertClassificationNumber(
 										entry.getValue().get(0).getImportLabelRequest().getClassification_number(),
@@ -1072,7 +1073,7 @@ public void createLabelLinkedByNielsenItemRank(ImportLabelModel element,Map<Stri
 						value = (element.getAmount() / PerServingInGrams) * 100;
 
 					} else if ((PerServingAmount != null && PerServingAmount != 0 && PerServingAmount != 0.0)
-							&& (PerServingUnit.equals("g"))) {
+							&& ( PerServingUnit != null && PerServingUnit != "" && PerServingUnit.equals("g"))) {
 						value = (element.getAmount() / PerServingAmount) * 100;
 
 					}

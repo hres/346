@@ -30,7 +30,7 @@ public class ClassificationService extends Application
         if (classificationDao == null)
         {
             final DbConnection pgConnectionPool = new DbConnection();
-            pgConnectionPool.initialize();
+//            pgConnectionPool.initialize();
 
             classificationDao =
 			        new ClassificationDao(pgConnectionPool.getConnections(),
