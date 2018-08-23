@@ -3,7 +3,9 @@ package hc.fcdr.rws.db;
 import static hc.fcdr.rws.util.DaoUtil.prepareStatement;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -62,11 +65,20 @@ public class ProductDao extends PgDao
     private static final String TABLE_REGEX  = "\\$\\{table\\}";
     private static final String KEYS_REGEX   = "\\$\\{keys\\}";
     private static final String VALUES_REGEX = "\\$\\{values\\}";
-
+    static Properties prop = new Properties();
+	static InputStream input = null;
+	
     public ProductDao(final Connection connection, final String schema)
     {
         super(connection);
         this.schema = schema;
+    	try {
+			input = new FileInputStream("/etc/sodium-monitoring/config.properties");
+			prop.load(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public List<Product> getProducts() throws DaoException
@@ -1478,7 +1490,7 @@ public class ProductDao extends PgDao
             final Integer deletedProduct = (Integer) executeUpdateProductDao(query_product, new Object[]
             { id });  
         }catch (final Exception e){
-        	
+        	System.out.println(e);
         	 logger.error(e);
              connection.rollback();
              throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -1526,7 +1538,7 @@ public class ProductDao extends PgDao
 			
 			for (String item: listOfImages) {
 				
-				uploadedFileLocation = "/home/romario/Documents/imagesLabel/"+item;
+				uploadedFileLocation = prop.getProperty("images")+item;
 				File file = new File(uploadedFileLocation);
 				
 				if(deleteFile(file)) {
@@ -1596,8 +1608,9 @@ public class ProductDao extends PgDao
        
             preparedStatement =
                     prepareStatement(connection, query, true, values);
+            System.out.println(preparedStatement);
            affectedRows = preparedStatement.executeUpdate();
-            
+
         
         return affectedRows;
     }

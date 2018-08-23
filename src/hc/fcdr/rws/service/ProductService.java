@@ -1,11 +1,13 @@
 package hc.fcdr.rws.service;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,8 +40,9 @@ import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.product.RelinkRecord;
 
-//import org.keycloak.KeycloakSecurityContext;
-//import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
+import org.keycloak.KeycloakPrincipal;
 
 
 @Path("/ProductService")
@@ -119,29 +122,34 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
-//    @Context
-//    SecurityContext sc;
+    @Context
+    SecurityContext sc;
+	@Context
+	HttpServletRequest httpServletRequest;
     @GET
     @Path("/restaurantTypes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurantTypes()
     {
         GenericList entity = new GenericList();
-//        String userName = null;
+        String userName = null;
+        final Principal userPrincipal = httpServletRequest.getUserPrincipal();
+//        AccessToken token = (KeycloakPrincipal) httpServletRequest.getUserPrincipal().getKeycloakSecurityContext.getToken();
 
-//        if (sc.getUserPrincipal() instanceof KeycloakPrincipal) {
-//          
-//          @SuppressWarnings("unchecked")
-//          KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>)  sc.getUserPrincipal();
-//
-//          // this is how to get the real userName (or rather the login name)
-//          userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
-//          System.out.println("The name is "+userName);
-//
-//        }else {
-//            System.out.println("Not an instance ");
-//
-//        }
+        if (userPrincipal instanceof KeycloakPrincipal) {
+          
+          @SuppressWarnings("unchecked")
+          KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>)  sc.getUserPrincipal();
+
+          // this is how to get the real userName (or rather the login name)
+          userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+          System.out.println("The name is "+userName);
+
+        }else {
+            System.out.println("Not an instance ");
+
+        }
+
         try
         {
             if (productDao != null)

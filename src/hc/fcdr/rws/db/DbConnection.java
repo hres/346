@@ -64,7 +64,7 @@ public class DbConnection
            
     {
         Connection connection = null;
-  System.out.println("Initiating DB Conenction");
+        System.out.println("Initiating DB Conenction");
 
 		try {
 		

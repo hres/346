@@ -135,7 +135,11 @@
 		</dependency>
 		
 		
-		
+		<dependency>
+    <groupId>org.keycloak</groupId>
+    <artifactId>keycloak-core</artifactId>
+    <version>4.1.0.Final</version>
+</dependency>
 
 
 	</dependencies>

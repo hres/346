@@ -52,7 +52,7 @@ public class PackageService extends Application {
 	@PostConstruct
 	public static void initialize() {
 		if (packageDao == null) {
-			final DbConnection pgConnectionPool = new DbConnection();
+			 DbConnection pgConnectionPool = new DbConnection();
 //			pgConnectionPool.initialize();
 
 			packageDao = new PackageDao(pgConnectionPool.getConnections(),
@@ -229,6 +229,10 @@ public class PackageService extends Application {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("id") final Integer id) {
 		ResponseGeneric entity = new ResponseGeneric();
+		 DbConnection pgConnectionPool = new DbConnection();
+
+		packageDao = new PackageDao(pgConnectionPool.getConnections(),
+				pgConnectionPool.getSchema());
 
 		try {
 			if (packageDao != null)

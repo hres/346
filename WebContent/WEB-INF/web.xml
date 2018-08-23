@@ -42,14 +42,14 @@
 <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>
-<servlet-name>FCDR REST Service</servlet-name>
+<servlet-name>FCDR</servlet-name>
 <url-pattern>/rest/*</url-pattern>
 </servlet-mapping>
 
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>fcdr-rest-service</web-resource-name>
-            <url-pattern>/dd/*</url-pattern>
+            <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>sodium-user</role-name>

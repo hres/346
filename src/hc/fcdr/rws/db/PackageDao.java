@@ -884,9 +884,10 @@ public class PackageDao extends PgDao {
 
 		try {
 
-			final Integer deletedRowdelete_components = (Integer) executeUpdate(delete_components, new Object[] { id });
+			executeUpdate(delete_components, new Object[] { id });
 
 			deletePackageImages(id);
+			
 			final Integer deletedRow = (Integer) executeUpdate(sql, new Object[] { id });
 
 			if (deletedRow == 0) {
@@ -898,6 +899,7 @@ public class PackageDao extends PgDao {
 
 			throw new DaoException(ResponseCodes.INTERNAL_SERVER_ERROR);
 		}
+
 
 		return new ResponseGeneric(ResponseCodes.OK.getCode(), ResponseCodes.OK.getMessage());
 	}
