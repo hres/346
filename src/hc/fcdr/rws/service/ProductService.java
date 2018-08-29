@@ -40,9 +40,6 @@ import hc.fcdr.rws.model.product.ProductUpdateDataResponse;
 import hc.fcdr.rws.model.product.ProductUpdateRequest;
 import hc.fcdr.rws.model.product.RelinkRecord;
 
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
-import org.keycloak.KeycloakPrincipal;
 
 
 @Path("/ProductService")
@@ -57,7 +54,6 @@ public class ProductService extends Application
         if (productDao == null)
         {
             final DbConnection pgConnectionPool = new DbConnection();
-//            pgConnectionPool.initialize();
 
             try
             {
@@ -73,8 +69,10 @@ public class ProductService extends Application
         }
     }
 
+/*
+Accept a product id as argument and return all fields associated to that product except the classification information
 
-
+*/
     @GET
     @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,6 +94,11 @@ public class ProductService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
+    
+    /*
+	This function isn't being used so far, but it should return the product information along with all the classification 
+	number/name/type that match product id that is given in the paramter. 
+    */
 
     @GET
     @Path("/productclassifications/{id}")
@@ -121,34 +124,34 @@ public class ProductService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
+    /*
+		Return an object containing the all the restaurant types stored in the restaurant type look up table in the database
+    */
 
-    @Context
-    SecurityContext sc;
-	@Context
-	HttpServletRequest httpServletRequest;
+
     @GET
     @Path("/restaurantTypes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurantTypes()
     {
         GenericList entity = new GenericList();
-        String userName = null;
-        final Principal userPrincipal = httpServletRequest.getUserPrincipal();
-//        AccessToken token = (KeycloakPrincipal) httpServletRequest.getUserPrincipal().getKeycloakSecurityContext.getToken();
-
-        if (userPrincipal instanceof KeycloakPrincipal) {
-          
-          @SuppressWarnings("unchecked")
-          KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>)  sc.getUserPrincipal();
-
-          // this is how to get the real userName (or rather the login name)
-          userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
-          System.out.println("The name is "+userName);
-
-        }else {
-            System.out.println("Not an instance ");
-
-        }
+//        String userName = null;
+//        final Principal userPrincipal = httpServletRequest.getUserPrincipal();
+////        AccessToken token = (KeycloakPrincipal) httpServletRequest.getUserPrincipal().getKeycloakSecurityContext.getToken();
+//
+//        if (userPrincipal instanceof KeycloakPrincipal) {
+//          
+//          @SuppressWarnings("unchecked")
+//          KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>)  sc.getUserPrincipal();
+//
+//          // this is how to get the real userName (or rather the login name)
+//          userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+//          System.out.println("The name is "+userName);
+//
+//        }else {
+//            System.out.println("Not an instance ");
+//
+//        }
 
         try
         {
@@ -164,7 +167,10 @@ public class ProductService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
-    //=====
+   
+    /*
+		Return an object containing the all the types stored in the type look up table in the database
+    */
     
     @GET
     @Path("/types")
@@ -187,6 +193,10 @@ public class ProductService extends Application
         return Response.status(Response.Status.OK)
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
+    /*
+    Accept a product id as argument and return all fields associated to that product *including the classification (at most one) 
+    name/number/type of that product
+    */
     @GET
     @Path("/productclassification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -212,6 +222,10 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
     
+    /*
+    	This method is used for the search by product functionality and takes a ProductRequest object as input param
+    	It return an object containing the list of product that matched the search criteria of the input param 
+    */
     @POST
     @Path("/productsfiltered")
     @Produces(MediaType.APPLICATION_JSON)
@@ -220,9 +234,7 @@ public class ProductService extends Application
             throws SQLException, IOException, Exception
     {
 
-        /// String applicationEnvironment = ContextManager.getJndiValue(
-        /// "APPLICATION_ENVIRONMENT");
-    	//System.out.println("You are being called"+productRequest.cluster_number);;
+
         ProductDataResponse entity = new ProductDataResponse();
 
         try
@@ -241,7 +253,10 @@ public class ProductService extends Application
 
     // ===========
     
-    
+    /*
+	This method is used for the search all (combination of product, sales and label) functionality and takes a ProductSalesLabelRequest 
+	object as input param It returns an object containing the list of records that matched the search criteria of the input param 
+     */
 
     @POST
     @Path("/productsaleslabel")
@@ -271,7 +286,10 @@ public class ProductService extends Application
     }
 
     // ===========
-
+	/*
+	 * Return an object containing the list of sales record associated the product that has the product id provided in the
+	 * input param
+	 */
     @GET
     @Path("/productsales/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -294,7 +312,10 @@ public class ProductService extends Application
     }
 
     // ===========
-
+	/*
+	 * Return an object containing the list of labels record associated the product that has the product id provided in the
+	 * input param
+	 */
     @GET
     @Path("/productlabels/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -317,7 +338,9 @@ public class ProductService extends Application
     }
 
     // ===========
-
+	/*
+	 * This method updates a product record with the values provided in the ProductUpdateRequest object.
+	 */
     @PUT
     @Path("/update")
     @Produces(MediaType.APPLICATION_JSON)
@@ -345,7 +368,9 @@ public class ProductService extends Application
     }
 
     // ===========
-
+	/*
+	 * This method updates create a new produt record.
+	 */
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -373,7 +398,9 @@ public class ProductService extends Application
     }
 
     // ===========
-
+	/*
+	 * This method delete the product record that has the product id provided in the input param
+	 */
     
     @DELETE
     @Path("/delete/{id}")
@@ -396,6 +423,9 @@ public class ProductService extends Application
                 .type(MediaType.APPLICATION_JSON).entity(entity).build();
     }
 
+	/*
+	 * This method delete update the product id of a sales or label record (relink)
+	 */
     @POST
     @Path("/relinkRecord")
     @Produces(MediaType.APPLICATION_JSON)

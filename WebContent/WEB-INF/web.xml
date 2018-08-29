@@ -42,20 +42,65 @@
 <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>
-<servlet-name>FCDR</servlet-name>
+<servlet-name>FCDR REST Service</servlet-name>
 <url-pattern>/rest/*</url-pattern>
 </servlet-mapping>
 
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>fcdr-rest-service</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/rest/PackageService/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>sodium-user</role-name>
         </auth-constraint>
     </security-constraint>
-
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/rest/ProductService/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
+        <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/rest/ImportService/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
+            <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/rest/SalesService/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
+        <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/rest/ClassificationService/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
+            <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>fcdr-rest-service</web-resource-name>
+            <url-pattern>/rest/ReportService/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>sodium-user</role-name>
+        </auth-constraint>
+    </security-constraint>
     <login-config>
         <auth-method>KEYCLOAK</auth-method>
         <realm-name>sodium-monitoring</realm-name>
