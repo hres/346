@@ -1265,14 +1265,16 @@ public class ProductDao extends PgDao
     public ProductInsertDataResponse getProductInsertResponse(
             final ProductInsertRequest productInsertRequest) throws DaoException
     {
-
+    	
+    	//Will be replace with the actual user's username
+    	String username = "tempory create product user";
         boolean flag = true;
         Integer classificationId = null;
         final String[] columns =
         {
                 "product_manufacturer", "product_brand", "cnf_code",
                 "cluster_number", "product_description", "product_comment",
-                "type", "restaurant_type", "creation_date", "last_edit_date" };
+                "type", "restaurant_type", "creation_date", "last_edit_date","edited_by" };
 
         final Map<String, Object> queryMap =
                 DaoUtil.getQueryMap(productInsertRequest);
@@ -1322,7 +1324,7 @@ public class ProductDao extends PgDao
         @SuppressWarnings("unchecked")
         final List<Object> productInsertList =
                 (List<Object>) queryMap.get("product_insert_list");
-
+//        productInsertList.add(username);
         // Returns the sales_id upon successful insert.
         final Object o = executeUpdate(query, productInsertList.toArray());
 

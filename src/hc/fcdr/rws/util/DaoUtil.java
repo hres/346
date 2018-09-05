@@ -1252,6 +1252,9 @@ public final class DaoUtil
         if (request.getClassification_number() != null)
                 queryMap.put("classification_number",
                         request.getClassification_number());
+        if (request.getEdited_by() != null)
+            queryMap.put("edited_by",request.getEdited_by());
+        productInsertList.add(request.getEdited_by());
 
 
         queryMap.put("product_insert_list", productInsertList);

@@ -38,6 +38,9 @@ public class ProductInsertRequest
     @XmlElement(
             nillable = true)
     private String  classification_type;
+    @XmlElement(
+            nillable = true)
+    private String  edited_by;
 
     public ProductInsertRequest()
     {
@@ -61,7 +64,8 @@ public class ProductInsertRequest
             final String product_comment, final Integer cnf_code,
             final Double cluster_number, final String restaurant_type,
             final String type, final String classification_number,
-            final String classification_name, final String classification_type)
+            final String classification_name, final String classification_type,
+            String  edited_by)
     {
         super();
         this.product_manufacturer = product_manufacturer;
@@ -75,9 +79,18 @@ public class ProductInsertRequest
         this.classification_number = classification_number;
         this.classification_name = classification_name;
         this.classification_type = classification_type;
+        this.edited_by= edited_by;
     }
 
-    public String getProduct_manufacturer()
+    public String getEdited_by() {
+		return edited_by;
+	}
+
+	public void setEdited_by(String edited_by) {
+		this.edited_by = edited_by;
+	}
+
+	public String getProduct_manufacturer()
     {
         return product_manufacturer;
     }

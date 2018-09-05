@@ -51,7 +51,6 @@ public class CORSFilter implements ContainerResponseFilter
     	
 //    	System.out.println("Auth: "+requestContext.getHeaders().get("Authorization").get(0));
 //    	System.out.println("Auth: "+requestContext.getHeaders().get("Authorization").size());
-
         cres.getHeaders().add("Access-Control-Allow-Origin", "*");
         cres.getHeaders().add("Access-Control-Allow-Headers",
                 "origin, content-type, accept, authorization");
@@ -60,8 +59,6 @@ public class CORSFilter implements ContainerResponseFilter
                 "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         cres.getHeaders().add("Access-Control-Max-Age", "1209600");
         
-        
-
 
     }
 

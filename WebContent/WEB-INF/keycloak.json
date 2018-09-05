@@ -1,8 +1,8 @@
 {
 	"realm" : "sodium-monitoring",
 	"resource" : "fcdr-rest-service",
-	"auth-server-url" : "https://keycloak.canadaeast.cloudapp.azure.com/auth",
-	"ssl-required" : "all",
+	"auth-server-url" : "http://192.168.187.128:8090/auth",
+	"ssl-required" : "none",
 	"use-resource-role-mappings" : false,
 	"enable-cors" : true,
 	"bearer-only" : true,
@@ -10,6 +10,5 @@
 	"enable-basic-auth" : false,
 	"expose-token" : false,
 	"allow-any-hostname" : false,
-	"public-client":true,
-	"principal-attribute":"preferred_username"
+	"public-client":true
 }

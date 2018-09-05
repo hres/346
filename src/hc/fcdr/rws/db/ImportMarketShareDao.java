@@ -796,7 +796,8 @@ public class ImportMarketShareDao extends PgDao {
 				null, 
 				v.get(0).getClassification_number(),
 				null,
-				v.get(0).getClassification_type()
+				v.get(0).getClassification_type(),
+				""
 				
 				);
 		int key = 0;
@@ -873,7 +874,8 @@ public class ImportMarketShareDao extends PgDao {
 					null, 
 					v.get(0).getClassification_number(),
 					null,
-					v.get(0).getClassification_type()
+					v.get(0).getClassification_type(),
+					""
 					
 					);
 				int key;

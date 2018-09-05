@@ -36,6 +36,7 @@ public class ProductUpdateRequest
     @XmlElement
     public String  classification_type;
 
+
     public List<Object> getProductFieldList()
     {
         final List<Object> productFieldList = new ArrayList<Object>();
