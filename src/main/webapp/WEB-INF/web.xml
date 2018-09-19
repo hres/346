@@ -88,7 +88,6 @@
         <auth-method>KEYCLOAK</auth-method>
         <realm-name>sodium-monitoring</realm-name>
     </login-config>
-
     <security-role>
         <role-name>sodium-user</role-name>
     </security-role>
